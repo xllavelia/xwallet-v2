@@ -1,0 +1,77 @@
+IPHON LEND-LEND
+
+//   const [tab,setTab] = useState(0)
+
+// useEffect(()=>{
+
+//   const bg = document.querySelector(".walletSegmentBackground")
+
+//   if(tab === 0){
+//     bg.style.transform = "translateX(0%)"
+//   }
+
+//   if(tab === 1){
+//     bg.style.transform = "translateX(100%)"
+//   }
+
+// },[tab])
+
+
+
+<div className="walletSegmentControl">
+
+  <div className="walletSegmentBackground"></div>
+
+  <button
+    className="walletSegmentButton"
+    onClick={() => setTab(0)}
+  >
+    My Assets
+  </button>
+
+  <button
+    className="walletSegmentButton"
+    onClick={() => setTab(1)}
+  >
+    My Transaction
+  </button>
+
+</div>
+
+
+
+
+
+.walletSegmentControl{
+  position: relative;
+  display: flex;
+  background: #e6e3e1;
+  border-radius: 40px;
+  padding: 4px;
+  width: 320px;
+}
+
+.walletSegmentButton{
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.walletSegmentBackground{
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background: white;
+  border-radius: 30px;
+  transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+}
+
+
+
