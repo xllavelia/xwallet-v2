@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from "react";
+import React, {useState, useRef} from "react";
   // import { useNavigate } from "react-router-dom";
 
 // git add .
@@ -370,57 +370,22 @@ const Home = () => {
 //   });
 
 // }
+const cardRef = useRef(null);
+const [activeTab, setActiveTab] = useState(0);
 
-//  const textEl = document.getElementById("copy-text");
+function handleTabChange(index) {
+  setActiveTab(index);
 
-//   textEl.addEventListener("click", () => {
-//     const text = textEl.innerText;
-//     navigator.clipboard.writeText(text)
-//       .then(() => {
-//         console.log("Текст скопирован!");
-//         // Можно добавить временный эффект, например:
-//         textEl.style.backgroundColor = "#d4edda";
-//         setTimeout(() => textEl.style.backgroundColor = "transparent", 300);
-//       })
-//       .catch(err => console.error("Ошибка копирования:", err));
-//   });
-
-const textRef = useRef();
-
-  const handleCopy = () => {
-    if (textRef.current) {
-      navigator.clipboard.writeText(textRef.current.innerText)
-        .then(() => {
-          console.log("Текст скопирован!");
-        })
-        .catch(err => console.error("Ошибка копирования:", err));
+  if (cardRef.current) {
+    if (index === 0) {
+      // При нажатии на Assets (первая кнопка)
+      cardRef.current.style.borderRadius = "0px 35px 35px 35px";
+    } else {
+      // При нажатии на Transactions (вторая кнопка)
+      cardRef.current.style.borderRadius = "35px 0px 35px 35px";
     }
-  };
-
-//   const [tab,setTab] = useState(0)
-
-// useEffect(()=>{
-
-//   const bg = document.querySelector(".walletSegmentBackground")
-
-//   if(tab === 0){
-//     bg.style.transform = "translateX(0%)"
-//   }
-
-//   if(tab === 1){
-//     bg.style.transform = "translateX(100%)"
-//   }
-
-// },[tab])
- const [activeTab, setActiveTab] = useState(0);
-
-  // Моковые данные для примера
-  const assets = [
-    { id: 'eth', name: 'Ethereum', percent: '29.74%', price: '$29,015', crypto: '79.006 ETH', fiat: '$100,000.00', iconClass: 'eth-icon', iconSymbol: '⬨' },
-    { id: 'bnb', name: 'Binance', percent: '15.96%', price: '$29,456', crypto: '107.70 BNB', fiat: '$30,845.75', iconClass: 'bnb-icon', iconSymbol: '◇' },
-    { id: 'usdt', name: 'Tether usd', percent: '29.74%', price: '$27,123', crypto: '79.006 ETH', fiat: '$100,000.00', iconClass: 'usdt-icon', iconSymbol: '₮' },
-  ];
-
+  }
+}
 
 return (
     
@@ -432,7 +397,7 @@ return (
 
   <div className="balance-parent">
     <h1 className="balance">$72.53</h1>
-    <h5>wallet id: <span  className="span-copy-balance"  ref={textRef} onClick={handleCopy}> 1927810028 </span>
+    <h5>wallet id: <span  className="span-copy-balance"  > 1927810028 </span>
 </h5>
   </div>
 
@@ -444,91 +409,42 @@ return (
   <button className="fast-func-swap"><svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.5951 4.50716C12.8673 4.19494 13.3411 4.16249 13.6533 4.43468L19.4929 9.52559C19.7286 9.73108 19.812 10.0613 19.7023 10.3541C19.5926 10.6469 19.3127 10.8409 19 10.8409H5C4.58579 10.8409 4.25 10.5051 4.25 10.0909C4.25 9.67671 4.58579 9.34092 5 9.34092H16.9984L12.6676 5.56534C12.3554 5.29315 12.3229 4.81938 12.5951 4.50716Z" fill="black" fill-rule="evenodd"/><path clip-rule="evenodd" d="M11.4049 19.4928C11.1327 19.8051 10.6589 19.8375 10.3467 19.5653L4.50715 14.4744C4.27144 14.2689 4.18796 13.9387 4.29768 13.6459C4.40741 13.3531 4.68729 13.1591 5 13.1591L19 13.1591C19.4142 13.1591 19.75 13.4949 19.75 13.9091C19.75 14.3233 19.4142 14.6591 19 14.6591L7.00161 14.6591L11.3324 18.4347C11.6446 18.7069 11.6771 19.1806 11.4049 19.4928Z" fill="black" fill-rule="evenodd"/></svg></button>
 
     <button className="fast-func-private"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs></defs><title/><g data-name="Layer 13" id="Layer_13"><path class="cls-1" d="M25,31H7a3,3,0,0,1-3-3V17a3,3,0,0,1,3-3H25a3,3,0,0,1,3,3V28A3,3,0,0,1,25,31ZM7,16a1,1,0,0,0-1,1V28a1,1,0,0,0,1,1H25a1,1,0,0,0,1-1V17a1,1,0,0,0-1-1Z"/><path class="cls-1" d="M24,16H8a1,1,0,0,1-1-1V9a8,8,0,0,1,8-8h2a8,8,0,0,1,8,8v6A1,1,0,0,1,24,16ZM9,14H23V9a6,6,0,0,0-6-6H15A6,6,0,0,0,9,9Z"/><path class="cls-1" d="M16,23a2,2,0,1,1,2-2A2,2,0,0,1,16,23Zm0-2Z"/><rect class="cls-1" height="4" width="2" x="15" y="22"/></g></svg></button>
-    {/* <svg data-name="Layer 1" id="Layer_1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M19,4H5A3,3,0,0,0,2,7V17a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,10.3H17a2.3,2.3,0,0,1,0-4.6h3ZM20,8H17a4,4,0,0,0,0,8h3v1a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V7A1,1,0,0,1,5,6H19a1,1,0,0,1,1,1Zm-4,4a1,1,0,1,0,1-1A1,1,0,0,0,16,12Z"/></svg> */}
  
   </div>
+<div className="active-parent">
+    <div className="active">
+   
 
-   <div className="wallet-wrapper">
-      <div className="bottom-card-container">
-        {/* Шапка с вкладками */}
-        <div className="tabs-header" data-active={activeTab}>
-          {/* Плавающий остров с изгибами */}
-          <div className="active-tab-indicator"></div>
-          
-          <button 
-            className={"tab-button " + (activeTab === 0 ? "active" : "")}
-            onClick={() => setActiveTab(0)}
-          >
-            My Assets
-          </button>
-          <button 
-            className={"tab-button " + (activeTab === 1 ? "active" : "")}
-            onClick={() => setActiveTab(1)}
-          >
-            My Transaction
-          </button>
-        </div>
-
-        {/* Основной контент карточки */}
-        <div className="card-content">
-          {activeTab === 0 ? (
-            <div className="assets-list fade-in">
-              {assets.map((asset) => (
-                <div className="asset-item" key={asset.id}>
-                  <div className="asset-info">
-                    <div className={"asset-icon " + asset.iconClass}>
-                      {asset.iconSymbol}
-                    </div>
-                    <div>
-                      <div className="asset-name">{asset.name}</div>
-                      <div className="asset-percent">{asset.percent} ({asset.price})</div>
-                    </div>
-                  </div>
-                  <div className="asset-balance">
-                    <div className="asset-crypto">{asset.crypto}</div>
-                    <div className="asset-fiat">{asset.fiat}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-             <div className="transactions-list fade-in">
-               <p className="empty-transactions">
-                 No recent transactions
-               </p>
-             </div>
-          )}
-        </div>
-      </div>
-    </div> 
-{/* <div className="active">
-<div className="walletSegmentControl-parent">
-<div className="walletSegmentControl">
-
-  <div className="walletSegmentBackground"></div>
-
-  <button
-    className="walletSegmentButton"
-    onClick={() => setTab(0)}
+<div className={"tabs-header " + (activeTab === 0 ? "tab-0-active" : "tab-1-active")}>
+  
+  {/* Остров — теперь просто пустой див, всё делает CSS */}
+  <div className="active-tab-indicator"></div>
+  
+  <button 
+    className={"tab-button " + (activeTab === 0 ? "active" : "")}
+    onClick={() => handleTabChange(0)}
   >
     My Assets
   </button>
-
-  <button
-    className="walletSegmentButton"
-    onClick={() => setTab(1)}
+  
+  <button 
+    className={"tab-button " + (activeTab === 1 ? "active" : "")}
+    onClick={() => handleTabChange(1)}
   >
     My Transaction
   </button>
+</div>
 
+<div className="card-content" ref={cardRef}>
+  {activeTab === 0 ? (
+    <div className="fade-in">Assets Content...</div>
+  ) : (
+    <div className="fade-in">Transactions Content...</div>
+  )}
 </div>
-</div>
-<div className="active-block-parent">
-<div className="active-block">
 
-</div>
-</div>
-       </div> */}
+        </div>
+        </div>
 
    {/* <div>
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
