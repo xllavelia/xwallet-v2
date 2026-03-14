@@ -11,7 +11,7 @@
 .header-text{
   display: flex;
   align-items: center;
-color: #ffffffeb;
+color: rgba(255, 255, 255, 0.8);
   font-family: 'Inter', sans-serif;
   font-size: 2rem;
   font-weight: 900;
@@ -48,7 +48,7 @@ margin-left: 3px;
 .balance{
    display: flex;
 justify-content: center;
-color: #ffffff;
+color: rgba(255, 255, 255, 0.9);
   font-family: 'Inter', sans-serif;
   font-size: 4rem;
 letter-spacing: -1px;
@@ -67,7 +67,15 @@ letter-spacing: -1px;
 .fast-func-arrow-out, .fast-func-arrow, .fast-func-swap, .fast-func-private{
   width: 5rem;
   height: 5rem;
-  background-color: #ffffffee ;
+background: rgba(255, 255, 255, 0.2);
+opacity: 0.9 !important;
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
+box-shadow: 
+  inset 0 0px 15px rgba(255, 255, 255, 0.3);   
+border: 1px solid rgba(255, 255, 255, 0.6);
+
     display: flex;
   justify-content: center;
   align-items: center;
@@ -79,33 +87,15 @@ letter-spacing: -1px;
 }
 
 
-.fast-func-arrow svg{
-  width: 4rem;
-  height: 4rem;
-  rotate: 135deg;
-  border-radius: 30%;
-  background-color: #ffffff00;
-  opacity: 0.9;
+.fast-func-arrow span, .fast-func-arrow-out span, .fast-func-swap span, .fast-func-private span{
+color: #ffffffea;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.3rem;
 
-}
-
-.fast-func-arrow-out svg{
-  width: 4rem;
-  height: 4rem;
-  rotate: 315deg;
-  background-color: #ffffff00;
-  border-radius: 30%;
-  opacity: 0.9;
-
-}
-
-.fast-func-swap svg, .fast-func-private svg{
-    width: 4rem;
-  height: 4rem;
-  background-color: #ffffff00;
-  border-radius: 30%;
+  font-weight:900; 
   opacity: 0.9;
 }
+
 
 .active-parent{
   display: flex;
@@ -117,6 +107,10 @@ opacity: 1;
 .active{
 width: 95%;
 overflow: hidden;
+}
+
+.active-lend{
+    margin-bottom: 1rem;
 }
 
 /* Контейнер для шапки вкладок */
@@ -132,12 +126,12 @@ overflow: hidden;
 
 /* --- ПЛАВАЮЩИЙ ОСТРОВ --- */
 /* Сам белый остров */
+
 .active-tab-indicator {
   position: absolute;
   bottom: 0;
   width: 50%; /* Если у тебя две кнопки */
   height: 100%;
-  background-color: #F4F5F9;
   transition: transform 0.3s ease;
   z-index: 1;
  
@@ -145,9 +139,9 @@ overflow: hidden;
 /* Основные стили для кнопок (для обеих) */
 .tab-button {
   flex: 1;
-  padding: 10px 15px;
+  padding: 10px 0px;
   background-color: transparent;
-  color: #c4a9a8; /* Цвет текста неактивной кнопки */
+  color: #f2f2f2; /* Цвет текста неактивной кнопки */
   border: none;
   font-size: 16px;
   font-weight: 700;
@@ -159,79 +153,43 @@ overflow: hidden;
 .active-tab-indicator {
   position: absolute;
   top: 0;
-  width: 50%; /* Ширина активного индикатора (если у тебя 2 кнопки) */
+  width: 49.6%; /* Ширина активного индикатора (если у тебя 2 кнопки) */
   height: 100%;
   transition: transform 0.3s ease-in-out;
   z-index: 1; /* Индикатор находится ниже кнопок */
-  background-color: #F4F5F9; /* Цвет активного индикатора */
-  border-radius: 20px; /* Скругление верхней части */
+ background: rgba(255, 255, 255, 0.1);
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
+box-shadow: 
+  inset 0 0px 15px rgba(255, 255, 255, 0.3);   
+border: 1px solid rgba(255, 255, 255, 0.6);
+
 }
 
-/* Магия для вогнутых изгибов (через псевдоэлементы) */
-.active-tab-indicator::before,
-.active-tab-indicator::after {
-  content: "";
-  position: absolute;
-  top: 44%; /* Положение вогнутого угла */
-  width: 50px; /* Размер вогнутого угла */
-  height: 30px; /* Должен быть равен ширине */
-  background-color: transparent; /* Изгиб прозрачный */
-rotate: 180deg;
-}
-
-/* Вогнутый изгиб слева */
-.active-tab-indicator::before {
-  left: -26px; /* Выносим за край острова на его ширину */
-  background: radial-gradient(circle at 100% 120%, transparent 30px, #F4F5F9 31px);
-}
-
-/* Вогнутый изгиб справа */
-.active-tab-indicator::after {
-  right: -26px; /* Выносим за край острова на его ширину */
-  background: radial-gradient(circle at 0% 120%, transparent 30px, #F4F5F9 31px);
-}
-/* 
-.active-tab-indicator-div {
-  position: absolute;
-
-  height:3rem;
-  width:3rem;
-  left: 102%;
-  top: -12%;
-  rotate: 20deg;
-border-radius: 100%;  
-  background-color:  #053b33 ;
-  z-index: 3;
-} */
 
 
-/* --- ЛОГИКА ОЧИСТКИ (КЛАССЫ) --- */
 
-/* Левая кнопка активна */
+
+
+
 .tab-0-active .active-tab-indicator {
   transform: translateX(0);
-  border-radius: 30px 37.5px 0 0; /* Убираем левый угол, т.к. там край экрана */
+  border-radius: 0.6rem;
 }
-.tab-0-active .active-tab-indicator::before { opacity: 0; } /* Скрываем левое ушко */
-.tab-0-active .active-tab-indicator::after { opacity: 1; }
-
-/* Правая кнопка активна */
 .tab-1-active .active-tab-indicator {
   transform: translateX(100%);
-  border-radius: 37.5px 30px 0 0; /* Убираем правый угол у края */
-}
-.tab-1-active .active-tab-indicator::before { opacity: 1; }
-.tab-1-active .active-tab-indicator::after { opacity: 0; } /* Скрываем правое ушко */
+  border-radius: 0.6rem; 
 
-/* --- КНОПКИ --- */
+}
 .tab-button {
+  
   flex: 1;
-  z-index: 2; /* Кнопки ВСЕГДА поверх индикатора */
+  z-index: 2; 
   background: none;
-  border: none;
   font-size: 15px;
   font-weight: 600;
-  color: #a8c4c1;
+  color: #ffffffd3;
    font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 900;
@@ -240,33 +198,43 @@ border-radius: 100%;
   
 }
 
-.tab-button.active {
-  color: #01281ac2;
-}
-
 /* Основная карта под табами */
 .card-content {
-  background-color: #F4F5F9 ;
+  /* background-color: #F4F5F9 ; */
+   background: rgba(255, 255, 255, 0.1);
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
+box-shadow: 
+  inset 0 0px 15px rgba(255, 255, 255, 0.3);   
+border: 1px solid rgba(255, 255, 255, 0.6);
   min-height: 39.5vh;
-  border-radius: 0px 35px 35px 35px; /* Закругляем низ карты */
+  border-radius:35px; /* Закругляем низ карты */
   padding: 20px;
   margin-top: -1px; /* Стык в стык с табами */
   transition: border-radius 0.3s ease;
-
+z-index: 3;
 }
 
 .fade-in{
-  background-color: #bfbfbf;
-  color: #040404;
+background: transparent;
+  color: #fffffff0;
    font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 700;
+}
+body {
+     background-image: url('/bgv2.jpg') ;
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
 }
 
 * {
   /* background-color:  #071a11 ; */
   /* background-color:  #01150f ; */
-  background-color:  #053b33 ;
+  /* background-color:  #053b33 ; */
+
 
   margin: 0;
     -webkit-tap-highlight-color: transparent;

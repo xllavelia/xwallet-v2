@@ -6,8 +6,9 @@ import React, {useState, useRef} from "react";
 // git push origin master
 
 // npx vite --host 0.0.0.0 --port 5173 --force
+
 //  git add .
-// git commit -m "active-tab-indicator"
+// git commit -m "glass and backround"
 // git push origin main
 
 
@@ -380,20 +381,24 @@ const [activeTab, setActiveTab] = useState(0);
 function handleTabChange(index) {
   setActiveTab(index);
 
-  if (cardRef.current) {
-    if (index === 0) {
-      // При нажатии на Assets (первая кнопка)
-      cardRef.current.style.borderRadius = "0px 35px 35px 35px";
-    } else {
-      // При нажатии на Transactions (вторая кнопка)
-      cardRef.current.style.borderRadius = "35px 0px 35px 35px";
-    }
-  }
+  // if (cardRef.current) {
+  //   if (index === 0) {
+  //     
+  //     cardRef.current.style.borderRadius = "35px 35px 35px 35px";
+  //   } else {
+  //     // При нажатии на Transactions (вторая кнопка)
+  //     cardRef.current.style.borderRadius = "35px 35px 35px 35px";
+  //   }
+  // }
 
 
 }
 
 
+{/* <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"><title>arrow-back</title><rect class="cls-1" width="0" height="0" /><path class="cls-2" d="M19,11H7.14l3.63-4.36A1,1,0,1,0,9.23,5.36l-5,6a1.19,1.19,0,0,0-.09.15c0,.05,0,.08-.07.13A1,1,0,0,0,4,12H4a1,1,0,0,0,.07.36c0,.05,0,.08.07.13a1.19,1.19,0,0,0,.09.15l5,6A1,1,0,0,0,10,19a1,1,0,0,0,.64-.23,1,1,0,0,0,.13-1.41L7.14,13H19a1,1,0,0,0,0-2Z"/></svg> */}
+{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>arrow-back</title><rect class="cls-1" width="0" height="0" /><path class="cls-2" d="M19,11H7.14l3.63-4.36A1,1,0,1,0,9.23,5.36l-5,6a1.19,1.19,0,0,0-.09.15c0,.05,0,.08-.07.13A1,1,0,0,0,4,12H4a1,1,0,0,0,.07.36c0,.05,0,.08.07.13a1.19,1.19,0,0,0,.09.15l5,6A1,1,0,0,0,10,19a1,1,0,0,0,.64-.23,1,1,0,0,0,.13-1.41L7.14,13H19a1,1,0,0,0,0-2Z"/></svg> */}
+{/* <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.5951 4.50716C12.8673 4.19494 13.3411 4.16249 13.6533 4.43468L19.4929 9.52559C19.7286 9.73108 19.812 10.0613 19.7023 10.3541C19.5926 10.6469 19.3127 10.8409 19 10.8409H5C4.58579 10.8409 4.25 10.5051 4.25 10.0909C4.25 9.67671 4.58579 9.34092 5 9.34092H16.9984L12.6676 5.56534C12.3554 5.29315 12.3229 4.81938 12.5951 4.50716Z" fill="black" fill-rule="evenodd"/><path clip-rule="evenodd" d="M11.4049 19.4928C11.1327 19.8051 10.6589 19.8375 10.3467 19.5653L4.50715 14.4744C4.27144 14.2689 4.18796 13.9387 4.29768 13.6459C4.40741 13.3531 4.68729 13.1591 5 13.1591L19 13.1591C19.4142 13.1591 19.75 13.4949 19.75 13.9091C19.75 14.3233 19.4142 14.6591 19 14.6591L7.00161 14.6591L11.3324 18.4347C11.6446 18.7069 11.6771 19.1806 11.4049 19.4928Z" fill="black" fill-rule="evenodd"/></svg> */}
+{/* <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.5951 4.50716C12.8673 4.19494 13.3411 4.16249 13.6533 4.43468L19.4929 9.52559C19.7286 9.73108 19.812 10.0613 19.7023 10.3541C19.5926 10.6469 19.3127 10.8409 19 10.8409H5C4.58579 10.8409 4.25 10.5051 4.25 10.0909C4.25 9.67671 4.58579 9.34092 5 9.34092H16.9984L12.6676 5.56534C12.3554 5.29315 12.3229 4.81938 12.5951 4.50716Z" fill="black" fill-rule="evenodd"/><path clip-rule="evenodd" d="M11.4049 19.4928C11.1327 19.8051 10.6589 19.8375 10.3467 19.5653L4.50715 14.4744C4.27144 14.2689 4.18796 13.9387 4.29768 13.6459C4.40741 13.3531 4.68729 13.1591 5 13.1591L19 13.1591C19.4142 13.1591 19.75 13.4949 19.75 13.9091C19.75 14.3233 19.4142 14.6591 19 14.6591L7.00161 14.6591L11.3324 18.4347C11.6446 18.7069 11.6771 19.1806 11.4049 19.4928Z" fill="black" fill-rule="evenodd"/></svg> */}
 
 return (
     
@@ -410,19 +415,19 @@ return (
   </div>
 
   <div className="fast-func">
-    <button className="fast-func-arrow"><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"><title>arrow-back</title><rect class="cls-1" width="0" height="0" /><path class="cls-2" d="M19,11H7.14l3.63-4.36A1,1,0,1,0,9.23,5.36l-5,6a1.19,1.19,0,0,0-.09.15c0,.05,0,.08-.07.13A1,1,0,0,0,4,12H4a1,1,0,0,0,.07.36c0,.05,0,.08.07.13a1.19,1.19,0,0,0,.09.15l5,6A1,1,0,0,0,10,19a1,1,0,0,0,.64-.23,1,1,0,0,0,.13-1.41L7.14,13H19a1,1,0,0,0,0-2Z"/></svg></button>
+    <button className="fast-func-arrow"><span>send</span></button>
    
-    <button className="fast-func-arrow-out"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>arrow-back</title><rect class="cls-1" width="0" height="0" /><path class="cls-2" d="M19,11H7.14l3.63-4.36A1,1,0,1,0,9.23,5.36l-5,6a1.19,1.19,0,0,0-.09.15c0,.05,0,.08-.07.13A1,1,0,0,0,4,12H4a1,1,0,0,0,.07.36c0,.05,0,.08.07.13a1.19,1.19,0,0,0,.09.15l5,6A1,1,0,0,0,10,19a1,1,0,0,0,.64-.23,1,1,0,0,0,.13-1.41L7.14,13H19a1,1,0,0,0,0-2Z"/></svg></button>
+    <button className="fast-func-arrow-out"><span>get</span></button>
   
-  <button className="fast-func-swap"><svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.5951 4.50716C12.8673 4.19494 13.3411 4.16249 13.6533 4.43468L19.4929 9.52559C19.7286 9.73108 19.812 10.0613 19.7023 10.3541C19.5926 10.6469 19.3127 10.8409 19 10.8409H5C4.58579 10.8409 4.25 10.5051 4.25 10.0909C4.25 9.67671 4.58579 9.34092 5 9.34092H16.9984L12.6676 5.56534C12.3554 5.29315 12.3229 4.81938 12.5951 4.50716Z" fill="black" fill-rule="evenodd"/><path clip-rule="evenodd" d="M11.4049 19.4928C11.1327 19.8051 10.6589 19.8375 10.3467 19.5653L4.50715 14.4744C4.27144 14.2689 4.18796 13.9387 4.29768 13.6459C4.40741 13.3531 4.68729 13.1591 5 13.1591L19 13.1591C19.4142 13.1591 19.75 13.4949 19.75 13.9091C19.75 14.3233 19.4142 14.6591 19 14.6591L7.00161 14.6591L11.3324 18.4347C11.6446 18.7069 11.6771 19.1806 11.4049 19.4928Z" fill="black" fill-rule="evenodd"/></svg></button>
+  <button className="fast-func-swap"><span>swap</span></button>
 
-    <button className="fast-func-private"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs></defs><title/><g data-name="Layer 13" id="Layer_13"><path class="cls-1" d="M25,31H7a3,3,0,0,1-3-3V17a3,3,0,0,1,3-3H25a3,3,0,0,1,3,3V28A3,3,0,0,1,25,31ZM7,16a1,1,0,0,0-1,1V28a1,1,0,0,0,1,1H25a1,1,0,0,0,1-1V17a1,1,0,0,0-1-1Z"/><path class="cls-1" d="M24,16H8a1,1,0,0,1-1-1V9a8,8,0,0,1,8-8h2a8,8,0,0,1,8,8v6A1,1,0,0,1,24,16ZM9,14H23V9a6,6,0,0,0-6-6H15A6,6,0,0,0,9,9Z"/><path class="cls-1" d="M16,23a2,2,0,1,1,2-2A2,2,0,0,1,16,23Zm0-2Z"/><rect class="cls-1" height="4" width="2" x="15" y="22"/></g></svg></button>
+    <button className="fast-func-private"><span>block</span></button>
  
   </div>
 <div className="active-parent">
     <div className="active">
    
-
+<div className="active-lend">
 <div className={"tabs-header " + (activeTab === 0 ? "tab-0-active" : "tab-1-active")}>
   {/* Твой активный остров, который ездит влево-вправо */}
 <div className="active-tab-indicator">
@@ -447,7 +452,7 @@ return (
     My Transaction
   </button>
 </div>
-
+</div>
 <div className="card-content" ref={cardRef}>
   {activeTab === 0 ? (
     <div className="fade-in">Assets Content...</div>
