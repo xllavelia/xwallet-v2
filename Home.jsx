@@ -8,7 +8,7 @@ import React, {useState, useRef} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "glass and backround"
+// git commit -m "glass 2.0"
 // git push origin main
 
 
@@ -405,7 +405,7 @@ return (
 <div className="content"> 
   <div className="header">
     <h1 className="header-text">Wallet</h1>
-<div className="photo-account"> </div>
+{/* <div className="photo-account"> </div> */}
   </div>
 
   <div className="balance-parent">

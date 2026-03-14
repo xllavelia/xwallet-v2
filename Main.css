@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@900&family=Syncopate:wght@700&display=swap');
 
 .header{
-  margin-top: 3.5rem;
+  margin-top: rem;
   display: flex;
+  justify-content: center;
   align-items: center;
   flex-direction: row;
   padding: 1rem;
@@ -17,7 +18,7 @@ color: rgba(255, 255, 255, 0.8);
   font-weight: 900;
   opacity: 0.9;
 }
-
+/* 
 .photo-account{
   height: 4rem;
   width: 4rem;
@@ -28,7 +29,7 @@ color: rgba(255, 255, 255, 0.8);
 background-repeat: no-repeat;
   margin-left: auto;
   border-radius: 50% ;
-}
+} */
 
 .balance-parent h5{
   display: flex;
@@ -225,7 +226,7 @@ background: transparent;
 }
 body {
      background-image: url('/bgv2.jpg') ;
- background-size: cover;
+ background-size: 110rem;
  background-position: center;
 background-repeat: no-repeat;
 }
