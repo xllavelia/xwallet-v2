@@ -7,7 +7,7 @@ import React, {useState, useRef} from "react";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 //  git add .
-// git commit -m ""
+// git commit -m "active-tab-indicator"
 // git push origin main
 
 
@@ -371,7 +371,9 @@ const Home = () => {
 //     return [...prevHistory, newHistoryItem];
 //   });
 
-// }
+// // }
+// const curvLeftfRef = useRef(null);
+// const curvRightfRef = useRef(null);
 const cardRef = useRef(null);
 const [activeTab, setActiveTab] = useState(0);
 
@@ -387,7 +389,11 @@ function handleTabChange(index) {
       cardRef.current.style.borderRadius = "35px 0px 35px 35px";
     }
   }
+
+
 }
+
+
 
 return (
     
@@ -418,15 +424,20 @@ return (
    
 
 <div className={"tabs-header " + (activeTab === 0 ? "tab-0-active" : "tab-1-active")}>
+  {/* Твой активный остров, который ездит влево-вправо */}
+<div className="active-tab-indicator">
+  {/* Левый изгиб */}
+  {/* <div className="curve curve-left" ref={curvLeftfRef}></div>
   
-  {/* Остров — теперь просто пустой див, всё делает CSS */}
-  <div className="active-tab-indicator"></div>
-  
+ 
+  <div className="curve curve-right" ref={curvRightfRef}></div> */}
+</div>
+  {/* <div className="active-tab-indicator-div"></div> */}
   <button 
     className={"tab-button " + (activeTab === 0 ? "active" : "")}
     onClick={() => handleTabChange(0)}
   >
-    My Assets
+  My Assets 
   </button>
   
   <button 

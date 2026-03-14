@@ -111,6 +111,7 @@ letter-spacing: -1px;
   display: flex;
 justify-content: center;
 margin-top: 2rem;
+opacity: 1;
 }
 
 .active{
@@ -130,52 +131,86 @@ overflow: hidden;
 }
 
 /* --- ПЛАВАЮЩИЙ ОСТРОВ --- */
+/* Сам белый остров */
 .active-tab-indicator {
-  bottom: -1px !important;
   position: absolute;
   bottom: 0;
-  left: 0;
-  height: 95%;
-  width: 50%; /* Ровно половина ширины шапки */
-  background-color: #F4F5F9; /* Цвет карточки из твоего кода */
-  border-radius: 35px 35px 0 0 !important; /* Скругляем только верх */
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 50%; /* Если у тебя две кнопки */
+  height: 100%;
+  background-color: #F4F5F9;
+  transition: transform 0.3s ease;
   z-index: 1;
+ 
+}
+/* Основные стили для кнопок (для обеих) */
+.tab-button {
+  flex: 1;
+  padding: 10px 15px;
+  background-color: transparent;
+  color: #c4a9a8; /* Цвет текста неактивной кнопки */
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
-/* Общие стили для выемок (ушек) */
+/* Стили для активной кнопки (только для кнопки "My Assets") */
+.active-tab-indicator {
+  position: absolute;
+  top: 0;
+  width: 50%; /* Ширина активного индикатора (если у тебя 2 кнопки) */
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1; /* Индикатор находится ниже кнопок */
+  background-color: #F4F5F9; /* Цвет активного индикатора */
+  border-radius: 20px; /* Скругление верхней части */
+}
+
+/* Магия для вогнутых изгибов (через псевдоэлементы) */
 .active-tab-indicator::before,
 .active-tab-indicator::after {
   content: "";
   position: absolute;
-  bottom: 0;
-  width: 20px;
-  height: 20px;
-  background: transparent;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+  top: 44%; /* Положение вогнутого угла */
+  width: 50px; /* Размер вогнутого угла */
+  height: 30px; /* Должен быть равен ширине */
+  background-color: transparent; /* Изгиб прозрачный */
+rotate: 180deg;
 }
 
-/* Левое ушко */
+/* Вогнутый изгиб слева */
 .active-tab-indicator::before {
-  left: -18px;
-  border-bottom-right-radius: 25px ;
-  box-shadow: 10px 0 0 0 #F4F5F9; /* Заливка угла */
+  left: -26px; /* Выносим за край острова на его ширину */
+  background: radial-gradient(circle at 100% 120%, transparent 30px, #F4F5F9 31px);
 }
 
-/* Правое ушко */
+/* Вогнутый изгиб справа */
 .active-tab-indicator::after {
-  right: -18px;
-  border-bottom-left-radius: 20px;
-  box-shadow: -10px 0 0 0 #F4F5F9;
+  right: -26px; /* Выносим за край острова на его ширину */
+  background: radial-gradient(circle at 0% 120%, transparent 30px, #F4F5F9 31px);
 }
+/* 
+.active-tab-indicator-div {
+  position: absolute;
+
+  height:3rem;
+  width:3rem;
+  left: 102%;
+  top: -12%;
+  rotate: 20deg;
+border-radius: 100%;  
+  background-color:  #053b33 ;
+  z-index: 3;
+} */
+
 
 /* --- ЛОГИКА ОЧИСТКИ (КЛАССЫ) --- */
 
 /* Левая кнопка активна */
 .tab-0-active .active-tab-indicator {
   transform: translateX(0);
-  border-radius: 0 25px 0 0; /* Убираем левый угол, т.к. там край экрана */
+  border-radius: 30px 37.5px 0 0; /* Убираем левый угол, т.к. там край экрана */
 }
 .tab-0-active .active-tab-indicator::before { opacity: 0; } /* Скрываем левое ушко */
 .tab-0-active .active-tab-indicator::after { opacity: 1; }
@@ -183,7 +218,7 @@ overflow: hidden;
 /* Правая кнопка активна */
 .tab-1-active .active-tab-indicator {
   transform: translateX(100%);
-  border-radius: 25px 0 0 0; /* Убираем правый угол у края */
+  border-radius: 37.5px 30px 0 0; /* Убираем правый угол у края */
 }
 .tab-1-active .active-tab-indicator::before { opacity: 1; }
 .tab-1-active .active-tab-indicator::after { opacity: 0; } /* Скрываем правое ушко */
@@ -196,24 +231,36 @@ overflow: hidden;
   border: none;
   font-size: 15px;
   font-weight: 600;
-  color: #C4A9A8;
+  color: #a8c4c1;
+   font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
   cursor: pointer;
   transition: color 0.3s ease;
   
 }
 
 .tab-button.active {
-  color: #1A1A1A;
+  color: #01281ac2;
 }
 
 /* Основная карта под табами */
 .card-content {
-  background-color: #F4F5F9;
-  min-height: 39vh;
+  background-color: #F4F5F9 ;
+  min-height: 39.5vh;
   border-radius: 0px 35px 35px 35px; /* Закругляем низ карты */
   padding: 20px;
   margin-top: -1px; /* Стык в стык с табами */
-  transition: border-radius 0.4s ease;
+  transition: border-radius 0.3s ease;
+
+}
+
+.fade-in{
+  background-color: #bfbfbf;
+  color: #040404;
+   font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 * {
