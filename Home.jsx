@@ -6,7 +6,9 @@ import React, {useState, useRef} from "react";
 // git push origin master
 
 // npx vite --host 0.0.0.0 --port 5173 --force
-
+//  git add .
+// git commit -m ""
+// git push origin main
 
 
 
@@ -392,7 +394,7 @@ return (
 <div className="content"> 
   <div className="header">
     <h1 className="header-text">Wallet</h1>
-<img src="bg.jpg" alt="" className="photo-account" /> 
+<div className="photo-account"> </div>
   </div>
 
   <div className="balance-parent">

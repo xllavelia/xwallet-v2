@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@900&family=Syncopate:wght@700&display=swap');
 
 .header{
-  margin-top: 3rem;
+  margin-top: 3.5rem;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -21,7 +21,11 @@ color: #ffffffeb;
 .photo-account{
   height: 4rem;
   width: 4rem;
+  background-image: url('/bg.jpg');
   scale: 0.9;
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
   margin-left: auto;
   border-radius: 50% ;
 }
