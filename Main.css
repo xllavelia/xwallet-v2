@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Montserrat:wght@900&family=Syncopate:wght@700&display=swap');
 
 .header{
-  margin-top: rem;
+  margin-top: 1.7rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,6 +30,10 @@ background-repeat: no-repeat;
   margin-left: auto;
   border-radius: 50% ;
 } */
+
+.balance-parent {
+  margin-top: 1rem;
+}
 
 .balance-parent h5{
   display: flex;
