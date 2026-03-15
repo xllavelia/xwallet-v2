@@ -8,7 +8,7 @@ import React, {useState, useRef} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "glass 2.0"
+// git commit -m "marging"
 // git push origin main
 
 
@@ -378,21 +378,22 @@ const Home = () => {
 const cardRef = useRef(null);
 const [activeTab, setActiveTab] = useState(0);
 
-function handleTabChange(index) {
+const handleTabChange = (index) => {
   setActiveTab(index);
 
-  // if (cardRef.current) {
-  //   if (index === 0) {
-  //     
-  //     cardRef.current.style.borderRadius = "35px 35px 35px 35px";
-  //   } else {
-  //     // При нажатии на Transactions (вторая кнопка)
-  //     cardRef.current.style.borderRadius = "35px 35px 35px 35px";
-  //   }
-  // }
-
-
-}
+  if (cardRef.current) {
+    // 1. Сначала немного сжимаем контент (эффект линзы)
+    cardRef.current.style.transform = "scale(0.99)";
+    cardRef.current.style.filter = "blur(2px)"; // Кратковременное "мыло" при движении
+    
+    setTimeout(() => {
+      // 2. Возвращаем в норму через 200мс
+      cardRef.current.style.transform = "scale(1)";
+      cardRef.current.style.filter = "blur(0px)";
+      cardRef.current.style.transition = "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)";
+    }, 50);
+  }
+};
 
 
 {/* <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"><title>arrow-back</title><rect class="cls-1" width="0" height="0" /><path class="cls-2" d="M19,11H7.14l3.63-4.36A1,1,0,1,0,9.23,5.36l-5,6a1.19,1.19,0,0,0-.09.15c0,.05,0,.08-.07.13A1,1,0,0,0,4,12H4a1,1,0,0,0,.07.36c0,.05,0,.08.07.13a1.19,1.19,0,0,0,.09.15l5,6A1,1,0,0,0,10,19a1,1,0,0,0,.64-.23,1,1,0,0,0,.13-1.41L7.14,13H19a1,1,0,0,0,0-2Z"/></svg> */}
@@ -409,8 +410,8 @@ return (
   </div>
 
   <div className="balance-parent">
-    <h1 className="balance">$72.53</h1>
-    <h5>wallet id: <span  className="span-copy-balance"  > 1927810028 </span>
+    <h1 className="balance">$12</h1>
+    <h5>wallet id: <span  className="span-copy-balance"> 1927810028 </span>
 </h5>
   </div>
 
@@ -463,6 +464,7 @@ return (
 
         </div>
         </div>
+
 
    {/* <div>
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
