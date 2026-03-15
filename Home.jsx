@@ -8,7 +8,7 @@ import React, {useState, useRef} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "margning"
+// git commit -m "crypto card!"
 // git push origin main
 
 
@@ -370,7 +370,7 @@ return (
     <h6 className="name-cart">VISA</h6>
     <div className="balance-parent">
       <h5 className="balance-text">Balance</h5>
-      <h1 className="balance">$12</h1>
+      <h1 className="balance">$471</h1>
       <h6 className="number-cart">8720 8261 2541 9267</h6>
       <h5 className="cart-id">cart id: <span className="span-copy-balance"> 19207145 </span></h5>
     </div>
@@ -392,6 +392,82 @@ return (
       </svg>
     </div>
   </div>
+</div>
+
+<div  className="crypto-mini-cards-container">
+
+  <div  className="crypto-mini-card">
+    <div  className="mini-card-header">
+      <div>
+        {/* <div  className="mini-card-icon icon-btc">₿</div> */}
+        <div  className="mini-card-title">Bitcoin</div>
+      </div>
+      <div  className="mini-card-rate">1 BTC = $19,509</div>
+    </div>
+    <div  className="mini-card-balance-section">
+      <div  className="mini-card-crypto-balance">108,61 BTC</div>
+      <div  className="mini-card-fiat-balance">$213,017.17</div>
+    </div>
+    <div  className="mini-card-profit-section">
+      <div  className="mini-card-profit-title">Profit (24h)</div>
+      <div  className="mini-card-profit-usd">+$1,237.45</div>
+      <div  className="mini-card-profit-percent">+5%</div>
+    </div>
+    <div  className="mini-card-actions">
+      <button  className="btn-mini-card btn-swap">Swap</button>
+      <button  className="btn-mini-card btn-buy">Buy</button>
+      <button  className="btn-mini-card btn-send">Send</button>
+    </div>
+  </div>
+
+  <div  className="crypto-mini-card">
+    <div  className="mini-card-header">
+      <div>
+        {/* <div  className="mini-card-icon icon-eth">Ξ</div> */}
+        <div  className="mini-card-title">Ethereum</div>
+      </div>
+      <div  className="mini-card-rate">1 ETH = $1,348</div>
+    </div>
+    <div  className="mini-card-balance-section">
+      <div  className="mini-card-crypto-balance">107,45 ETH</div>
+      <div  className="mini-card-fiat-balance">$144,842.60</div>
+    </div>
+    <div  className="mini-card-profit-section">
+      <div  className="mini-card-profit-title">Profit (24h)</div>
+      <div  className="mini-card-profit-usd">+$3,237.45</div>
+      <div  className="mini-card-profit-percent">+8%</div>
+    </div>
+    <div  className="mini-card-actions">
+      <button  className="btn-mini-card btn-swap">Swap</button>
+      <button  className="btn-mini-card btn-buy">Buy</button>
+      <button  className="btn-mini-card btn-send">Send</button>
+    </div>
+  </div>
+
+  <div  className="crypto-mini-card">
+    <div  className="mini-card-header">
+      <div>
+        {/* <div  className="mini-card-icon icon-usdt">$</div> */}
+        <div  className="mini-card-title">USDT</div>
+      </div>
+      <div  className="mini-card-rate">1 USDT = $1.00</div>
+    </div>
+    <div  className="mini-card-balance-section">
+      <div  className="mini-card-crypto-balance">0.000 USDT</div>
+      <div  className="mini-card-fiat-balance">$0.00</div>
+    </div>
+    <div  className="mini-card-profit-section">
+      <div  className="mini-card-profit-title">Profit (24h)</div>
+      <div  className="mini-card-profit-usd">+$0.00</div>
+      <div  className="mini-card-profit-percent">+0.00%</div>
+    </div>
+    <div  className="mini-card-actions">
+      <button  className="btn-mini-card btn-swap">Swap</button>
+      <button  className="btn-mini-card btn-buy">Buy</button>
+      <button  className="btn-mini-card btn-send">Send</button>
+    </div>
+  </div>
+
 </div>
 
   {/* <div className="fast-func">
@@ -443,7 +519,7 @@ return (
 
 
    {/* <div>
-<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<svg xmlns="http://www.w3.org/2000/svg"  className="icon icon-tabler icon-tabler-arrow-narrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="red" d="M0 0h24v24H0z"/>
   <line x1="5" y1="12" x2="19" y2="12" />
   <line x1="5" y1="12" x2="9" y2="16" />

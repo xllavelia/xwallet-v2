@@ -20,9 +20,6 @@ background-color: hsl(162, 50%, 15%);
   opacity: 1;
 }
 
-
-
-
 .home-cart-parent{
   display: flex;
   justify-content: center;
@@ -57,56 +54,52 @@ letter-spacing: -1px;
   opacity: 0;
   padding: 0.1rem;
 }
+
 .balance-text{
-  color: hsl(70, 80%, 80%);
+  color: hsl(69, 18%, 92%);
     font-family:'Unbounded', sans-serif;
   font-size: 1rem;
   font-weight: 500;
   opacity: 0.8;
   padding-left:0.5rem;
 }
-.number-cart{
-  color: hsl(70, 80%, 80%);
-  font-family:'Unbounded', sans-serif;
 
+.number-cart{
+  color: hsl(72, 12%, 92%);
+  font-family:'Unbounded', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   opacity: .9;
   text-align: center;
 }
+
 .cart-id{
   margin-top: 0.1rem;
   text-align: center;
-  color: hsl(70, 80%, 80%);
+  color: hsl(70, 21%, 95%);
   font-family:'Unbounded', sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
   opacity: 0.8;
 }
 
-
-
-/* Эта обертка больше не будет ломать верстку */
 .not-cart {
-  
   gap:0.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Распределит блоки ровно по высоте 17.5vh */
-  width: 15%; /* ВОТ ИСПРАВЛЕНИЕ: было 100% */
+  justify-content: space-between; 
+  width: 15%; 
 }
 
-/* Большой фиолетовый */
 .cart-nwc {
   border-radius: 0.3rem;
-  width: 100%; /* Занимает всю ширину обертки .not-cart */
+  width: 100%; 
   height: 14.5vh;
   background-color: hsl(70, 80%, 80%);
 }
 
-/* Кнопка с плюсом */
+
 .create-cart {
-  
    border-radius: 0.3rem;
   display: flex;
   justify-content: center; 
@@ -123,20 +116,179 @@ stroke: #e0ffc2;
   height: 5vh;
 }
 
+.crypto-mini-cards-container {
+   overflow-x: auto ;
+ overflow-y: hidden ;
+ scroll-snap-type: x mandatory;
+scrollbar-width: none;
+scroll-behavior: smooth;
+justify-content: start;
+  margin: 3%;
+margin-top: 3vh;
+  display: flex;
+  gap: 15px; 
+  background-color: #000000;
+  padding: 0px;
+  border-radius: 12px;
+}
+
+.crypto-mini-card {
+  background-color: hsl(162, 50%, 15%); 
+  color: #FFFFFF; 
+  font-family: 'Unbounded', sans-serif; 
+  border-radius: 12px; 
+  padding: 15px; 
+  display: flex;
+  flex-direction: column;
+ min-width: 35vh;
+
+}
+
+/* Стили для заголовка карточки */
+.mini-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Распределяем элементы по краям */
+  margin-bottom: 10px;
+}
+
+/* Стили для иконки монеты */
+.mini-card-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Круглая иконка */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+
+.icon-btc { background-color: #F97316; color: #FFFFFF; } 
+.icon-eth { background-color: #3B82F6; color: #FFFFFF; } 
+.icon-usdt { background-color: #10B981; color: #FFFFFF; } 
+
+
+.mini-card-title {
+  font-size: 16px;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.mini-card-rate {
+  font-size: 12px;
+  color: hsl(70, 80%, 80%);
+}
+
+.mini-card-balance-section {
+  margin-bottom: 15px;
+}
+
+/* Стили для криптовалютного баланса */
+.mini-card-crypto-balance {
+  font-size: 24px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+/* Стили для эквивалента в USD */
+.mini-card-fiat-balance {
+  font-size: 14px;
+  color: hsl(70, 80%, 80%);
+  opacity: 0.9; /* Светло-серый цвет текста */
+}
+
+/* Стили для секции прибыли */
+.mini-card-profit-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Стили для текста заголовка прибыли */
+.mini-card-profit-title {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+/* Стили для прибыли в USD */
+.mini-card-profit-usd {
+  font-size: 14px;
+  color: #10B981; /* Зеленый цвет для прибыли */
+}
+
+/* Стили для процентного прироста прибыли */
+.mini-card-profit-percent {
+  font-size: 14px;
+  color: hsl(70, 80%, 80%); /* Фирменный акцентный цвет для процентов */
+}
+
+/* Стили для кнопок действий */
+.mini-card-actions {
+  display: flex;
+  gap: 8px; /* Отступ между кнопками */
+  justify-content: space-between;
+}
+
+/* Стили для общей кнопки */
+.btn-mini-card {
+  flex: 1; /* Кнопки занимают все доступное место */
+  text-align: center;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase; /* Текст в верхнем регистре */
+  border: none;
+  cursor: pointer;
+}
+
+.btn-swap { 
+  background-color: transparent; 
+  border: 2px solid hsl(70, 80%, 80%); 
+  color: hsl(70, 80%, 80%); 
+  font-family: 'Unbounded', sans-serif; 
+
+} 
+.btn-buy { 
+  background-color:
+    hsl(70, 80%, 80%); 
+    color: hsl(162, 50%, 15%);
+  font-family: 'Unbounded', sans-serif; 
+
+   } 
+.btn-send {
+   background-color:  
+   hsl(70, 80%, 80%); 
+   color: hsl(162, 50%, 15%); 
+  font-family: 'Unbounded', sans-serif; 
+  } 
+
+  
+@media (min-width: 560px) {
+  .lend-div{
+margin-top: 50%;
+  }
+}
+
+
+@media (min-width: 768px) { 
+.crypto-mini-cards-container{
+  justify-content: center;
+}
+}
+
 body {
-     /* background-image: url('/bgv2.jpg') ;
- background-size: 110rem;
- background-position: center;
-background-repeat: no-repeat; */
 background-color: black;
 }
 
 * {
-  
   margin: 0;
     -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none; 
   -ms-user-select: none;     
   user-select: none; 
-  
 }
