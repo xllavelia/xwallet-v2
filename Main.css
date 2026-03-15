@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Syne:wght@400..800&family=Michroma&family=Archivo:wdth,wght@62.5..125,100..900&family=Inter:wght@100..900&display=swap');
 
 .header{
-  margin-top: 5vh;
+  margin-top: 7vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,7 +33,7 @@ background-color: hsl(162, 50%, 15%);
 
 .home-cart{
 background-color: hsl(162, 50%, 15%);
-  height: 23vh;
+  height: 21vh;
   width: 73%;
   border-radius: 0.3rem;
 }
@@ -100,7 +100,7 @@ letter-spacing: -1px;
 .cart-nwc {
   border-radius: 0.3rem;
   width: 100%; /* Занимает всю ширину обертки .not-cart */
-  height: 15.5vh;
+  height: 14.5vh;
   background-color: hsl(70, 80%, 80%);
 }
 
@@ -112,7 +112,7 @@ letter-spacing: -1px;
   justify-content: center; 
   align-items: center;     
   width: 100%;
-  height: 6.5vh;
+  height: 5.5vh;
   background-color: hsl(162, 50%, 15%);
 
 }
