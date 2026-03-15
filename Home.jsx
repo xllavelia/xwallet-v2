@@ -8,7 +8,7 @@ import React, {useState, useRef} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "DELETE XWALLET-V2"
+// git commit -m "cart and header"
 // git push origin main
 
 
