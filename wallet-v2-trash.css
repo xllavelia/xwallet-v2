@@ -1,0 +1,195 @@
+/* 
+.photo-account{
+  height: 4rem;
+  width: 4rem;
+  background-image: url('/bg.jpg');
+  scale: 0.9;
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
+  margin-left: auto;
+  border-radius: 50% ;
+} */
+
+
+
+/* .balance-parent h5{
+  display: flex;
+justify-content: center;
+color: #ffffffea;
+font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+letter-spacing: -1px;
+  font-weight:500; 
+  opacity: 0.5;
+}
+
+.balance-parent span{
+margin-left: 3px;
+} */
+
+/* 
+.fast-func{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-around; 
+  margin-top: 3.8rem; 
+}
+
+.fast-func-arrow-out, .fast-func-arrow, .fast-func-swap, .fast-func-private{
+  width: 5rem;
+  height: 5rem;
+background: rgba(255, 255, 255, 0.2);
+opacity: 0.9 !important;
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
+box-shadow: 
+  inset 0 0px 15px rgba(255, 255, 255, 0.3);   
+border: 1px solid rgba(255, 255, 255, 0.6);
+
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin: 0rem;
+    outline: none;
+    border: none;
+  opacity: 0.9;
+}
+
+
+.fast-func-arrow span, .fast-func-arrow-out span, .fast-func-swap span, .fast-func-private span{
+color: #ffffffea;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.3rem;
+
+  font-weight:900; 
+  opacity: 0.9;
+}
+
+
+.active-parent{
+  display: flex;
+justify-content: center;
+margin-top: 2rem;
+opacity: 1;
+}
+
+.active{
+width: 95%;
+overflow: hidden;
+}
+
+.active-lend{
+    margin-bottom: 1rem;
+}
+
+
+.tabs-header {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 45px; 
+  background-color: transparent; 
+  padding: 0;
+  margin: 0;
+}
+
+
+.active-tab-indicator {
+  position: absolute;
+  bottom: 0;
+  width: 50%; 
+  height: 100%;
+  transition: transform 0.3s ease;
+  z-index: 1;
+ 
+}
+.tab-button {
+  flex: 1;
+  padding: 10px 0px;
+  background-color: transparent;
+  color: #f2f2f2; 
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+
+.active-tab-indicator {
+  position: absolute;
+  top: 0;
+  width: 49.6%; 
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1; 
+ background: rgba(255, 255, 255, 0.1);
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
+box-shadow: 
+  inset 0 0px 15px rgba(255, 255, 255, 0.3);   
+border: 1px solid rgba(255, 255, 255, 0.3);
+
+}
+
+
+
+
+
+
+
+.tab-0-active .active-tab-indicator {
+  transform: translateX(0);
+  border-radius: 0.6rem;
+}
+.tab-1-active .active-tab-indicator {
+  transform: translateX(100%);
+  border-radius: 0.6rem; 
+
+}
+
+.tab-button {
+  
+  flex: 1;
+  z-index: 2; 
+  background: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffffd3;
+   font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  
+}
+
+.card-content {
+   background: rgba(255, 255, 255, 0.02);
+ background-size: cover;
+ background-position: center;
+background-repeat: no-repeat;
+box-shadow: 
+  inset 0 0px 15px rgba(255, 255, 255, 0.3);   
+border: 1px solid rgba(255, 255, 255, 0.3);
+  min-height: 39.5vh;
+  border-radius:35px; 
+  padding: 20px;
+  margin-top: -1px;
+  transition: border-radius 0.3s ease;
+z-index: 3;
+}
+
+
+
+.fade-in{
+background: transparent;
+  color: #fffffff0;
+   font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+} */

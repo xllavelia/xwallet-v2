@@ -8,7 +8,7 @@ import React, {useState, useRef} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "marging"
+// git commit -m "DELETE XWALLET-V2"
 // git push origin main
 
 
@@ -356,66 +356,45 @@ const Home = () => {
 // }, [name, amount,activeButtons ]);
 
 
-
-
-// const [historyList, setHistoryList] = useState([]);
-
-// function historyAdd(historyName, historyPrice) {
-
-//   const newHistoryItem = {
-//     id: Date.now(),
-//     name: historyName,
-//     price: historyPrice
-//   };
-
-//   setHistoryList(function(prevHistory) {
-//     return [...prevHistory, newHistoryItem];
-//   });
-
-// // }
-// const curvLeftfRef = useRef(null);
-// const curvRightfRef = useRef(null);
-const cardRef = useRef(null);
-const [activeTab, setActiveTab] = useState(0);
-
-const handleTabChange = (index) => {
-  setActiveTab(index);
-
-  if (cardRef.current) {
-    // 1. Сначала немного сжимаем контент (эффект линзы)
-    cardRef.current.style.transform = "scale(0.99)";
-    cardRef.current.style.filter = "blur(2px)"; // Кратковременное "мыло" при движении
-    
-    setTimeout(() => {
-      // 2. Возвращаем в норму через 200мс
-      cardRef.current.style.transform = "scale(1)";
-      cardRef.current.style.filter = "blur(0px)";
-      cardRef.current.style.transition = "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)";
-    }, 50);
-  }
-};
-
-
-{/* <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"><title>arrow-back</title><rect class="cls-1" width="0" height="0" /><path class="cls-2" d="M19,11H7.14l3.63-4.36A1,1,0,1,0,9.23,5.36l-5,6a1.19,1.19,0,0,0-.09.15c0,.05,0,.08-.07.13A1,1,0,0,0,4,12H4a1,1,0,0,0,.07.36c0,.05,0,.08.07.13a1.19,1.19,0,0,0,.09.15l5,6A1,1,0,0,0,10,19a1,1,0,0,0,.64-.23,1,1,0,0,0,.13-1.41L7.14,13H19a1,1,0,0,0,0-2Z"/></svg> */}
-{/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>arrow-back</title><rect class="cls-1" width="0" height="0" /><path class="cls-2" d="M19,11H7.14l3.63-4.36A1,1,0,1,0,9.23,5.36l-5,6a1.19,1.19,0,0,0-.09.15c0,.05,0,.08-.07.13A1,1,0,0,0,4,12H4a1,1,0,0,0,.07.36c0,.05,0,.08.07.13a1.19,1.19,0,0,0,.09.15l5,6A1,1,0,0,0,10,19a1,1,0,0,0,.64-.23,1,1,0,0,0,.13-1.41L7.14,13H19a1,1,0,0,0,0-2Z"/></svg> */}
-{/* <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.5951 4.50716C12.8673 4.19494 13.3411 4.16249 13.6533 4.43468L19.4929 9.52559C19.7286 9.73108 19.812 10.0613 19.7023 10.3541C19.5926 10.6469 19.3127 10.8409 19 10.8409H5C4.58579 10.8409 4.25 10.5051 4.25 10.0909C4.25 9.67671 4.58579 9.34092 5 9.34092H16.9984L12.6676 5.56534C12.3554 5.29315 12.3229 4.81938 12.5951 4.50716Z" fill="black" fill-rule="evenodd"/><path clip-rule="evenodd" d="M11.4049 19.4928C11.1327 19.8051 10.6589 19.8375 10.3467 19.5653L4.50715 14.4744C4.27144 14.2689 4.18796 13.9387 4.29768 13.6459C4.40741 13.3531 4.68729 13.1591 5 13.1591L19 13.1591C19.4142 13.1591 19.75 13.4949 19.75 13.9091C19.75 14.3233 19.4142 14.6591 19 14.6591L7.00161 14.6591L11.3324 18.4347C11.6446 18.7069 11.6771 19.1806 11.4049 19.4928Z" fill="black" fill-rule="evenodd"/></svg> */}
-{/* <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.5951 4.50716C12.8673 4.19494 13.3411 4.16249 13.6533 4.43468L19.4929 9.52559C19.7286 9.73108 19.812 10.0613 19.7023 10.3541C19.5926 10.6469 19.3127 10.8409 19 10.8409H5C4.58579 10.8409 4.25 10.5051 4.25 10.0909C4.25 9.67671 4.58579 9.34092 5 9.34092H16.9984L12.6676 5.56534C12.3554 5.29315 12.3229 4.81938 12.5951 4.50716Z" fill="black" fill-rule="evenodd"/><path clip-rule="evenodd" d="M11.4049 19.4928C11.1327 19.8051 10.6589 19.8375 10.3467 19.5653L4.50715 14.4744C4.27144 14.2689 4.18796 13.9387 4.29768 13.6459C4.40741 13.3531 4.68729 13.1591 5 13.1591L19 13.1591C19.4142 13.1591 19.75 13.4949 19.75 13.9091C19.75 14.3233 19.4142 14.6591 19 14.6591L7.00161 14.6591L11.3324 18.4347C11.6446 18.7069 11.6771 19.1806 11.4049 19.4928Z" fill="black" fill-rule="evenodd"/></svg> */}
-
 return (
     
 <div className="content"> 
+  <div className="not-scroll">
+
   <div className="header">
-    <h1 className="header-text">Wallet</h1>
-{/* <div className="photo-account"> </div> */}
+    <h1 className="header-text">Hello, kovrik!</h1>
   </div>
 
-  <div className="balance-parent">
-    <h1 className="balance">$12</h1>
-    <h5>wallet id: <span  className="span-copy-balance"> 1927810028 </span>
-</h5>
+<div className="home-cart-parent">
+  <div className="home-cart">
+    <h6 className="name-cart">VISA</h6>
+    <div className="balance-parent">
+      <h5 className="balance-text">Balance</h5>
+      <h1 className="balance">$12</h1>
+      <h6 className="number-cart">8720 8261 2541 9267</h6>
+      <h5 className="cart-id">cart id: <span className="span-copy-balance"> 19207145 </span></h5>
+    </div>
   </div>
 
-  <div className="fast-func">
+  {/* Теперь этот блок держит всё на своих местах */}
+  <div className="not-cart"> 
+    <div className="cart-nwc">
+    </div>
+    
+    <div className="create-cart">
+      <svg className="create-cart-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path 
+          d="M12 20L12 12M12 12L12 4M12 12L20 12M12 12L4 12" 
+          stroke="" 
+          strokeWidth="2" 
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+
+  {/* <div className="fast-func">
     <button className="fast-func-arrow"><span>send</span></button>
    
     <button className="fast-func-arrow-out"><span>get</span></button>
@@ -430,15 +409,12 @@ return (
    
 <div className="active-lend">
 <div className={"tabs-header " + (activeTab === 0 ? "tab-0-active" : "tab-1-active")}>
-  {/* Твой активный остров, который ездит влево-вправо */}
 <div className="active-tab-indicator">
-  {/* Левый изгиб */}
-  {/* <div className="curve curve-left" ref={curvLeftfRef}></div>
-  
+
  
-  <div className="curve curve-right" ref={curvRightfRef}></div> */}
+  <div className="curve curve-right" ref={curvRightfRef}></div> 
 </div>
-  {/* <div className="active-tab-indicator-div"></div> */}
+ 
   <button 
     className={"tab-button " + (activeTab === 0 ? "active" : "")}
     onClick={() => handleTabChange(0)}
@@ -463,7 +439,7 @@ return (
 </div>
 
         </div>
-        </div>
+        </div> */}
 
 
    {/* <div>
@@ -777,7 +753,7 @@ style={{
 <div  ref={GoalLendParent1} className="karta-lend-parent-1"><div className="karta-lend-content-1"><p>RRRRRR1RRRRRRR</p></div></div>
 <div  ref={GoalLendParent2} className="karta-lend-parent-2"><div className="karta-lend-content-2"><p>RRRRRRRRR2RRRR</p></div></div>
 <div  ref={GoalLendParent3}  className="karta-lend-parent-3"><div className="karta-lend-content-3"><p>RRR3RRRRRRRRRR</p></div></div>
-   */}   </div>
+   */}   </div></div>
   );
 }
 export default Home;
