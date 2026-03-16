@@ -7,9 +7,9 @@ import React, {useState, useRef} from "react";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 
- git add .
-git commit -m "transaction!"
-git push origin main
+//  git add .
+// git commit -m "transaction!"
+// git push origin main
 
 
 
