@@ -7,9 +7,9 @@ import React, {useState, useRef} from "react";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 
-//  git add .
-// git commit -m "mini fix"
-// git push origin main
+ git add .
+git commit -m "transaction!"
+git push origin main
 
 
 
@@ -355,6 +355,46 @@ const Home = () => {
 //   }
 // }, [name, amount,activeButtons ]);
 
+// 1. Тот самый шаблонный массив с данными
+const transactionsDB = [
+  {
+    id: 1,
+    name: "Starbucks Coffee",
+    date: "October 17, 09:00 PM",
+    amount: "-$44.80",
+    bonus: "+$1.65",
+     icon: <img src="https://i.pinimg.com/736x/14/55/09/145509e2e7c55b7ab8830545895b70c9.jpg" alt="" /> 
+  },
+  {
+    id: 2,
+     name: "Deposit USDT",
+    date: "October 15, 08:15 AM",
+    amount: "+$500.00",
+    bonus: "+0.00",
+    icon: <svg width="201px" height="201px" viewBox="0 0 201 201" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>USDT</title><desc>Created with Sketch.</desc><defs></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Artboard" transform="translate(-1807.000000, -2361.000000)"><g id="USDT" transform="translate(1807.000000, 2361.000000)"><path d="M200.8206,100.4652 C200.8206,155.6942 156.0496,200.4652 100.8206,200.4652 C45.5916,200.4652 0.8206,155.6942 0.8206,100.4652 C0.8206,45.2362 45.5916,0.4652 100.8206,0.4652 C156.0496,0.4652 200.8206,45.2362 200.8206,100.4652" id="Fill-692" fill="#1BA27A"></path><polygon id="Fill-694" fill="#FFFFFF" points="147.7532 50.8914 53.0622 50.8914 53.0622 73.7504 88.9782 73.7504 88.9782 107.3504 111.8372 107.3504 111.8372 73.7504 147.7532 73.7504"></polygon>
+ <path d="M100.6252,110.9305 C70.9142,110.9305 46.8282,106.2285 46.8282,100.4275 C46.8282,94.6275 70.9142,89.9245 100.6252,89.9245 C130.3352,89.9245 154.4212,94.6275 154.4212,100.4275 C154.4212,106.2285 130.3352,110.9305 100.6252,110.9305 M161.0302,102.1785 C161.0302,94.6985 133.9862,88.6345 100.6252,88.6345 C67.2642,88.6345 40.2192,94.6985 40.2192,102.1785 C40.2192,108.7645 61.1902,114.2525 88.9782,115.4695 L88.9782,163.7035 L111.8372,163.7035 L111.8372,115.4885 C139.8402,114.3095 161.0302,108.7995 161.0302,102.1785" id="Fill-696" fill="#FFFFFF"></path> </g> </g> </g></svg>
+  },
+  {
+    id: 3,
+   name: "Apple Store",
+    date: "October 16, 12:30 PM",
+    amount: "-$109.99",
+    bonus: "+$5.50",
+    icon: <img src="https://i.pinimg.com/736x/cf/11/eb/cf11ebcc0a874e3ad3830431f7b0ab58.jpg" alt="" />
+  }
+];
+
+// 2. Стейт, в котором изначально лежит только первая транзакция
+const [history, setHistory] = useState([transactionsDB[0]]);
+const [clickCount, setClickCount] = useState(1);
+
+// 3. Функция добавления новой карточки при клике
+const handleAddTransaction = () => {
+  if (clickCount < transactionsDB.length) {
+    setHistory([ transactionsDB[clickCount], ...history]);
+    setClickCount(clickCount + 1);
+  }
+};
 
 return (
     
@@ -402,11 +442,11 @@ return (
         {/* <div  className="mini-card-icon icon-btc">₿</div> */}
         <div  className="mini-card-title">Bitcoin</div>
       </div>
-      <div  className="mini-card-rate">1 BTC = $19,509</div>
+      <div  className="mini-card-rate">1 BTC = $71,509</div>
     </div>
     <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">108,61 BTC</div>
-      <div  className="mini-card-fiat-balance">$213,017.17</div>
+      <div  className="mini-card-crypto-balance">0,0091 BTC</div>
+      <div  className="mini-card-fiat-balance">$678.2</div>
     </div>
     <div  className="mini-card-profit-section">
       <div  className="mini-card-profit-title">Profit (24h)</div>
@@ -419,18 +459,18 @@ return (
       <button  className="btn-mini-card btn-send">Send</button>
     </div>
   </div>
-
+  
   <div  className="crypto-mini-card">
     <div  className="mini-card-header">
       <div>
         {/* <div  className="mini-card-icon icon-eth">Ξ</div> */}
         <div  className="mini-card-title">Ethereum</div>
       </div>
-      <div  className="mini-card-rate">1 ETH = $1,348</div>
+      <div  className="mini-card-rate">1 ETH = $2,048</div>
     </div>
     <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">107,45 ETH</div>
-      <div  className="mini-card-fiat-balance">$144,842.60</div>
+      <div  className="mini-card-crypto-balance">7 ETH</div>
+      <div  className="mini-card-fiat-balance">$7042.60</div>
     </div>
     <div  className="mini-card-profit-section">
       <div  className="mini-card-profit-title">Profit (24h)</div>
@@ -467,8 +507,48 @@ return (
       <button  className="btn-mini-card btn-send">Send</button>
     </div>
   </div>
-
 </div>
+
+<div className="home-history-wrapper-parent">
+<div className="home-history-wrapper">
+  
+
+  <div className="home-history-header">
+    <h2 className="home-history-title">Transactions</h2>
+    <span className="home-history-see-all" onClick={handleAddTransaction}>
+      See all
+    </span>
+  </div>
+
+  <div className="home-history-list">
+    {history.map((item) => (
+      <div key={item.id} className="home-history-item">
+        
+        <div className="home-history-left">
+          <div className="home-history-img">
+            {item.icon}
+          </div>
+          <div className="home-history-info">
+            <h4 className="home-history-name">{item.name}</h4>
+            <span className="home-history-date">{item.date}</span>
+          </div>
+        </div>
+
+        <div className="home-history-right">
+          <h4 className="home-history-amount">{item.amount}</h4>
+          {item.bonus && (
+            <span className="home-history-bonus">{item.bonus}</span>
+          )}
+        </div>
+        
+      </div>
+    ))}
+  </div>
+  
+</div>
+</div>
+
+
 
   {/* <div className="fast-func">
     <button className="fast-func-arrow"><span>send</span></button>

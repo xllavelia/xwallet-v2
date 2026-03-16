@@ -133,7 +133,7 @@ margin-top: 3vh;
 }
 
 .crypto-mini-card {
-  background-color: hsl(162, 50%, 15%); 
+  background-color: #121212; 
   color: #FFFFFF; 
   font-family: 'Unbounded', sans-serif; 
   border-radius: 12px; 
@@ -267,13 +267,145 @@ margin-top: 3vh;
   font-family: 'Unbounded', sans-serif; 
   } 
 
+
   
-@media (min-width: 560px) {
-  .lend-div{
-margin-top: 50%;
-  }
+.home-history-wrapper-parent {
+  margin-top: 1.5rem;
+display: flex;
+justify-content: center;
+}
+  
+.home-history-wrapper {
+  background-color: #121212;
+  border-radius: 20px;
+  padding: 24px;
+  font-family: 'Unbounded', sans-serif;
+  width: 95%;
+  box-sizing: border-box;
 }
 
+ 
+.home-history-wrapper img {
+width: 100%;
+height: auto;
+border-radius: 30%;
+border: 1px solid #ffffff ;
+}
+
+
+.home-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.home-history-title {
+  color: #FFFFFF;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.home-history-see-all {
+  color: hsl(70, 80%, 80%); /* Твой фирменный салатовый */
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.home-history-see-all:active {
+  opacity: 0.5; /* Легкая анимация нажатия */
+}
+
+/* Контейнер списка */
+.home-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Отступ между транзакциями */
+}
+
+/* Сама карточка транзакции */
+.home-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Легкая разделительная линия */
+}
+
+/* Убираем линию у последней карточки */
+.home-history-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Группировка левой части */
+.home-history-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Кружок с картинкой */
+.home-history-img {
+  width: 50px;
+  height: 50px;
+  background-color: transparent; /* Твой фирменный изумрудно-темный */
+  border-radius: 14px; /* Слегка скругленный квадрат смотрится дороже круга */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+/* Информация (Имя и Дата) */
+.home-history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-history-name {
+  color: #FFFFFF;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.home-history-date {
+  color: rgba(255, 255, 255, 0.4); /* Выцветший серый для даты */
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+/* Правая часть (Суммы) */
+.home-history-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Выравниваем по правому краю */
+  gap: 6px;
+}
+
+.home-history-amount {
+  color: #FFFFFF;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* Плашка кэшбека */
+.home-history-bonus {
+  background-color: hsl(70, 80%, 80%);
+  color: #121212; /* Темный текст для читаемости на салатовом фоне */
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
 
 @media (min-width: 768px) { 
 .crypto-mini-cards-container{
