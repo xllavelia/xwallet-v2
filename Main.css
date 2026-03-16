@@ -4,7 +4,7 @@
   margin-top: 7vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   flex-direction: row;
   padding: 1rem;
 }
