@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Syne:wght@400..800&family=Michroma&family=Archivo:wdth,wght@62.5..125,100..900&family=Inter:wght@100..900&display=swap');
 
+
 .header{
   margin-top: 7vh;
   display: flex;
@@ -107,7 +108,6 @@ letter-spacing: -1px;
   width: 100%;
   height: 5.5vh;
   background-color: hsl(162, 50%, 15%);
-
 }
 
 .create-cart svg {
@@ -256,14 +256,14 @@ margin-top: 3vh;
 .btn-buy { 
   background-color:
     hsl(70, 80%, 80%); 
-    color: hsl(162, 50%, 15%);
+    color: #000000;
   font-family: 'Unbounded', sans-serif; 
 
    } 
 .btn-send {
    background-color:  
    hsl(70, 80%, 80%); 
-   color: hsl(162, 50%, 15%); 
+   color: #000000; 
   font-family: 'Unbounded', sans-serif; 
   } 
 
@@ -287,8 +287,8 @@ justify-content: center;
  
 .home-history-wrapper img {
 width: 100%;
-height: auto;
-border-radius: 30%;
+height: 100%;
+border-radius: 20%;
 border: 1px solid #ffffff ;
 }
 
@@ -354,7 +354,6 @@ border: 1px solid #ffffff ;
   width: 50px;
   height: 50px;
   background-color: transparent; /* Твой фирменный изумрудно-темный */
-  border-radius: 14px; /* Слегка скругленный квадрат смотрится дороже круга */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -406,6 +405,88 @@ border: 1px solid #ffffff ;
   padding: 4px 8px;
   border-radius: 8px;
 }
+
+.app-scroll-container {
+  display: flex; 
+
+ overflow-x: auto;
+ overflow-y:scroll;
+  scroll-snap-type: x mandatory;
+  background-color: #000000;
+  font-family: 'Unbounded', sans-serif;
+  scrollbar-width: none; 
+  scroll-behavior: smooth;
+}
+
+
+
+.app-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.app-page-section {
+  /* Каждая страница — это отдельный блок на весь экран */
+  flex-shrink: 0;
+  width: 100vw;
+  scroll-snap-align: start;
+  background-color: #000000;
+
+}
+
+
+
+.app-page-section:nth-child(2) {
+  background-color: #000000;
+    width: 100%;
+  height: 100%;
+}
+
+.app-page-section:nth-child(3) {
+  background-color: hsl(162, 50%, 10%);
+}
+
+
+
+/* 
+
+.nav-bottom-island {
+  width: 55%;
+  height: 80px;
+  background-color: #1a1a1a; 
+  border-radius: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.nav-bright-track {
+  width: 87%;
+  height: 55px;
+  background-color: hsl(162, 50%, 15%); 
+  border-radius: 25px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  touch-action: none; 
+}
+
+
+.nav-sticky-island-wrapper {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 9;
+  position: sticky; 
+  left: 50vw; 
+} */
+
+
 
 @media (min-width: 768px) { 
 .crypto-mini-cards-container{

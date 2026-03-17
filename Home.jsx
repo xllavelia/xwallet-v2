@@ -1,3 +1,4 @@
+import { img } from "framer-motion/client";
 import React, {useState, useRef} from "react";
   // import { useNavigate } from "react-router-dom";
 
@@ -8,7 +9,7 @@ import React, {useState, useRef} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "transaction!"
+// git commit -m "scroll!"
 // git push origin main
 
 
@@ -381,6 +382,16 @@ const transactionsDB = [
     amount: "-$109.99",
     bonus: "+$5.50",
     icon: <img src="https://i.pinimg.com/736x/cf/11/eb/cf11ebcc0a874e3ad3830431f7b0ab58.jpg" alt="" />
+  },
+
+ {
+    id: 4,
+   name: "Windraft ETH",
+    date: "October 17, 02:30 PM",
+    amount: "-$100",
+    bonus: "+0.00",
+        icon: <img src="https://i.pinimg.com/474x/00/56/09/0056095969b13247cc2220891bbf5caf.jpg" alt="" />
+
   }
 ];
 
@@ -396,13 +407,20 @@ const handleAddTransaction = () => {
   }
 };
 
+
 return (
     
 <div className="content"> 
-  <div className="not-scroll">
+
+ <div className="app-scroll-container">
+      
+      {/* Каждая секция занимает 100% экрана */}
+      <div className="app-page-section"   >
+        <div className="page-content" >
+
 
   <div className="header">
-    <h1 className="header-text">Hello, kovrik!</h1>
+    <h1 className="header-text">Hello. kovrik!</h1>
   </div>
 
 <div className="home-cart-parent">
@@ -543,11 +561,41 @@ return (
         
       </div>
     ))}
+    
   </div>
-  
+        </div>
+      </div>
+      
 </div>
 </div>
 
+
+      <section className="app-page-section">
+        <div className="page-content">
+
+          <h1 style={{ color: "#FFFFFF" }}>Crypto</h1>
+
+        </div>
+      </section>
+
+      <section className="app-page-section">
+        <div className="page-content">
+
+          <h1 style={{ color: "#FFFFFF" }}>Settings</h1>
+
+        </div>
+      </section>
+
+    </div>
+    <div className="scroll"> </div>
+
+{/* <div className="CRYPTO">
+
+</div>
+
+<div className="SETTING">
+
+</div> */}
 
 
   {/* <div className="fast-func">
@@ -909,7 +957,7 @@ style={{
 <div  ref={GoalLendParent1} className="karta-lend-parent-1"><div className="karta-lend-content-1"><p>RRRRRR1RRRRRRR</p></div></div>
 <div  ref={GoalLendParent2} className="karta-lend-parent-2"><div className="karta-lend-content-2"><p>RRRRRRRRR2RRRR</p></div></div>
 <div  ref={GoalLendParent3}  className="karta-lend-parent-3"><div className="karta-lend-content-3"><p>RRR3RRRRRRRRRR</p></div></div>
-   */}   </div></div>
+   */}   </div>
   );
 }
 export default Home;
