@@ -2,7 +2,6 @@
 
 
 .header{
-  margin-top: 7vh;
   display: flex;
   align-items: center;
   justify-content: start;
@@ -406,6 +405,10 @@ border: 1px solid #ffffff ;
   border-radius: 8px;
 }
 
+.page-content{
+margin-top: 7vh ;
+}
+
 .app-scroll-container {
   display: flex; 
 
@@ -413,7 +416,6 @@ border: 1px solid #ffffff ;
  overflow-y:scroll;
   scroll-snap-type: x mandatory;
   background-color: #000000;
-  font-family: 'Unbounded', sans-serif;
   scrollbar-width: none; 
   scroll-behavior: smooth;
 }
@@ -485,6 +487,143 @@ border: 1px solid #ffffff ;
   position: sticky; 
   left: 50vw; 
 } */
+
+.crypto-card{
+border: 3px solid #ff1f11;
+color: #b56799;
+
+}
+
+.crypto-header-parent{
+color: #F97316;
+display: flex;
+justify-content: space-around;
+padding: 1rem;
+}
+
+.crypto-balance-div-parent{
+  color: chartreuse;
+  display: flex;
+justify-content: space-around;
+padding: 1rem;
+}
+
+.crypto-balance-div h2{
+  color: #10B981;
+}
+
+.crypto-balance{
+  font-size: 3rem;
+  color: #b1ffe1;
+}
+
+
+
+
+
+
+.crypto-mini-activ-div {
+   overflow-x: auto ;
+ overflow-y: hidden ;
+ scroll-snap-type: x mandatory;
+scrollbar-width: none;
+scroll-behavior: smooth;
+justify-content: start;
+  margin: 3%;
+margin-top: 3vh;
+  display: flex;
+  gap: 15px; 
+  background-color: #000000;
+  padding: 0px;
+  border-radius: 12px;
+}
+
+.crypto-mini-active {
+  background-color: #121212; 
+  color: #FFFFFF; 
+  font-family: 'Unbounded', sans-serif; 
+  border-radius: 12px; 
+  padding: 15px; 
+  display: flex;
+  flex-direction: column;
+ min-width: 15vh;
+min-height: 20vh;
+}
+
+/* Стили для заголовка карточки */
+.crypto-mini-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Распределяем элементы по краям */
+  margin-bottom: 10px;
+}
+
+.mini-card-title {
+  font-size: 16px;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.mini-card-rate {
+  font-size: 12px;
+  color: hsl(70, 80%, 80%);
+}
+
+.mini-card-balance-section {
+  margin-bottom: 15px;
+}
+
+/* Стили для криптовалютного баланса */
+.mini-card-crypto-balance {
+  font-size: 24px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+/* Стили для эквивалента в USD */
+.mini-card-fiat-balance {
+  font-size: 14px;
+  color: hsl(70, 80%, 80%);
+  opacity: 0.9; /* Светло-серый цвет текста */
+}
+
+/* Стили для секции прибыли */
+.mini-card-profit-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Стили для текста заголовка прибыли */
+.mini-card-profit-title {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+/* Стили для прибыли в USD */
+.mini-card-profit-usd {
+  font-size: 14px;
+  color: #10B981; /* Зеленый цвет для прибыли */
+}
+
+/* Стили для процентного прироста прибыли */
+.mini-card-profit-percent {
+  font-size: 14px;
+  color: hsl(70, 80%, 80%); /* Фирменный акцентный цвет для процентов */
+}
+
+/* Стили для кнопок действий */
+.mini-card-actions {
+  display: flex;
+  gap: 8px; /* Отступ между кнопками */
+  justify-content: space-between;
+}
+
+
+
+  
+
 
 
 

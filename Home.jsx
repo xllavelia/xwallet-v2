@@ -1,5 +1,4 @@
-import { img } from "framer-motion/client";
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
   // import { useNavigate } from "react-router-dom";
 
 // git add .
@@ -9,7 +8,7 @@ import React, {useState, useRef} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "scroll!"
+// git commit -m "crypto card 30%"
 // git push origin main
 
 
@@ -407,6 +406,62 @@ const handleAddTransaction = () => {
   }
 };
 
+const [rates, setRates] = useState(null);
+
+  // SVG иконки в переменных
+  const svgUp = (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00FF00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  );
+
+  const svgDown = (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF0000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  );
+
+  useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true"
+        );
+        const data = await response.json();
+
+        // Умное форматирование и сохранение в переменные (объект)
+        const formattedData = {
+          btc: {
+            price: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(data.bitcoin.usd),
+            change: data.bitcoin.usd_24h_change,
+            isUp: data.bitcoin.usd_24h_change > 0
+          },
+          eth: {
+            price: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(data.ethereum.usd),
+            change: data.ethereum.usd_24h_change,
+            isUp: data.ethereum.usd_24h_change > 0
+          },
+          sol: {
+            price: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(data.solana.usd),
+            change: data.solana.usd_24h_change,
+            isUp: data.solana.usd_24h_change > 0
+          }
+        };
+
+        setRates(formattedData);
+      } catch (error) {
+        console.error("Ошибка курсов:", error);
+      }
+    };
+
+    fetchRates();
+    // Обновляем раз в 5 минут
+    const interval = setInterval(fetchRates, 300000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!rates) return <div style={{color: "gray"}}>Loading rates...</div>;
+
 
 return (
     
@@ -571,11 +626,82 @@ return (
 
 
       <section className="app-page-section">
-        <div className="page-content">
+        <div className="page-content"> <div className="crypto">
+<div className="crypto-card-parent"> <div className="crypto-card">
+ <div className="crypto-header-parent"> <div className="crypto-header"> <span>BTC:  {rates.btc.price}  {rates.btc.change.toFixed(2)}%   {rates.btc.isUp ? svgUp : svgDown} </span> <span>ETH:  {rates.eth.price}  {rates.eth.change.toFixed(2)}%   {rates.eth.isUp ? svgUp : svgDown} </span> <span>SOL:  {rates.sol.price}    {rates.sol.change.toFixed(2)}%  {rates.sol.isUp ? svgUp : svgDown} </span>  </div></div> 
+<div className="crypto-balance-div-parent">
+  <div className="crypto-balance-div">
+    <h2>card one</h2>
+    <h1 className="crypto-balance">$12</h1>
+  </div></div>
 
-          <h1 style={{ color: "#FFFFFF" }}>Crypto</h1>
+<div className="crypto-mini-activ-div">
+  
+  <div  className="crypto-mini-active">
+    <div  className="crypto-mini-card-header">
+      <div>
+        <div  className="crypto-mini-card-title">Bitcoin</div>
+      </div>
+    </div>
+    <div  className="crypto-card-balance-section">
+      <div  className="crypto-card-crypto-balance">0,0091 BTC</div>
+      <div  className="crypto-card-fiat-balance">$678.2</div>
+    </div>
+    <div  className="crypto-card-profit-section">
+      <div  className="crypto-card-profit-title">Profit (24h)</div>
+      <div  className="crypto-card-profit-usd">+$1,237.45</div>
+      <div  className="crypto-card-profit-percent">+5%</div>
+    </div>
+  
+  </div>
+  
+  <div  className="crypto-mini-active">
+    <div  className="crypto-mini-card-header">
+      <div>
+        <div  className="crypto-mini-card-title">Bitcoin</div>
+      </div>
+    </div>
+    <div  className="crypto-card-balance-section">
+      <div  className="crypto-card-crypto-balance">0,0091 BTC</div>
+      <div  className="crypto-card-fiat-balance">$678.2</div>
+    </div>
+    <div  className="crypto-card-profit-section">
+      <div  className="crypto-card-profit-title">Profit (24h)</div>
+      <div  className="crypto-card-profit-usd">+$1,237.45</div>
+      <div  className="crypto-card-profit-percent">+5%</div>
+    </div>
+   
+  </div>
 
-        </div>
+  
+  <div  className="crypto-mini-active">
+    <div  className="crypto-mini-card-header">
+      <div>
+        <div  className="crypto-mini-card-title">Bitcoin</div>
+      </div>
+      <div  className="crypto-mini-card-rate">1 BTC = $71,509</div>
+    </div>
+    <div  className="crypto-card-balance-section">
+      <div  className="crypto-card-crypto-balance">0,0091 BTC</div>
+      <div  className="crypto-card-fiat-balance">$678.2</div>
+    </div>
+    <div  className="crypto-card-profit-section">
+      <div  className="crypto-card-profit-title">Profit (24h)</div>
+      <div  className="crypto-card-profit-usd">+$1,237.45</div>
+      <div  className="crypto-card-profit-percent">+5%</div>
+    </div>
+    <div  className="crypto-card-actions">
+      <button  className="crypto-btn-mini-card crypto-btn-swap">Swap</button>
+      <button  className="crypto-btn-mini-card crypto-btn-buy">Buy</button>
+      <button  className="crypto-btn-mini-card crypto-btn-send">Send</button>
+    </div>
+  </div>
+  </div>
+
+</div> </div>
+
+          </div> </div>
+
       </section>
 
       <section className="app-page-section">
