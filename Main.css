@@ -4,9 +4,10 @@
 .header{
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
   flex-direction: row;
   padding: 1rem;
+  padding-top: 0 ;
 }
 
 .header-text{
@@ -14,7 +15,7 @@
   align-items: center;
 color: hsl(70, 80%, 80%);
 background-color: hsl(162, 50%, 15%);
-  font-family:'Unbounded', sans-serif;
+  font-family: 'Unbounded', sans-serif;
   font-size: 2rem;
   font-weight: 900;
   opacity: 1;
@@ -406,12 +407,12 @@ border: 1px solid #ffffff ;
 }
 
 .page-content{
-margin-top: 7vh ;
+margin-top: 10vh ;
 }
 
 .app-scroll-container {
   display: flex; 
-
+  gap: 20rem;
  overflow-x: auto;
  overflow-y:scroll;
   scroll-snap-type: x mandatory;
@@ -487,145 +488,159 @@ margin-top: 7vh ;
   position: sticky; 
   left: 50vw; 
 } */
-
-.crypto-card{
-border: 3px solid #ff1f11;
-color: #b56799;
-
+:root {
+  --bg: #000000;
+  --card: #1A1A1A;
+  --accent: hsl(70, 80%, 80%);
+  --text: #FFFFFF;
+  --dim: rgba(255, 255, 255, 0.4);
 }
 
-.crypto-header-parent{
-color: #F97316;
-display: flex;
-justify-content: space-around;
-padding: 1rem;
+.crypto-layout {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
 }
 
-.crypto-balance-div-parent{
-  color: chartreuse;
+.balance-block { text-align: center; 
+  padding: 40px 20px; padding-top: 0px; }
+.balance-main { display: flex; justify-content: center; align-items: baseline; gap: 8px; margin: 10px 0; }
+.balance-main .amount { font-family: 'Unbounded'; font-size: 2.5rem; letter-spacing: -2px; }
+.balance-main .symbol { color: hsl(70, 80%, 80%); background-color: hsl(162, 50%, 20%); font-size: 2rem; 
+font-family:  'Unbounded'; font-weight: 700;}
+/* .label-dim {text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; } */
+
+
+.actions-floating-grid {
   display: flex;
-justify-content: space-around;
-padding: 1rem;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+.pnl-summary{
+  font-weight: 800;
+  width: 100%;
 }
 
-.crypto-balance-div h2{
-  color: #10B981;
+.upLast {
+  background-color: hsl(162, 50%, 20%);
+   color: hsl(70, 80%, 80%);
 }
 
-.crypto-balance{
-  font-size: 3rem;
-  color: #b1ffe1;
-}
-
-
-
-
-
-
-.crypto-mini-activ-div {
-   overflow-x: auto ;
- overflow-y: hidden ;
- scroll-snap-type: x mandatory;
-scrollbar-width: none;
-scroll-behavior: smooth;
-justify-content: start;
-  margin: 3%;
-margin-top: 3vh;
-  display: flex;
-  gap: 15px; 
-  background-color: #000000;
-  padding: 0px;
-  border-radius: 12px;
-}
-
-.crypto-mini-active {
-  background-color: #121212; 
-  color: #FFFFFF; 
-  font-family: 'Unbounded', sans-serif; 
-  border-radius: 12px; 
-  padding: 15px; 
+.action-circle {
   display: flex;
   flex-direction: column;
- min-width: 15vh;
-min-height: 20vh;
-}
-
-/* Стили для заголовка карточки */
-.crypto-mini-card-header {
-  display: flex;
   align-items: center;
-  justify-content: space-between; /* Распределяем элементы по краям */
-  margin-bottom: 10px;
+  gap: 8px;
+  cursor: pointer;
 }
-
-.mini-card-title {
-  font-size: 16px;
-  color: #FFFFFF;
-  font-weight: bold;
-}
-
-.mini-card-rate {
-  font-size: 12px;
-  color: hsl(70, 80%, 80%);
-}
-
-.mini-card-balance-section {
-  margin-bottom: 15px;
-}
-
-/* Стили для криптовалютного баланса */
-.mini-card-crypto-balance {
-  font-size: 24px;
-  font-weight: bold;
-  color: #FFFFFF;
-}
-
-/* Стили для эквивалента в USD */
-.mini-card-fiat-balance {
-  font-size: 14px;
-  color: hsl(70, 80%, 80%);
-  opacity: 0.9; /* Светло-серый цвет текста */
-}
-
-/* Стили для секции прибыли */
-.mini-card-profit-section {
+.action-circle .icon {
+  width: 100px;
+  height: 60px;
+  border-radius: 20px;
+  background: var(--card);
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
+  font-size: 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: 0.3s;
+}
+.action-circle.primary .icon { background: hsl(162, 50%, 15%); color: #000; border: none; }
+.action-circle span { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
+
+.action-circle .icon{
+  background: #141414;
 }
 
-/* Стили для текста заголовка прибыли */
-.mini-card-profit-title {
-  font-size: 12px;
-  color: #9CA3AF;
-}
-
-/* Стили для прибыли в USD */
-.mini-card-profit-usd {
-  font-size: 14px;
-  color: #10B981; /* Зеленый цвет для прибыли */
-}
-
-/* Стили для процентного прироста прибыли */
-.mini-card-profit-percent {
-  font-size: 14px;
-  color: hsl(70, 80%, 80%); /* Фирменный акцентный цвет для процентов */
-}
-
-/* Стили для кнопок действий */
-.mini-card-actions {
+.section-title { padding: 0 20px; margin-bottom: 15px; font-size: 0.9rem; color: var(--dim); }
+.cards-horizontal-slider {
   display: flex;
-  gap: 8px; /* Отступ между кнопками */
+  overflow-x: auto;
+  gap: 15px;
+  padding: 0 20px;
+  scrollbar-width: none;
+}
+
+.bank-card {
+  font-family: 'Unbounded';
+  min-width: 63%;
+  height: 8rem;
+  border-radius: 0.6rem;
+  background-color: #121212;
+  position: relative;
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
 
 
 
-  
+.card-val span{
+   background-color:hsl(162, 50%, 20%);
+color: hsl(70, 80%, 80%);
+}
+
+.card-glass-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  /* background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%); */
+}
+.card-brand{
+font-size: 1.1rem;
+font-weight: 800;
+}
+
+.chip-parent{
+position: absolute;
+left: 80%;
+bottom: 10%;
+}
+
+.card-val { font-family: 'Unbounded'; font-size: 1.2rem; }
+.card-num { font-size: 0.8rem; opacity: 0.6; }
+
+.revenue-stats {
+  display: flex;
+  margin: 30px 20px;
+  background: var(--card);
+  border-radius: 0.6rem;
+  background-color: #121212;
+  padding: 20px;
+}
+.rev-item { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.rev-item.divider { width: 1px; flex: 0 0 1px; background: rgba(255,255,255,0.05); margin: 0 20px; }
+.rev-label { font-size: 0.7rem; color: var(--dim); }
+.rev-val { font-weight: bold; }
+.rev-val.up span { color: hsl(70, 80%, 80%); background-color: hsl(162, 50%, 20%); }
 
 
+.trades-list { padding: 0 20px; }
+.trade-item {
+  background: var(--card);
+  border-radius: 0.6rem;
+  background-color: #121212;
+  margin-bottom: 10px;
+  padding: 16px;
+  transition: 0.3s;
+}
+.trade-main-info { display: flex; justify-content: space-between; align-items: center; }
+.trade-left { display: flex; gap: 12px; align-items: center; }
+.type-icon { width: 36px; height: 36px; background: #000; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+.trade-asset { font-weight: bold; font-size: 0.9rem; }
+.trade-date { font-size: 0.7rem; color: var(--dim); }
+.trade-amount { font-weight: bold; text-align: right; background-color: hsl(162, 50%, 20%); color: hsl(70, 80%, 80%); }
+.trade-id-short { font-size: 0.6rem; color: var(--dim); }
 
+.trade-details-dropdown {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.detail-row { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 5px; }
+.hash-text { color: var(--accent); }
 
 @media (min-width: 768px) { 
 .crypto-mini-cards-container{
@@ -639,6 +654,7 @@ background-color: black;
 
 * {
   margin: 0;
+
     -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none; 
   -ms-user-select: none;     

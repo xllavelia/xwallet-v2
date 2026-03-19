@@ -1,4 +1,5 @@
 import React, {useState, useRef, useEffect} from "react";
+import { AreaChart, Area, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
   // import { useNavigate } from "react-router-dom";
 
 // git add .
@@ -8,7 +9,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "crypto card 30%"
+// git commit -m "crypto page!"
 // git push origin main
 
 
@@ -405,63 +406,36 @@ const handleAddTransaction = () => {
     setClickCount(clickCount + 1);
   }
 };
-
 const [rates, setRates] = useState(null);
-
-  // SVG иконки в переменных
-  const svgUp = (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00FF00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="18 15 12 9 6 15"></polyline>
-    </svg>
-  );
-
-  const svgDown = (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF0000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
-  );
+  const [activeHistory, setActiveHistory] = useState(null);
 
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await fetch(
-          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true"
-        );
-        const data = await response.json();
-
-        // Умное форматирование и сохранение в переменные (объект)
-        const formattedData = {
-          btc: {
-            price: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(data.bitcoin.usd),
-            change: data.bitcoin.usd_24h_change,
-            isUp: data.bitcoin.usd_24h_change > 0
-          },
-          eth: {
-            price: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(data.ethereum.usd),
-            change: data.ethereum.usd_24h_change,
-            isUp: data.ethereum.usd_24h_change > 0
-          },
-          sol: {
-            price: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(data.solana.usd),
-            change: data.solana.usd_24h_change,
-            isUp: data.solana.usd_24h_change > 0
-          }
-        };
-
-        setRates(formattedData);
-      } catch (error) {
-        console.error("Ошибка курсов:", error);
+        const url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true";
+        const res = await fetch(url);
+        const data = await res.json();
+        setRates(data);
+      } catch (e) {
+        console.error("Rates sync error");
       }
     };
-
     fetchRates();
-    // Обновляем раз в 5 минут
-    const interval = setInterval(fetchRates, 300000);
+    const interval = setInterval(fetchRates, 60000);
     return () => clearInterval(interval);
   }, []);
 
-  if (!rates) return <div style={{color: "gray"}}>Loading rates...</div>;
+  // Mock data для истории и карт
+  const cards = [
+    { id: "btc", name: "Bitcoin Platinum", number: "**** 8842", balance: "1.2400 BTC", color: "linear-gradient(135deg, #F7931A 0%, #8A5410 100%)", backroundColor: "hsl(70, 80%, 80%)" },
+    { id: "eth", name: "Ethereum Glass", number: "**** 1109", balance: "14.50 ETH", color: "linear-gradient(135deg, #627EEA 0%, #2E3E7A 100%)", backroundColor: " hsl(162, 50%, 15%)" },
+    { id: "sol", name: "Solana Quartz", number: "**** 4412", balance: "180.2 SOL", color: "linear-gradient(135deg, #14F195 0%, #0D6D45 100%)", backroundColor: "hsl(70, 80%, 80%)" }
+  ];
 
+  const trades = [
+    { id: "TRX-9921", type: "Buy", asset: "BTC", amount: "+0.002", status: "Completed", date: "Today, 14:20" },
+    { id: "TRX-4402", type: "Swap", asset: "SOL/USDT", amount: "40.0", status: "Completed", date: "Yesterday, 10:11" }
+  ];
 
 return (
     
@@ -469,13 +443,12 @@ return (
 
  <div className="app-scroll-container">
       
-      {/* Каждая секция занимает 100% экрана */}
       <div className="app-page-section"   >
         <div className="page-content" >
 
 
   <div className="header">
-    <h1 className="header-text">Hello. kovrik!</h1>
+    <h1 className="header-text">Hello. Kovrik!</h1>
   </div>
 
 <div className="home-cart-parent">
@@ -627,78 +600,119 @@ return (
 
       <section className="app-page-section">
         <div className="page-content"> <div className="crypto">
-<div className="crypto-card-parent"> <div className="crypto-card">
- <div className="crypto-header-parent"> <div className="crypto-header"> <span>BTC:  {rates.btc.price}  {rates.btc.change.toFixed(2)}%   {rates.btc.isUp ? svgUp : svgDown} </span> <span>ETH:  {rates.eth.price}  {rates.eth.change.toFixed(2)}%   {rates.eth.isUp ? svgUp : svgDown} </span> <span>SOL:  {rates.sol.price}    {rates.sol.change.toFixed(2)}%  {rates.sol.isUp ? svgUp : svgDown} </span>  </div></div> 
-<div className="crypto-balance-div-parent">
-  <div className="crypto-balance-div">
-    <h2>card one</h2>
-    <h1 className="crypto-balance">$12</h1>
-  </div></div>
 
-<div className="crypto-mini-activ-div">
-  
-  <div  className="crypto-mini-active">
-    <div  className="crypto-mini-card-header">
-      <div>
-        <div  className="crypto-mini-card-title">Bitcoin</div>
-      </div>
-    </div>
-    <div  className="crypto-card-balance-section">
-      <div  className="crypto-card-crypto-balance">0,0091 BTC</div>
-      <div  className="crypto-card-fiat-balance">$678.2</div>
-    </div>
-    <div  className="crypto-card-profit-section">
-      <div  className="crypto-card-profit-title">Profit (24h)</div>
-      <div  className="crypto-card-profit-usd">+$1,237.45</div>
-      <div  className="crypto-card-profit-percent">+5%</div>
-    </div>
-  
-  </div>
-  
-  <div  className="crypto-mini-active">
-    <div  className="crypto-mini-card-header">
-      <div>
-        <div  className="crypto-mini-card-title">Bitcoin</div>
-      </div>
-    </div>
-    <div  className="crypto-card-balance-section">
-      <div  className="crypto-card-crypto-balance">0,0091 BTC</div>
-      <div  className="crypto-card-fiat-balance">$678.2</div>
-    </div>
-    <div  className="crypto-card-profit-section">
-      <div  className="crypto-card-profit-title">Profit (24h)</div>
-      <div  className="crypto-card-profit-usd">+$1,237.45</div>
-      <div  className="crypto-card-profit-percent">+5%</div>
-    </div>
-   
-  </div>
 
-  
-  <div  className="crypto-mini-active">
-    <div  className="crypto-mini-card-header">
-      <div>
-        <div  className="crypto-mini-card-title">Bitcoin</div>
-      </div>
-      <div  className="crypto-mini-card-rate">1 BTC = $71,509</div>
-    </div>
-    <div  className="crypto-card-balance-section">
-      <div  className="crypto-card-crypto-balance">0,0091 BTC</div>
-      <div  className="crypto-card-fiat-balance">$678.2</div>
-    </div>
-    <div  className="crypto-card-profit-section">
-      <div  className="crypto-card-profit-title">Profit (24h)</div>
-      <div  className="crypto-card-profit-usd">+$1,237.45</div>
-      <div  className="crypto-card-profit-percent">+5%</div>
-    </div>
-    <div  className="crypto-card-actions">
-      <button  className="crypto-btn-mini-card crypto-btn-swap">Swap</button>
-      <button  className="crypto-btn-mini-card crypto-btn-buy">Buy</button>
-      <button  className="crypto-btn-mini-card crypto-btn-send">Send</button>
-    </div>
-  </div>
-  </div>
 
-</div> </div>
+ <div className="crypto-layout">
+      
+
+      {/* 2. Total Balance */}
+      <section className="balance-block">
+        {/* <span className="label-dim">Total Assets</span> */}
+        <div className="balance-main">
+          <span className="symbol">usdt</span>
+          <h1 className="amount">789.00</h1>
+        </div>
+        <div className="pnl-summary">
+          <span className="upLast">+2.4% last 24h</span>
+        </div>
+      </section>
+
+
+      <div className="actions-floating-grid">
+        <div className="action-circle primary">
+          <div className="icon">↑</div>
+          <span style={{
+    color: "hsl(70, 80%, 80%)" ,
+    backgroundColor: "hsl(162, 50%, 15%)"
+  }}     >Send</span>
+        </div>
+        <div className="action-circle">
+          <div className="icon">⇄</div>
+          <span>Swap</span>
+        </div>
+        <div className="action-circle">
+          <div className="icon">↓</div>
+          <span>Get</span>
+        </div>
+      </div>
+
+      <section className="cards-section">
+        <h3 className="section-title">My Digital Cards</h3>
+        <div className="cards-horizontal-slider">
+          {cards.map((card) => (
+            <div className="bank-card" key={card.id}  >
+              <div className="card-glass-overlay"></div>
+              <div className="card-top-row"><span className="card-brand">{card.name}</span>
+                 <br />
+              <span style={{
+    opacity: 0.2,
+    fontFamily: 'Unbounded'
+  }}>  CashBack 0.3%</span>   <div className="chip-parent"><div className="chip"></div></div> 
+              
+              
+              </div>
+              <div className="card-balance-row">
+                <div className="card-val"> <span>{card.balance} </span></div>
+                <div className="card-num">{card.number}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 6. Revenue Block (Daily/Weekly) */}
+      <section className="revenue-stats">
+        <div className="rev-item">
+          <span className="rev-label">Today PnL</span>
+          <span className="rev-val up"> <span>+$1,240.50</span></span>
+        </div>
+        <div className="rev-item divider"></div>
+        <div className="rev-item">
+          <span className="rev-label">7D Profit</span>
+          <span className="rev-val">+$8,900.00</span>
+        </div>
+      </section>
+
+      {/* 7. Trade History */}
+      <section className="history-section">
+        <h3 className="section-title">Trade History</h3>
+        <div className="trades-list">
+          {trades.map((t) => (
+            <div 
+              className={"trade-item " + (activeHistory === t.id ? "expanded" : "")} 
+              key={t.id}
+              onClick={() => setActiveHistory(activeHistory === t.id ? null : t.id)}
+            >
+              <div className="trade-main-info">
+                <div className="trade-left">
+                  <div className="type-icon">{t.type[0]}</div>
+                  <div>
+                    <div className="trade-asset">{t.asset}</div>
+                    <div className="trade-date">{t.date}</div>
+                  </div>
+                </div>
+                <div className="trade-right">
+                  <div className="trade-amount">{t.amount}</div>
+                  <div className="trade-id-short">{t.id}</div>
+                </div>
+              </div>
+              {activeHistory === t.id && (
+                <div className="trade-details-dropdown">
+                  <div className="detail-row"><span>Status:</span> <span>{t.status}</span></div>
+                  <div className="detail-row"><span>Network Fee:</span> <span>0.0001 BTC</span></div>
+                  <div className="detail-row"><span>Hash:</span> <span className="hash-text">0x882...fa11</span></div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div>
+
+
+
 
           </div> </div>
 
