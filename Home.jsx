@@ -9,7 +9,7 @@ import { AreaChart, Area, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "setting!"
+// git commit -m "card info and fast button"
 // git push origin main
 
 
@@ -434,7 +434,7 @@ const [rates, setRates] = useState(null);
 
   const trades = [
     { id: "TRX-9921", type: "Buy", asset: "BTC", amount: "+0.002", status: "Completed", date: "Today, 14:20" },
-    { id: "TRX-4402", type: "Swap", asset: "SOL/USDT", amount: "40.0", status: "Completed", date: "Yesterday, 10:11" }
+    { id: "TRX-4402", type: "Swap", asset: "SOL", amount: "+2.00", status: "Completed", date: "Yesterday, 10:11" }
   ];
 
 
@@ -450,26 +450,44 @@ const [rates, setRates] = useState(null);
   const toggleNotifications = () => {
     setNotifications(!notifications);
   };
+const [activeCard, setActiveCard] = useState(false);
 
 
 
+ const [clickCount1, setClickCount1] = useState(0);
+  const [bg, setBg] = useState("#000000");
 
-return (
+  function handleClick1() {
+    const newCount = clickCount1 + 1;
+    setClickCount1(newCount);
+
+    if (newCount >= 7) {
+      setBg(bg === "#0f3d2e" ? "#0f3d2e" : "#725454");
+      setClickCount1(0); // сброс
+    }
+  }
+
+  const [isVisible, setIsVisible] = useState(false);
+
+
+  return (
     
-<div className="content"> 
+<div className="content" > 
 
  <div className="app-scroll-container">
       
-      <div className="app-page-section"   >
-        <div className="page-content" >
+      <div className="app-page-section"  style={{
+        background: bg
+      }} >
+        <div className="page-content">
 
 
   <div className="header">
-    <h1 className="header-text">Hello. Kovrik!</h1>
+    <h1 className="header-text">Hello. xlav!</h1>
   </div>
 
 <div className="home-cart-parent">
-  <div  className="home-cart ">
+  <div  className="home-cart" onClick={() => setActiveCard(!activeCard)}>
 
 
     <h6 className="name-cart">VISA</h6>
@@ -478,26 +496,61 @@ return (
       <h1 className="balance">$471</h1>
       <h6 className="number-cart">8720 8261 2541 9267</h6>
       <h5 className="cart-id">cart id: <span className="span-copy-balance"> 19207145</span></h5>
+    </div> 
+    {activeCard && (
+      
+    <div className="trade-details-dropdown-home">
+      <div className="detail-row-home"><span>Cashback:</span> <span>1.00%</span></div>
+      <div className="detail-row-home"><span>Balance:</span> <span>$471.00</span></div>
+      <div className="detail-row-home"><span>Owner:</span> <span>xlav</span></div>
+      <div className="detail-row-home"><span>ID:</span> <span>19207145</span></div>
+      {/* <div className="detail-row-home"><span>Number:</span> <span style={{fontSize: "0.8rem"}}>8720 8261 2541 9267</span></div> */}
+      <div className="detail-row-home"><span>NWC:</span> <span>active</span></div>
+      <div className="detail-row-home"><span>Income:</span> <span>$571</span></div>
+      <div className="detail-row-home"><span>Outcome:</span> <span>$100</span></div>
+      <div className="detail-row-home"><span>Counry:</span> <span>Russia</span></div>
+
+      <div className="detail-row-home"><span>Network:</span> <span className="hash-text">Mainnet</span></div>
     </div>
+  )}
   </div>
 
-  {/* Теперь этот блок держит всё на своих местах */}
+ 
   <div className="not-cart"> 
     <div className="cart-nwc">
     </div>
     
-    <div className="create-cart">
-      <svg className="create-cart-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path 
-          d="M12 20L12 12M12 12L12 4M12 12L20 12M12 12L4 12" 
-          stroke="" 
-          strokeWidth="2" 
-          strokeLinecap="round"
-        />
-      </svg>
+    <div className="create-cart"  onClick={() => setIsVisible(!isVisible)}>
+ 
     </div>
+
+
   </div>
 </div>
+
+ <div className={"custom-elements " + (isVisible ? "show" : "hide")}>
+
+      <div className="actions-floating-grid-home">
+        <div className="action-circle-home primary-home">
+          <div className="icon-home" >↑</div>
+          {/* <span style={{
+    color: "hsl(70, 80%, 80%)" ,
+    backgroundColor: "hsl(162, 50%, 15%)"
+  }}     >Send</span> */}
+        </div>
+        <div className="action-circle-home">
+          <div className="icon-home">$
+          {/* <span>Swap</span> */}
+          </div>
+        </div>
+        <div className="action-circle-home">
+          <div className="icon-home">↓</div>
+          {/* <span>Get</span> */}
+        </div>
+      </div>
+      
+</div>
+
 
 <div  className="crypto-mini-cards-container">
 
@@ -617,7 +670,9 @@ return (
 </div>
 
 
-      <section className="app-page-section">
+      <section className="app-page-section"  style={{
+        background: bg
+      }}>
         <div className="page-content"> <div className="crypto">
 
 
@@ -737,7 +792,9 @@ return (
 
       </section>
 
-      <section className="app-page-section">
+      <section className="app-page-section"  style={{
+        background: bg
+      }}>
         <div className="page-content">
 
          <div className="settings-layout">
@@ -823,7 +880,7 @@ return (
         
         <div className="app-version-info">
           <span>xwallet</span>
-          <span className="version-number">v.1.0.0</span>
+          <span className="version-number" onClick={handleClick1}>v.1.0.0</span>
         </div>
       </footer>
 
