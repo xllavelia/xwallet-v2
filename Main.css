@@ -947,7 +947,8 @@ bottom: 10%;
 }
 .icon-btn-send {
   rotate: 270deg;
-  background: none;
+  background: #121212;
+  border-radius: 7px;
   border: none;
   color: #FFFFFF;
   font-size: 1.7rem;
@@ -986,6 +987,7 @@ bottom: 10%;
   gap: 15px;
   margin-bottom: 4px;
 }
+
 .numpad-grid button {
   background: #121212;
   border-radius: 1rem;
@@ -1110,7 +1112,7 @@ font-weight: 700;
 /* Dropdown */
 .search-results-dropdown {
   position: absolute;
-  top: 60%;
+  top: 60px;
   left: 0;
   right: 0;
   background: #222;
@@ -1204,6 +1206,386 @@ font-weight: 700;
   font-size: 0.85rem;
   margin-bottom: 0px;
 }
+
+.ex-container {
+  margin-top: 7vh;
+  background: #000;
+  color: #fff;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+  
+}
+
+.ex-header {
+    font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rem;
+  font-family: 'Unbounded', sans-serif; 
+}
+
+.ex-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+    font-size: 1rem;
+}
+
+.ex-back-btn, .ex-more-btn {
+  background: #121212;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.2rem;
+  font-family: 'Unbounded', sans-serif; 
+
+  font-family: 'Unbounded', sans-serif; 
+  border: 1px solid #222;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+/* КАРТОЧКИ */
+.ex-card {
+  background: #121212;
+  border: 1px solid #151515;
+  border-radius: 24px;
+  padding: 20px;
+}
+
+.ex-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ex-asset-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.ex-icon-circle {
+  width: 40px;
+  height: 40px;
+  background: var(--accent);
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.ex-asset-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.ex-val-text {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.6rem;
+}
+
+.ex-val-text.ex-dim {
+  color: #444;
+}
+
+.ex-card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #555;
+}
+
+/* РАЗДЕЛИТЕЛЬ */
+.ex-divider {
+  height: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.ex-swap-btn {
+  background: #121212;
+  border: 3px solid black;
+  color: var(--accent);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+
+
+.ex-small-numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+ margin-top: 5rem;
+}
+.ex-small-numpad button {
+  background: #121212;
+  border-radius: 1rem;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: 'Unbounded', sans-serif;
+  padding: 15px 0;
+  cursor: pointer;
+}
+.ex-small-numpad button:active {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+}
+
+
+
+
+.buy-swipe-elite-container {
+  width: 100%;
+  padding: 20px 0;
+}
+
+.buy-swipe-elite-track {
+  position: relative;
+    background: #121212;
+  border-radius: 40px;
+  height: 70px;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  touch-action: none; 
+  user-select: none;
+}
+
+.buy-swipe-elite-text {
+   position: absolute;
+  width: 100%;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.buy-swipe-elite-thumb {
+ width: 60px;
+  height: 60px;
+  font-family: 'Unbounded', sans-serif; 
+font-weight: 700;
+  background: hsl(70, 80%, 80%);
+  border-radius: 50%;
+  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  z-index: 2;
+  font-size: 1.4rem;
+  cursor: grab;
+  z-index: 2;
+  will-change: transform;
+}
+
+.buy-swipe-elite-thumb:active {
+  cursor: grabbing;
+  transform: scale(0.95); /* Легкое вдавливание при нажатии */
+}
+
+
+.get-page {
+  margin-top: 7vh;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.get-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  
+}
+
+.get-page-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.get-icon-btn {
+  background: #0A0A0A;
+  border: 1px solid #1A1A1A;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+    font-weight: bold;
+    font-size: 1rem;
+  cursor: pointer;
+}
+
+/* КАРТОЧКА */
+.get-info-card {
+  background: #0A0A0A;
+  border: 1px solid #151515;
+  border-radius: 28px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.get-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.get-label {
+  color: #555;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.get-value {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.85rem;
+}
+
+.get-divider {
+  height: 1px;
+  background: #151515;
+  margin: 10px 0 20px 0;
+}
+
+.get-address-text {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--accent);
+  word-break: break-all;
+  line-height: 1.4;
+  font-family: 'Unbounded', sans-serif;
+}
+
+/* СЕЛЕКТОР */
+.get-network-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.get-net-btn {
+  flex: 1;
+  background: #0A0A0A;
+  border: 1px solid #151515;
+  color: #444;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.get-net-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(211, 242, 167, 0.05); /* Легкий оттенок твоего акцента */
+}
+
+/* QR КОД */
+.get-qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.get-qr-frame {
+  width: 240px;
+  height: 240px;
+  background: #1A1A1A; 
+  border-radius: 32px;
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.get-qr-mock {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-center-icon {
+  font-size: 2rem;
+  color: var(--accent);
+}
+
+.qr-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 4px solid var(--accent);
+}
+
+.top-left { top: 15px; left: 15px; border-right: 0; border-bottom: 0; }
+.top-right { top: 15px; right: 15px; border-left: 0; border-bottom: 0; }
+.bottom-left { bottom: 15px; left: 15px; border-right: 0; border-top: 0; }
+.bottom-right { bottom: 15px; right: 15px; border-left: 0; border-top: 0; }
+
+.get-qr-hint {
+  color: #444;
+  font-size: 0.8rem;
+}
+
+/* КНОПКА */
+.get-copy-btn {
+  margin-top: 2rem;
+  width: 100%;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 20px;
+  border-radius: 20px;
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+
 
 
 body {

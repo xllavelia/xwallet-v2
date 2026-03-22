@@ -46,6 +46,17 @@ const roadSend = () => {
     navigate("/send");
   };
 
+
+const roadBuy = () => {
+    navigate("/buy");
+  };
+
+
+const roadGet = () => {
+    navigate("/get");
+  };
+
+
 // const roadHome = () => {
 //     navigate("/");
 //   };
@@ -538,12 +549,12 @@ const [activeCard, setActiveCard] = useState(false);
   }}     >Send</span> */}
         </div>
         <div className="action-circle-home">
-          <div className="icon-home">$
+          <div className="icon-home" onClick={roadBuy}>$
           {/* <span>Swap</span> */}
           </div>
         </div>
         <div className="action-circle-home">
-          <div className="icon-home">↓</div>
+          <div className="icon-home" onClick={roadGet}>↓</div>
           {/* <span>Get</span> */}
         </div>
       </div>

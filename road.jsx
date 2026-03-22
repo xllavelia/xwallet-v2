@@ -4,6 +4,9 @@ import "./Main.css";
 import Home from "./Home";
 // import About from "./About";
 import Send from "./Send";
+import Buy from "./Buy";
+import Get from "./Get";
+
 
 const NavigationBar = () => {
   return (
@@ -20,6 +23,9 @@ const App = () => {
         <Route  path="/" element={<Home />} />
         {/* <Route path="/about" element={<About />} /> */}
          <Route path="/send" element={<Send />} />
+         <Route path="/buy" element={<Buy />} />
+         <Route path="/get" element={<Get />} />
+
       </Routes>
     </BrowserRouter>
   );
