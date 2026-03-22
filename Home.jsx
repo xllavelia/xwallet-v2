@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect} from "react";
-import { AreaChart, Area, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
-  // import { useNavigate } from "react-router-dom";
+  import { useNavigate } from "react-router-dom";
 
 // git add .
 //  git commit -m "added progress row with percent"
@@ -9,19 +8,19 @@ import { AreaChart, Area, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "card info and fast button"
+// git commit -m "send page!"
 // git push origin main
 
 
 
 const Home = () => {
+  const navigate = useNavigate();
 //   let balanceGoalNow = 7.58
 // let balansPRGoalNow = "7.90%"
 //    const createGoalRef = useRef(null);
 //    const deleteGoalOld = useRef(null);
 //    const finalGoal= useRef(null);
 //    const infoFinalGoal = useRef(null);
-//   const navigate = useNavigate();
 // const [name, setName] = useState("");
 // const [dollar, setDollar] = useState("");
 // const [photo, setPhoto] = useState(null);
@@ -43,9 +42,9 @@ const Home = () => {
 //   });
 // }, []);
 
-// const roadCrypto = () => {
-//     navigate("/crypto");
-//   };
+const roadSend = () => {
+    navigate("/send");
+  };
 
 // const roadHome = () => {
 //     navigate("/");
@@ -532,7 +531,7 @@ const [activeCard, setActiveCard] = useState(false);
 
       <div className="actions-floating-grid-home">
         <div className="action-circle-home primary-home">
-          <div className="icon-home" >↑</div>
+          <div className="icon-home" onClick={roadSend}>↑</div>
           {/* <span style={{
     color: "hsl(70, 80%, 80%)" ,
     backgroundColor: "hsl(162, 50%, 15%)"
