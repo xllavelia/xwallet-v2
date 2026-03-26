@@ -185,7 +185,7 @@ padding: 0rem;
 scrollbar-width: none;
 scroll-behavior: smooth;
 justify-content: start;
-  margin: 3%;
+  margin: 5%;
 margin-top: 3vh;
   display: flex;
   gap: 15px; 
@@ -211,26 +211,9 @@ margin-top: 3vh;
   display: flex;
   align-items: center;
   justify-content: space-between; /* Распределяем элементы по краям */
-  margin-bottom: 10px;
+  margin-bottom: 0.4rem;
 }
 
-/* Стили для иконки монеты */
-.mini-card-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%; /* Круглая иконка */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  margin-right: 8px;
-}
-
-
-.icon-btc { background-color: #F97316; color: #FFFFFF; } 
-.icon-eth { background-color: #3B82F6; color: #FFFFFF; } 
-.icon-usdt { background-color: #10B981; color: #FFFFFF; } 
 
 
 .mini-card-title {
@@ -245,7 +228,8 @@ margin-top: 3vh;
 }
 
 .mini-card-balance-section {
-  margin-bottom: 15px;
+  margin-top: 0.5rem;
+  margin-bottom: -2px;
 }
 
 /* Стили для криптовалютного баланса */
@@ -257,9 +241,10 @@ margin-top: 3vh;
 
 /* Стили для эквивалента в USD */
 .mini-card-fiat-balance {
+  opacity: 0;
   font-size: 14px;
   color: hsl(70, 80%, 80%);
-  opacity: 0.9; /* Светло-серый цвет текста */
+  opacity: 0; /* Светло-серый цвет текста */
 }
 
 /* Стили для секции прибыли */
@@ -268,6 +253,7 @@ margin-top: 3vh;
   align-items: center;
   gap: 10px;
   margin-bottom: 15px;
+  opacity: 0.5;
 }
 
 /* Стили для текста заголовка прибыли */
@@ -614,27 +600,41 @@ font-family:  'Unbounded'; font-weight: 700;}
 }
 
 .section-title { padding: 0 20px; margin-bottom: 15px; font-size: 0.9rem; color: var(--dim); }
-.cards-horizontal-slider {
+
+
+.bank-card-parent{
   display: flex;
-  overflow-x: auto;
-  gap: 15px;
+  justify-content: center;
   padding: 0 20px;
-  scrollbar-width: none;
 }
 
 .bank-card {
   font-family: 'Unbounded';
-  min-width: 34vh;
-  height: 8rem;
+  min-width: 90%;
+  height: 10rem;
   border-radius: 12px;
   background-color: #1A1A1A;
   position: relative;
-  padding: 20px;
+  padding: 20px; 
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
+
+
+
+/* 
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes backCard{
+  to {
+    --angle: 360deg;
+  }
+} */
+
 
 
 .card-val span{
@@ -666,7 +666,7 @@ bottom: 10%;
   margin: 30px 20px;
   background: var(--card);
   border-radius: 0.6rem;
-  background-color: #1A1A1A;
+  background-color: #121212;
   padding: 20px;
 }
 .rev-item { flex: 1; display: flex; flex-direction: column; gap: 5px; }
@@ -1327,14 +1327,13 @@ font-weight: 700;
   font-size: 1.1rem;
 }
 
-
-
 .ex-small-numpad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
- margin-top: 5rem;
+ margin-top: 2rem;
 }
+
 .ex-small-numpad button {
   background: #121212;
   border-radius: 1rem;

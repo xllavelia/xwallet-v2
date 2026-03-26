@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect, useMemo} from "react";
   import { useNavigate } from "react-router-dom";
 
 // git add .
@@ -8,7 +8,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "buy and get page!"
+// git commit -m "redact home and crupto card"
 // git push origin main
 
 
@@ -480,6 +480,8 @@ const [activeCard, setActiveCard] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
 
+
+  
   return (
     
 <div className="content" > 
@@ -562,81 +564,6 @@ const [activeCard, setActiveCard] = useState(false);
 </div>
 
 
-<div  className="crypto-mini-cards-container">
-
-  <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-btc">₿</div> */}
-        <div  className="mini-card-title">Bitcoin</div>
-      </div>
-      <div  className="mini-card-rate">1 BTC = $71,509</div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">0,0091 BTC</div>
-      <div  className="mini-card-fiat-balance">$678.2</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">+$1,237.45</div>
-      <div  className="mini-card-profit-percent">+5%</div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">Swap</button>
-      <button  className="btn-mini-card btn-buy">Buy</button>
-      <button  className="btn-mini-card btn-send">Send</button>
-    </div>
-  </div>
-  
-  <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-eth">Ξ</div> */}
-        <div  className="mini-card-title">Ethereum</div>
-      </div>
-      <div  className="mini-card-rate">1 ETH = $2,048</div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">7 ETH</div>
-      <div  className="mini-card-fiat-balance">$7042.60</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">+$3,237.45</div>
-      <div  className="mini-card-profit-percent">+8%</div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">Swap</button>
-      <button  className="btn-mini-card btn-buy">Buy</button>
-      <button  className="btn-mini-card btn-send">Send</button>
-    </div>
-  </div>
-
-  <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-usdt">$</div> */}
-        <div  className="mini-card-title">USDT</div>
-      </div>
-      <div  className="mini-card-rate">1 USDT = $1.00</div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">0.000 USDT</div>
-      <div  className="mini-card-fiat-balance">$0.00</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">+$0.00</div>
-      <div  className="mini-card-profit-percent">+0.00%</div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">Swap</button>
-      <button  className="btn-mini-card btn-buy">Buy</button>
-      <button  className="btn-mini-card btn-send">Send</button>
-    </div>
-  </div>
-</div>
-
 <div className="home-history-wrapper-parent">
 <div className="home-history-wrapper">
   
@@ -706,43 +633,95 @@ const [activeCard, setActiveCard] = useState(false);
       <div className="actions-floating-grid">
         <div className="action-circle primary">
           <div className="icon">↑</div>
-          <span style={{
+          {/* <span style={{
     color: "hsl(70, 80%, 80%)" ,
     backgroundColor: "hsl(162, 50%, 15%)"
-  }}     >Send</span>
+  }}     >Send</span> */}
         </div>
         <div className="action-circle">
           <div className="icon">⇄</div>
-          <span>Swap</span>
+          {/* <span>Swap</span> */}
         </div>
         <div className="action-circle">
           <div className="icon">↓</div>
-          <span>Get</span>
+          {/* <span>Get</span> */}
         </div>
       </div>
 
       <section className="cards-section">
-        <h3 className="section-title">My Digital Cards</h3>
-        <div className="cards-horizontal-slider">
-          {cards.map((card) => (
-            <div className="bank-card" key={card.id}  >
-              <div className="card-glass-overlay"></div>
-              <div className="card-top-row"><span className="card-brand">{card.name}</span>
-                 <br />
-              <span style={{
-    opacity: 0.2,
-    fontFamily: 'Unbounded'
-  }}>  CashBack 0.3%</span>   <div className="chip-parent"><div className="chip"></div></div> 
-              
-              
-              </div>
-              <div className="card-balance-row">
-                <div className="card-val"> <span>{card.balance} </span></div>
-                <div className="card-num">{card.number}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+       
+<div  className="crypto-mini-cards-container">
+
+  <div  className="crypto-mini-card">
+    <div  className="mini-card-header">
+      <div>
+        {/* <div  className="mini-card-icon icon-btc">₿</div> */}
+        <div  className="mini-card-title">Bitcoin</div>
+      </div>
+      <div  className="mini-card-rate"></div>
+    </div>
+    <div  className="mini-card-balance-section">
+      <div  className="mini-card-crypto-balance">$72.980,26</div>
+      <div  className="mini-card-fiat-balance">+0.9%</div>
+    </div>
+    <div  className="mini-card-profit-section">
+      <div  className="mini-card-profit-title">Profit (24h)</div>
+      <div  className="mini-card-profit-usd">$237.45</div>
+      <div  className="mini-card-profit-percent"></div>
+    </div>
+    <div  className="mini-card-actions">
+      <button  className="btn-mini-card btn-swap">long</button>
+      <button  className="btn-mini-card btn-send">short</button>
+    </div>
+  </div>
+  
+  <div  className="crypto-mini-card">
+    <div  className="mini-card-header">
+      <div>
+        {/* <div  className="mini-card-icon icon-eth">Ξ</div> */}
+        <div  className="mini-card-title">Ethereum</div>
+      </div>
+      <div  className="mini-card-rate"></div>
+    </div>
+    <div  className="mini-card-balance-section">
+      <div  className="mini-card-crypto-balance">2182,00</div>
+      <div  className="mini-card-fiat-balance">xxxx</div>
+    </div>
+    <div  className="mini-card-profit-section">
+      <div  className="mini-card-profit-title">Profit (24h)</div>
+      <div  className="mini-card-profit-usd">$7.45</div>
+      <div  className="mini-card-profit-percent"></div>
+    </div>
+    <div  className="mini-card-actions">
+      <button  className="btn-mini-card btn-swap">long</button>
+      <button  className="btn-mini-card btn-send">short</button>
+    </div>
+  </div>
+
+  <div  className="crypto-mini-card">
+    <div  className="mini-card-header">
+      <div>
+        {/* <div  className="mini-card-icon icon-usdt">$</div> */}
+        <div  className="mini-card-title">SOL</div>
+      </div>
+      <div  className="mini-card-rate"></div>
+    </div>
+    <div  className="mini-card-balance-section">
+      <div  className="mini-card-crypto-balance">91,25</div>
+      <div  className="mini-card-fiat-balance">xxxxx</div>
+    </div>
+    <div  className="mini-card-profit-section">
+      <div  className="mini-card-profit-title">Profit (24h)</div>
+      <div  className="mini-card-profit-usd">+$0.00</div>
+      <div  className="mini-card-profit-percent"></div>
+    </div>
+    <div  className="mini-card-actions">
+     <button  className="btn-mini-card btn-swap">long</button>
+      <button  className="btn-mini-card btn-send">short</button>
+    </div>
+  </div>
+</div>
+
       </section>
 
       {/* 6. Revenue Block (Daily/Weekly) */}
@@ -802,19 +781,17 @@ const [activeCard, setActiveCard] = useState(false);
 
       </section>
 
-      <section className="app-page-section"  style={{
+       <section className="app-page-section"  style={{
         background: bg
       }}>
         <div className="page-content">
 
          <div className="settings-layout">
       
-      {/* Шапка */}
       <header className="settings-header">
         <h1 className="settings-title">Setting</h1>
       </header>
 
-      {/* 1. Карточка аккаунта */}
       <section className="profile-section">
         <div className="profile-card-glass">
           <div className="profile-avatar-large">
@@ -831,10 +808,8 @@ const [activeCard, setActiveCard] = useState(false);
         </div>
       </section>
 
-      {/* 2. Основное меню настроек */}
       <section className="settings-menu-block">
         
-        {/* Аккаунт (Детали) */}
         <div className="menu-item-row">
           <div className="menu-item-left">
             <div className="menu-icon-box"></div>
@@ -852,7 +827,6 @@ const [activeCard, setActiveCard] = useState(false);
         </div>
 
 
-        {/* Добавление друзей */}
         <div className="menu-item-row">
           <div className="menu-item-left">
             <div className="menu-icon-box"></div>
@@ -864,14 +838,12 @@ const [activeCard, setActiveCard] = useState(false);
           </div>
         </div>
 
-        {/* Уведомления (с кастомным свитчером) */}
         <div className="menu-item-row" onClick={toggleNotifications}>
           <div className="menu-item-left">
             <div className="menu-icon-box"></div>
             <span className="menu-text">notification PUSH</span>
           </div>
           <div className="menu-item-right">
-            {/* Твой кастомный свитчер в стиле iOS, но в твоих цветах */}
             <div className={"custom-toggle " + (notifications ? "toggle-on" : "toggle-off")}>
               <div className="toggle-knob"></div>
             </div>
@@ -880,7 +852,6 @@ const [activeCard, setActiveCard] = useState(false);
 
       </section>
 
-      {/* 3. Футер (Контакты и Политика) */}
       <footer className="settings-footer">
         <div className="footer-links">
           <div className="footer-link-item">Contact Information</div>
@@ -896,12 +867,11 @@ const [activeCard, setActiveCard] = useState(false);
 
     </div>
 
-
+ 
         </div>
       </section>
 
     </div>
-    <div className="scroll"> </div>
 
 {/* <div className="CRYPTO">
 
