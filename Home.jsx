@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useMemo} from "react";
+import React, {useState, useRef, useEffect} from "react";
   import { useNavigate } from "react-router-dom";
 
 // git add .
@@ -8,7 +8,7 @@ import React, {useState, useRef, useEffect, useMemo} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "redact home and crupto card"
+// git commit -m "remake crypto page!"
 // git push origin main
 
 
@@ -480,8 +480,6 @@ const [activeCard, setActiveCard] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
 
-
-  
   return (
     
 <div className="content" > 
@@ -617,6 +615,8 @@ const [activeCard, setActiveCard] = useState(false);
  <div className="crypto-layout">
       
 
+
+
       {/* 2. Total Balance */}
       <section className="balance-block">
         {/* <span className="label-dim">Total Assets</span> */}
@@ -638,6 +638,11 @@ const [activeCard, setActiveCard] = useState(false);
     backgroundColor: "hsl(162, 50%, 15%)"
   }}     >Send</span> */}
         </div>
+         <div className="action-circle x-primary">
+          <div className="icon"><svg height="45%" version="1.1" viewBox="0 0 24 24" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:serif="http://www.serif.com/" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Icon"><path d="M12,2.25c-5.381,0 -9.75,4.369 -9.75,9.75c0,5.381 4.369,9.75 9.75,9.75c5.381,0 9.75,-4.369 9.75,-9.75c0,-5.381 -4.369,-9.75 -9.75,-9.75Zm0,1.5c4.553,0 8.25,3.697 8.25,8.25c0,4.553 -3.697,8.25 -8.25,8.25c-4.553,0 -8.25,-3.697 -8.25,-8.25c0,-4.553 3.697,-8.25 8.25,-8.25Z"/><path d="M11.25,7l0,4.586c-0,0.464 0.184,0.909 0.513,1.237c0.754,0.755 2.707,2.707 2.707,2.707c0.292,0.293 0.768,0.293 1.06,0c0.293,-0.292 0.293,-0.768 0,-1.06c0,-0 -1.952,-1.953 -2.707,-2.707c-0.047,-0.047 -0.073,-0.111 -0.073,-0.177c0,-1.199 0,-4.586 0,-4.586c0,-0.414 -0.336,-0.75 -0.75,-0.75c-0.414,-0 -0.75,0.336 -0.75,0.75Z"/></g></svg>
+</div>
+          {/* <span>Swap</span> */}
+        </div>
         <div className="action-circle">
           <div className="icon">⇄</div>
           {/* <span>Swap</span> */}
@@ -648,84 +653,189 @@ const [activeCard, setActiveCard] = useState(false);
         </div>
       </div>
 
-      <section className="cards-section">
-       
-<div  className="crypto-mini-cards-container">
 
-  <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-btc">₿</div> */}
-        <div  className="mini-card-title">Bitcoin</div>
+ <div className="eb-container-parent">
+ <div className="eb-container">
+      {/* Верхняя часть: Основной доход */}
+      <div className="eb-top-section">
+        <div className="eb-header-row">
+          <span>Today's Profit</span>
+          <svg className="eb-icon-eye" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+        
+        <div className="eb-main-balance">
+          12.98 USD
+          <svg className="eb-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+
+        <div className="eb-stats-grid">
+          <div className="eb-stat-item">
+            <div className="eb-stat-label">Earn Assets</div>
+            <div className="eb-stat-value">2.30 USD</div>
+          </div>
+          <div className="eb-stat-item">
+            <div className="eb-stat-label">Total Profit</div>
+            <div className="eb-stat-value">79,21 USD</div>
+          </div>
+        </div>
       </div>
-      <div  className="mini-card-rate"></div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">$72.980,26</div>
-      <div  className="mini-card-fiat-balance">+0.9%</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">$237.45</div>
-      <div  className="mini-card-profit-percent"></div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">long</button>
-      <button  className="btn-mini-card btn-send">short</button>
-    </div>
-  </div>
-  
-  <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-eth">Ξ</div> */}
-        <div  className="mini-card-title">Ethereum</div>
+
+      {/* Разделитель */}
+      <div className="eb-divider-h"></div>
+
+      {/* Нижняя часть: Ассеты */}
+      <div className="eb-assets-row">
+        {/* Блок USDT */}
+        <div className="eb-asset-card">
+          <div className="eb-asset-icon usdt-bg">
+            <span className="eb-icon-symbol">₮</span>
+          </div>
+          <div className="eb-asset-info">
+            <div className="eb-tag">For new users...</div>
+            <div className="eb-asset-data">
+              <span className="eb-asset-name">USDT</span>
+              <span className="eb-asset-apr">50 % APR</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="eb-divider-v"></div>
+
+        {/* Блок ETH */}
+        <div className="eb-asset-card">
+          <div className="eb-asset-icon eth-bg">
+            <span className="eb-icon-symbol">Ξ</span>
+          </div>
+          <div className="eb-asset-info">
+            <div className="eb-tag">Bonus</div>
+            <div className="eb-asset-data">
+              <span className="eb-asset-name">ETH</span>
+              <span className="eb-asset-apr">5 % APR</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div  className="mini-card-rate"></div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">2182,00</div>
-      <div  className="mini-card-fiat-balance">xxxx</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">$7.45</div>
-      <div  className="mini-card-profit-percent"></div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">long</button>
-      <button  className="btn-mini-card btn-send">short</button>
-    </div>
-  </div>
+    </div> 
+    </div> 
 
-  <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-usdt">$</div> */}
-        <div  className="mini-card-title">SOL</div>
+ <div className="mc-wrapper">
+      
+      <div className="mc-scroll-area">
+        
+        {/* Блок добавления карты (Заглушка) */}
+        <div className="mc-item mc-add-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="2" y1="10" x2="22" y2="10"></line>
+            <line x1="12" y1="15" x2="16" y2="15"></line>
+            {/* Имитация плюсика рядом */}
+            <line x1="26" y1="12" x2="30" y2="12"></line>
+            <line x1="28" y1="10" x2="28" y2="14"></line>
+          </svg>
+        </div>
+
+        {/* Карточка 1: Лаймовая */}
+        <div className={'mc-item mc-card ' + 'bg-lime'}>
+          <div className="mc-top">
+            <div>
+              <div className="mc-label">Current Balance</div>
+              <div className="mc-balance">$17.24</div>
+            </div>
+            <div className="mc-contactless">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8.5 21.3c-2.8-2.6-4.5-6.4-4.5-10.6 0-4.2 1.7-8 4.5-10.6"></path>
+                <path d="M12.5 18.5c-2-1.9-3.2-4.6-3.2-7.6 0-3 1.2-5.7 3.2-7.6"></path>
+                <path d="M16 15.2c-1.1-1.1-1.8-2.6-1.8-4.3 0-1.7.7-3.2 1.8-4.3"></path>
+                <path d="M19 12c0-.8-.3-1.6-.8-2.2"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div className="mc-bottom">
+            <div className="mc-info-row">
+              <span>XLAVELIA LAGA</span>
+              <span>08/24</span>
+            </div>
+            <div className="mc-number-row">
+              <span>7901 **** **** 4581</span>
+              <div className="mc-mastercard">
+                <svg width="32" height="20" viewBox="0 0 32 20" fill="none">
+                  <circle cx="10" cy="10" r="10" fill="#eb001b" fillOpacity="0.9"></circle>
+                  <circle cx="22" cy="10" r="10" fill="#f79e1b" fillOpacity="0.9"></circle>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Карточка 2: Белая */}
+        <div className={'mc-item mc-card ' + 'bg-white'}>
+          <div className="mc-top">
+            <div>
+              <div className="mc-label">Current Balance</div>
+              <div className="mc-balance">$0.00</div>
+            </div>
+            <div className="mc-contactless">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8.5 21.3c-2.8-2.6-4.5-6.4-4.5-10.6 0-4.2 1.7-8 4.5-10.6"></path>
+                <path d="M12.5 18.5c-2-1.9-3.2-4.6-3.2-7.6 0-3 1.2-5.7 3.2-7.6"></path>
+                <path d="M16 15.2c-1.1-1.1-1.8-2.6-1.8-4.3 0-1.7.7-3.2 1.8-4.3"></path>
+                <path d="M19 12c0-.8-.3-1.6-.8-2.2"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div className="mc-bottom">
+            <div className="mc-info-row">
+              <span>XLAVELIA LAGA</span>
+              <span>12/26</span>
+            </div>
+            <div className="mc-number-row">
+              <span>1234 **** **** 1234</span>
+              <div className="mc-mastercard">
+                <svg width="32" height="20" viewBox="0 0 32 20" fill="none">
+                  <circle cx="10" cy="10" r="10" fill="#eb001b" fillOpacity="0.9"></circle>
+                  <circle cx="22" cy="10" r="10" fill="#f79e1b" fillOpacity="0.9"></circle>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div  className="mini-card-rate"></div>
     </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">91,25</div>
-      <div  className="mini-card-fiat-balance">xxxxx</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">+$0.00</div>
-      <div  className="mini-card-profit-percent"></div>
-    </div>
-    <div  className="mini-card-actions">
-     <button  className="btn-mini-card btn-swap">long</button>
-      <button  className="btn-mini-card btn-send">short</button>
-    </div>
-  </div>
-</div>
 
-      </section>
 
-      {/* 6. Revenue Block (Daily/Weekly) */}
-      <section className="revenue-stats">
+
+
+ <div className="ms-container">
+      
+      <div className="ms-mini-card">
+        <div className="ms-label">capitalization</div>
+        <div className="ms-value">2,42 trill $</div>
+        <div className={'ms-change ' + 'neg'}>-2,03 %</div>
+      </div>
+
+      <div className="ms-mini-card">
+        <div className="ms-label">volume</div>
+        <div className="ms-value">101,78 bill $</div>
+        <div className={'ms-change ' + 'pos'}>+15,53 %</div>
+      </div>
+
+      <div className="ms-mini-card">
+        <div className="ms-label">dominance</div>
+        <div className="ms-value">56,30 %</div>
+        <div className="ms-subtext">Bitcoin</div>
+      </div>
+
+    </div>
+
+      {/* <section className="revenue-stats">
         <div className="rev-item">
           <span className="rev-label">Today PnL</span>
           <span className="rev-val up"> <span>+$1,240.50</span></span>
@@ -735,9 +845,9 @@ const [activeCard, setActiveCard] = useState(false);
           <span className="rev-label">7D Profit</span>
           <span className="rev-val">+$8,900.00</span>
         </div>
-      </section>
+      </section> */}
 
-      {/* 7. Trade History */}
+{/* 
       <section className="history-section">
         <h3 className="section-title">Trade History</h3>
         <div className="trades-list">
@@ -770,7 +880,7 @@ const [activeCard, setActiveCard] = useState(false);
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
     </div>
 
