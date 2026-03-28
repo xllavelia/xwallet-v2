@@ -1,488 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Syne:wght@400..800&family=Michroma&family=Archivo:wdth,wght@62.5..125,100..900&family=Inter:wght@100..900&display=swap');
 
-
-.header{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  padding: 1rem;
-  padding-top: 0 ;
-}
-
-.header-text{
-  display: flex;
-  align-items: center;
-color: hsl(70, 80%, 80%);
-background-color: hsl(162, 50%, 17%);
-  font-family: 'Unbounded', sans-serif;
-  font-size: 2rem;
-  font-weight: 900;
-  opacity: 1;
-}
-
-.home-cart-parent{
-  display: flex;
-  justify-content: center;
-   margin-top: 0vh;
-   gap: 0.8rem;
-   opacity: 1;
-}
-
-.home-cart{
-background-color: hsl(162, 50%, 17%);
-  /* height: 21vh; */
-  width: 73%;
-  border-radius: 0.3rem;
-}
-
-.balance{
-  padding: 0.5rem ;
-  padding-top: 0rem;
-  color: hsl(70, 80%, 80%);
-    font-family:'Unbounded', sans-serif;
-  font-size: 3.3rem;
-letter-spacing: -1px;
-  font-weight:900; 
-  opacity: 1;
-}
-
-.name-cart{
-  color: hsl(70, 80%, 80%);
-  font-family:'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  opacity: 0;
-  padding: 0.1rem;
-}
-
-.balance-text{
-  color: hsl(69, 18%, 92%);
-    font-family:'Unbounded', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0.8;
-  padding-left:0.5rem;
-}
-
-.number-cart{
-  color: hsl(72, 12%, 92%);
-  font-family:'Unbounded', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  opacity: .9;
-  text-align: center;
-}
-
-.cart-id{
-  margin-top: 0.1rem;
-  text-align: center;
-  color: hsl(70, 21%, 95%);
-  font-family:'Unbounded', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
-  opacity: 0.8;
-   padding-bottom: 1.7rem;
-}
-
-.trade-details-dropdown-home {
-  font-family:'Unbounded', sans-serif;
-padding: 1rem;
-  margin-top: -5px;
-  margin-bottom: -1rem;
-  padding-top: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-.detail-row-home { 
-  color: hsl(69, 18%, 92%);
-  display: flex; justify-content: space-between; font-size: .8rem; font-weight: 700; margin-bottom: 6px; }
-
-
-.not-cart {
-  gap:0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; 
-  width: 15%; 
-}
-
-.cart-nwc {
-  border-radius: 0.3rem;
-  width: 100%; 
-  height: 70%;
-  background-color: hsl(70, 80%, 80%);
-}
-
-
-.create-cart {
-   border-radius: 0.3rem;
-  display: flex;
-  justify-content: center; 
-  align-items: center;     
-  width: 100%;
-  height: 30%;
-  overflow: hidden;
-  background-color: hsl(162, 50%, 17%);
-}
-
-
-.actions-floating-grid-home {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  margin: 30px;
-}
-
-.action-circle-home {
-   color: hsl(70, 21%, 95%);
-  font-family:'Unbounded', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  width: 100%;
-}
-
-.action-circle-home .icon-home {
- width: 110%;
-  height: 60px;
-  border-radius: 20px;
-  background: #121212;
-  color: hsl(70, 80%, 80%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: 0.3s;
-}
-.action-circle.primary-home .icon-home {
-   background: hsl(162, 50%, 20%); border: none; }
-.action-circle-home span { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
-
-
-.show{display: block;}
-.hide{display: none;}
-
-.trade-details-dropdown-home-button {
-  font-family:'Unbounded', sans-serif;
-  width: 90%;
-padding: 0rem;
-  margin-top: -5px;
-  margin-bottom: 0rem;
-  padding-top: 15px;
-}
-
-
-
-.crypto-mini-cards-container {
-   overflow-x: auto ;
- overflow-y: hidden ;
- scroll-snap-type: x mandatory;
-scrollbar-width: none;
-scroll-behavior: smooth;
-justify-content: start;
-  margin: 5%;
-margin-top: 3vh;
-  display: flex;
-  gap: 15px; 
-  background-color: #000000;
-  padding: 0px;
-  border-radius: 12px;
-}
-
-.crypto-mini-card {
-  background-color: #121212; 
-  color: #FFFFFF; 
-  font-family: 'Unbounded', sans-serif; 
-  border-radius: 12px; 
-  padding: 15px; 
-  display: flex;
-  flex-direction: column;
- min-width: 35vh;
-
-}
-
-/* Стили для заголовка карточки */
-.mini-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Распределяем элементы по краям */
-  margin-bottom: 0.4rem;
-}
-
-
-
-.mini-card-title {
-  font-size: 16px;
-  color: #FFFFFF;
-  font-weight: bold;
-}
-
-.mini-card-rate {
-  font-size: 12px;
-  color: hsl(70, 80%, 80%);
-}
-
-.mini-card-balance-section {
-  margin-top: 0.5rem;
-  margin-bottom: -2px;
-}
-
-/* Стили для криптовалютного баланса */
-.mini-card-crypto-balance {
-  font-size: 24px;
-  font-weight: bold;
-  color: #FFFFFF;
-}
-
-/* Стили для эквивалента в USD */
-.mini-card-fiat-balance {
-  opacity: 0;
-  font-size: 14px;
-  color: hsl(70, 80%, 80%);
-  opacity: 0; /* Светло-серый цвет текста */
-}
-
-/* Стили для секции прибыли */
-.mini-card-profit-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-  opacity: 0.5;
-}
-
-/* Стили для текста заголовка прибыли */
-.mini-card-profit-title {
-  font-size: 12px;
-  color: #9CA3AF;
-}
-
-/* Стили для прибыли в USD */
-.mini-card-profit-usd {
-  font-size: 14px;
-  color: #10B981; /* Зеленый цвет для прибыли */
-}
-
-/* Стили для процентного прироста прибыли */
-.mini-card-profit-percent {
-  font-size: 14px;
-  color: hsl(70, 80%, 80%); /* Фирменный акцентный цвет для процентов */
-}
-
-/* Стили для кнопок действий */
-.mini-card-actions {
-  display: flex;
-  gap: 8px; /* Отступ между кнопками */
-  justify-content: space-between;
-}
-
-/* Стили для общей кнопки */
-.btn-mini-card {
-  flex: 1; /* Кнопки занимают все доступное место */
-  text-align: center;
-  border-radius: 8px;
-  padding: 8px;
-  font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase; /* Текст в верхнем регистре */
-  border: none;
-  cursor: pointer;
-}
-
-.btn-swap { 
-  background-color: transparent; 
-  border: 2px solid hsl(70, 80%, 80%); 
-  color: hsl(70, 80%, 80%); 
-  font-family: 'Unbounded', sans-serif; 
-}
-
-.btn-buy { 
-  background-color:
-    hsl(70, 80%, 80%); 
-    color: #000000;
-  font-family: 'Unbounded', sans-serif; 
-   } 
-
-.btn-send {
-   background-color:  
-   hsl(70, 80%, 80%); 
-   color: #000000; 
-  font-family: 'Unbounded', sans-serif; 
-  }
-  
-.home-history-wrapper-parent {
-  margin-top: 1.5rem;
-display: flex;
-justify-content: center;
-}
-  
-.home-history-wrapper {
-  background-color: #121212;
-  border-radius: 20px;
-  padding: 24px;
-  font-family: 'Unbounded', sans-serif;
-  width: 95%;
-  box-sizing: border-box;
-}
-
- 
-.home-history-wrapper img {
-width: 100%;
-height: 100%;
-border-radius: 20%;
-border: 1px solid #ffffff ;
-}
-
-
-.home-history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.home-history-title {
-  color: #FFFFFF;
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.5px;
-}
-
-.home-history-see-all {
-  color: hsl(70, 80%, 80%); /* Твой фирменный салатовый */
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.home-history-see-all:active {
-  opacity: 0.5; /* Легкая анимация нажатия */
-}
-
-/* Контейнер списка */
-.home-history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px; /* Отступ между транзакциями */
-}
-
-/* Сама карточка транзакции */
-.home-history-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Легкая разделительная линия */
-}
-
-/* Убираем линию у последней карточки */
-.home-history-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-/* Группировка левой части */
-.home-history-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-/* Кружок с картинкой */
-.home-history-img {
-  width: 50px;
-  height: 50px;
-  background-color: transparent; /* Твой фирменный изумрудно-темный */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-}
-
-/* Информация (Имя и Дата) */
-.home-history-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.home-history-name {
-  color: #FFFFFF;
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.home-history-date {
-  color: rgba(255, 255, 255, 0.4); /* Выцветший серый для даты */
-  font-size: 0.8rem;
-  font-weight: 400;
-}
-
-/* Правая часть (Суммы) */
-.home-history-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end; /* Выравниваем по правому краю */
-  gap: 6px;
-}
-
-.home-history-amount {
-  color: #FFFFFF;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.5px;
-}
-
-/* Плашка кэшбека */
-.home-history-bonus {
-  background-color: hsl(70, 80%, 80%);
-  color: #121212; /* Темный текст для читаемости на салатовом фоне */
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
 .page-content{
 margin-top: 10vh ;
 }
 
 .app-scroll-container {
   display: flex; 
-  gap: 20rem;
- overflow-x: auto;
- overflow-y:scroll;
-  scroll-snap-type: x mandatory;
-  background-color: #000000;
-  scrollbar-width: none; 
-  scroll-behavior: smooth;
+overflow: hidden;
 }
-
-
-
-.app-scroll-container::-webkit-scrollbar {
-  display: none;
+.Road-Home{
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  width: 90%;
+  height: 5%;
+  margin-top: -9vh;
+  background-color: transparent;
 }
 
 .app-page-section {
-  /* Каждая страница — это отдельный блок на весь экран */
   flex-shrink: 0;
   width: 100vw;
-  scroll-snap-align: start;
-  background-color: #000000;
-
 }
-
-
 
 .app-page-section:nth-child(2) {
   background-color: #000000;
@@ -701,18 +240,26 @@ padding-top: 4%;
 }
 
 .ms-mini-card {
+  align-items: start;
   font-family: 'Unbounded'; 
   flex: 1; /* Карточки делят пространство поровну */
-  min-width: 12rem;
-  background-color: #121212; 
+  min-width: 11rem;
+  background-color: #151515; 
   border-radius: 16px;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Распределяем элементы по высоте */
-  height: 110px; /* Фиксированная высота */
+  justify-content: center; /* Распределяем элементы по высоте */
+  height: 100px; /* Фиксированная высота */
   box-sizing: border-box;
 }
+/* .ms-plus{
+  border: 2px solid hsl(162, 90%, 20%);
+}
+
+.ms-min{
+  border: 2px solid hsl(61, 80%, 78%);
+} */
 
 .ms-label {
   color: #888888; /* Серый цвет для лейблов */
@@ -723,24 +270,27 @@ padding-top: 4%;
 
 .ms-value {
   color: #ffffff; /* Белый цвет для основных значений */
-  font-size: 19px;
+  font-size: 14px;
   font-weight: 700;
   margin-top: auto; /* Прижимает значение к низу лейбла */
-  margin-bottom: 4px;
+  margin-bottom: 0px;
 }
 
 .ms-change {
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 600;
 }
 
-/* Стили для процентов (позитивный/негативный) */
 .neg {
-  color: #ff5e62; /* Красный */
+  color: hsl(61, 80%, 78%); 
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
 
 .pos {
-  color: #a6f549; /* Твой салатовый из ТЗ графиков */
+  color: hsl(162, 90%, 20%); 
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
 
 .ms-subtext {
@@ -760,12 +310,12 @@ padding-top: 4%;
   background-color: #121212;
   border-radius: 24px;
   overflow: hidden;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Unbounded'; 
   box-sizing: border-box;
 }
 
 .eb-top-section {
-  padding: 20px 20px 16px 20px;
+  padding: 10px 20px 10px 20px;
 }
 
 .eb-header-row {
@@ -782,10 +332,10 @@ padding-top: 4%;
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #ffffff;
+  color: #FFFFFF;
   font-size: 28px;
   font-weight: 800;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .eb-stats-grid {
@@ -851,7 +401,7 @@ padding-top: 4%;
 }
 
 .eb-tag {
-  background-color: #d4f07a;
+  background-color: hsl(61, 80%, 78%);
   color: #000;
   font-size: 10px;
   font-weight: 800;
@@ -883,6 +433,8 @@ padding-top: 4%;
   width: 1px;
   background-color: #222;
 }
+
+
 
 /* 
 
@@ -1210,8 +762,7 @@ bottom: 10%;
 
 /* FAKE INPUT */
 .amount-display-container {
-  margin-top: 5vh;
-  /* flex-grow: 0; */
+margin-bottom: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1222,7 +773,7 @@ bottom: 10%;
 }
 
 .currency-symbol {
-  color: var(--accent, hsl(80, 70% 70%));
+  color:hsl(61, 80%, 78%);
 }
 .fake-input.is-empty {
   color: rgba(255, 255, 255, 0.2);
@@ -1234,10 +785,13 @@ bottom: 10%;
 
 /* NUMPAD */
 .numpad-grid {
+  position: absolute;
+  top: 49%;
+  left: 5%;
+  right: 5%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
-  margin-bottom: 4px;
 }
 
 .numpad-grid button {
@@ -1248,7 +802,9 @@ bottom: 10%;
   font-size: 1.8rem;
   font-weight: 800;
   font-family: 'Unbounded', sans-serif;
-  padding: 15px 0;
+  /* padding: 0px 0; */
+height: 8vh;
+width: 100%;
   cursor: pointer;
 }
 .numpad-grid button:active {
@@ -1257,16 +813,19 @@ bottom: 10%;
 }
 
 .swipe-elite-container {
-  width: 100%;
-  padding: 20px 0;
+  width: 90%;
+  left: 5%;
+  right: 5%;
+  position: absolute;
+  top: 89%;
 }
 
 .swipe-elite-track {
   position: relative;
     background: #121212;
   border-radius: 40px;
-  height: 70px;
-  border-radius: 32px;
+  height: 75px;
+  border-radius: 37px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
@@ -1290,11 +849,12 @@ bottom: 10%;
 }
 
 .swipe-elite-thumb {
- width: 60px;
-  height: 60px;
+ width: 65px;
+  height: 65px;
+margin-left: 0.5rem;
   font-family: 'Unbounded', sans-serif; 
 font-weight: 700;
-  background: hsl(70, 80%, 80%);
+  background: hsl(61, 80%, 78%);
   border-radius: 50%;
   color: #000000;
   display: flex;
@@ -1460,7 +1020,7 @@ font-weight: 700;
 }
 
 .ex-container {
-  margin-top: 7vh;
+  margin-top: 10vh;
   background: #000;
   color: #fff;
   padding: 25px;
@@ -1470,21 +1030,6 @@ font-weight: 700;
   
 }
 
-.ex-header {
-    font-weight: bold;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4rem;
-  font-family: 'Unbounded', sans-serif; 
-}
-
-.ex-title {
-  font-family: 'Unbounded', sans-serif;
-  font-size: 1rem;
-  letter-spacing: 1px;
-    font-size: 1rem;
-}
 
 .ex-back-btn, .ex-more-btn {
   background: #121212;
@@ -1603,106 +1148,23 @@ font-weight: 700;
 }
 
 
-
-
-.buy-swipe-elite-container {
-  width: 100%;
-  padding: 20px 0;
-}
-
-.buy-swipe-elite-track {
-  position: relative;
-    background: #121212;
-  border-radius: 40px;
-  height: 70px;
-  border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  touch-action: none; 
-  user-select: none;
-}
-
-.buy-swipe-elite-text {
-   position: absolute;
-  width: 100%;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.4);
-  font-weight: bold;
-  font-size: 0.9rem;
-  z-index: 1;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-
-.buy-swipe-elite-thumb {
- width: 60px;
-  height: 60px;
-  font-family: 'Unbounded', sans-serif; 
-font-weight: 700;
-  background: hsl(70, 80%, 80%);
-  border-radius: 50%;
-  color: #000000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  z-index: 2;
-  font-size: 1.4rem;
-  cursor: grab;
-  z-index: 2;
-  will-change: transform;
-}
-
-.buy-swipe-elite-thumb:active {
-  cursor: grabbing;
-  transform: scale(0.95); /* Легкое вдавливание при нажатии */
-}
-
-
 .get-page {
   margin-top: 7vh;
   background: #000;
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 30px 20px;
+  padding: 30px 0px;
   font-family: 'Inter', sans-serif;
-}
-
-.get-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-  
-}
-
-.get-page-title {
-  font-family: 'Unbounded', sans-serif;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.get-icon-btn {
-  background: #0A0A0A;
-  border: 1px solid #1A1A1A;
-  color: #fff;
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-    font-weight: bold;
-    font-size: 1rem;
-  cursor: pointer;
 }
 
 /* КАРТОЧКА */
 .get-info-card {
-  background: #0A0A0A;
+  position: absolute;
+  width: 80%;
+  right: 5%;
+  left: 5%;
+  background:#121212;
   border: 1px solid #151515;
   border-radius: 28px;
   padding: 24px;
@@ -1745,14 +1207,19 @@ font-weight: 700;
 
 /* СЕЛЕКТОР */
 .get-network-selector {
+  position: absolute;
+  width: 90%;
+  right: 5%;
+  left: 5%;
+  top: 40%;
   display: flex;
   gap: 10px;
-  margin-bottom: 40px;
 }
 
 .get-net-btn {
+  width: 100%;
   flex: 1;
-  background: #0A0A0A;
+  background: #121212;
   border: 1px solid #151515;
   color: #444;
   padding: 12px;
@@ -1766,11 +1233,15 @@ font-weight: 700;
 .get-net-btn.active {
   border-color: var(--accent);
   color: var(--accent);
-  background: rgba(211, 242, 167, 0.05); /* Легкий оттенок твоего акцента */
+  background: #121212; /* Легкий оттенок твоего акцента */
 }
 
 /* QR КОД */
 .get-qr-container {
+position: absolute;
+top: 48%;
+right: 10%;
+left: 10%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1781,10 +1252,10 @@ font-weight: 700;
 .get-qr-frame {
   width: 240px;
   height: 240px;
-  background: #1A1A1A; 
+  background: #121212; 
   border-radius: 32px;
   padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   position: relative;
 }
 
@@ -1823,8 +1294,12 @@ font-weight: 700;
 
 /* КНОПКА */
 .get-copy-btn {
+  position: absolute;
   margin-top: 2rem;
-  width: 100%;
+  width: 90%;
+  top: 86%;
+  right: 5%;
+  left: 5%;
   background: var(--accent);
   color: #000;
   border: none;

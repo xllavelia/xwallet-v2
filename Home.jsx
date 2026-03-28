@@ -8,7 +8,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "remake crypto page!"
+// git commit -m "remake position and delete scroll page"
 // git push origin main
 
 
@@ -479,13 +479,51 @@ const [activeCard, setActiveCard] = useState(false);
 
   const [isVisible, setIsVisible] = useState(false);
 
+const COINS = [
+  { id: "bitcoin",  ticker: "BTC", color: "#f7931a" },
+  { id: "solana",   ticker: "SOL", color: "#14f195" },
+  { id: "toncoin",  ticker: "TON", color: "#0098ea" },
+  { id: "ethereum", ticker: "ETH", color: "#8b5cf6" },
+];
+
+function SparklineChart({ points, color }) {
+  const svgRef = useRef(null);
+
+  if (!points || points.length < 2) return null;
+
+  const width = 180;
+  const height = 70;
+  const pad = 4;
+
+  const min = Math.min(...points);
+  const max = Math.max(...points);
+  const range = max - min || 1;
+
+  const coords = points.map((val, i) => {
+    const x = pad + (i / (points.length - 1)) * (width - pad * 2);
+    const y = pad + (1 - (val - min) / range) * (height - pad * 2);
+    return [x, y];
+  });
+
+  const d = coords
+    .map(([x, y], i) => (i === 0 ? "M" + x + "," + y : "L" + x + "," + y))
+    .join(" ");
+
+  const fillD =
+    d +
+    " L" + coords[coords.length - 1][0] + "," + (height - pad) +
+    " L" + coords[0][0] + "," + (height - pad) +
+    " Z";
+
+  const gradId = "grad_" + color.replace("#", "");
+}
 
   return (
     
 <div className="content" > 
 
  <div className="app-scroll-container">
-      
+{/*       
       <div className="app-page-section"  style={{
         background: bg
       }} >
@@ -514,7 +552,6 @@ const [activeCard, setActiveCard] = useState(false);
       <div className="detail-row-home"><span>Balance:</span> <span>$471.00</span></div>
       <div className="detail-row-home"><span>Owner:</span> <span>xlav</span></div>
       <div className="detail-row-home"><span>ID:</span> <span>19207145</span></div>
-      {/* <div className="detail-row-home"><span>Number:</span> <span style={{fontSize: "0.8rem"}}>8720 8261 2541 9267</span></div> */}
       <div className="detail-row-home"><span>NWC:</span> <span>active</span></div>
       <div className="detail-row-home"><span>Income:</span> <span>$571</span></div>
       <div className="detail-row-home"><span>Outcome:</span> <span>$100</span></div>
@@ -543,19 +580,19 @@ const [activeCard, setActiveCard] = useState(false);
       <div className="actions-floating-grid-home">
         <div className="action-circle-home primary-home">
           <div className="icon-home" onClick={roadSend}>↑</div>
-          {/* <span style={{
+          <span style={{
     color: "hsl(70, 80%, 80%)" ,
     backgroundColor: "hsl(162, 50%, 15%)"
-  }}     >Send</span> */}
+  }}     >Send</span>
         </div>
         <div className="action-circle-home">
           <div className="icon-home" onClick={roadBuy}>$
-          {/* <span>Swap</span> */}
+          <span>Swap</span>
           </div>
         </div>
         <div className="action-circle-home">
           <div className="icon-home" onClick={roadGet}>↓</div>
-          {/* <span>Get</span> */}
+          <span>Get</span>
         </div>
       </div>
       
@@ -599,10 +636,10 @@ const [activeCard, setActiveCard] = useState(false);
     
   </div>
         </div>
-      </div>
-      
-</div>
-</div>
+      </div>       </div>
+</div> */}
+
+
 
 
       <section className="app-page-section"  style={{
@@ -631,7 +668,7 @@ const [activeCard, setActiveCard] = useState(false);
 
 
       <div className="actions-floating-grid">
-        <div className="action-circle primary">
+        <div className="action-circle primary"  onClick={roadSend}>
           <div className="icon">↑</div>
           {/* <span style={{
     color: "hsl(70, 80%, 80%)" ,
@@ -643,12 +680,12 @@ const [activeCard, setActiveCard] = useState(false);
 </div>
           {/* <span>Swap</span> */}
         </div>
-        <div className="action-circle">
+        <div className="action-circle" onClick={roadBuy}>
           <div className="icon">⇄</div>
           {/* <span>Swap</span> */}
         </div>
         <div className="action-circle">
-          <div className="icon">↓</div>
+          <div className="icon" onClick={roadGet}>↓</div>
           {/* <span>Get</span> */}
         </div>
       </div>
@@ -696,10 +733,10 @@ const [activeCard, setActiveCard] = useState(false);
             <span className="eb-icon-symbol">₮</span>
           </div>
           <div className="eb-asset-info">
-            <div className="eb-tag">For new users...</div>
+            <div className="eb-tag">infite frends</div>
             <div className="eb-asset-data">
               <span className="eb-asset-name">USDT</span>
-              <span className="eb-asset-apr">50 % APR</span>
+              <span className="eb-asset-apr">0.3%</span>
             </div>
           </div>
         </div>
@@ -715,7 +752,7 @@ const [activeCard, setActiveCard] = useState(false);
             <div className="eb-tag">Bonus</div>
             <div className="eb-asset-data">
               <span className="eb-asset-name">ETH</span>
-              <span className="eb-asset-apr">5 % APR</span>
+              <span className="eb-asset-apr">100$</span>
             </div>
           </div>
         </div>
@@ -812,28 +849,52 @@ const [activeCard, setActiveCard] = useState(false);
 
 
 
-
+{/* 
  <div className="ms-container">
       
-      <div className="ms-mini-card">
-        <div className="ms-label">capitalization</div>
-        <div className="ms-value">2,42 trill $</div>
-        <div className={'ms-change ' + 'neg'}>-2,03 %</div>
+      <div className="ms-mini-card ms-min">
+        <div className="ms-label">BTC</div>
+        <div className={'ms-change ' + 'neg'}>-23$ 2.5%</div>
+        <div className="ms-value">LONG</div>
+  
       </div>
 
-      <div className="ms-mini-card">
-        <div className="ms-label">volume</div>
-        <div className="ms-value">101,78 bill $</div>
-        <div className={'ms-change ' + 'pos'}>+15,53 %</div>
+      <div className="ms-mini-card ms-plus">
+        <div className="ms-label">ETH</div>
+        <div className={'ms-change ' + 'pos'}>+20$ 6.4%</div>
+        <div className="ms-value">SHORT</div>
       </div>
 
-      <div className="ms-mini-card">
-        <div className="ms-label">dominance</div>
-        <div className="ms-value">56,30 %</div>
-        <div className="ms-subtext">Bitcoin</div>
+      <div className="ms-mini-card ms-min">
+        <div className="ms-label">SOL</div>
+        <div className={'ms-change ' + 'neg'}>-0.9$ 0.4%</div>
+        <div className="ms-value">SHORT</div>
+      </div>
+    </div> */}
+    
+ <div className="ms-container">
+      
+      <div className="ms-mini-card ms-min">
+        <div className="ms-label">BTC</div>
+        <div className={'ms-change ' + 'neg'}>$71.920</div>
+        <div className="ms-value">-0.8%</div>
+  
       </div>
 
+      <div className="ms-mini-card ms-plus">
+        <div className="ms-label">ETH</div>
+        <div className={'ms-change ' + 'pos'}>$4.189</div>
+        <div className="ms-value">+3.5%</div>
+      </div>
+
+      <div className="ms-mini-card ms-min">
+        <div className="ms-label">SOL</div>
+        <div className={'ms-change ' + 'neg'}>$98</div>
+        <div className="ms-value">-7.2%</div>
+      </div>
     </div>
+
+    
 
       {/* <section className="revenue-stats">
         <div className="rev-item">
@@ -891,7 +952,7 @@ const [activeCard, setActiveCard] = useState(false);
 
       </section>
 
-       <section className="app-page-section"  style={{
+       {/* <section className="app-page-section"  style={{
         background: bg
       }}>
         <div className="page-content">
@@ -979,7 +1040,7 @@ const [activeCard, setActiveCard] = useState(false);
 
  
         </div>
-      </section>
+      </section> */}
 
     </div>
 

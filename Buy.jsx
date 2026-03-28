@@ -93,13 +93,10 @@ const roadHome = () => {
    }; 
 
   return (<div className="BuyContent">
+<div className="Road-Home" onClick={roadHome}></div>
 
     <div className="ex-container">
-      <div className="ex-header">
-        <button className="ex-back-btn" onClick={roadHome}>x</button>
-        <span className="ex-title">Exchange</span>
-        <button className="ex-more-btn">•••</button>
-      </div>
+      
 
       <div className="ex-main-content">
         {/* ВЕРХНЯЯ КАРТОЧКА */}
@@ -143,7 +140,7 @@ const roadHome = () => {
       </div>
 
       {/* УМЕНЬШЕННЫЙ НУМПАД */}
-      <div className="ex-small-numpad">
+      <div className="numpad-grid">
         <button onClick={() => handlePress("1")}>1</button>
         <button onClick={() => handlePress("2")}>2</button>
         <button onClick={() => handlePress("3")}>3</button>
@@ -159,12 +156,12 @@ const roadHome = () => {
       </div>
 
 
-       <div className="buy-swipe-elite-container">
-      <div className="buy-swipe-elite-track" ref={trackRef}>
+       <div className="swipe-elite-container ">
+      <div className="swipe-elite-track" ref={trackRef}>
         
         {/* Вычисляем прозрачность текста в зависимости от того, как далеко ушел свайп */}
         <span 
-          className="buy-swipe-elite-text" 
+          className="swipe-elite-text" 
           style={{ opacity: trackRef.current ? 1 - (swipeX / (trackRef.current.offsetWidth - 56)) : 1 }}
         >
           Swipe to Send
@@ -172,7 +169,7 @@ const roadHome = () => {
         
         {/* Сам ползунок */}
         <div 
-          className="buy-swipe-elite-thumb"
+          className="swipe-elite-thumb"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}

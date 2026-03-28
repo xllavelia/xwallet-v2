@@ -11,12 +11,14 @@ const roadHome = () => {
 
  const [network, setNetwork] = useState('ERC20');
 
-  // Данные кошелька
-  const walletId = 'ID-99283401';
+
+  const walletId = '921028279';
   const btcAddress = 'bc1qxy2kgsv6dnvce47rj6gvcs7m3wjm0yu8a';
   const ethAddress = '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
-  const solAddress = 'GvT9...xR4n';
-  const cardNumber = '4412 •••• •••• 8892';
+  const solAddress = 'GvT97vf46scxR4n';
+  const cardNumber = '7901 2837 9272 4581';
+  const cardNumber2 = '1234 9991 8738 1234';
+
 
   // Логика выбора адреса
   let activeAddress = ethAddress;
@@ -25,14 +27,10 @@ const roadHome = () => {
 
 
   return (<div className="GetContent">
+<div className="Road-Home" onClick={roadHome}></div>
 
 <div className="get-page">
-      <header className="get-header">
-        <button className="get-icon-btn" onClick={roadHome}>x</button>
-        <span className="get-page-title">Receive Assets</span>
-        <button className="get-icon-btn">•••</button>
-      </header>
-
+     
       <div className="get-content">
         {/* КАРТОЧКА С ИНФОРМАЦИЕЙ */}
         <div className="get-info-card">
@@ -41,9 +39,14 @@ const roadHome = () => {
             <span className="get-value">{walletId}</span>
           </div>
           <div className="get-row">
-            <span className="get-label">Card Number</span>
+            <span className="get-label">Card 1 Number</span>
             <span className="get-value">{cardNumber}</span>
           </div>
+           <div className="get-row">
+            <span className="get-label">Card 2 Number</span>
+            <span className="get-value">{cardNumber2}</span>
+          </div>
+          
           <div className="get-divider"></div>
           <div className="get-address-box">
             <span className="get-label">Your Deposit Address</span>

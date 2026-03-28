@@ -97,12 +97,7 @@ const mockUsers = [
 
    <div className="transfer-page">
       
-<header className="transfer-header">
-        <button className="icon-btn-send" onClick={roadHome}>↑</button>
-        <span>Send usd</span>
-        <button className="icon-btn-send"></button>
-      </header>
-
+<div className="Road-Home" onClick={roadHome}></div>
       
 
       <div className="amount-display-container">
@@ -163,7 +158,7 @@ const mockUsers = [
       </div>
 
    </div>
-
+<div className="numpad-grid-parent">
       <div className="numpad-grid">
         <button onClick={() => handleNumpad("1")}>1</button>
         <button onClick={() => handleNumpad("2")}>2</button>
@@ -177,6 +172,7 @@ const mockUsers = [
         <button onClick={() => handleNumpad(".")}>.</button>
         <button onClick={() => handleNumpad("0")}>0</button>
         <button onClick={() => handleNumpad("del")}>/</button>
+      </div>
       </div>
  <div className="swipe-elite-container">
       <div className="swipe-elite-track" ref={trackRef}>
