@@ -2,11 +2,14 @@ import React from "react";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import "./Main.css";
 import Home from "./Home";
-// import About from "./About";
 import Send from "./Send";
 import Buy from "./Buy";
 import Get from "./Get";
-
+import Setting from "./Setting";
+import History from "./History";
+import State from "./State";
+import Bonus from "./Bonus";
+import Referral from "./Referral";
 
 const NavigationBar = () => {
   return (
@@ -21,10 +24,14 @@ const App = () => {
       <NavigationBar />
       <Routes>
         <Route  path="/" element={<Home />} />
-        {/* <Route path="/about" element={<About />} /> */}
          <Route path="/send" element={<Send />} />
          <Route path="/buy" element={<Buy />} />
          <Route path="/get" element={<Get />} />
+         <Route path="/setting" element={<Setting />} />
+         <Route path="/history" element={<History />} />
+         <Route path="/state" element={<State />} />
+         <Route path="/bonus" element={<Bonus />} />
+         <Route path="/referral" element={<Referral />} />
 
       </Routes>
     </BrowserRouter>
