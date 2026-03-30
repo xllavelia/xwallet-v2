@@ -46,16 +46,7 @@ const roadHome = () => {
             </div>
           </div>
 
-          <div className="pc-bottom">
-            <div className="pc-stat">
-              <span className="pc-label">TOTAL PROFIT</span>
-              <span className="pc-val">{'$ ' + totalEarnings.toFixed(2)}</span>
-            </div>
-            <div className="pc-stat">
-              <span className="pc-label">LAST PAYOUT</span>
-              <span className="pc-val">{lastPayout}</span>
-            </div>
-          </div>
+         
         </div>
 
         <div className="pc-side">

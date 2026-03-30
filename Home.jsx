@@ -614,9 +614,9 @@ const [rates, setRates] = useState(null);
         
         <div className="eb-main-balance">
           12.98 USD
-          <svg className="eb-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          {/* <svg className="eb-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
+          </svg> */}
         </div>
 
         <div className="eb-stats-grid">
