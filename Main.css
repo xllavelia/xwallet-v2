@@ -1824,9 +1824,9 @@ justify-content: center;
   color: var(--tkt-dark);
   font-family: 'Unbounded'; 
   border-radius: 16px;
+  height: 20vh;
   position: relative;
   overflow: hidden;
-  height: 22vh;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   margin: 20px auto;
 }
@@ -1845,7 +1845,7 @@ justify-content: center;
 
 .tm-block {
   flex: 1;
-  padding: 5px 16px;
+  padding: 10px 16px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1879,7 +1879,7 @@ justify-content: center;
 }
 
 .tm-hero {
-  padding: 5px 10px;
+  padding: 10px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1888,7 +1888,7 @@ justify-content: center;
 
 .tm-title-wrapper h2 {
   margin: 0;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 900;
   line-height: 1.1;
   text-transform: uppercase;

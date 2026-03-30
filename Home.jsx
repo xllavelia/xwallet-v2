@@ -8,7 +8,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "remake position and delete scroll page"
+// git commit -m "height fix"
 // git push origin main
 
 
@@ -599,11 +599,10 @@ const [rates, setRates] = useState(null);
           {/* <span>Get</span> */}
         </div>
       </div>
-
+ 
 
  <div className="eb-container-parent">
  <div className="eb-container">
-      {/* Верхняя часть: Основной доход */}
       <div className="eb-top-section" onClick={roadState}>
         <div className="eb-header-row">
           <span>Today's Profit</span>
@@ -622,26 +621,20 @@ const [rates, setRates] = useState(null);
 
         <div className="eb-stats-grid">
           <div className="eb-stat-item">
-            <div className="eb-stat-label">referal bonus</div>
-            <div className="eb-stat-value">2.30 USD</div>
-          </div>
-          <div className="eb-stat-item">
-            <div className="eb-stat-label">Total Profit</div>
+             <div className="eb-stat-label">Total Profit</div>
             <div className="eb-stat-value">79,21 USD</div>
           </div>
+        
         </div>
       </div>
 
-      {/* Разделитель */}
       <div className="eb-divider-h"></div>
 
-      {/* Нижняя часть: Ассеты */}
       <div className="eb-assets-row">
-        {/* Блок USDT */}
         <div className="eb-asset-card" onClick={roadReferral}>
-          <div className="eb-asset-icon usdt-bg">
+          {/* <div className="eb-asset-icon usdt-bg">
             <span className="eb-icon-symbol">₮</span>
-          </div>
+          </div> */}
           <div className="eb-asset-info">
             <div className="eb-tag">infite frends</div>
             <div className="eb-asset-data">
@@ -653,22 +646,21 @@ const [rates, setRates] = useState(null);
 
         <div className="eb-divider-v"></div>
 
-        {/* Блок ETH */}
         <div className="eb-asset-card" onClick={roadBonus}>
-          <div className="eb-asset-icon eth-bg">
+          {/* <div className="eb-asset-icon eth-bg">
             <span className="eb-icon-symbol">Ξ</span>
-          </div>
+          </div> */}
           <div className="eb-asset-info">
             <div className="eb-tag">Bonus</div>
             <div className="eb-asset-data">
-              <span className="eb-asset-name">ETH</span>
+              <span className="eb-asset-name">Gift Card</span>
               <span className="eb-asset-apr">100$</span>
             </div>
           </div>
         </div>
       </div>
     </div> 
-    </div> 
+    </div>  
 
  <div className="mc-wrapper">
       
