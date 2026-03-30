@@ -10,6 +10,8 @@ import History from "./History";
 import State from "./State";
 import Bonus from "./Bonus";
 import Referral from "./Referral";
+import Card from "./Card";
+import Card2 from "./Card2";
 
 const NavigationBar = () => {
   return (
@@ -32,6 +34,8 @@ const App = () => {
          <Route path="/state" element={<State />} />
          <Route path="/bonus" element={<Bonus />} />
          <Route path="/referral" element={<Referral />} />
+         <Route path="/card" element={<Card />} />
+         <Route path="/card2" element={<Card2 />} />
 
       </Routes>
     </BrowserRouter>

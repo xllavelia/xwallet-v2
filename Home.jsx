@@ -8,7 +8,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "height fix"
+// git commit -m "info card!"
 // git push origin main
 
 
@@ -74,6 +74,13 @@ const roadReferral = () => {
     navigate("/referral");
   };
 
+const roadCard = () => {
+    navigate("/card");
+  };
+
+const roadCard2 = () => {
+    navigate("/card2");
+  };
 // const roadHome = () => {
 //     navigate("/");
 //   };
@@ -679,7 +686,7 @@ const [rates, setRates] = useState(null);
         </div>
 
         {/* Карточка 1: Лаймовая */}
-        <div className={'mc-item mc-card ' + 'bg-lime'}>
+        <div className={'mc-item mc-card ' + 'bg-lime'} onClick={roadCard}>
           <div className="mc-top">
             <div>
               <div className="mc-label">Current Balance</div>
@@ -713,7 +720,7 @@ const [rates, setRates] = useState(null);
         </div>
 
         {/* Карточка 2: Белая */}
-        <div className={'mc-item mc-card ' + 'bg-white'}>
+        <div className={'mc-item mc-card ' + 'bg-white'} onClick={roadCard2}>
           <div className="mc-top">
             <div>
               <div className="mc-label">Current Balance</div>
