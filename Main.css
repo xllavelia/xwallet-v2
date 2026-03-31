@@ -229,14 +229,15 @@ padding-top: 4%;
   display: flex;
   gap: 12px;
   padding: 0.5rem;
-  background-color: #000000; /* Глубокий черный фон из ТЗ */
-  overflow-x: auto; /* На случай, если не поместятся на узком экране */
+  background-color: transparent; 
+  overflow-x: scroll;
 }
 
 /* Скрываем скроллбар */
 .ms-container::-webkit-scrollbar {
   display: none;
 }
+
 .ms-container {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -249,7 +250,7 @@ padding-top: 4%;
   font-family: 'Unbounded'; 
   flex: 1; /* Карточки делят пространство поровну */
   min-width: 11rem;
-  background-color: #151515; 
+  background-color: #1a1a1a; 
   border-radius: 16px;
   padding: 16px;
   display: flex;
@@ -258,13 +259,6 @@ padding-top: 4%;
   height: 100px; /* Фиксированная высота */
   box-sizing: border-box;
 }
-/* .ms-plus{
-  border: 2px solid hsl(162, 90%, 20%);
-}
-
-.ms-min{
-  border: 2px solid hsl(61, 80%, 78%);
-} */
 
 .ms-label {
   color: #888888; /* Серый цвет для лейблов */
@@ -307,6 +301,104 @@ padding-top: 4%;
 } 
 
 
+.home-wrapper {
+ margin: 0.5rem;
+  background-color: #000;
+}
+
+/* ЕДИНАЯ КАРТА */
+.unified-card {
+  font-family: 'Unbounded'; 
+  width: 100%;
+  background: #121212;
+  border: 1px solid #1f2226;
+  border-radius: 20px;
+  padding: 16px 0; /* Внутренние отступы только сверху/снизу для скролла */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  cursor: pointer;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+/* СКРОЛЛ КУРСОВ */
+.uc-rates-scroll {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 0 16px;
+  scrollbar-width: none; /* Скрываем скроллбар в FF */
+}
+.uc-rates-scroll::-webkit-scrollbar { display: none; } /* Скрываем в Chrome */
+
+.uc-rate-item {
+  display: flex;
+  flex-direction: column;
+  min-width: fit-content;
+}
+
+.uc-ticker {
+  font-size: 10px;
+  font-weight: 800;
+  color: #555;
+  margin-bottom: 2px;
+}
+
+.uc-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+
+/* ЛЕНДИНГ ВЫБОРА (MODAL) */
+.lend-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.lend-modal {
+  font-family: 'Unbounded', sans-serif; 
+  width: 100%;
+  background: #121212;
+  border-top: 1px solid #1f2226;
+  border-radius: 24px 24px 0 0;
+  padding: 24px;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.lend-handle { width: 36px; height: 4px; background: #2b2f36; margin: 0 auto 24px; border-radius: 2px; }
+.lend-title { color: #fff; font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+
+.lend-list { display: flex; flex-direction: column; gap: 10px; }
+
+.lend-item {
+  background: #1a1a1a;
+  padding: 16px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.lend-left { display: flex; align-items: center; gap: 14px; }
+.lend-icon { 
+  width: 40px; height: 40px; background: #000; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: #fff; border: 1px solid #222;
+}
+.lend-info { display: flex; flex-direction: column; }
+.lend-name { color: #fff; font-weight: 700; font-size: 14px; }
+.lend-ticker { color: #555; font-size: 11px; }
+.lend-price { color: #fff; font-weight: 700;}
 
 .crypto-mini-cards-container {
    overflow-x: auto ;
@@ -2432,7 +2524,7 @@ justify-content: center;
 }
 
 .mc-card- {
-  font-family: 'Unbounded'; 
+  font-family: 'Unbounded', sans-serif; 
   width: 90%;
   padding: 5%;
 padding-bottom: 4%;
@@ -2534,6 +2626,402 @@ padding-top: 4%;
   letter-spacing: 0.5px;
 }
 
+
+.bo-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* Пропускаем клики, когда закрыто */
+}
+.bo-overlay.open { pointer-events: auto; }
+
+/* Затемнение фона */
+.bo-backdrop {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.bo-overlay.open .bo-backdrop { opacity: 1; }
+
+
+.bo-ticket {
+font-family: 'Unbounded'; 
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 90%;
+  max-width: 400px;
+  background-color: hsl(61, 80%, 78%); 
+  color: hsl(162, 50%, 20%);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+  
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.bo-ticket.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.bo-ticket-inner {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ШАПКА */
+.bo-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.bo-col { display: flex; flex-direction: column; }
+.bo-col.right { align-items: flex-end; }
+
+.bo-label { font-size: 10px; font-weight: 800; opacity: 0.6; letter-spacing: 1px; margin-bottom: 4px; }
+.bo-status {
+  background: #1a3025; color: #e2f1ad;
+  padding: 4px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 900; letter-spacing: 1px;
+}
+
+.bo-close-btn {
+  background: transparent; border: none; color: #1a3025;
+  font-size: 20px; cursor: pointer; opacity: 0.5; transition: opacity 0.2s;
+}
+.bo-close-btn:hover { opacity: 1; }
+
+/* ГЛАВНЫЙ БАЛАНС */
+.bo-main-balance { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 24px; }
+.bo-bal-label { font-size: 11px; font-weight: 800; letter-spacing: 3px; margin-bottom: 8px; }
+.bo-bal-val { font-size: 38px; font-weight: 900; letter-spacing: -1px; }
+
+/* РАЗДЕЛИТЕЛЬ ТИКЕТА */
+.bo-divider {
+  border-top: 2px dashed rgba(26, 48, 37, 0.2);
+  margin: 16px 0;
+}
+
+/* ПРОФИТЫ */
+.bo-row { display: flex; justify-content: space-between; align-items: center; }
+.bo-val-bold { font-size: 18px; font-weight: 900; }
+
+/* СПИСОК СТАТИСТИКИ */
+.bo-stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0 24px 0;
+}
+
+.bo-stat-item { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; font-weight: 600; }
+.bo-s-label { opacity: 0.7; }
+.bo-s-dots { flex: 1; border-bottom: 1px dotted rgba(26, 48, 37, 0.4); margin: 0 10px; position: relative; top: -4px; }
+.bo-s-val { font-weight: 800;}
+
+/* КНОПКА НАСТРОЕК */
+.bo-settings-btn {
+  width: 100%;
+  background: hsl(162, 50%, 20%);
+  color: hsl(61, 80%, 78%);
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-top: auto;
+  transition: transform 0.1s;
+}
+.bo-settings-btn:active { transform: scale(0.98); }
+
+.set-icon { font-size: 16px; opacity: 0.8; }
+.set-text { font-size: 11px; font-weight: 800; letter-spacing: 2px; flex: 1; text-align: left; margin-left: 12px; }
+.set-arrow { font-size: 16px; }
+
+.bo-ticket-stub {
+  width: 50px;
+  background-color: hsl(162, 50%, 17%);
+  color: hsl(61, 80%, 78%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+  border-left: 2px dashed rgba(226, 241, 173, 0.3);
+}
+.stub-text { transform: rotate(90deg); font-size: 10px; font-weight: 900; letter-spacing: 2px; white-space: nowrap; margin-top: 40px;}
+.stub-barcode {
+  width: 20px; height: 100px;
+  background: repeating-linear-gradient(to bottom, #e2f1ad, #e2f1ad 2px, transparent 2px, transparent 4px);
+  opacity: 0.5;
+  margin-bottom: 20px;
+}
+
+
+.TradeContent{
+  padding-top: 10vh;
+}
+
+
+
+/* Базовый контейнер */
+.elite-trade {
+  font-family: 'Unbounded', sans-serif; 
+  color: #ffffff;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding-bottom: 90px;
+}
+
+/* Утилиты цветов */
+.green { color: #2ebd85 !important; }
+.red { color: #f6465d !important; }
+.yellow { color: #eebb4d !important; }
+
+/* HEADER */
+.et-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px;
+}
+
+.et-back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+}
+
+.et-title-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  margin-left: 16px;
+}
+
+.et-icon-placeholder {
+  width: 28px;
+  height: 28px;
+  background: #2b3139;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #f3ba2f; /* Желтый оттенок как у BTC */
+}
+
+.et-symbol {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.et-lev {
+  background: #2b3139;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #848e9c;
+}
+
+.et-actions {
+  display: flex;
+  gap: 16px;
+  font-size: 18px;
+  color: #848e9c;
+}
+
+/* PRICE */
+.et-price-zone {
+  padding: 8px 16px 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.et-price {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.et-change {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* CHART */
+.et-chart-wrapper {
+  height: 320px;
+  width: 100%;
+  border-top: 1px solid #1f2229;
+  border-bottom: 1px solid #1f2229;
+}
+
+/* TIMEFRAMES */
+.et-timeframes {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #1f2229;
+}
+
+.et-tf-btn {
+  background: transparent;
+  border: none;
+  color: #848e9c;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.et-tf-btn.active {
+  background: #2b3139;
+  color: #ffffff;
+}
+.et-more-container {
+  position: relative;
+  display: inline-block;
+}
+
+.et-more-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #1a1b20; /* Цвет чуть светлее основного фона */
+  border: 1px solid #2b3139;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  min-width: 100px;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.et-dropdown-item {
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #848e9c;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.et-dropdown-item:hover {
+  background: #2b3139;
+  color: #ffffff;
+}
+
+/* Фикс для кнопки More, если она активна */
+.et-more-container .et-tf-btn.active {
+  color: #ffffff;
+  background: #2b3139;
+}
+/* STATS */
+.et-stats {
+  background-color: #121212;
+  border-radius: 1.5rem;
+  margin: 1.5rem;
+  padding: 24px 16px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.et-stats h2 {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+  font-weight: 700;
+}
+
+.et-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-size: 14px;
+  color: #848e9c;
+}
+
+.et-stat-row .val {
+  color: #ffffff;
+  font-weight: 600;
+  font-family: monospace; /* Для цифр выглядит профессиональнее */
+  font-size: 15px;
+}
+
+.et-stat-row .arrow {
+  font-size: 20px;
+}
+
+/* BOTTOM BAR */
+.et-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 90%;
+  margin: 0 auto;
+  background: transparent;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  /* border-top: 1px solid #1f2229; */
+  z-index: 100;
+}
+
+.et-btn-trade {
+  flex: 1;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.et-btn-trade.long {
+  background-color: black; 
+  border: 2px solid #10B981; 
+  color: #10B981; 
+  font-family: 'Unbounded', sans-serif; 
+}
+
+.et-btn-trade.short {
+  background-color:
+    #f6465d; 
+    color: #000000;
+  font-family: 'Unbounded', sans-serif; 
+}
 
 
 @media (min-width: 768px) { 

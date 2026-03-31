@@ -8,7 +8,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "info card!"
+// git commit -m "real trade page and remake crypto select coin!"
 // git push origin main
 
 
@@ -81,6 +81,8 @@ const roadCard = () => {
 const roadCard2 = () => {
     navigate("/card2");
   };
+
+
 // const roadHome = () => {
 //     navigate("/");
 //   };
@@ -459,20 +461,55 @@ const [rates, setRates] = useState(null);
     return () => clearInterval(interval);
   }, []);
 
-  // Mock data для истории и карт
-  const cards = [
-    { id: "btc", name: "Bitcoin Platinum", number: "**** 8842", balance: "1.2400 BTC", color: "linear-gradient(135deg, #F7931A 0%, #8A5410 100%)", backroundColor: "hsl(70, 80%, 80%)" },
-    { id: "eth", name: "Ethereum Glass", number: "**** 1109", balance: "14.50 ETH", color: "linear-gradient(135deg, #627EEA 0%, #2E3E7A 100%)", backroundColor: " hsl(162, 50%, 15%)" },
-    { id: "sol", name: "Solana Quartz", number: "**** 4412", balance: "180.2 SOL", color: "linear-gradient(135deg, #14F195 0%, #0D6D45 100%)", backroundColor: "hsl(70, 80%, 80%)" }
-  ];
 
-  const trades = [
-    { id: "TRX-9921", type: "Buy", asset: "BTC", amount: "+0.002", status: "Completed", date: "Today, 14:20" },
-    { id: "TRX-4402", type: "Swap", asset: "SOL", amount: "+2.00", status: "Completed", date: "Yesterday, 10:11" }
-  ];
-
-
+  
   const [bg, setBg] = useState("#000000");
+
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Расширенные данные для статистики
+  const totalBalance = 789.00;
+  const profit24h = 12.98;
+  const profit7d = 70.54;
+  const totalIncome = 4500.00;
+  const totalOutcome = 2009.50;
+  
+  // Дополнительная статистика
+  const activeTrades = 12;
+  const winRate = 78.5;
+  const cashbackEarned = 145.50;
+
+const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+  const [prices, setPrices] = useState({ BTC: '0.00', ETH: '0.00', SOL: '0.00', TON: '0.00' });
+
+  const coins = [
+    { id: 'BTC', name: 'Bitcoin', icon: '₿' },
+    { id: 'ETH', name: 'Ethereum', icon: 'Ξ' },
+    { id: 'SOL', name: 'Solana', icon: '◎' },
+    { id: 'TON', name: 'Toncoin', icon: '♦' }
+  ];
+
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","SOLUSDT","TONUSDT"]');
+        const data = await res.json();
+        const p = {};
+        data.forEach(i => p[i.symbol.replace('USDT', '')] = parseFloat(i.price));
+        setPrices(p);
+      } catch (e) { console.error(e); }
+    };
+    fetchPrices();
+    const inv = setInterval(fetchPrices, 10000);
+    return () => clearInterval(inv);
+  }, []);
+
+  const handleTradeNav = (id) => {
+    navigate('/trade', { state: { coin: id } });
+    setIsSelectorOpen(false);
+  };
+
 
   return (
     
@@ -574,12 +611,12 @@ const [rates, setRates] = useState(null);
       {/* 2. Total Balance */}
       <section className="balance-block">
         {/* <span className="label-dim">Total Assets</span> */}
-        <div className="balance-main" onClick={roadSetting}>
-          <span className="symbol">usdt</span>
-          <h1 className="amount">789.00</h1>
+        <div className="balance-main">
+          <span className="symbol" onClick={() => setIsOpen(true)}>usdt</span>
+          <h1 className="amount" onClick={() => setIsOpen(true)}>789.00</h1>
         </div>
         <div className="pnl-summary">
-          <span className="upLast">+2.4% last 24h</span>
+          <span className="upLast" onClick={() => setIsOpen(true)}>+2.4% last 24h</span>
         </div>
       </section>
 
@@ -610,7 +647,7 @@ const [rates, setRates] = useState(null);
 
  <div className="eb-container-parent">
  <div className="eb-container">
-      <div className="eb-top-section" onClick={roadState}>
+      <div className="eb-top-section" >
         <div className="eb-header-row">
           <span>Today's Profit</span>
           <svg className="eb-icon-eye" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -757,114 +794,72 @@ const [rates, setRates] = useState(null);
     </div>
 
 
+ <div className="home-wrapper">
+      
+      {/* МОНОЛИТНАЯ КАРТА */}
+      <div className="unified-card" onClick={() => setIsSelectorOpen(true)}>
+        
+        {/* ВЕРХНИЙ БЛОК: КУРСЫ СО СКРОЛЛОМ */}
+        <div className="uc-rates-scroll">
+          {Object.entries(prices).map(([ticker, val]) => (
+            <div key={ticker} className="uc-rate-item">
+              <span className="uc-ticker">{ticker}</span>
+              <span className="uc-price">{'$' + val.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
 
-     <section className="cards-section">
-       
-<div  className="crypto-mini-cards-container">
-
-  <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-btc">₿</div> */}
-        <div  className="mini-card-title">Bitcoin</div>
+      <div className="ms-container">
+      
+      <div className="ms-mini-card">
+        <div className="ms-label">capitalization</div>
+        <div className="ms-value">2,42 trill $</div>
+        <div className={'ms-change ' + 'neg'}>-2,03 %</div>
       </div>
-      <div  className="mini-card-rate"></div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">$72.980,26</div>
-      <div  className="mini-card-fiat-balance">+0.9%</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">$237.45</div>
-      <div  className="mini-card-profit-percent"></div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">long</button>
-      <button  className="btn-mini-card btn-send">short</button>
-    </div>
-  </div>
 
-   <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-eth">Ξ</div> */}
-        <div  className="mini-card-title">Ethereum</div>
+      <div className="ms-mini-card">
+        <div className="ms-label">volume</div>
+        <div className="ms-value">101,78 bill $</div>
+        <div className={'ms-change ' + 'pos'}>+15,53 %</div>
       </div>
-      <div  className="mini-card-rate"></div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">2182.00</div>
-      <div  className="mini-card-fiat-balance">xxxx</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">$7.45</div>
-      <div  className="mini-card-profit-percent"></div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">long</button>
-      <button  className="btn-mini-card btn-send">short</button>
-    </div>
-  </div>
 
-
-   <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-eth">Ξ</div> */}
-        <div  className="mini-card-title">Solana</div>
+      <div className="ms-mini-card">
+        <div className="ms-label">dominance</div>
+        <div className="ms-value">56,30 %</div>
+        <div className="ms-subtext">Bitcoin</div>
       </div>
-      <div  className="mini-card-rate"></div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">82.29</div>
-      <div  className="mini-card-fiat-balance">xxxx</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">$18.45</div>
-      <div  className="mini-card-profit-percent"></div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">long</button>
-      <button  className="btn-mini-card btn-send">short</button>
-    </div>
-  </div>
 
-
-
-
-     <div  className="crypto-mini-card">
-    <div  className="mini-card-header">
-      <div>
-        {/* <div  className="mini-card-icon icon-eth">Ξ</div> */}
-        <div  className="mini-card-title">Ton</div>
+    </div>
       </div>
-      <div  className="mini-card-rate"></div>
-    </div>
-    <div  className="mini-card-balance-section">
-      <div  className="mini-card-crypto-balance">532.56</div>
-      <div  className="mini-card-fiat-balance">xxxx</div>
-    </div>
-    <div  className="mini-card-profit-section">
-      <div  className="mini-card-profit-title">Profit (24h)</div>
-      <div  className="mini-card-profit-usd">$27.94</div>
-      <div  className="mini-card-profit-percent"></div>
-    </div>
-    <div  className="mini-card-actions">
-      <button  className="btn-mini-card btn-swap">long</button>
-      <button  className="btn-mini-card btn-send">short</button>
-    </div>
-  </div>
 
+      {/* ЛЕНДИНГ ВЫБОРА МОНЕТ (MODAL) */}
+      {isSelectorOpen && (
+        <div className="lend-overlay" onClick={() => setIsSelectorOpen(false)}>
+          <div className="lend-modal" onClick={e => e.stopPropagation()}>
+            <div className="lend-handle"></div>
+            <h2 className="lend-title">Select Asset</h2>
+            <div className="lend-list">
+              {coins.map(c => (
+                <div key={c.id} className="lend-item" onClick={() => handleTradeNav(c.id)}>
+                  <div className="lend-left">
+                    <div className="lend-icon">{c.icon}</div>
+                    <div className="lend-info">
+                      <span className="lend-name">{c.name}</span>
+                      <span className="lend-ticker">{c.id + ' / USDT'}</span>
+                    </div>
+                  </div>
+                  <div className="lend-price">
+                    {'$' + (prices[c.id] || '0.00')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
-  </div>
-  </section>
+    </div>
   
-
-    
-
       {/* <section className="revenue-stats">
         <div className="rev-item">
           <span className="rev-label">Today PnL</span>
@@ -911,8 +906,93 @@ const [rates, setRates] = useState(null);
           ))}
         </div>
       </section> */}
+ <div className={'bo-overlay' + (isOpen ? ' open' : '')}>
+        
+        {/* Клик по фону закрывает окно */}
+        <div className="bo-backdrop" onClick={() => setIsOpen(false)}></div>
 
-    </div>
+        {/* ОСТРОВ-ТИКЕТ ПО ЦЕНТРУ */}
+        <div className={'bo-ticket' + (isOpen ? ' open' : '')}>
+          
+          <div className="bo-ticket-inner">
+            {/* ШАПКА ТИКЕТА */}
+            <div className="bo-header">
+              <div className="bo-col">
+                <span className="bo-label">PORTFOLIO</span>
+                <span className="bo-status">LIVE</span>
+              </div>
+              <button className="bo-close-btn" onClick={() => setIsOpen(false)}>
+                ✕
+              </button>
+            </div>
+
+            {/* ГЛАВНЫЙ БАЛАНС */}
+            <div className="bo-main-balance">
+              <span className="bo-bal-label">TOTAL BALANCE</span>
+              <span className="bo-bal-val">
+                {'$ ' + totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+
+            <div className="bo-divider"></div>
+
+            {/* БЛОК ПРОФИТА (24ч и 7д) */}
+            <div className="bo-row">
+              <div className="bo-col">
+                <span className="bo-label">24H PROFIT</span>
+                <span className="bo-val-bold">{'+$ ' + profit24h.toFixed(2)}</span>
+              </div>
+              <div className="bo-col right">
+                <span className="bo-label">7D PROFIT</span>
+                <span className="bo-val-bold">{'+$ ' + profit7d.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="bo-divider"></div>
+
+            {/* РАСШИРЕННАЯ СТАТИСТИКА */}
+            <div className="bo-stats-list">
+              <div className="bo-stat-item">
+                <span className="bo-s-label">Total Income</span>
+                <span className="bo-s-dots"></span>
+                <span className="bo-s-val">{'$ ' + totalIncome.toLocaleString()}</span>
+              </div>
+              <div className="bo-stat-item">
+                <span className="bo-s-label">Total Outcome</span>
+                <span className="bo-s-dots"></span>
+                <span className="bo-s-val">{'$ ' + totalOutcome.toLocaleString()}</span>
+              </div>
+              <div className="bo-stat-item">
+                <span className="bo-s-label">Active Trades</span>
+                <span className="bo-s-dots"></span>
+                <span className="bo-s-val">{activeTrades + ' Open'}</span>
+              </div>
+              <div className="bo-stat-item">
+                <span className="bo-s-label">Average Win Rate</span>
+                <span className="bo-s-dots"></span>
+                <span className="bo-s-val">{winRate + '%'}</span>
+              </div>
+              <div className="bo-stat-item">
+                <span className="bo-s-label">Cashback Earned</span>
+                <span className="bo-s-dots"></span>
+                <span className="bo-s-val">{'$ ' + cashbackEarned.toFixed(2)}</span>
+              </div>
+            </div>
+<button className="bo-settings-btn" onClick={roadSetting}>
+              {/* <span className="set-icon">⚙</span> */}
+              <span className="set-text">SYSTEM PREFERENCES</span>
+            </button>
+
+          </div>
+          
+          {/* Боковой корешок для стиля тикета */}
+          <div className="bo-ticket-stub">
+            <span className="stub-text">SYS-BAL-01</span>
+            <div className="stub-barcode"></div>
+          </div>
+
+        </div>
+      </div> </div>
 
           </div> </div>
 

@@ -12,6 +12,7 @@ import Bonus from "./Bonus";
 import Referral from "./Referral";
 import Card from "./Card";
 import Card2 from "./Card2";
+import Trade from "./Trade";
 
 const NavigationBar = () => {
   return (
@@ -36,6 +37,8 @@ const App = () => {
          <Route path="/referral" element={<Referral />} />
          <Route path="/card" element={<Card />} />
          <Route path="/card2" element={<Card2 />} />
+         <Route path="/trade" element={<Trade />} />
+
 
       </Routes>
     </BrowserRouter>

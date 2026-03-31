@@ -76,7 +76,9 @@ const [swipeX, setSwipeX] = useState(0);
 const mockUsers = [
   { id: "7721", name: "Alex Rover", avatar: "AR" },
   { id: "0042", name: "Tim Shim", avatar: "TS" },
-  { id: "1337", name: "Elite Dev", avatar: "ED" }
+  { id: "1337", name: "Elite Dev", avatar: "ED" },
+  { id: "6767", name: "Stepan Skebobovich", avatar: "67" },
+  { id: "1488", name: "Dmitry Pidr", avatar: "67" }
 ];
 
 
