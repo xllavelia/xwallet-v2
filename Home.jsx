@@ -1,5 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
-  import { useNavigate } from "react-router-dom";
+  import { useNavigate, useLocation } from "react-router-dom";
+  import { useBalance, usePosition, useTradeHistory } from './useBalance';
+
 
 // git add .
 //  git commit -m "added progress row with percent"
@@ -8,39 +10,14 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "mini fix"
+// git commit -m "TRADE!!! and history"
 // git push origin main
 
 
 
 const Home = () => {
   const navigate = useNavigate();
-//   let balanceGoalNow = 7.58
-// let balansPRGoalNow = "7.90%"
-//    const createGoalRef = useRef(null);
-//    const deleteGoalOld = useRef(null);
-//    const finalGoal= useRef(null);
-//    const infoFinalGoal = useRef(null);
-// const [name, setName] = useState("");
-// const [dollar, setDollar] = useState("");
-// const [photo, setPhoto] = useState(null);
-//  const GoalLendParent1 = useRef(null);
-//  const GoalLendParent2 = useRef(null);
-//  const GoalLendParent3 = useRef(null);
-//  const kartaChildrenRef = useRef(null);
-// useEffect(() => {
-//   const container = kartaChildrenRef.current;
-
-//   if (!container) return;
-
-//   const middle =
-//     container.children[Math.floor(container.children.length / 2)];
-
-//   middle.scrollIntoView({
-//     behavior: "auto",
-//     inline: "center",
-//   });
-// }, []);
+  const balance = useBalance();
 
 const roadSend = () => {
     navigate("/send");
@@ -82,316 +59,8 @@ const roadCard2 = () => {
     navigate("/card2");
   };
 
-// const roadHome = () => {
-//     navigate("/");
-//   };
+  var balanceStr = balance.toFixed(2);
 
-
-// function HomeGoalPlusBtn1(event) {
-//   event.stopPropagation();
-  
-//   if (GoalLendParent.current) {
-//     GoalLendParent1.current.style.transition = "opacity 0.6s";
-//     GoalLendParent1.current.style.opacity = "1";
-//     GoalLendParent1.current.style.pointerEvents = "auto";
-//         kartaChildrenRef.current.style.pointerEvents = "none";
-     
-//   }
-// }
-
-// useEffect(() => {
-//   function handleClickOutside(event) {
-//     if (
-//       GoalLendParent1.current &&
-//       !GoalLendParent1.current.contains(event.target)
-//     ) {
-//       GoalLendParent1.current.style.opacity = "0";
-//       GoalLendParent1.current.style.pointerEvents = "none";
-//         kartaChildrenRef.current.style.pointerEvents = "auto";
-     
-//     }
-//   }
-
-//   document.addEventListener("click", handleClickOutside);
-
-//   return () => {
-//     document.removeEventListener("click", handleClickOutside);
-//   };
-// }, []);
-
-
-
-// function HomeGoalPlusBtn2(event) {
-//   event.stopPropagation();
-  
-//   if (GoalLendParent.current) {
-//     GoalLendParent2.current.style.transition = "opacity 0.6s";
-//     GoalLendParent2.current.style.opacity = "1";
-//     GoalLendParent2.current.style.pointerEvents = "auto";
-//         kartaChildrenRef.current.style.pointerEvents = "none";
-     
-//   }
-// }
-
-// useEffect(() => {
-//   function handleClickOutside(event) {
-//     if (
-//       GoalLendParent2.current &&
-//       !GoalLendParent2.current.contains(event.target)
-//     ) {
-//       GoalLendParent2.current.style.opacity = "0";
-//       GoalLendParent2.current.style.pointerEvents = "none";
-//         kartaChildrenRef.current.style.pointerEvents = "auto";
-     
-//     }
-//   }
-
-//   document.addEventListener("click", handleClickOutside);
-
-//   return () => {
-//     document.removeEventListener("click", handleClickOutside);
-//   };
-// }, []);
-
-
-
-// function HomeGoalPlusBtn3(event) {
-//   event.stopPropagation();
-  
-//   if (GoalLendParent.current) {
-//     GoalLendParent3.current.style.transition = "opacity 0.6s";
-//     GoalLendParent3.current.style.opacity = "1";
-//     GoalLendParent3.current.style.pointerEvents = "auto";
-//         kartaChildrenRef.current.style.pointerEvents = "none";
-     
-//   }
-// }
-
-// useEffect(() => {
-//   function handleClickOutside(event) {
-//     if (
-//       GoalLendParent.current &&
-//       !GoalLendParent.current.contains(event.target)
-//     ) {
-//       GoalLendParent3.current.style.opacity = "0";
-//       GoalLendParent3.current.style.pointerEvents = "none";
-//         kartaChildrenRef.current.style.pointerEvents = "auto";
-     
-//     }
-//   }
-
-//   document.addEventListener("click", handleClickOutside);
-
-//   return () => {
-//     document.removeEventListener("click", handleClickOutside);
-//   };
-// }, []);
-
-
-
-
-
-//  const GoalLendParent = useRef(null);
-  
-
-
-// function HomeGoalPlusBtn(event) {
-//   event.stopPropagation();
-  
-//   if (GoalLendParent.current) {
-//     GoalLendParent.current.style.transition = "opacity 0.6s";
-//     GoalLendParent.current.style.opacity = "1";
-//     GoalLendParent.current.style.pointerEvents = "auto";
-//         kartaChildrenRef.current.style.pointerEvents = "none";
-     
-//   }
-// }
-
-// useEffect(() => {
-//   function handleClickOutside(event) {
-//     if (
-//       GoalLendParent.current &&
-//       !GoalLendParent.current.contains(event.target)
-//     ) {
-//       GoalLendParent.current.style.opacity = "0";
-//       GoalLendParent.current.style.pointerEvents = "none";
-//         kartaChildrenRef.current.style.pointerEvents = "auto";
-     
-//     }
-//   }
-
-//   document.addEventListener("click", handleClickOutside);
-
-//   return () => {
-//     document.removeEventListener("click", handleClickOutside);
-//   };
-// }, []);
-
-
-// const fileRef = useRef(null);
-// const [image, setImage] = useState(null);
-// const [preview, setPreview] = useState(null);
-
-// function openFilePicker() {
-//   fileRef.current.click();
-// }
-
-
-// function inputNameFunc(e) {
-//   setName(e.target.value);
-
-// }
-
-// function handleFileChange(e) {
-//   const file = e.target.files[0];
-//   if (file) {
-//     setImage(URL.createObjectURL(file));
-//   }
-//     if (!file) return
-//   setPhoto(file)
-//   const  imageUrl = URL.createObjectURL(file)
-//   setPreview(imageUrl)
-
-// }
-// const [amount, setAmount] = useState("");
-
-// function handleChange(e) {
-//   let numbers = e.target.value.replace(/\D/g, "");
-//   setDollar(e.target.value);
-
-//   if (numbers === "") {
-//     setAmount("");
-//     return;
-//   }
-
-//   let intPart = numbers.slice(0, -2);
-//   if (intPart === "") intPart = "0";
-
-//   let decimalPart = numbers.slice(-2);
-//   if (decimalPart.length < 2) {
-//     decimalPart = decimalPart.padStart(2, "0");
-//   }
-
-//   let formattedInt = Number(intPart).toLocaleString("en-US");
-
-//   setAmount(formattedInt + "." + decimalPart);
-// }
-
-// const [activeButtons, setActiveButtons] = React.useState([]);
-
-// function toggleButton(index) {
-//   setActiveButtons(function(previousState) {
-//     let newState = [];
-//     let isAlreadyActive = false;
-
-//     // Проверяем — есть ли уже эта кнопка в массиве
-//     for (let i = 0; i < previousState.length; i++) {
-//       if (previousState[i] === index) {
-//         isAlreadyActive = true;
-//       }
-//     }
-
-//     // Если кнопка уже активна — убираем её
-//     if (isAlreadyActive === true) {
-//       for (let i = 0; i < previousState.length; i++) {
-//         if (previousState[i] !== index) {
-//           newState.push(previousState[i]);
-//         }
-//       }
-
-//       // Проверка — сколько активных осталось
-//       const allThreeActive = newState.length === 3;
-//       console.log("Все три кнопки активны?", allThreeActive);
-
-//       return newState;
-//     }
-
-//     // Если уже 3 активных — больше не добавляем
-//     if (previousState.length >= 3) {
-//       console.log("Нельзя активировать больше 3 кнопок");
-//       return previousState;
-//     }
-
-//     // Иначе добавляем новую кнопку
-//     for (let i = 0; i < previousState.length; i++) {
-//       newState.push(previousState[i]);
-//     }
-
-//     newState.push(index);
-
-//     // Проверка — все 3 кнопки активны?
-//     const allThreeActive = newState.length === 3;
-//     console.log("три кнопки активны?", allThreeActive);
-
-//     return newState;
-//   });
-// }
-
-// function  createGoal(event) {
-//   event.stopPropagation();
-  
-//   if (GoalLendParent.current) {
-//     GoalLendParent.current.style.opacity = "0";
-//       GoalLendParent.current.style.pointerEvents = "none";
-//         kartaChildrenRef.current.style.pointerEvents = "auto";
-//       deleteGoalOld.current.style.display = "none";
-//      finalGoal.current.style.display = "flex";
-//   }
-// }
-
-
-// console.log(name)
-// console.log(dollar)
-
-
-
-
-// function infoFinalGoalFunc(event) {
-//   event.stopPropagation();
-  
-//   if (infoFinalGoal.current) {
-//     infoFinalGoal.current.style.transition = "opacity 0.6s";
-//     infoFinalGoal.current.style.opacity = "1";
-//     infoFinalGoal.current.style.pointerEvents = "auto";
-//         kartaChildrenRef.current.style.pointerEvents = "none";
-     
-//   }
-// }
-
-// useEffect(() => {
-//   function handleClickOutside(event) {
-//     if (
-//       infoFinalGoal.current &&
-//       !infoFinalGoal.current.contains(event.target)
-//     ) {
-//       infoFinalGoal.current.style.opacity = "0";
-//       infoFinalGoal.current.style.pointerEvents = "none";
-//         kartaChildrenRef.current.style.pointerEvents = "auto";
-     
-//     }
-//   }
-
-//   document.addEventListener("click", handleClickOutside);
-
-//   return () => {
-//     document.removeEventListener("click", handleClickOutside);
-//   };
-// }, []);
-
-
-// useEffect(() => {
-//   if (! createGoalRef.current) return;
-
-//   if (name.trim() === "" || Number(amount) === 0 || activeButtons.length != 3) {
-//      createGoalRef.current.style.pointerEvents = "none";
-//      createGoalRef.current.style.opacity = "0.5"; // чтобы было видно что disabled
-//   } else {
-//      createGoalRef.current.style.pointerEvents = "auto";
-//      createGoalRef.current.style.opacity = "1";
-//   }
-// }, [name, amount,activeButtons ]);
-
-// 1. Тот самый шаблонный массив с данными
 const transactionsDB = [
   {
     id: 1,
@@ -467,17 +136,26 @@ const [rates, setRates] = useState(null);
 
   const [isOpen, setIsOpen] = useState(false);
 
-  // Расширенные данные для статистики
-  const totalBalance = 789.00;
-  const profit24h = 12.98;
-  const profit7d = 70.54;
-  const totalIncome = 4500.00;
-  const totalOutcome = 2009.50;
-  
-  // Дополнительная статистика
-  const activeTrades = 12;
-  const winRate = 78.5;
-  const cashbackEarned = 145.50;
+// (импорты уже есть, добавь usePosition и useTradeHistory)
+
+const position = usePosition();
+const tradeHistory = useTradeHistory();
+
+var closedWins   = tradeHistory.filter(function(t) { return t.result === 'win'; });
+var totalPnlAll  = tradeHistory.reduce(function(acc, t) { return acc + t.pnl; }, 0);
+var now          = Date.now();
+var last24h      = tradeHistory.filter(function(t) { return now - t.closeTime < 86400000; });
+var last7d       = tradeHistory.filter(function(t) { return now - t.closeTime < 604800000; });
+var profit24h    = last24h.reduce(function(acc, t) { return acc + t.pnl; }, 0);
+var profit7d     = last7d.reduce(function(acc, t) { return acc + t.pnl; }, 0);
+var totalIncome  = tradeHistory.filter(function(t) { return t.pnl > 0; }).reduce(function(acc, t) { return acc + t.pnl; }, 0);
+var totalOutcome = tradeHistory.filter(function(t) { return t.pnl < 0; }).reduce(function(acc, t) { return acc + Math.abs(t.pnl); }, 0);
+var activeTrades = position !== null ? 1 : 0;
+var winRate      = tradeHistory.length > 0 ? parseFloat(((closedWins.length / tradeHistory.length) * 100).toFixed(1)) : 0;
+var cashbackEarned = tradeHistory.reduce(function(acc, t) { return acc + t.fees * 0.1; }, 0);
+
+var profit24hStr  = (profit24h  >= 0 ? '+' : '-') + Math.abs(profit24h).toFixed(2);
+var profit7dStr   = (profit7d   >= 0 ? '+' : '-') + Math.abs(profit7d).toFixed(2);
 
 const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [prices, setPrices] = useState({ BTC: '0.00', ETH: '0.00', SOL: '0.00', TON: '0.00' });
@@ -515,84 +193,6 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
 <div className="content" > 
 
  <div className="app-scroll-container">
-{/*       
-      <div className="app-page-section"  style={{
-        background: bg
-      }} >
-        <div className="page-content">
-
-
-  <div className="header">
-    <h1 className="header-text">Hello. xlav!</h1>
-  </div>
-
-<div className="home-cart-parent">
-  <div  className="home-cart" onClick={() => setActiveCard(!activeCard)}>
-
-
-    <h6 className="name-cart">VISA</h6>
-    <div className="balance-parent">
-      <h5 className="balance-text">Balance</h5>
-      <h1 className="balance">$471</h1>
-      <h6 className="number-cart">8720 8261 2541 9267</h6>
-      <h5 className="cart-id">cart id: <span className="span-copy-balance"> 19207145</span></h5>
-    </div> 
-    {activeCard && (
-      
-    <div className="trade-details-dropdown-home">
-      <div className="detail-row-home"><span>Cashback:</span> <span>1.00%</span></div>
-      <div className="detail-row-home"><span>Balance:</span> <span>$471.00</span></div>
-      <div className="detail-row-home"><span>Owner:</span> <span>xlav</span></div>
-      <div className="detail-row-home"><span>ID:</span> <span>19207145</span></div>
-      <div className="detail-row-home"><span>NWC:</span> <span>active</span></div>
-      <div className="detail-row-home"><span>Income:</span> <span>$571</span></div>
-      <div className="detail-row-home"><span>Outcome:</span> <span>$100</span></div>
-      <div className="detail-row-home"><span>Counry:</span> <span>Russia</span></div>
-
-      <div className="detail-row-home"><span>Network:</span> <span className="hash-text">Mainnet</span></div>
-    </div>
-  )}
-  </div>
-
- 
-  <div className="not-cart"> 
-    <div className="cart-nwc">
-    </div>
-    
-    <div className="create-cart"  onClick={() => setIsVisible(!isVisible)}>
- 
-    </div>
-
-
-  </div>
-</div>
-
- <div className={"custom-elements " + (isVisible ? "show" : "hide")}>
-
-      <div className="actions-floating-grid-home">
-        <div className="action-circle-home primary-home">
-          <div className="icon-home" onClick={roadSend}>↑</div>
-          <span style={{
-    color: "hsl(70, 80%, 80%)" ,
-    backgroundColor: "hsl(162, 50%, 15%)"
-  }}     >Send</span>
-        </div>
-        <div className="action-circle-home">
-          <div className="icon-home" onClick={roadBuy}>$
-          <span>Swap</span>
-          </div>
-        </div>
-        <div className="action-circle-home">
-          <div className="icon-home" onClick={roadGet}>↓</div>
-          <span>Get</span>
-        </div>
-      </div>
-      
-</div>
-
- */}
-
-
 
 
       <section className="app-page-section"  style={{
@@ -612,7 +212,7 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
         {/* <span className="label-dim">Total Assets</span> */}
         <div className="balance-main">
           <span className="symbol" onClick={() => setIsOpen(true)}>usdt</span>
-          <h1 className="amount" onClick={() => setIsOpen(true)}>789.00</h1>
+          <h1 className="amount" onClick={() => setIsOpen(true)}>{balanceStr}</h1>
         </div>
         <div className="pnl-summary">
           <span className="upLast" onClick={() => setIsOpen(true)}>+2.4% last 24h</span>
@@ -851,52 +451,6 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
 
     </div>
   
-      {/* <section className="revenue-stats">
-        <div className="rev-item">
-          <span className="rev-label">Today PnL</span>
-          <span className="rev-val up"> <span>+$1,240.50</span></span>
-        </div>
-        <div className="rev-item divider"></div>
-        <div className="rev-item">
-          <span className="rev-label">7D Profit</span>
-          <span className="rev-val">+$8,900.00</span>
-        </div>
-      </section> */}
-
-{/* 
-      <section className="history-section">
-        <h3 className="section-title">Trade History</h3>
-        <div className="trades-list">
-          {trades.map((t) => (
-            <div 
-              className={"trade-item " + (activeHistory === t.id ? "expanded" : "")} 
-              key={t.id}
-              onClick={() => setActiveHistory(activeHistory === t.id ? null : t.id)}
-            >
-              <div className="trade-main-info">
-                <div className="trade-left">
-                  <div className="type-icon">{t.type[0]}</div>
-                  <div>
-                    <div className="trade-asset">{t.asset}</div>
-                    <div className="trade-date">{t.date}</div>
-                  </div>
-                </div>
-                <div className="trade-right">
-                  <div className="trade-amount">{t.amount}</div>
-                  <div className="trade-id-short">{t.id}</div>
-                </div>
-              </div>
-              {activeHistory === t.id && (
-                <div className="trade-details-dropdown">
-                  <div className="detail-row"><span>Status:</span> <span>{t.status}</span></div>
-                  <div className="detail-row"><span>Network Fee:</span> <span>0.0001 BTC</span></div>
-                  <div className="detail-row"><span>Hash:</span> <span className="hash-text">0x882...fa11</span></div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </section> */}
  <div className={'bo-overlay' + (isOpen ? ' open' : '')}>
         
         {/* Клик по фону закрывает окно */}
@@ -921,7 +475,7 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
             <div className="bo-main-balance">
               <span className="bo-bal-label">TOTAL BALANCE</span>
               <span className="bo-bal-val">
-                {'$ ' + totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                {'$ ' + balanceStr.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </span>
             </div>
 
@@ -931,11 +485,11 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
             <div className="bo-row">
               <div className="bo-col">
                 <span className="bo-label">24H PROFIT</span>
-                <span className="bo-val-bold">{'+$ ' + profit24h.toFixed(2)}</span>
+                <span className="bo-val-bold">{profit24hStr}</span>
               </div>
               <div className="bo-col right">
                 <span className="bo-label">7D PROFIT</span>
-                <span className="bo-val-bold">{'+$ ' + profit7d.toFixed(2)}</span>
+                <span className="bo-val-bold">{profit7dStr}</span>
               </div>
             </div>
 

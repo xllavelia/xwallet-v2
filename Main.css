@@ -3259,6 +3259,443 @@ body {
   box-shadow: none;
 }
 
+/* ── Balance chip in Trade header ── */
+.et-balance-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.et-balance-label {
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.et-balance-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+/* ── Active position panel ── */
+.et-position-panel {
+  margin: 10px 0;
+  background: #13141a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.et-position-panel-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.et-position-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.et-pos-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+}
+
+.et-pos-badge.long {
+  background: rgba(46, 189, 133, 0.15);
+  color: #2ebd85;
+  border: 1px solid rgba(46, 189, 133, 0.3);
+}
+
+.et-pos-badge.short {
+  background: rgba(246, 70, 93, 0.15);
+  color: #f6465d;
+  border: 1px solid rgba(246, 70, 93, 0.3);
+}
+
+.et-pos-coin {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.et-pos-lev {
+  font-size: 11px;
+  color: #f0b90b;
+  font-weight: 600;
+}
+
+.et-pnl-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.et-pnl-val {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.et-pnl-pct {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.et-pnl-pos .et-pnl-val,
+.et-pnl-pos .et-pnl-pct { color: #2ebd85; }
+
+.et-pnl-neg .et-pnl-val,
+.et-pnl-neg .et-pnl-pct { color: #f6465d; }
+
+.et-pnl-neutral .et-pnl-val,
+.et-pnl-neutral .et-pnl-pct { color: #888; }
+
+.et-position-panel-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.et-pos-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.et-pos-label { color: #555; }
+.et-pos-val { color: #c0c8d8; font-weight: 500; }
+.et-liq-val { color: #f6465d; }
+
+.et-close-pos-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(246, 70, 93, 0.1);
+  border: 1px solid rgba(246, 70, 93, 0.35);
+  border-radius: 10px;
+  color: #f6465d;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.et-close-pos-btn:hover {
+  background: rgba(246, 70, 93, 0.2);
+}
+
+/* ── Balance bar in Order ── */
+.px-balance-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.px-bal-label {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.px-bal-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+/* ── Leverage selector ── */
+.px-leverage-section {
+  margin: 12px 0;
+}
+
+.px-leverage-title {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.px-leverage-options {
+  display: flex;
+  gap: 8px;
+}
+
+.px-lev-btn {
+  flex: 1;
+  padding: 7px 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #888;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.px-lev-btn.active {
+  background: rgba(240, 185, 11, 0.12);
+  border-color: rgba(240, 185, 11, 0.4);
+  color: #f0b90b;
+}
+
+/* ── Metrics extras ── */
+.px-liq-price { color: #f6465d; font-weight: 600; }
+.px-after-trade { color: #2ebd85; font-weight: 600; }
+
+/* ── P&L preview table ── */
+.px-pnl-preview {
+  margin: 12px 0;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.px-pnl-title {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+.px-pnl-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.px-pnl-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.px-pnl-header {
+  color: #444;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding-bottom: 4px;
+}
+
+.px-pnl-label { color: #666; }
+
+.px-pnl-cell.pos { color: #2ebd85; font-weight: 600; }
+.px-pnl-cell.neg { color: #f6465d; font-weight: 600; }
+
+/* ── Success bar ── */
+.px-success-bar {
+  text-align: center;
+  font-size: 13px;
+  color: #2ebd85;
+  padding: 8px;
+  background: rgba(46, 189, 133, 0.08);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(46, 189, 133, 0.2);
+}
+
+
+
+/* ── Last trade panel in Trade ── */
+.et-last-trade-panel {
+  margin: 10px 0;
+  background: #13141a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.et-last-trade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.et-last-trade-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #555;
+}
+
+.et-last-trade-date {
+  font-size: 10px;
+  color: #444;
+}
+
+.et-last-trade-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.et-last-entry {
+  font-size: 12px;
+  color: #888;
+  flex: 1;
+}
+
+.et-last-trade-pnl {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.et-last-trade-pnl.pos { color: #2ebd85; }
+.et-last-trade-pnl.neg { color: #f6465d; }
+
+.et-last-pct {
+  font-size: 10px;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+/* ── Trade row clickable ── */
+.ht-trade-row {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ht-trade-row:hover {
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+}
+
+/* ── Empty state ── */
+.ht-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  gap: 12px;
+}
+.ht-empty-icon { font-size: 36px; }
+.ht-empty-text { font-size: 13px; color: #555; text-align: center; }
+
+/* ── Detail modal overlay ── */
+.ht-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.ht-detail-modal {
+  width: 100%;
+  max-width: 480px;
+  background: #111827;
+  border-radius: 24px 24px 0 0;
+  padding: 24px 20px 36px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.ht-detail-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ht-detail-coin {
+  font-size: 18px;
+  font-weight: 800;
+  color: #e2e8f0;
+  flex: 1;
+}
+
+.ht-result-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+}
+.ht-result-badge.win  { background: rgba(46,189,133,0.15); color: #2ebd85; border: 1px solid rgba(46,189,133,0.3); }
+.ht-result-badge.loss { background: rgba(246,70,93,0.15);  color: #f6465d; border: 1px solid rgba(246,70,93,0.3);  }
+
+.ht-detail-close {
+  background: rgba(255,255,255,0.06);
+  border: none;
+  color: #888;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.ht-detail-pnl {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.ht-detail-pnl.pos { color: #2ebd85; }
+.ht-detail-pnl.neg { color: #f6465d; }
+
+.ht-detail-pnl-val { font-size: 32px; font-weight: 900; line-height: 1; }
+.ht-detail-pnl-pct { font-size: 14px; opacity: 0.8; }
+
+.ht-detail-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 14px 0;
+}
+
+.ht-detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ht-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.ht-dl { color: #555; }
+.ht-dv { color: #c0c8d8; font-weight: 500; }
+.ht-dv-liq  { color: #f6465d; }
+.ht-dv-lev  { color: #f0b90b; font-weight: 700; }
+.ht-dv-fee  { color: #888; }
+.ht-dv-date { font-size: 11px; color: #666; }
+
+.ht-detail-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+
 
 @media (min-width: 768px) { 
 .crypto-mini-cards-container{

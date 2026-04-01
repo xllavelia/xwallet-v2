@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { resetAll } from './useBalance';
+
 
 
 const Setting = () => {
@@ -97,7 +99,7 @@ const roadHome = () => {
       <footer className="settings-footer">
         <div className="footer-links">
           <div className="footer-link-item">Contact Information</div>
-          <div className="footer-link-item">Privacy Policy</div>
+          <div className="footer-link-item" onClick={resetAll}>Privacy Policy</div>
           <div className="footer-link-item">Terms Of Use</div>
         </div>
         
