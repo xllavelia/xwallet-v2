@@ -8,7 +8,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "real trade page and remake crypto select coin!"
+// git commit -m "order!"
 // git push origin main
 
 
@@ -81,7 +81,6 @@ const roadCard = () => {
 const roadCard2 = () => {
     navigate("/card2");
   };
-
 
 // const roadHome = () => {
 //     navigate("/");
@@ -484,10 +483,10 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [prices, setPrices] = useState({ BTC: '0.00', ETH: '0.00', SOL: '0.00', TON: '0.00' });
 
   const coins = [
-    { id: 'BTC', name: 'Bitcoin', icon: '₿' },
-    { id: 'ETH', name: 'Ethereum', icon: 'Ξ' },
-    { id: 'SOL', name: 'Solana', icon: '◎' },
-    { id: 'TON', name: 'Toncoin', icon: '♦' }
+    { id: 'BTC', name: 'Bitcoin', icon: '' },
+    { id: 'ETH', name: 'Ethereum', icon: '' },
+    { id: 'SOL', name: 'Solana', icon: '' },
+    { id: 'TON', name: 'Toncoin', icon: '' }
   ];
 
   useEffect(() => {
@@ -799,15 +798,7 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
       {/* МОНОЛИТНАЯ КАРТА */}
       <div className="unified-card" onClick={() => setIsSelectorOpen(true)}>
         
-        {/* ВЕРХНИЙ БЛОК: КУРСЫ СО СКРОЛЛОМ */}
-        <div className="uc-rates-scroll">
-          {Object.entries(prices).map(([ticker, val]) => (
-            <div key={ticker} className="uc-rate-item">
-              <span className="uc-ticker">{ticker}</span>
-              <span className="uc-price">{'$' + val.toLocaleString()}</span>
-            </div>
-          ))}
-        </div>
+
 
       <div className="ms-container">
       

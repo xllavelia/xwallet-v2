@@ -316,7 +316,7 @@ padding-top: 4%;
   padding: 16px 0; /* Внутренние отступы только сверху/снизу для скролла */
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 5px;
   cursor: pointer;
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
@@ -391,9 +391,9 @@ padding-top: 4%;
 
 .lend-left { display: flex; align-items: center; gap: 14px; }
 .lend-icon { 
-  width: 40px; height: 40px; background: #000; border-radius: 50%;
+  width: 40px; height: 40px; background: #000; border-radius: 10%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 20px; color: #fff; border: 1px solid #222;
+  font-size: 20px; color: #fff; ;
 }
 .lend-info { display: flex; flex-direction: column; }
 .lend-name { color: #fff; font-weight: 700; font-size: 14px; }
@@ -3024,6 +3024,242 @@ font-family: 'Unbounded';
 }
 
 
+.OrderContent{
+  padding-top: 10vh;
+}
+:root {
+  /* Палитра в стиле "после дождя" - глубокие, чистые, строгие тона */
+  --px-bg: #090c0a;
+  --px-surface: #111814;
+  --px-surface-light: #1a241d;
+  --px-text-main: #ffffff;
+  --px-text-dim: #8b9a91;
+  
+  --px-green: #00d676;
+  --px-green-glow: rgba(0, 214, 118, 0.2);
+  --px-red: #ff4d4d;
+  --px-red-glow: rgba(255, 77, 77, 0.2);
+  --px-amber: #e5b344;
+  
+  --font-display: 'Unbounded', sans-serif;
+  --font-ui: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: var(--px-bg);
+  color: var(--px-text-main);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+.premium-exchange-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px 16px;
+  box-sizing: border-box;
+}
+
+/* --- Хедер --- */
+.px-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.px-back-btn {
+  background: none; border: none; color: var(--px-text-main);
+  cursor: pointer; padding: 8px; border-radius: 50%;
+  transition: background 0.2s;
+}
+.px-back-btn:active { background: var(--px-surface-light); }
+
+.px-coin-info { text-align: center; }
+.px-title { 
+  margin: 0; font-family: var(--font-display); 
+  font-size: 16px; font-weight: 600; letter-spacing: 0.5px;
+}
+.px-price-row { 
+  display: flex; gap: 8px; justify-content: center; 
+  font-size: 13px; margin-top: 4px; font-weight: 500;
+}
+.color-up { color: var(--px-green); }
+.color-down { color: var(--px-red); }
+
+.px-market-btn {
+  background: var(--px-surface);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: var(--px-text-main);
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 12px; font-weight: 600;
+}
+
+/* --- Инпут блок --- */
+.px-hero-input {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.px-input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.px-currency {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--px-text-dim);
+}
+
+.px-giant-input {
+  background: transparent;
+  border: none;
+  color: var(--px-text-main);
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 800;
+  width: 180px;
+  text-align: center;
+  outline: none;
+  padding: 0;
+}
+
+/* Убираем стрелки в input */
+.px-giant-input::-webkit-outer-spin-button,
+.px-giant-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.px-crypto-conversion {
+  color: var(--px-text-dim);
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* --- Пресеты --- */
+.px-presets-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.px-preset-btn {
+  flex: 1;
+  background: var(--px-surface);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: var(--px-text-dim);
+  padding: 16px 0;
+  border-radius: 16px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.px-preset-btn:active { transform: scale(0.92); }
+
+.px-preset-btn.active {
+  background: var(--px-text-main);
+  color: var(--px-bg);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+}
+
+/* --- Карточки деталей (Стекло) --- */
+.glass-card {
+  background: rgba(17, 24, 20, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 8px 20px;
+  margin-bottom: 20px;
+}
+
+.px-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.px-row:last-child { border-bottom: none; }
+
+.px-label { color: var(--px-text-dim); font-size: 14px; }
+.px-val { color: var(--px-text-main); font-size: 14px; font-weight: 500; }
+.accent-val { font-family: var(--font-display); font-weight: 600; }
+
+.flex-val { display: flex; align-items: center; gap: 8px; }
+.px-usdc-icon { width: 18px; height: 18px; background: #2775ca; border-radius: 50%; }
+
+.px-metrics-card { padding: 0 20px; margin-bottom: 30px; }
+
+/* --- Элегантные ошибки --- */
+.px-alert-inline {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  color: var(--px-amber); font-size: 12px; font-weight: 500;
+  margin-bottom: 20px;
+}
+.px-alert-dot { width: 6px; height: 6px; background: var(--px-amber); border-radius: 50%; }
+
+.glass-card-error {
+  background: rgba(229, 179, 68, 0.08);
+  border: 1px solid rgba(229, 179, 68, 0.2);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  color: var(--px-amber);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.px-alert-bottom {
+  text-align: center; color: var(--px-red);
+  font-size: 12px; margin-bottom: 12px; font-weight: 500;
+}
+
+.px-footer { margin-top: auto; padding-bottom: 10px; }
+/* Базовые стили для главной кнопки */
+.px-action-btn {
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+  font-family: 'Unbounded', sans-serif; /* Твой фирменный шрифт */
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Цвет для SHORT (Красный) */
+.btn-short {
+  background-color: #ff4d4d; /* Тот самый красный со скрина */
+  color: white;
+  box-shadow: 0 10px 20px rgba(255, 77, 77, 0.2);
+}
+
+/* Цвет для LONG (Зеленый) */
+.btn-long {
+  background-color: #00d676; /* Сочный зеленый */
+  color: #090c0a; /* Черный текст для лучшей читаемости на зеленом */
+  box-shadow: 0 10px 20px rgba(0, 214, 118, 0.2);
+}
+
+/* Состояние заблокированной кнопки */
+.btn-locked {
+  background-color: #1a241d;
+  color: #8b9a91;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
 @media (min-width: 768px) { 
 .crypto-mini-cards-container{
   justify-content: center;
@@ -3047,6 +3283,7 @@ justify-content: center;
   display: flex;
   justify-content: center;
 }
+
 
 /* .eb-container {
   width: 30rem;

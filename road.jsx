@@ -13,6 +13,7 @@ import Referral from "./Referral";
 import Card from "./Card";
 import Card2 from "./Card2";
 import Trade from "./Trade";
+import Order from "./Order";
 
 const NavigationBar = () => {
   return (
@@ -38,8 +39,7 @@ const App = () => {
          <Route path="/card" element={<Card />} />
          <Route path="/card2" element={<Card2 />} />
          <Route path="/trade" element={<Trade />} />
-
-
+         <Route path="/order" element={<Order />} />
       </Routes>
     </BrowserRouter>
   );

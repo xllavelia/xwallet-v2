@@ -206,8 +206,8 @@ const [isMoreOpen, setIsMoreOpen] = useState(false);
 
       {/* BOTTOM BUTTONS */}
       <div className="et-bottom-bar">
-        <button className="et-btn-trade long">Long</button>
-        <button className="et-btn-trade short">Short</button>
+        <button className="et-btn-trade long"    onClick={() => navigate('/order', { state: { coin: currentCoin, type: 'long', price: currentPrice, change: priceChange} })}>Long</button>
+        <button className="et-btn-trade short"     onClick={() => navigate('/order', { state: { coin: currentCoin, type: 'short', price: currentPrice, change: priceChange} })}>Short</button>
       </div>
     </div>
 
