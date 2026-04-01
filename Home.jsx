@@ -8,7 +8,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "order!"
+// git commit -m "mini fix"
 // git push origin main
 
 

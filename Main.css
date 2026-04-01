@@ -3222,7 +3222,7 @@ body {
   font-size: 12px; margin-bottom: 12px; font-weight: 500;
 }
 
-.px-footer { margin-top: auto; padding-bottom: 10px; }
+.px-footer { margin-top: auto; padding-bottom: 3rem; }
 /* Базовые стили для главной кнопки */
 .px-action-btn {
   width: 100%;
