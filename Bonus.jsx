@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from "react";
+import { useVoucherUsed, VOUCHER_TOTAL } from './useBalance';
 import { useNavigate } from "react-router-dom";
 
 
@@ -10,19 +11,14 @@ const roadHome = () => {
   };
 
 
-const [ticket] = useState({
-    total: 100.00,
-    used: 8.50,
-    code: '',
-    validThru: '12/26',
-  });
+var voucherUsed = useVoucherUsed();
+var remaining = (VOUCHER_TOTAL - voucherUsed).toFixed(2);
+var redeemed = voucherUsed;
+var remainingActive = VOUCHER_TOTAL - voucherUsed;
 
-  const remaining = (ticket.total - ticket.used).toFixed(2);
+  // const remaining = (ticket.total - ticket.used).toFixed(2);
 
 const ticketId = '847291';
-  const totalValue = 100;
-  const redeemed = 8.50;
-  const remainingActive = 91.50;
   const tradesCount = 14;
 
   // Логика таймера (4 дня)

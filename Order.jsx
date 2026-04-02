@@ -1,99 +1,120 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useBalance, writeBalance, writePosition } from './useBalance';
+import { useBalance, useVoucherUsed, addPosition, writeBalance, writeVoucherUsed, VOUCHER_TOTAL } from './useBalance';
 
 const Order = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const stateData = location.state || {};
-  const type = stateData.type || 'short';
-  const coin = stateData.coin || 'BTC';
-  const rawPrice = stateData.price || '69035';
-  const change = stateData.change || '+2.33%';
+  var stateData = location.state || {};
+  var type = stateData.type || 'short';
+  var coin = stateData.coin || 'BTC';
+  var rawPrice = stateData.price || '69035';
+  var change = stateData.change || '+2.33%';
+  var prefillLeverage = stateData.leverage || 3;
+  var prefillAmount = stateData.amount ? stateData.amount.toString() : "10";
 
-  const currentPrice = parseFloat(rawPrice.toString().replace(/,/g, '')) || 69035;
+  var currentPrice = parseFloat(rawPrice.toString().replace(/,/g, '')) || 69035;
 
-  const balance = useBalance();
+  var balance = useBalance();
+  var voucherUsed = useVoucherUsed();
 
-  const [amountInput, setAmountInput] = useState("10");
-  const [leverage, setLeverage] = useState(3);
+  const [amountInput, setAmountInput] = useState(prefillAmount);
+  const [leverage, setLeverage] = useState(prefillLeverage);
   const [submitted, setSubmitted] = useState(false);
 
-  const parsedAmount = parseFloat(amountInput) || 0;
-  const cryptoAmount = currentPrice > 0 ? (parsedAmount / currentPrice).toFixed(6) : 0;
-  const requiredMargin = parsedAmount / leverage;
-  const fees = parsedAmount * 0.001;
-  const totalRequired = requiredMargin + fees;
-  const isBalanceLow = balance < totalRequired;
-  const isTypeShort = type === 'short';
+  var parsedAmount = parseFloat(amountInput) || 0;
+  var cryptoAmount = currentPrice > 0 ? (parsedAmount / currentPrice).toFixed(6) : 0;
+  var requiredMargin = parsedAmount / leverage;
+  var fees = parsedAmount * 0.001;
+
+  var voucherRemaining = VOUCHER_TOTAL - voucherUsed;
+  var feesFromVoucher = fees <= voucherRemaining ? fees : (voucherRemaining > 0 ? voucherRemaining : 0);
+  var feesFromBalance = fees - feesFromVoucher;
+  var voucherCoversAll = fees > 0 && feesFromVoucher >= fees;
+  var voucherCoversPartial = feesFromVoucher > 0 && feesFromVoucher < fees;
+
+  var totalRequired = requiredMargin + feesFromBalance;
+  var isBalanceLow = balance < totalRequired;
 
   var liqPrice = 0;
-  if (parsedAmount > 0) {
-    if (isTypeShort) {
+  if (parsedAmount > 0 && currentPrice > 0) {
+    if (type === 'short') {
       liqPrice = currentPrice * (1 + 1 / leverage);
     } else {
       liqPrice = currentPrice * (1 - 1 / leverage);
     }
   }
 
-  var pnlAt10 = 0;
-  var pnlAt5 = 0;
-  var pnlAt2 = 0;
-  if (parsedAmount > 0 && currentPrice > 0) {
-    var dir = isTypeShort ? -1 : 1;
-    pnlAt2 = requiredMargin * leverage * 0.02 * dir;
-    pnlAt5 = requiredMargin * leverage * 0.05 * dir;
-    pnlAt10 = requiredMargin * leverage * 0.10 * dir;
-  }
+  var dir = type === 'short' ? -1 : 1;
+  var pnlAt2  = parsedAmount > 0 ? requiredMargin * leverage * 0.02 * dir : 0;
+  var pnlAt5  = parsedAmount > 0 ? requiredMargin * leverage * 0.05 * dir : 0;
+  var pnlAt10 = parsedAmount > 0 ? requiredMargin * leverage * 0.10 * dir : 0;
+  var s2  = pnlAt2  >= 0 ? '+' : '';
+  var s5  = pnlAt5  >= 0 ? '+' : '';
+  var s10 = pnlAt10 >= 0 ? '+' : '';
+  var pnl2Str  = s2  + '$' + pnlAt2.toFixed(2);
+  var pnl5Str  = s5  + '$' + pnlAt5.toFixed(2);
+  var pnl10Str = s10 + '$' + pnlAt10.toFixed(2);
+  var pnl2Class  = 'px-pnl-cell ' + (pnlAt2  >= 0 ? 'pos' : 'neg');
+  var pnl5Class  = 'px-pnl-cell ' + (pnlAt5  >= 0 ? 'pos' : 'neg');
+  var pnl10Class = 'px-pnl-cell ' + (pnlAt10 >= 0 ? 'pos' : 'neg');
 
-  var pnlSign2 = pnlAt2 >= 0 ? '+' : '';
-  var pnlSign5 = pnlAt5 >= 0 ? '+' : '';
-  var pnlSign10 = pnlAt10 >= 0 ? '+' : '';
-  var pnl2Str = pnlSign2 + '$' + pnlAt2.toFixed(2);
-  var pnl5Str = pnlSign5 + '$' + pnlAt5.toFixed(2);
-  var pnl10Str = pnlSign10 + '$' + pnlAt10.toFixed(2);
-  var pnl2Class = pnlAt2 >= 0 ? 'px-pnl-cell pos' : 'px-pnl-cell neg';
-  var pnl5Class = pnlAt5 >= 0 ? 'px-pnl-cell pos' : 'px-pnl-cell neg';
-  var pnl10Class = pnlAt10 >= 0 ? 'px-pnl-cell pos' : 'px-pnl-cell neg';
+  var leverageOptions = [2, 3, 5, 10, 20, 50, 100];
 
-  var leverageOptions = [2, 3, 5, 10, 20];
+  var formatUsd   = function(n) { return parseFloat(n).toFixed(2); };
+  var formatPrice = function(n) { return Math.round(n).toLocaleString('en-US'); };
 
-  var formatUsd = function (num) { return parseFloat(num).toFixed(2); };
-  var formatPrice = function (num) { return Math.round(num).toLocaleString('en-US'); };
-
-  var btnClass = 'px-action-btn ' + (isBalanceLow ? 'btn-locked' : (type === 'short' ? 'btn-short' : 'btn-long'));
-  var btnText = isBalanceLow ? 'Insufficient Funds' : ('Open ' + type.charAt(0).toUpperCase() + type.slice(1));
+  var titleText = type.charAt(0).toUpperCase() + type.slice(1) + ' ' + coin;
+  var changeClass = 'px-change ' + (change.toString().includes('-') ? 'color-down' : 'color-up');
   var balanceStr = '$' + balance.toFixed(2);
   var afterTradeStr = '$' + (balance - totalRequired).toFixed(2);
-  var changeClass = 'px-change ' + (change.includes('-') ? 'color-down' : 'color-up');
-  var titleText = type.charAt(0).toUpperCase() + type.slice(1) + ' ' + coin;
+  var btnClass = 'px-action-btn ' + (isBalanceLow ? 'btn-locked' : (type === 'short' ? 'btn-short' : 'btn-long'));
+  var btnText = isBalanceLow ? 'Insufficient Funds' : ('Open ' + type.charAt(0).toUpperCase() + type.slice(1));
+  var voucherRemainingStr = '$' + voucherRemaining.toFixed(2);
+
+  var feesDisplayStr = '-';
+  if (parsedAmount > 0) {
+    if (voucherCoversAll) {
+      feesDisplayStr = 'FREE via Voucher';
+    } else if (voucherCoversPartial) {
+      feesDisplayStr = '$' + feesFromVoucher.toFixed(2) + ' Voucher + $' + feesFromBalance.toFixed(2);
+    } else {
+      feesDisplayStr = '$' + formatUsd(fees);
+    }
+  }
 
   function roadHome() { navigate("/"); }
 
   function handleOpenPosition() {
-    if (isBalanceLow || parsedAmount <= 0) return;
+    if (isBalanceLow || parsedAmount <= 0 || submitted) return;
     var newBalance = parseFloat((balance - totalRequired).toFixed(2));
-    writeBalance(newBalance);
-    writePosition({
+    var newVoucherUsed = parseFloat((voucherUsed + feesFromVoucher).toFixed(2));
+    var pos = {
+      id: Date.now(),
       coin: coin,
       type: type,
       entryPrice: currentPrice,
       amount: parsedAmount,
       leverage: leverage,
       margin: requiredMargin,
-      liqPrice: liqPrice,
       fees: fees,
+      feesFromVoucher: feesFromVoucher,
+      feesFromBalance: feesFromBalance,
+      feesPaidByVoucher: voucherCoversAll,
+      liqPrice: liqPrice,
       openTime: Date.now()
-    });
+    };
+    writeBalance(newBalance);
+    if (feesFromVoucher > 0) { writeVoucherUsed(newVoucherUsed); }
+    addPosition(pos);
     setSubmitted(true);
-    setTimeout(function () { navigate('/trade', { state: { coin: coin } }); }, 1200);
+    setTimeout(function() { navigate('/trade', { state: { coin: coin } }); }, 1200);
   }
 
   return (
     <div className="OrderContent">
       <div className="Road-Home" onClick={roadHome}></div>
-
       <div className="premium-exchange-wrapper">
 
         <header className="px-header">
@@ -106,6 +127,19 @@ const Order = () => {
           </div>
           <button className="px-market-btn">Market <span className="caret">▾</span></button>
         </header>
+
+        <div className="px-balance-bar">
+          <span className="px-bal-label">Available</span>
+          <span className="px-bal-val">{balanceStr}</span>
+        </div>
+
+        {voucherRemaining > 0 && (
+          <div className="px-voucher-bar">
+            <span className="px-voucher-icon">🎫</span>
+            <span className="px-voucher-text">Commission voucher active</span>
+            <span className="px-voucher-remaining">{voucherRemainingStr + ' left'}</span>
+          </div>
+        )}
 
         <main className="px-main-content">
 
@@ -131,8 +165,8 @@ const Order = () => {
           )}
 
           <section className="px-presets-container">
-            {[10, 50, 100, 500].map((val) => {
-              const isActive = parsedAmount === val;
+            {[10, 50, 100, 500].map(function(val) {
+              var isActive = parsedAmount === val;
               return (
                 <button key={val} className={'px-preset-btn ' + (isActive ? 'active' : '')} onClick={() => setAmountInput(val.toString())}>
                   {'$' + val}
@@ -144,7 +178,7 @@ const Order = () => {
           <section className="px-leverage-section">
             <span className="px-leverage-title">Leverage</span>
             <div className="px-leverage-options">
-              {leverageOptions.map(function (lv) {
+              {leverageOptions.map(function(lv) {
                 return (
                   <button key={lv} className={'px-lev-btn ' + (leverage === lv ? 'active' : '')} onClick={() => setLeverage(lv)}>
                     {lv + 'x'}
@@ -184,7 +218,7 @@ const Order = () => {
             </div>
             <div className="px-row">
               <span className="px-label">Fees</span>
-              <span className="px-val">{parsedAmount > 0 ? '$' + formatUsd(fees) : '-'}</span>
+              <span className={'px-val ' + (voucherCoversAll ? 'px-fees-free' : '')}>{feesDisplayStr}</span>
             </div>
             <div className="px-row">
               <span className="px-label">Balance after</span>
@@ -196,22 +230,10 @@ const Order = () => {
             <section className="px-pnl-preview">
               <div className="px-pnl-title">Estimated P&L</div>
               <div className="px-pnl-table">
-                <div className="px-pnl-row px-pnl-header">
-                  <span>Move</span>
-                  <span>P&L</span>
-                </div>
-                <div className="px-pnl-row">
-                  <span className="px-pnl-label">2%</span>
-                  <span className={pnl2Class}>{pnl2Str}</span>
-                </div>
-                <div className="px-pnl-row">
-                  <span className="px-pnl-label">5%</span>
-                  <span className={pnl5Class}>{pnl5Str}</span>
-                </div>
-                <div className="px-pnl-row">
-                  <span className="px-pnl-label">10%</span>
-                  <span className={pnl10Class}>{pnl10Str}</span>
-                </div>
+                <div className="px-pnl-row px-pnl-header"><span>Move</span><span>P&L</span></div>
+                <div className="px-pnl-row"><span className="px-pnl-label">2%</span><span className={pnl2Class}>{pnl2Str}</span></div>
+                <div className="px-pnl-row"><span className="px-pnl-label">5%</span><span className={pnl5Class}>{pnl5Str}</span></div>
+                <div className="px-pnl-row"><span className="px-pnl-label">10%</span><span className={pnl10Class}>{pnl10Str}</span></div>
               </div>
             </section>
           )}

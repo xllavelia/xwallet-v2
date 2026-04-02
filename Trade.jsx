@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createChart, CandlestickSeries, HistogramSeries } from 'lightweight-charts';
-import { useBalance, usePosition, useTradeHistory, writeBalance, writePosition, addClosedTrade } from './useBalance';
+import { useBalance, usePositions, useTradeHistory, closePositionById } from './useBalance';
 
 const Trade = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const chartContainerRef = useRef(null);
   const candleSeriesRef = useRef(null);
-  const entryLineRef = useRef(null);
-  const liqLineRef = useRef(null);
+  const priceLineRefs = useRef([]);
 
   const currentCoin = location.state && location.state.coin ? location.state.coin : 'BTC';
   const symbol = currentCoin + 'USDT';
@@ -21,99 +20,80 @@ const Trade = () => {
   const [isMoreOpen, setIsMoreOpen] = useState(false);
 
   const balance = useBalance();
-  const position = usePosition();
+  const positions = usePositions();
   const tradeHistory = useTradeHistory();
 
   const coinStats = {
-    BTC: { lev: '40x', vol: '$2.21B', oi: '$1.80B', fund: '0.0000%' },
-    ETH: { lev: '25x', vol: '$1.02B', oi: '$1.19B', fund: '0.0012%' },
-    SOL: { lev: '20x', vol: '$850M', oi: '$420M', fund: '-0.0020%' },
-    TON: { lev: '10x', vol: '$120M', oi: '$65M', fund: '0.0050%' }
+    BTC: { lev: '125x', vol: '$2.21B', oi: '$1.80B', fund: '0.0000%' },
+    ETH: { lev: '100x', vol: '$1.02B', oi: '$1.19B', fund: '0.0012%' },
+    SOL: { lev: '50x',  vol: '$850M',  oi: '$420M',  fund: '-0.0020%' },
+    TON: { lev: '20x',  vol: '$120M',  oi: '$65M',   fund: '0.0050%' }
   };
   const stats = coinStats[currentCoin] || coinStats['BTC'];
 
-  const numericPrice = parseFloat(currentPrice.toString().replace(/,/g, '')) || 0;
-  const positionActive = position !== null && position.coin === currentCoin;
-
-  var pnl = 0;
-  if (positionActive && numericPrice > 0 && position.entryPrice > 0) {
-    var priceMove = numericPrice - position.entryPrice;
-    var direction = position.type === 'long' ? 1 : -1;
-    pnl = position.margin * position.leverage * (priceMove / position.entryPrice) * direction;
-  }
-
-  var pnlSign = pnl >= 0 ? '+' : '';
-  var pnlStr = positionActive ? pnlSign + '$' + pnl.toFixed(2) : '--';
-  var pnlPct = positionActive ? (pnl / position.margin) * 100 : 0;
-  var pnlPctStr = positionActive ? pnlSign + pnlPct.toFixed(2) + '%' : '';
-  var pnlClass = pnl >= 0 ? 'et-pnl-pos' : 'et-pnl-neg';
+  var numericPrice = parseFloat(currentPrice.toString().replace(/,/g, '')) || 0;
+  var coinPositions = positions.filter(function(p) { return p.coin === currentCoin; });
   var balanceStr = '$' + balance.toFixed(2);
-  var posTypeLabel = positionActive ? (position.type === 'long' ? 'LONG' : 'SHORT') : '';
-  var posTypeClass = positionActive ? ('et-pos-badge ' + position.type) : 'et-pos-badge';
-  var entryStr = positionActive ? '$' + position.entryPrice.toLocaleString('en-US') : '';
-  var liqStr = positionActive ? '$' + Math.round(position.liqPrice).toLocaleString('en-US') : '';
-  var marginStr = positionActive ? '$' + position.margin.toFixed(2) : '';
+  var totalOpenCount = coinPositions.length;
+
+  var positionPanels = coinPositions.map(function(pos) {
+    var priceMove = numericPrice - pos.entryPrice;
+    var direction = pos.type === 'long' ? 1 : -1;
+    var pnl = numericPrice > 0 && pos.entryPrice > 0
+      ? pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction
+      : 0;
+    var pnlPct = pos.margin > 0 ? (pnl / pos.margin) * 100 : 0;
+    var sign = pnl >= 0 ? '+' : '';
+    return {
+      id: pos.id,
+      type: pos.type,
+      leverage: pos.leverage,
+      pnlStr: sign + '$' + pnl.toFixed(2),
+      pnlPctStr: sign + pnlPct.toFixed(2) + '%',
+      pnlClass: pnl >= 0 ? 'et-pnl-pos' : 'et-pnl-neg',
+      typeClass: 'et-pos-badge ' + pos.type,
+      entryStr: '$' + pos.entryPrice.toLocaleString('en-US'),
+      liqStr: '$' + Math.round(pos.liqPrice).toLocaleString('en-US'),
+      marginStr: '$' + pos.margin.toFixed(2)
+    };
+  });
 
   var lastTrade = null;
   for (var i = 0; i < tradeHistory.length; i++) {
     if (tradeHistory[i].coin === currentCoin) { lastTrade = tradeHistory[i]; break; }
   }
 
-  var lastTradeSign = lastTrade && lastTrade.pnl >= 0 ? '+' : '';
-  var lastTradePnlStr = lastTrade ? lastTradeSign + '$' + lastTrade.pnl.toFixed(2) : '';
-  var lastTradePctStr = lastTrade ? lastTradeSign + lastTrade.pnlPercent.toFixed(2) + '%' : '';
-  var lastTradeClass = lastTrade ? (lastTrade.pnl >= 0 ? 'et-last-trade-pnl pos' : 'et-last-trade-pnl neg') : '';
-  var lastTradeTypeClass = lastTrade ? ('et-pos-badge ' + lastTrade.type) : '';
-  var lastTradeDateStr = lastTrade ? new Date(lastTrade.closeTime).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+  var lastSign = lastTrade && lastTrade.pnl >= 0 ? '+' : '';
+  var lastPnlStr = lastTrade ? lastSign + '$' + lastTrade.pnl.toFixed(2) : '';
+  var lastPctStr = lastTrade ? lastSign + lastTrade.pnlPercent.toFixed(2) + '%' : '';
+  var lastPnlClass = lastTrade ? (lastTrade.pnl >= 0 ? 'et-last-trade-pnl pos' : 'et-last-trade-pnl neg') : '';
+  var lastTypeClass = lastTrade ? ('et-pos-badge ' + lastTrade.type) : '';
+  var lastDateStr = lastTrade ? new Date(lastTrade.closeTime).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
 
-  function handleClosePosition() {
-    if (!positionActive) return;
-    var closePrice = numericPrice;
-    var finalBalance = balance + position.margin + pnl;
-    if (finalBalance < 0) finalBalance = 0;
-    var closedTrade = {
-      id: Date.now(),
-      coin: position.coin,
-      type: position.type,
-      entryPrice: position.entryPrice,
-      closePrice: closePrice,
-      leverage: position.leverage,
-      amount: position.amount,
-      margin: position.margin,
-      fees: position.fees,
-      pnl: parseFloat(pnl.toFixed(2)),
-      pnlPercent: parseFloat(pnlPct.toFixed(2)),
-      liqPrice: position.liqPrice,
-      openTime: position.openTime,
-      closeTime: Date.now(),
-      duration: Date.now() - position.openTime,
-      result: pnl >= 0 ? 'win' : 'loss'
-    };
-    writeBalance(parseFloat(finalBalance.toFixed(2)));
-    writePosition(null);
-    addClosedTrade(closedTrade);
+  function handleClose(posId) {
+    if (numericPrice <= 0) return;
+    closePositionById(posId, numericPrice);
   }
-
   function roadHome() { navigate("/"); }
   function handleTimeframe(tf) { setTimeframe(tf); }
 
   useEffect(function() {
     if (!chartContainerRef.current) return;
     const chart = createChart(chartContainerRef.current, {
-      layout: { background: { type: 'solid', color: '#0d0e12' }, textColor: '#888888' },
-      grid: { vertLines: { color: 'rgba(255,255,255,0.05)' }, horzLines: { color: 'rgba(255,255,255,0.05)' } },
-      crosshair: { mode: 1, vertLine: { color: '#555', labelBackgroundColor: '#1a1b20' }, horzLine: { color: '#555', labelBackgroundColor: '#1a1b20' } },
-      rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)', autoScale: true },
-      timeScale: { borderColor: 'rgba(255,255,255,0.1)', timeVisible: true, secondsVisible: false },
+      layout: { background: { type: 'solid', color: '#0d0e12' }, textColor: '#888' },
+      grid: { vertLines: { color: 'rgba(255,255,255,0.04)' }, horzLines: { color: 'rgba(255,255,255,0.04)' } },
+      crosshair: { mode: 1, vertLine: { color: '#444', labelBackgroundColor: '#1a1b20' }, horzLine: { color: '#444', labelBackgroundColor: '#1a1b20' } },
+      rightPriceScale: { borderColor: 'rgba(255,255,255,0.08)', autoScale: true },
+      timeScale: { borderColor: 'rgba(255,255,255,0.08)', timeVisible: true, secondsVisible: false },
       autoSize: true
     });
-    const candlestickSeries = chart.addSeries(CandlestickSeries, {
+    const cs = chart.addSeries(CandlestickSeries, {
       upColor: '#2ebd85', downColor: '#f6465d', borderVisible: false, wickUpColor: '#2ebd85', wickDownColor: '#f6465d'
     });
-    const volumeSeries = chart.addSeries(HistogramSeries, {
+    const vs = chart.addSeries(HistogramSeries, {
       priceFormat: { type: 'volume' }, priceScaleId: '', scaleMargins: { top: 0.8, bottom: 0 }
     });
-    candleSeriesRef.current = candlestickSeries;
+    candleSeriesRef.current = cs;
     const fetchData = async () => {
       try {
         const res = await fetch('https://api.binance.com/api/v3/klines?symbol=' + symbol + '&interval=' + timeframe + '&limit=150');
@@ -121,41 +101,46 @@ const Trade = () => {
         const candles = [];
         const volumes = [];
         data.forEach(function(d) {
-          var time = d[0] / 1000;
-          var open = parseFloat(d[1]);
-          var high = parseFloat(d[2]);
-          var low = parseFloat(d[3]);
-          var close = parseFloat(d[4]);
-          var volume = parseFloat(d[5]);
-          candles.push({ time, open, high, low, close });
-          volumes.push({ time, value: volume, color: close >= open ? 'rgba(46,189,133,0.5)' : 'rgba(246,70,93,0.5)' });
+          var t = d[0] / 1000;
+          var o = parseFloat(d[1]);
+          var h = parseFloat(d[2]);
+          var l = parseFloat(d[3]);
+          var c = parseFloat(d[4]);
+          var v = parseFloat(d[5]);
+          candles.push({ time: t, open: o, high: h, low: l, close: c });
+          volumes.push({ time: t, value: v, color: c >= o ? 'rgba(46,189,133,0.5)' : 'rgba(246,70,93,0.5)' });
         });
-        candlestickSeries.setData(candles);
-        volumeSeries.setData(volumes);
+        cs.setData(candles);
+        vs.setData(volumes);
         if (candles.length > 0) {
           var last = candles[candles.length - 1];
           var first = candles[0];
           setCurrentPrice(last.close.toLocaleString('en-US'));
-          var change = ((last.close - first.open) / first.open) * 100;
-          setPriceChange((change > 0 ? '+' : '') + change.toFixed(2) + '%');
-          setIsPositive(change >= 0);
+          var ch = ((last.close - first.open) / first.open) * 100;
+          setPriceChange((ch > 0 ? '+' : '') + ch.toFixed(2) + '%');
+          setIsPositive(ch >= 0);
         }
-      } catch (err) { console.error('Error fetching data:', err); }
+      } catch(err) { console.error(err); }
     };
     fetchData();
-    return function() { chart.remove(); candleSeriesRef.current = null; };
+    return function() { chart.remove(); candleSeriesRef.current = null; priceLineRefs.current = []; };
   }, [symbol, timeframe, currentCoin]);
 
   useEffect(function() {
     var series = candleSeriesRef.current;
     if (!series) return;
-    if (entryLineRef.current) { try { series.removePriceLine(entryLineRef.current); } catch(e){} entryLineRef.current = null; }
-    if (liqLineRef.current)   { try { series.removePriceLine(liqLineRef.current);   } catch(e){} liqLineRef.current = null; }
-    if (positionActive) {
-      entryLineRef.current = series.createPriceLine({ price: position.entryPrice, color: '#f0b90b', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: 'Entry' });
-      liqLineRef.current   = series.createPriceLine({ price: position.liqPrice,   color: '#f6465d', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: 'Liq.' });
-    }
-  }, [positionActive, currentPrice]);
+    priceLineRefs.current.forEach(function(line) {
+      try { series.removePriceLine(line); } catch(e) {}
+    });
+    priceLineRefs.current = [];
+    var filtered = positions.filter(function(p) { return p.coin === currentCoin; });
+    filtered.forEach(function(pos, idx) {
+      var n = filtered.length > 1 ? ' #' + (idx + 1) : '';
+      var el = series.createPriceLine({ price: pos.entryPrice, color: '#f0b90b', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: 'Entry' + n });
+      var ll = series.createPriceLine({ price: pos.liqPrice,   color: '#f6465d', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: 'Liq.' + n });
+      priceLineRefs.current.push(el, ll);
+    });
+  }, [positions, currentCoin]);
 
   return (
     <div className="TradeContent">
@@ -196,40 +181,50 @@ const Trade = () => {
           </div>
         </div>
 
-        {positionActive && (
-          <div className="et-position-panel">
-            <div className="et-position-panel-top">
-              <div className="et-position-left">
-                <span className={posTypeClass}>{posTypeLabel}</span>
-                <span className="et-pos-coin">{position.coin}</span>
-                <span className="et-pos-lev">{position.leverage + 'x'}</span>
-              </div>
-              <div className={pnlClass + ' et-pnl-block'}>
-                <span className="et-pnl-val">{pnlStr}</span>
-                <span className="et-pnl-pct">{pnlPctStr}</span>
-              </div>
+        {totalOpenCount > 0 && (
+          <div className="et-positions-container">
+            <div className="et-positions-title">
+              <span>Active Positions</span>
+              <span className="et-pos-count">{totalOpenCount}</span>
             </div>
-            <div className="et-position-panel-rows">
-              <div className="et-pos-row"><span className="et-pos-label">Entry</span><span className="et-pos-val">{entryStr}</span></div>
-              <div className="et-pos-row"><span className="et-pos-label">Liq. Price</span><span className="et-pos-val et-liq-val">{liqStr}</span></div>
-              <div className="et-pos-row"><span className="et-pos-label">Margin</span><span className="et-pos-val">{marginStr}</span></div>
-            </div>
-            <button className="et-close-pos-btn" onClick={handleClosePosition}>Close Position</button>
+            {positionPanels.map(function(panel) {
+              return (
+                <div key={panel.id} className="et-position-panel">
+                  <div className="et-position-panel-top">
+                    <div className="et-position-left">
+                      <span className={panel.typeClass}>{panel.type.toUpperCase()}</span>
+                      <span className="et-pos-coin">{currentCoin}</span>
+                      <span className="et-pos-lev">{panel.leverage + 'x'}</span>
+                    </div>
+                    <div className={panel.pnlClass + ' et-pnl-block'}>
+                      <span className="et-pnl-val">{panel.pnlStr}</span>
+                      <span className="et-pnl-pct">{panel.pnlPctStr}</span>
+                    </div>
+                  </div>
+                  <div className="et-position-panel-rows">
+                    <div className="et-pos-row"><span className="et-pos-label">Entry</span><span className="et-pos-val">{panel.entryStr}</span></div>
+                    <div className="et-pos-row"><span className="et-pos-label">Liq. Price</span><span className="et-pos-val et-liq-val">{panel.liqStr}</span></div>
+                    <div className="et-pos-row"><span className="et-pos-label">Margin</span><span className="et-pos-val">{panel.marginStr}</span></div>
+                  </div>
+                  <button className="et-close-pos-btn" onClick={() => handleClose(panel.id)}>Close Position</button>
+                </div>
+              );
+            })}
           </div>
         )}
 
-        {!positionActive && lastTrade && (
+        {totalOpenCount === 0 && lastTrade && (
           <div className="et-last-trade-panel">
             <div className="et-last-trade-header">
               <span className="et-last-trade-title">Last Trade</span>
-              <span className="et-last-trade-date">{lastTradeDateStr}</span>
+              <span className="et-last-trade-date">{lastDateStr}</span>
             </div>
             <div className="et-last-trade-body">
-              <span className={lastTradeTypeClass}>{lastTrade.type.toUpperCase()}</span>
+              <span className={lastTypeClass}>{lastTrade.type.toUpperCase()}</span>
               <span className="et-last-entry">{'Entry: $' + lastTrade.entryPrice.toLocaleString('en-US')}</span>
-              <div className={lastTradeClass}>
-                <span>{lastTradePnlStr}</span>
-                <span className="et-last-pct">{lastTradePctStr}</span>
+              <div className={lastPnlClass}>
+                <span>{lastPnlStr}</span>
+                <span className="et-last-pct">{lastPctStr}</span>
               </div>
             </div>
           </div>

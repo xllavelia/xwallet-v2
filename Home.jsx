@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from "react";
   import { useNavigate, useLocation } from "react-router-dom";
-  import { useBalance, usePosition, useTradeHistory } from './useBalance';
+  import { useBalance, usePositions, useTradeHistory } from './useBalance';
 
 
 // git add .
@@ -10,7 +10,7 @@ import React, {useState, useRef, useEffect} from "react";
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "TRADE!!! and history"
+// git commit -m "remake trade and add tiket"
 // git push origin main
 
 
@@ -138,7 +138,7 @@ const [rates, setRates] = useState(null);
 
 // (импорты уже есть, добавь usePosition и useTradeHistory)
 
-const position = usePosition();
+const position = usePositions();
 const tradeHistory = useTradeHistory();
 
 var closedWins   = tradeHistory.filter(function(t) { return t.result === 'win'; });

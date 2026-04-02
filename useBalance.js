@@ -1,34 +1,77 @@
 import { useState, useEffect } from "react";
 
 var BALANCE_KEY   = "trading_balance";
-var POSITION_KEY  = "trading_position";
+var POSITIONS_KEY = "trading_positions";
 var HISTORY_KEY   = "trading_history";
-var DEFAULT_BALANCE = 100.00;
+var VOUCHER_KEY   = "voucher_used";
+var DEFAULT_BALANCE = 500.00;
+var VOUCHER_TOTAL = 100.00;
 
 function readBalance() {
   var s = localStorage.getItem(BALANCE_KEY);
   return s !== null ? parseFloat(s) : DEFAULT_BALANCE;
 }
 function writeBalance(val) {
-  localStorage.setItem(BALANCE_KEY, String(val));
+  localStorage.setItem(BALANCE_KEY, String(parseFloat(val.toFixed(2))));
   window.dispatchEvent(new Event("balance_update"));
 }
 
-function readPosition() {
-  var s = localStorage.getItem(POSITION_KEY);
-  if (!s) return null;
-  try { return JSON.parse(s); } catch (e) { return null; }
+function readPositions() {
+  var s = localStorage.getItem(POSITIONS_KEY);
+  if (!s) return [];
+  try { return JSON.parse(s); } catch(e) { return []; }
 }
-function writePosition(pos) {
-  if (pos === null) { localStorage.removeItem(POSITION_KEY); }
-  else { localStorage.setItem(POSITION_KEY, JSON.stringify(pos)); }
-  window.dispatchEvent(new Event("position_update"));
+function writePositions(arr) {
+  localStorage.setItem(POSITIONS_KEY, JSON.stringify(arr));
+  window.dispatchEvent(new Event("positions_update"));
+}
+function addPosition(pos) {
+  var arr = readPositions();
+  arr.unshift(pos);
+  writePositions(arr);
+}
+function closePositionById(id, closePrice) {
+  var arr = readPositions();
+  var pos = null;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].id === id) { pos = arr[i]; break; }
+  }
+  if (!pos) return;
+  var priceMove = closePrice - pos.entryPrice;
+  var direction = pos.type === 'long' ? 1 : -1;
+  var pnl = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
+  var pnlPercent = (pnl / pos.margin) * 100;
+  var bal = readBalance();
+  var newBal = Math.max(0, parseFloat((bal + pos.margin + pnl).toFixed(2)));
+  writeBalance(newBal);
+  var newArr = arr.filter(function(p) { return p.id !== id; });
+  writePositions(newArr);
+  var closedTrade = {
+    id: pos.id,
+    coin: pos.coin,
+    type: pos.type,
+    entryPrice: pos.entryPrice,
+    closePrice: closePrice,
+    leverage: pos.leverage,
+    amount: pos.amount,
+    margin: pos.margin,
+    fees: pos.fees,
+    feesPaidByVoucher: pos.feesPaidByVoucher || false,
+    pnl: parseFloat(pnl.toFixed(2)),
+    pnlPercent: parseFloat(pnlPercent.toFixed(2)),
+    liqPrice: pos.liqPrice,
+    openTime: pos.openTime,
+    closeTime: Date.now(),
+    duration: Date.now() - pos.openTime,
+    result: pnl >= 0 ? 'win' : 'loss'
+  };
+  addClosedTrade(closedTrade);
 }
 
 function readHistory() {
   var s = localStorage.getItem(HISTORY_KEY);
   if (!s) return [];
-  try { return JSON.parse(s); } catch (e) { return []; }
+  try { return JSON.parse(s); } catch(e) { return []; }
 }
 function writeHistory(arr) {
   localStorage.setItem(HISTORY_KEY, JSON.stringify(arr));
@@ -40,10 +83,20 @@ function addClosedTrade(trade) {
   writeHistory(arr);
 }
 
+function readVoucherUsed() {
+  var s = localStorage.getItem(VOUCHER_KEY);
+  return s !== null ? parseFloat(s) : 0;
+}
+function writeVoucherUsed(val) {
+  localStorage.setItem(VOUCHER_KEY, String(parseFloat(val.toFixed(2))));
+  window.dispatchEvent(new Event("voucher_update"));
+}
+
 function resetAll() {
   writeBalance(DEFAULT_BALANCE);
-  writePosition(null);
+  writePositions([]);
   writeHistory([]);
+  writeVoucherUsed(0);
 }
 
 function useBalance() {
@@ -58,16 +111,16 @@ function useBalance() {
   return balance;
 }
 
-function usePosition() {
-  var pair = useState(readPosition());
-  var position = pair[0];
-  var setPosition = pair[1];
+function usePositions() {
+  var pair = useState(readPositions());
+  var positions = pair[0];
+  var setPositions = pair[1];
   useEffect(function() {
-    function onUpdate() { setPosition(readPosition()); }
-    window.addEventListener("position_update", onUpdate);
-    return function() { window.removeEventListener("position_update", onUpdate); };
+    function onUpdate() { setPositions(readPositions()); }
+    window.addEventListener("positions_update", onUpdate);
+    return function() { window.removeEventListener("positions_update", onUpdate); };
   }, []);
-  return position;
+  return positions;
 }
 
 function useTradeHistory() {
@@ -82,9 +135,22 @@ function useTradeHistory() {
   return history;
 }
 
+function useVoucherUsed() {
+  var pair = useState(readVoucherUsed());
+  var used = pair[0];
+  var setUsed = pair[1];
+  useEffect(function() {
+    function onUpdate() { setUsed(readVoucherUsed()); }
+    window.addEventListener("voucher_update", onUpdate);
+    return function() { window.removeEventListener("voucher_update", onUpdate); };
+  }, []);
+  return used;
+}
+
 export {
-  useBalance, usePosition, useTradeHistory,
-  writeBalance, writePosition, writeHistory, addClosedTrade,
-  readBalance, readPosition, readHistory,
-  resetAll
+  useBalance, usePositions, useTradeHistory, useVoucherUsed,
+  writeBalance, writePositions, addPosition, closePositionById,
+  writeHistory, addClosedTrade,
+  readBalance, readPositions, readHistory, readVoucherUsed, writeVoucherUsed,
+  resetAll, VOUCHER_TOTAL
 };
