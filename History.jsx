@@ -235,17 +235,17 @@ const History = () => {
 
         <div className="history-tabs">
           <button className={'history-tab ' + (activeTab === 'transactions' ? 'active-tab' : '')} onClick={() => setActiveTab('transactions')}>
-            <span style={{fontFamily: "Unbounded"}}>Txns</span>
+            <span style={{fontFamily: "Unbounded"}}>Traansaction</span>
           </button>
           <button className={'history-tab ' + (activeTab === 'swap' ? 'active-tab' : '')} onClick={() => setActiveTab('swap')}>
             <span style={{fontFamily: "Unbounded"}}>Swap</span>
           </button>
           <button className={'history-tab ht-tab-with-badge ' + (activeTab === 'active' ? 'active-tab' : '')} onClick={() => setActiveTab('active')}>
-            <span style={{fontFamily: "Unbounded"}}>Active</span>
-            {positions.length > 0 && <span className="ht-tab-badge">{positions.length}</span>}
+            <span style={{fontFamily: "Unbounded"}}>Active Trade</span>
+            {positions.length > 0 && <span className="ht-tab-badge"></span>}
           </button>
           <button className={'history-tab ' + (activeTab === 'completed' ? 'active-tab' : '')} onClick={() => setActiveTab('completed')}>
-            <span style={{fontFamily: "Unbounded"}}>Trades</span>
+            <span style={{fontFamily: "Unbounded"}}>Completed Trade</span>
           </button>
         </div>
 
@@ -342,7 +342,7 @@ const History = () => {
 
           {activeTab === 'completed' && tradeHistory.length === 0 && (
             <div className="ht-empty">
-              <span className="ht-empty-icon">📭</span>
+              <span className="ht-empty-icon"></span>
               <span className="ht-empty-text">No closed trades yet.</span>
             </div>
           )}

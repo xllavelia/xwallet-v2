@@ -55,7 +55,7 @@ const ticketId = '847291';
 
           <div className="tm-block border-left">
             <span className="tm-label">VALID THRU</span>
-            <span className="tm-value">{ticket.validThru}</span>
+            <span className="tm-value">12/26</span>
           </div>
           <div className="tm-block border-left">
             <span className="tm-label">STATUS</span>
@@ -76,7 +76,7 @@ const ticketId = '847291';
           <div className="tm-stats-row">
             <div className="stat-box">
               <span className="stat-lbl">REDEEMED</span>
-              <span className="stat-val">${ticket.used.toFixed(2)}</span>
+              <span className="stat-val">${voucherUsed}</span>
             </div>
             <div className="stat-box right-align">
               <span className="stat-lbl">REMAINING</span>
@@ -101,7 +101,7 @@ const ticketId = '847291';
         <div className="ts-top">
           <div className="ts-serial">NO. 847291</div>
           <div className="ts-barcode"></div>
-          <div className="ts-code">{ticket.code}</div>
+          <div className="ts-code">{}</div>
         </div>
         <div className="ts-bottom">
         </div>

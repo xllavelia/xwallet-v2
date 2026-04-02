@@ -2,17 +2,11 @@ import React, {useState, useRef, useEffect} from "react";
   import { useNavigate, useLocation } from "react-router-dom";
   import { useBalance, usePositions, useTradeHistory } from './useBalance';
 
-
-// git add .
-//  git commit -m "added progress row with percent"
-// git push origin master
-
 // npx vite --host 0.0.0.0 --port 5173 --force
 
 //  git add .
-// git commit -m "remake trade and add tiket"
+// git commit -m "mini fix"
 // git push origin main
-
 
 
 const Home = () => {
@@ -195,9 +189,7 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
  <div className="app-scroll-container">
 
 
-      <section className="app-page-section"  style={{
-        background: bg
-      }}>
+      <section className="app-page-section">
         <div className="page-content"> <div className="crypto">
 
 

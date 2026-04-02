@@ -4,7 +4,7 @@ var BALANCE_KEY   = "trading_balance";
 var POSITIONS_KEY = "trading_positions";
 var HISTORY_KEY   = "trading_history";
 var VOUCHER_KEY   = "voucher_used";
-var DEFAULT_BALANCE = 500.00;
+var DEFAULT_BALANCE = 100.00;
 var VOUCHER_TOTAL = 100.00;
 
 function readBalance() {
