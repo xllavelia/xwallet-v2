@@ -1,16 +1,16 @@
 import React, {useState, useRef, useEffect} from "react";
   import { useNavigate, useLocation } from "react-router-dom";
-  import { useBalance, usePositions, useTradeHistory } from './useBalance';
+import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } from './useBalance';
+ 
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 
-//  git add .
-// git commit -m "Auto close, new design, voucher, ditails on active trade, toFixed, debug stat"
-// git push origin main
 
 const Home = () => {
   const navigate = useNavigate();
   const balance = useBalance();
+var profile   = useProfile();
+var transfers = useTransfers();
 
 const roadSend = () => {
     navigate("/send");
@@ -181,6 +181,18 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
     setIsSelectorOpen(false);
   };
 
+var [refreshing, setRefreshing] = useState(false);
+
+function handleRefresh() {
+  setRefreshing(true);
+  window.dispatchEvent(new Event("balance_update"));
+  window.dispatchEvent(new Event("positions_update"));
+  window.dispatchEvent(new Event("history_update"));
+  window.dispatchEvent(new Event("transfers_update"));
+  setTimeout(function () { setRefreshing(false); }, 700);
+}
+
+var recentTransfers = transfers.slice(0, 3);
 
   return (
     
@@ -207,7 +219,9 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
           <h1 className="amount" onClick={() => setIsOpen(true)}>{balanceStr}</h1>
         </div>
         <div className="pnl-summary">
-          <span className="upLast" onClick={() => setIsOpen(true)}>+2.4% last 24h</span>
+     <div onClick={handleRefresh}>  <span className="upLast" >{profit24hStr + ' at last 24h'}</span>
+</div>
+{/* <button className={'home-refresh-btn ' + (refreshing ? 'spinning' : '')} onClick={handleRefresh}>↻</button> */}
         </div>
       </section>
 
@@ -520,7 +534,7 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
           
           {/* Боковой корешок для стиля тикета */}
           <div className="bo-ticket-stub">
-            <span className="stub-text">ID 7818270018</span>
+<span className="stub-text">{'ID ' + profile.id}</span>
             <div className="stub-barcode"></div>
           </div>
 

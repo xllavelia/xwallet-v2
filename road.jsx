@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import "./Main.css";
+import "./Transfersystem.css";
 import Home from "./Home";
 import Send from "./Send";
 import Buy from "./Buy";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePositions, useTradeHistory, closePositionById } from "./useBalance";
+import { usePositions, useTradeHistory, closePositionById} from "./useBalance";
 
 function safeNum(val) {
   var n = parseFloat(val);
@@ -209,7 +209,7 @@ const History = () => {
     { id: 3, name: "Usdt",     nameSwap: "Ton",    amount: "+700",   bonus: "-2.3",   icon: "⇄" },
     { id: 4, name: "Solana",   nameSwap: "btc",    amount: "+8.32",  bonus: "-0.076", icon: "⇄" }
   ];
-
+const [recentTransfers, setRecentTransfers] = useState([]);
   return (
     <div className="HistoryContent">
       <div className="Road-Home" onClick={roadHome}></div>
@@ -292,26 +292,20 @@ const History = () => {
 
         <div className="history-tabs">
           <button className={'history-tab ' + (activeTab === 'transactions' ? 'active-tab' : '')} onClick={() => setActiveTab('transactions')}>
-<<<<<<< HEAD
+
             <span style={{fontFamily: "Unbounded"}}>Transaction</span>
-=======
-            <span style={{fontFamily: "Unbounded"}}>Txns</span>
->>>>>>> c8700822bf9f01bd3077f97b6d98f4714462b5d8
+
           </button>
           <button className={'history-tab ' + (activeTab === 'swap' ? 'active-tab' : '')} onClick={() => setActiveTab('swap')}>
             <span style={{fontFamily: "Unbounded"}}>Swap</span>
           </button>
           <button className={'history-tab ht-tab-with-badge ' + (activeTab === 'active' ? 'active-tab' : '')} onClick={() => setActiveTab('active')}>
-<<<<<<< HEAD
+
             <span style={{fontFamily: "Unbounded"}}>Active Trade</span>
             {/* {positions.length > 0 && <span className="ht-tab-badge">{positions.length}</span>} */}
-=======
-            <span style={{fontFamily: "Unbounded"}}>Active</span>
-            {positions.length > 0 && <span className="ht-tab-badge">{positions.length}</span>}
->>>>>>> c8700822bf9f01bd3077f97b6d98f4714462b5d8
           </button>
           <button className={'history-tab ' + (activeTab === 'completed' ? 'active-tab' : '')} onClick={() => setActiveTab('completed')}>
-            <span style={{fontFamily: "Unbounded"}}>Trades</span>
+            <span style={{fontFamily: "Unbounded"}}>Completed Trade</span>
           </button>
         </div>
 
@@ -320,25 +314,34 @@ const History = () => {
           {activeTab === 'transactions' && (
             <div className="home-history-wrapper-parent">
               <div className="home-history-wrapper">
-                <div className="home-history-list">
-                  {transactionsDB.map(function(item) {
-                    return (
-                      <div key={item.id} className="home-history-item">
-                        <div className="home-history-left">
-                          <div className="home-history-img">{item.icon}</div>
-                          <div className="home-history-info">
-                            <h4 className="home-history-name">{item.name} <span style={{color:"rgba(255,255,255,0.4)",fontSize:"0.8rem"}}>{item.network}</span></h4>
-                            <span className="home-history-date">{item.date}</span>
-                          </div>
-                        </div>
-                        <div className="home-history-right">
-                          <h4 className="home-history-amount">{item.amount}</h4>
-                          {item.bonus && <span className="home-history-bonus">{item.bonus}</span>}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+               <div className="home-history-list">
+  {recentTransfers.length === 0 && (
+    <div className="home-history-empty">No recent transfers</div>
+  )}
+  {recentTransfers.map(function(item) {
+    var isSend    = item.type === 'send';
+    var amtNum    = parseFloat(item.amount) || 0;
+    var amtStr    = (isSend ? '-' : '+') + '$' + amtNum.toFixed(2);
+    var label     = isSend ? ('→ ' + item.toName) : ('← ' + item.fromName);
+    var d         = new Date(item.timestamp);
+    var dateStr   = d.toLocaleString('en-US', {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'});
+    return (
+      <div key={item.id} className="home-history-item">
+        <div className="home-history-left">
+          <div className="home-history-img">{isSend ? '↑' : '↓'}</div>
+          <div className="home-history-info">
+            <h4 className="home-history-name">{label}</h4>
+            <span className="home-history-date">{dateStr}</span>
+          </div>
+        </div>
+        <div className="home-history-right">
+          <h4 className={'home-history-amount ' + (isSend ? 'tx-send' : 'tx-receive')}>{amtStr}</h4>
+          <span className="home-history-bonus">USDT</span>
+        </div>
+      </div>
+    );
+  })}
+</div>
               </div>
             </div>
           )}
@@ -387,11 +390,9 @@ const History = () => {
                           <div className="ht-ac-header">
                             <span className={card.typeClass}>{card.type.toUpperCase()}</span>
                             <span className="ht-lev-tag">{card.leverage + 'x'}</span>
-<<<<<<< HEAD
+
                             {card.feesPaidByVoucher && <span className="ht-voucher-badge">voucher</span>}
-=======
-                            {card.feesPaidByVoucher && <span className="ht-voucher-badge">🎫</span>}
->>>>>>> c8700822bf9f01bd3077f97b6d98f4714462b5d8
+
                             {card.autoClose && <span className="ht-ac-tp-badge">TP</span>}
                           </div>
                           <div className="ht-ac-coin">{card.coin}</div>
@@ -438,11 +439,9 @@ const History = () => {
                             <div className="ht-active-top">
                               <h4 className="home-history-name-active">{item.coin}</h4>
                               <span className={'et-pos-badge ' + item.type}>{item.type.toUpperCase()}</span>
-<<<<<<< HEAD
+
                               {item.feesPaidByVoucher && <span className="ht-voucher-badge">voucher</span>}
-=======
-                              {item.feesPaidByVoucher && <span className="ht-voucher-badge">🎫</span>}
->>>>>>> c8700822bf9f01bd3077f97b6d98f4714462b5d8
+
                             </div>
                             <span className="home-history-date-active"><span style={{color:"rgba(255,255,255,0.4)"}}>{dateStr}</span></span>
                           </div>
