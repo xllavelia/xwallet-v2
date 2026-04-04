@@ -292,17 +292,26 @@ const History = () => {
 
         <div className="history-tabs">
           <button className={'history-tab ' + (activeTab === 'transactions' ? 'active-tab' : '')} onClick={() => setActiveTab('transactions')}>
+<<<<<<< HEAD
             <span style={{fontFamily: "Unbounded"}}>Transaction</span>
+=======
+            <span style={{fontFamily: "Unbounded"}}>Txns</span>
+>>>>>>> c8700822bf9f01bd3077f97b6d98f4714462b5d8
           </button>
           <button className={'history-tab ' + (activeTab === 'swap' ? 'active-tab' : '')} onClick={() => setActiveTab('swap')}>
             <span style={{fontFamily: "Unbounded"}}>Swap</span>
           </button>
           <button className={'history-tab ht-tab-with-badge ' + (activeTab === 'active' ? 'active-tab' : '')} onClick={() => setActiveTab('active')}>
+<<<<<<< HEAD
             <span style={{fontFamily: "Unbounded"}}>Active Trade</span>
             {/* {positions.length > 0 && <span className="ht-tab-badge">{positions.length}</span>} */}
+=======
+            <span style={{fontFamily: "Unbounded"}}>Active</span>
+            {positions.length > 0 && <span className="ht-tab-badge">{positions.length}</span>}
+>>>>>>> c8700822bf9f01bd3077f97b6d98f4714462b5d8
           </button>
           <button className={'history-tab ' + (activeTab === 'completed' ? 'active-tab' : '')} onClick={() => setActiveTab('completed')}>
-            <span style={{fontFamily: "Unbounded"}}>Completed Trade</span>
+            <span style={{fontFamily: "Unbounded"}}>Trades</span>
           </button>
         </div>
 
@@ -378,7 +387,11 @@ const History = () => {
                           <div className="ht-ac-header">
                             <span className={card.typeClass}>{card.type.toUpperCase()}</span>
                             <span className="ht-lev-tag">{card.leverage + 'x'}</span>
+<<<<<<< HEAD
                             {card.feesPaidByVoucher && <span className="ht-voucher-badge">voucher</span>}
+=======
+                            {card.feesPaidByVoucher && <span className="ht-voucher-badge">🎫</span>}
+>>>>>>> c8700822bf9f01bd3077f97b6d98f4714462b5d8
                             {card.autoClose && <span className="ht-ac-tp-badge">TP</span>}
                           </div>
                           <div className="ht-ac-coin">{card.coin}</div>
@@ -425,7 +438,11 @@ const History = () => {
                             <div className="ht-active-top">
                               <h4 className="home-history-name-active">{item.coin}</h4>
                               <span className={'et-pos-badge ' + item.type}>{item.type.toUpperCase()}</span>
+<<<<<<< HEAD
                               {item.feesPaidByVoucher && <span className="ht-voucher-badge">voucher</span>}
+=======
+                              {item.feesPaidByVoucher && <span className="ht-voucher-badge">🎫</span>}
+>>>>>>> c8700822bf9f01bd3077f97b6d98f4714462b5d8
                             </div>
                             <span className="home-history-date-active"><span style={{color:"rgba(255,255,255,0.4)"}}>{dateStr}</span></span>
                           </div>
