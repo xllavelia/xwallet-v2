@@ -135,21 +135,22 @@ const [rates, setRates] = useState(null);
 const position = usePositions();
 const tradeHistory = useTradeHistory();
 
+// стало:
+function safeNum(val) { var n = parseFloat(val); return isNaN(n) ? 0 : n; }
 var closedWins   = tradeHistory.filter(function(t) { return t.result === 'win'; });
-var totalPnlAll  = tradeHistory.reduce(function(acc, t) { return acc + t.pnl; }, 0);
 var now          = Date.now();
-var last24h      = tradeHistory.filter(function(t) { return now - t.closeTime < 86400000; });
-var last7d       = tradeHistory.filter(function(t) { return now - t.closeTime < 604800000; });
-var profit24h    = last24h.reduce(function(acc, t) { return acc + t.pnl; }, 0);
-var profit7d     = last7d.reduce(function(acc, t) { return acc + t.pnl; }, 0);
-var totalIncome  = tradeHistory.filter(function(t) { return t.pnl > 0; }).reduce(function(acc, t) { return acc + t.pnl; }, 0);
-var totalOutcome = tradeHistory.filter(function(t) { return t.pnl < 0; }).reduce(function(acc, t) { return acc + Math.abs(t.pnl); }, 0);
-var activeTrades = position !== null ? 1 : 0;
+var last24h      = tradeHistory.filter(function(t) { return now - safeNum(t.closeTime) < 86400000; });
+var last7d       = tradeHistory.filter(function(t) { return now - safeNum(t.closeTime) < 604800000; });
+var profit24h    = last24h.reduce(function(acc, t) { return acc + safeNum(t.pnl); }, 0);
+var profit7d     = last7d.reduce(function(acc, t) { return acc + safeNum(t.pnl); }, 0);
+var totalIncome  = tradeHistory.filter(function(t) { return safeNum(t.pnl) > 0; }).reduce(function(acc, t) { return acc + safeNum(t.pnl); }, 0);
+var totalOutcome = tradeHistory.filter(function(t) { return safeNum(t.pnl) < 0; }).reduce(function(acc, t) { return acc + Math.abs(safeNum(t.pnl)); }, 0);
+var activeTrades = position.length;
 var winRate      = tradeHistory.length > 0 ? parseFloat(((closedWins.length / tradeHistory.length) * 100).toFixed(1)) : 0;
-var cashbackEarned = tradeHistory.reduce(function(acc, t) { return acc + t.fees * 0.1; }, 0);
+var cashbackEarned = tradeHistory.reduce(function(acc, t) { return acc + safeNum(t.fees) * 0.1; }, 0);
 
-var profit24hStr  = (profit24h  >= 0 ? '+' : '-') + Math.abs(profit24h).toFixed(2);
-var profit7dStr   = (profit7d   >= 0 ? '+' : '-') + Math.abs(profit7d).toFixed(2);
+var profit24hStr  = (profit24h >= 0 ? '+' : '-') + Math.abs(profit24h).toFixed(2);
+var profit7dStr   = (profit7d  >= 0 ? '+' : '-') + Math.abs(profit7d).toFixed(2);
 
 const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [prices, setPrices] = useState({ BTC: '0.00', ETH: '0.00', SOL: '0.00', TON: '0.00' });
@@ -248,16 +249,13 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
         </div>
         
         <div className="eb-main-balance">
-          12.98 USD
-          {/* <svg className="eb-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg> */}
+       {profit24hStr + ' USD'}
         </div>
 
         <div className="eb-stats-grid">
           <div className="eb-stat-item">
              <div className="eb-stat-label">Total Profit</div>
-            <div className="eb-stat-value">79,21 USD</div>
+            <div className="eb-stat-value">{(totalIncome - totalOutcome).toFixed(2) + ' USD'}</div>
           </div>
         
         </div>
@@ -425,7 +423,6 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
               {coins.map(c => (
                 <div key={c.id} className="lend-item" onClick={() => handleTradeNav(c.id)}>
                   <div className="lend-left">
-                    <div className="lend-icon">{c.icon}</div>
                     <div className="lend-info">
                       <span className="lend-name">{c.name}</span>
                       <span className="lend-ticker">{c.id + ' / USDT'}</span>
@@ -524,7 +521,7 @@ const [isSelectorOpen, setIsSelectorOpen] = useState(false);
           
           {/* Боковой корешок для стиля тикета */}
           <div className="bo-ticket-stub">
-            <span className="stub-text">SYS-BAL-01</span>
+            <span className="stub-text">ID 7818270018</span>
             <div className="stub-barcode"></div>
           </div>
 

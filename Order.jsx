@@ -21,14 +21,29 @@ const Order = () => {
 
   const [amountInput, setAmountInput] = useState(prefillAmount);
   const [leverage, setLeverage] = useState(prefillLeverage);
-  const [submitted, setSubmitted] = useState(false);
+const [submitted, setSubmitted] = useState(false);
+const [autoCloseEnabled, setAutoCloseEnabled] = useState(false);
+const [autoCloseTarget, setAutoCloseTarget] = useState(5);
+
+function generateTradeId() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var result = 'TRD-';
+  for (var i = 0; i < 6; i++) {
+    result = result + chars[Math.floor(Math.random() * chars.length)];
+  }
+  return result;
+}
 
   var parsedAmount = parseFloat(amountInput) || 0;
   var cryptoAmount = currentPrice > 0 ? (parsedAmount / currentPrice).toFixed(6) : 0;
   var requiredMargin = parsedAmount / leverage;
-  var fees = parsedAmount * 0.001;
-
-  var voucherRemaining = VOUCHER_TOTAL - voucherUsed;
+  var fees = parsedAmount * 0.007;
+var voucherStartTime = localStorage.getItem('voucher_start_time');
+var voucherExpired = voucherStartTime
+  ? Math.floor((Date.now() - parseInt(voucherStartTime)) / 1000) >= 345600
+  : true;
+var voucherActive = voucherStartTime !== null && !voucherExpired;
+var voucherRemaining = voucherActive ? Math.max(0, VOUCHER_TOTAL - voucherUsed) : 0;
   var feesFromVoucher = fees <= voucherRemaining ? fees : (voucherRemaining > 0 ? voucherRemaining : 0);
   var feesFromBalance = fees - feesFromVoucher;
   var voucherCoversAll = fees > 0 && feesFromVoucher >= fees;
@@ -73,24 +88,27 @@ const Order = () => {
   var btnText = isBalanceLow ? 'Insufficient Funds' : ('Open ' + type.charAt(0).toUpperCase() + type.slice(1));
   var voucherRemainingStr = '$' + voucherRemaining.toFixed(2);
 
-  var feesDisplayStr = '-';
-  if (parsedAmount > 0) {
-    if (voucherCoversAll) {
-      feesDisplayStr = 'FREE via Voucher';
-    } else if (voucherCoversPartial) {
-      feesDisplayStr = '$' + feesFromVoucher.toFixed(2) + ' Voucher + $' + feesFromBalance.toFixed(2);
-    } else {
-      feesDisplayStr = '$' + formatUsd(fees);
-    }
+var feesDisplayStr = '-';
+if (parsedAmount > 0) {
+  if (voucherCoversAll) {
+    feesDisplayStr = '$' + formatUsd(fees) + ' FREE';
+  } else if (voucherCoversPartial) {
+    feesDisplayStr = '$' + formatUsd(fees) + ' (-$' + feesFromVoucher.toFixed(2) + ' 🎫)';
+  } else {
+    feesDisplayStr = '$' + formatUsd(fees);
   }
+}
 
-  function roadHome() { navigate("/"); }
+  function roadHome() { navigate("/trade"); }
 
   function handleOpenPosition() {
     if (isBalanceLow || parsedAmount <= 0 || submitted) return;
     var newBalance = parseFloat((balance - totalRequired).toFixed(2));
     var newVoucherUsed = parseFloat((voucherUsed + feesFromVoucher).toFixed(2));
     var pos = {
+  tradeId: generateTradeId(),
+  autoClose: autoCloseEnabled,
+  autoCloseTarget: autoCloseEnabled ? autoCloseTarget : null,
       id: Date.now(),
       coin: coin,
       type: type,
@@ -127,19 +145,6 @@ const Order = () => {
           </div>
           <button className="px-market-btn">Market <span className="caret">▾</span></button>
         </header>
-
-        <div className="px-balance-bar">
-          <span className="px-bal-label">Available</span>
-          <span className="px-bal-val">{balanceStr}</span>
-        </div>
-
-        {voucherRemaining > 0 && (
-          <div className="px-voucher-bar">
-            <span className="px-voucher-icon">🎫</span>
-            <span className="px-voucher-text">Commission voucher active</span>
-            <span className="px-voucher-remaining">{voucherRemainingStr + ' left'}</span>
-          </div>
-        )}
 
         <main className="px-main-content">
 
@@ -187,7 +192,38 @@ const Order = () => {
               })}
             </div>
           </section>
-
+<section className="px-autoclose-section">
+  <div className="px-autoclose-header">
+    <span className="px-leverage-title">Auto Close (Take Profit)</span>
+    <div
+      className={'px-toggle ' + (autoCloseEnabled ? 'on' : 'off')}
+      onClick={() => setAutoCloseEnabled(!autoCloseEnabled)}
+    >
+      <div className="px-toggle-thumb"></div>
+    </div>
+  </div>
+  {autoCloseEnabled && (
+    <div className="px-autoclose-body">
+      <span className="px-ac-label">Close when profit reaches</span>
+      <div className="px-ac-options">
+        {[3, 5, 10, 20, 50].map(function(pct) {
+          return (
+            <button
+              key={pct}
+              className={'px-lev-btn ' + (autoCloseTarget === pct ? 'active' : '')}
+              onClick={() => setAutoCloseTarget(pct)}
+            >
+              {'+' + pct + '%'}
+            </button>
+          );
+        })}
+      </div>
+      <div className="px-ac-preview">
+        {'TP at $' + formatUsd(requiredMargin * leverage * (autoCloseTarget / 100)) + ' profit'}
+      </div>
+    </div>
+  )}
+</section>
           <section className="px-details-card glass-card">
             <div className="px-row">
               <span className="px-label">Leverage</span>
@@ -202,10 +238,10 @@ const Order = () => {
               <span className="px-val flex-val">Total Balance</span>
             </div>
           </section>
-
+{/* 
           {isBalanceLow && (
             <div className="px-alert-card glass-card-error">Insufficient funds to cover the trade</div>
-          )}
+          )} */}
 
           <section className="px-metrics-card">
             <div className="px-row">
@@ -221,11 +257,15 @@ const Order = () => {
               <span className={'px-val ' + (voucherCoversAll ? 'px-fees-free' : '')}>{feesDisplayStr}</span>
             </div>
             <div className="px-row">
+              <span className="px-label">Balance Now</span>
+              <span className="px-val px-after-trade">{balanceStr}</span>
+            </div>
+            <div className="px-row">
               <span className="px-label">Balance after</span>
               <span className="px-val px-after-trade">{parsedAmount > 0 ? afterTradeStr : balanceStr}</span>
             </div>
           </section>
-
+{/* 
           {parsedAmount > 0 && (
             <section className="px-pnl-preview">
               <div className="px-pnl-title">Estimated P&L</div>
@@ -236,7 +276,7 @@ const Order = () => {
                 <div className="px-pnl-row"><span className="px-pnl-label">10%</span><span className={pnl10Class}>{pnl10Str}</span></div>
               </div>
             </section>
-          )}
+          )} */}
 
         </main>
 
