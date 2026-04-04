@@ -42,7 +42,9 @@ function closePositionById(id, closePrice) {
   var pnl = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
   var pnlPercent = (pnl / pos.margin) * 100;
   var bal = readBalance();
-  var newBal = Math.max(0, parseFloat((bal + pos.margin + pnl).toFixed(2)));
+var maxLoss = -pos.margin;
+var clampedPnl = Math.max(pnl, maxLoss);
+var newBal = Math.max(0, parseFloat((bal + pos.margin + clampedPnl).toFixed(2)));
   writeBalance(newBal);
   var newArr = arr.filter(function(p) { return p.id !== id; });
   writePositions(newArr);
@@ -57,7 +59,7 @@ function closePositionById(id, closePrice) {
     margin: pos.margin,
     fees: pos.fees,
     feesPaidByVoucher: pos.feesPaidByVoucher || false,
-    pnl: parseFloat(pnl.toFixed(2)),
+   pnl: parseFloat(clampedPnl.toFixed(2)),
     pnlPercent: parseFloat(pnlPercent.toFixed(2)),
     liqPrice: pos.liqPrice,
     openTime: pos.openTime,
