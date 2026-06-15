@@ -198,19 +198,43 @@ const Trade = () => {
     });
   }, [positions, currentCoin]);
 
-  useEffect(function() {
-    if (numericPrice <= 0) return;
-    positions.filter(function(p) { return p.coin === currentCoin; }).forEach(function(pos) {
-      if (pos.liqPrice <= 0) return;
-      var shouldLiq = pos.type === 'long' ? numericPrice <= pos.liqPrice : numericPrice >= pos.liqPrice;
-      if (shouldLiq) { closePositionById(pos.id, pos.liqPrice); if (activePosId === pos.id) setActivePosId(null); return; }
-      if (pos.autoClose && pos.autoCloseTarget && pos.entryPrice > 0) {
-        var pnl    = calcPnl(pos);
-        var pnlPct = pos.margin > 0 ? (pnl / pos.margin) * 100 : 0;
-        if (pnlPct >= pos.autoCloseTarget) { closePositionById(pos.id, numericPrice); if (activePosId === pos.id) setActivePosId(null); }
+ useEffect(function() {
+  if (numericPrice <= 0) return;
+
+  positions.filter(function(p) { return p.coin === currentCoin; }).forEach(function(pos) {
+    if (!pos.entryPrice || pos.entryPrice <= 0) return;
+    if (!pos.liqPrice   || pos.liqPrice <= 0)   return;
+    if (!pos.margin     || pos.margin <= 0)      return;
+    if (!pos.leverage   || pos.leverage <= 0)    return;
+
+    var priceMove = numericPrice - pos.entryPrice;
+    var direction = pos.type === 'long' ? 1 : -1;
+    var rawPnl    = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
+    var pnlPct    = (rawPnl / pos.margin) * 100;
+
+    // Ликвидация — цена дошла до уровня ИЛИ убыток >= 100% маржи
+    var shouldLiq = pos.type === 'long'
+      ? numericPrice <= pos.liqPrice
+      : numericPrice >= pos.liqPrice;
+
+    var deepLoss = pnlPct <= -100;
+
+    if (shouldLiq || deepLoss) {
+      var liqClose = shouldLiq ? pos.liqPrice : numericPrice;
+      closePositionById(pos.id, liqClose);
+      if (activePosId === pos.id) setActivePosId(null);
+      return;
+    }
+
+    // Auto close — только если включён и прибыль достигнута
+    if (pos.autoClose && pos.autoCloseTarget && pos.autoCloseTarget > 0) {
+      if (pnlPct >= pos.autoCloseTarget) {
+        closePositionById(pos.id, numericPrice);
+        if (activePosId === pos.id) setActivePosId(null);
       }
-    });
-  }, [numericPrice]);
+    }
+  });
+}, [numericPrice]);
 
   return (
     <div className="TradeContent">
