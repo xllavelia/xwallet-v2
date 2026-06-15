@@ -10,7 +10,7 @@ var ALL_PROFILES   = "all_profiles";
 var TRANSFERS_KEY  = "transfer_history";
 
 var DEFAULT_BALANCE  = 100.00;
-var VOUCHER_TOTAL    = 100.00;
+var VOUCHER_TOTAL    = 200.00;
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function dispatch(name) { window.dispatchEvent(new Event(name)); }
