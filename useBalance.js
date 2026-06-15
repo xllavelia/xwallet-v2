@@ -88,6 +88,21 @@ function addPosition(pos) {
   arr.unshift(pos);
   writePositions(arr);
 }
+function checkAndAutoClose() {
+  var arr = readPositions();
+  if (arr.length === 0) return;
+  arr.forEach(function(pos) {
+    if (!pos.liqPrice || !pos.entryPrice || !pos.margin || !pos.leverage) return;
+    // Автозакрытие по take profit если autoClose включён
+    if (pos.autoClose && pos.autoCloseTarget && pos.entryPrice > 0) {
+      // Нельзя проверить без живой цены — пропускаем, Trade сам проверит
+    }
+    // Ликвидация — если позиция уже давно должна была закрыться
+    // Это защита: если maxLoss уже превышен считаем ликвидированной
+    var maxLoss = -pos.margin;
+    // Без живой цены не можем считать точно, поэтому только useBalance делает clamp
+  });
+}
 function closePositionById(id, closePrice) {
   var arr = readPositions();
   var pos = null;
@@ -97,9 +112,8 @@ function closePositionById(id, closePrice) {
   if (!pos) return;
   var priceMove  = closePrice - pos.entryPrice;
   var direction  = pos.type === "long" ? 1 : -1;
-  var pnl        = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
-  var clampedPnl = Math.max(pnl, -pos.margin);
-  var pnlPct     = (clampedPnl / pos.margin) * 100;
+  var pnl = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
+var clampedPnl = Math.max(pnl, -pos.margin);
   var bal        = readBalance();
   var newBal     = Math.max(0, parseFloat((bal + pos.margin + clampedPnl).toFixed(2)));
   writeBalance(newBal);
