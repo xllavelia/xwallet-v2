@@ -75,7 +75,7 @@ var voucherRemaining = voucherActive ? Math.max(0, VOUCHER_TOTAL - voucherUsed) 
   var pnl5Class  = 'px-pnl-cell ' + (pnlAt5  >= 0 ? 'pos' : 'neg');
   var pnl10Class = 'px-pnl-cell ' + (pnlAt10 >= 0 ? 'pos' : 'neg');
 
-  var leverageOptions = [2, 3, 5, 10, 20, 50, 100];
+  var leverageOptions = [2, 5, 10, 25, 50, 100, 200];
 
   var formatUsd   = function(n) { return parseFloat(n).toFixed(2); };
   var formatPrice = function(n) { return Math.round(n).toLocaleString('en-US'); };
@@ -93,7 +93,7 @@ if (parsedAmount > 0) {
   if (voucherCoversAll) {
     feesDisplayStr = '$' + formatUsd(fees) + ' FREE';
   } else if (voucherCoversPartial) {
-    feesDisplayStr = '$' + formatUsd(fees) + ' (-$' + feesFromVoucher.toFixed(2) + ' 🎫)';
+    feesDisplayStr = '$' + formatUsd(fees) + ' (-$' + feesFromVoucher.toFixed(2) + ')';
   } else {
     feesDisplayStr = '$' + formatUsd(fees);
   }
