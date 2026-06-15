@@ -283,6 +283,78 @@ function useTransfers() {
   }, []);
   return pair[0];
 }
+// ── BACKGROUND LIQUIDATION CHECKER ───────────────────────────────────────────
+function startLiquidationChecker() {
+  var active = true;
+
+  function tick() {
+    if (!active) return;
+    var arr = readPositions();
+    if (arr.length === 0) {
+      setTimeout(tick, 15000);
+      return;
+    }
+
+    var uniqueCoins = [];
+    arr.forEach(function(pos) {
+      if (pos.coin && uniqueCoins.indexOf(pos.coin) === -1) uniqueCoins.push(pos.coin);
+    });
+
+    var symbols = JSON.stringify(uniqueCoins.map(function(c) { return c + 'USDT'; }));
+
+    fetch('https://api.binance.com/api/v3/ticker/price?symbols=' + symbols)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var prices = {};
+        data.forEach(function(item) {
+          prices[item.symbol.replace('USDT', '')] = parseFloat(item.price);
+        });
+
+        var positions = readPositions();
+        positions.forEach(function(pos) {
+          if (!pos.entryPrice || pos.entryPrice <= 0) return;
+          if (!pos.liqPrice   || pos.liqPrice <= 0)   return;
+          if (!pos.margin     || pos.margin <= 0)      return;
+          if (!pos.leverage   || pos.leverage <= 0)    return;
+
+          var livePrice = prices[pos.coin];
+          if (!livePrice || livePrice <= 0) return;
+
+          var priceMove = livePrice - pos.entryPrice;
+          var direction = pos.type === 'long' ? 1 : -1;
+          var rawPnl    = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
+          var pnlPct    = (rawPnl / pos.margin) * 100;
+
+          var shouldLiq = pos.type === 'long'
+            ? livePrice <= pos.liqPrice
+            : livePrice >= pos.liqPrice;
+
+          var deepLoss = pnlPct <= -99.9;
+
+          if (shouldLiq || deepLoss) {
+            closePositionById(pos.id, shouldLiq ? pos.liqPrice : livePrice);
+            return;
+          }
+
+          if (pos.autoClose && pos.autoCloseTarget && pos.autoCloseTarget > 0) {
+            if (pnlPct >= pos.autoCloseTarget) {
+              closePositionById(pos.id, livePrice);
+            }
+          }
+        });
+      })
+      .catch(function() {})
+      .finally(function() {
+        if (active) setTimeout(tick, 15000);
+      });
+  }
+
+  tick();
+  return function() { active = false; };
+}
+
+// Запускаем сразу при загрузке модуля — работает на всех страницах
+var _stopChecker = startLiquidationChecker();
 
 export {
   useBalance, usePositions, useTradeHistory, useVoucherUsed, useProfile, useTransfers,
