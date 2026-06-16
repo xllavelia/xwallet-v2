@@ -10,7 +10,7 @@ var ALL_PROFILES   = "all_profiles";
 var TRANSFERS_KEY  = "transfer_history";
 
 var DEFAULT_BALANCE  = 100.00;
-var VOUCHER_TOTAL    = 200.00;
+var VOUCHER_TOTAL    = 400.00;
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function dispatch(name) { window.dispatchEvent(new Event(name)); }
@@ -132,13 +132,13 @@ var newBal     = Math.max(0, parseFloat((bal + pos.margin + clampedPnl).toFixed(
     margin:           pos.margin,
     fees:             pos.fees,
     feesPaidByVoucher: pos.feesPaidByVoucher || false,
-    pnl:              parseFloat(clampedPnl.toFixed(2)),
-    pnlPercent:       parseFloat(pnlPct.toFixed(2)),
-    liqPrice:         pos.liqPrice,
-    openTime:         pos.openTime,
-    closeTime:        Date.now(),
-    duration:         Date.now() - pos.openTime,
-    result:           clampedPnl >= 0 ? "win" : "loss"
+    pnl:               parseFloat(clampedPnl.toFixed(2)),
+pnlPercent:        parseFloat(pnlPercent.toFixed(2)),
+liqPrice:          pos.liqPrice,
+openTime:          pos.openTime,
+closeTime:         Date.now(),
+duration:          Date.now() - pos.openTime,
+result:            clampedPnl >= 0 ? 'win' : 'loss'
   };
   addClosedTrade(closedTrade);
 }
