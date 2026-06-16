@@ -112,10 +112,11 @@ function closePositionById(id, closePrice) {
   if (!pos) return;
   var priceMove  = closePrice - pos.entryPrice;
   var direction  = pos.type === "long" ? 1 : -1;
-  var pnl = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
+ var pnl        = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
 var clampedPnl = Math.max(pnl, -pos.margin);
-  var bal        = readBalance();
-  var newBal     = Math.max(0, parseFloat((bal + pos.margin + clampedPnl).toFixed(2)));
+var pnlPercent = pos.margin > 0 ? (clampedPnl / pos.margin) * 100 : 0;
+var bal        = readBalance();
+var newBal     = Math.max(0, parseFloat((bal + pos.margin + clampedPnl).toFixed(2)));
   writeBalance(newBal);
   var newArr = arr.filter(function (p) { return p.id !== id; });
   writePositions(newArr);
