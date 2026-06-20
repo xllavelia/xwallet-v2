@@ -54,11 +54,11 @@ const Trade = () => {
   const positions = rawPositions.map(migratePos);
 
   const coinStats = {
-    BTC: { lev: '125x', vol: '$2.21B', oi: '$1.80B', fund: '0.0000%' },
-    ETH: { lev: '100x', vol: '$1.02B', oi: '$1.19B', fund: '0.0012%' },
-    SOL: { lev: '50x',  vol: '$850M',  oi: '$420M',  fund: '-0.0020%' },
-    TON: { lev: '20x',  vol: '$120M',  oi: '$65M',   fund: '0.0050%' }
-  };
+  BTC: { lev: '200x', vol: '$2.21B', oi: '$1.80B', fund: '0.0000%' },
+  ETH: { lev: '200x', vol: '$1.02B', oi: '$1.19B', fund: '0.0012%' },
+  SOL: { lev: '150x', vol: '$850M',  oi: '$420M',  fund: '-0.0020%' },
+  TON: { lev: '75x',  vol: '$120M',  oi: '$65M',   fund: '0.0050%' }
+};
   const stats = coinStats[currentCoin] || coinStats['BTC'];
 
   var numericPrice   = safeNum(currentPrice.toString().replace(/,/g, ''));
@@ -200,6 +200,12 @@ const Trade = () => {
  useEffect(function() {
   if (numericPrice <= 0) return;
 
+<<<<<<< HEAD
+=======
+ useEffect(function() {
+  if (numericPrice <= 0) return;
+
+>>>>>>> cc07bef7176388afbfc3ab5bace100a85c58df7c
   positions.filter(function(p) { return p.coin === currentCoin; }).forEach(function(pos) {
     if (!pos.entryPrice || pos.entryPrice <= 0) return;
     if (!pos.liqPrice   || pos.liqPrice <= 0)   return;

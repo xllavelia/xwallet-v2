@@ -9,8 +9,13 @@ var PROFILE_KEY    = "user_profile";
 var ALL_PROFILES   = "all_profiles";
 var TRANSFERS_KEY  = "transfer_history";
 
+<<<<<<< HEAD
 var DEFAULT_BALANCE  = 100;
 var VOUCHER_TOTAL    = 100;
+=======
+var DEFAULT_BALANCE  = 100.00;
+var VOUCHER_TOTAL    = 400.00;
+>>>>>>> cc07bef7176388afbfc3ab5bace100a85c58df7c
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function dispatch(name) { window.dispatchEvent(new Event(name)); }
@@ -88,6 +93,21 @@ function addPosition(pos) {
   arr.unshift(pos);
   writePositions(arr);
 }
+function checkAndAutoClose() {
+  var arr = readPositions();
+  if (arr.length === 0) return;
+  arr.forEach(function(pos) {
+    if (!pos.liqPrice || !pos.entryPrice || !pos.margin || !pos.leverage) return;
+    // Автозакрытие по take profit если autoClose включён
+    if (pos.autoClose && pos.autoCloseTarget && pos.entryPrice > 0) {
+      // Нельзя проверить без живой цены — пропускаем, Trade сам проверит
+    }
+    // Ликвидация — если позиция уже давно должна была закрыться
+    // Это защита: если maxLoss уже превышен считаем ликвидированной
+    var maxLoss = -pos.margin;
+    // Без живой цены не можем считать точно, поэтому только useBalance делает clamp
+  });
+}
 function closePositionById(id, closePrice) {
   var arr = readPositions();
   var pos = null;
@@ -97,11 +117,11 @@ function closePositionById(id, closePrice) {
   if (!pos) return;
   var priceMove  = closePrice - pos.entryPrice;
   var direction  = pos.type === "long" ? 1 : -1;
-  var pnl        = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
-  var clampedPnl = Math.max(pnl, -pos.margin);
-  var pnlPct     = (clampedPnl / pos.margin) * 100;
-  var bal        = readBalance();
-  var newBal     = Math.max(0, parseFloat((bal + pos.margin + clampedPnl).toFixed(2)));
+ var pnl        = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
+var clampedPnl = Math.max(pnl, -pos.margin);
+var pnlPercent = pos.margin > 0 ? (clampedPnl / pos.margin) * 100 : 0;
+var bal        = readBalance();
+var newBal     = Math.max(0, parseFloat((bal + pos.margin + clampedPnl).toFixed(2)));
   writeBalance(newBal);
   var newArr = arr.filter(function (p) { return p.id !== id; });
   writePositions(newArr);
@@ -117,7 +137,11 @@ function closePositionById(id, closePrice) {
     margin:           pos.margin,
     fees:             pos.fees,
     feesPaidByVoucher: pos.feesPaidByVoucher || false,
+<<<<<<< HEAD
    pnl:               parseFloat(clampedPnl.toFixed(2)),
+=======
+    pnl:               parseFloat(clampedPnl.toFixed(2)),
+>>>>>>> cc07bef7176388afbfc3ab5bace100a85c58df7c
 pnlPercent:        parseFloat(pnlPercent.toFixed(2)),
 liqPrice:          pos.liqPrice,
 openTime:          pos.openTime,
@@ -269,6 +293,78 @@ function useTransfers() {
   }, []);
   return pair[0];
 }
+// ── BACKGROUND LIQUIDATION CHECKER ───────────────────────────────────────────
+function startLiquidationChecker() {
+  var active = true;
+
+  function tick() {
+    if (!active) return;
+    var arr = readPositions();
+    if (arr.length === 0) {
+      setTimeout(tick, 15000);
+      return;
+    }
+
+    var uniqueCoins = [];
+    arr.forEach(function(pos) {
+      if (pos.coin && uniqueCoins.indexOf(pos.coin) === -1) uniqueCoins.push(pos.coin);
+    });
+
+    var symbols = JSON.stringify(uniqueCoins.map(function(c) { return c + 'USDT'; }));
+
+    fetch('https://api.binance.com/api/v3/ticker/price?symbols=' + symbols)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var prices = {};
+        data.forEach(function(item) {
+          prices[item.symbol.replace('USDT', '')] = parseFloat(item.price);
+        });
+
+        var positions = readPositions();
+        positions.forEach(function(pos) {
+          if (!pos.entryPrice || pos.entryPrice <= 0) return;
+          if (!pos.liqPrice   || pos.liqPrice <= 0)   return;
+          if (!pos.margin     || pos.margin <= 0)      return;
+          if (!pos.leverage   || pos.leverage <= 0)    return;
+
+          var livePrice = prices[pos.coin];
+          if (!livePrice || livePrice <= 0) return;
+
+          var priceMove = livePrice - pos.entryPrice;
+          var direction = pos.type === 'long' ? 1 : -1;
+          var rawPnl    = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
+          var pnlPct    = (rawPnl / pos.margin) * 100;
+
+          var shouldLiq = pos.type === 'long'
+            ? livePrice <= pos.liqPrice
+            : livePrice >= pos.liqPrice;
+
+          var deepLoss = pnlPct <= -99.9;
+
+          if (shouldLiq || deepLoss) {
+            closePositionById(pos.id, shouldLiq ? pos.liqPrice : livePrice);
+            return;
+          }
+
+          if (pos.autoClose && pos.autoCloseTarget && pos.autoCloseTarget > 0) {
+            if (pnlPct >= pos.autoCloseTarget) {
+              closePositionById(pos.id, livePrice);
+            }
+          }
+        });
+      })
+      .catch(function() {})
+      .finally(function() {
+        if (active) setTimeout(tick, 15000);
+      });
+  }
+
+  tick();
+  return function() { active = false; };
+}
+
+// Запускаем сразу при загрузке модуля — работает на всех страницах
+var _stopChecker = startLiquidationChecker();
 
 export {
   useBalance, usePositions, useTradeHistory, useVoucherUsed, useProfile, useTransfers,

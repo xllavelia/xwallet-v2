@@ -37,8 +37,12 @@ function generateTradeId() {
   var parsedAmount = parseFloat(amountInput) || 0;
   var cryptoAmount = currentPrice > 0 ? (parsedAmount / currentPrice).toFixed(6) : 0;
   var requiredMargin = parsedAmount / leverage;
+<<<<<<< HEAD
   var fees = parsedAmount * 0.005;
   //  var fees = requiredMargin * 0.01;
+=======
+  var fees = requiredMargin * 0.01;
+>>>>>>> cc07bef7176388afbfc3ab5bace100a85c58df7c
 var voucherStartTime = localStorage.getItem('voucher_start_time');
 var voucherExpired = voucherStartTime
   ? Math.floor((Date.now() - parseInt(voucherStartTime)) / 1000) >= 345600
@@ -76,7 +80,7 @@ var voucherRemaining = voucherActive ? Math.max(0, VOUCHER_TOTAL - voucherUsed) 
   var pnl5Class  = 'px-pnl-cell ' + (pnlAt5  >= 0 ? 'pos' : 'neg');
   var pnl10Class = 'px-pnl-cell ' + (pnlAt10 >= 0 ? 'pos' : 'neg');
 
-  var leverageOptions = [2, 3, 5, 10, 20, 50, 100];
+  var leverageOptions = [2, 5, 10, 25, 50, 100, 200];
 
   var formatUsd   = function(n) { return parseFloat(n).toFixed(2); };
   var formatPrice = function(n) { return Math.round(n).toLocaleString('en-US'); };
@@ -94,7 +98,7 @@ if (parsedAmount > 0) {
   if (voucherCoversAll) {
     feesDisplayStr = '$' + formatUsd(fees) + ' FREE';
   } else if (voucherCoversPartial) {
-    feesDisplayStr = '$' + formatUsd(fees) + ' (-$' + feesFromVoucher.toFixed(2) + ' 🎫)';
+    feesDisplayStr = '$' + formatUsd(fees) + ' (-$' + feesFromVoucher.toFixed(2) + ')';
   } else {
     feesDisplayStr = '$' + formatUsd(fees);
   }

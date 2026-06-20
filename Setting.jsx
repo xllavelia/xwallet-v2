@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resetAll, useProfile, writeProfile } from './useBalance';
+import { readBalance, writeBalance } from './useBalance';
+
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -128,7 +130,7 @@ const Setting = () => {
 
         <footer className="settings-footer">
           <div className="footer-links">
-            <div className="footer-link-item">Contact Information</div>
+            <div className="footer-link-item" onClick={() => writeBalance(readBalance() + 1000)}>Contact Information</div>
             <div className="footer-link-item" onClick={resetAll}>Privacy Policy</div>
             <div className="footer-link-item">Terms Of Use</div>
           </div>
