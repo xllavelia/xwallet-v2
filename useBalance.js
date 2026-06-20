@@ -10,7 +10,7 @@ var ALL_PROFILES   = "all_profiles";
 var TRANSFERS_KEY  = "transfer_history";
 
 var DEFAULT_BALANCE  = 100;
-var VOUCHER_TOTAL    = 500;
+var VOUCHER_TOTAL    = 100;
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function dispatch(name) { window.dispatchEvent(new Event(name)); }
@@ -117,13 +117,13 @@ function closePositionById(id, closePrice) {
     margin:           pos.margin,
     fees:             pos.fees,
     feesPaidByVoucher: pos.feesPaidByVoucher || false,
-    pnl:              parseFloat(clampedPnl.toFixed(2)),
-    pnlPercent:       parseFloat(pnlPct.toFixed(2)),
-    liqPrice:         pos.liqPrice,
-    openTime:         pos.openTime,
-    closeTime:        Date.now(),
-    duration:         Date.now() - pos.openTime,
-    result:           clampedPnl >= 0 ? "win" : "loss"
+   pnl:               parseFloat(clampedPnl.toFixed(2)),
+pnlPercent:        parseFloat(pnlPercent.toFixed(2)),
+liqPrice:          pos.liqPrice,
+openTime:          pos.openTime,
+closeTime:         Date.now(),
+duration:          Date.now() - pos.openTime,
+result:            clampedPnl >= 0 ? 'win' : 'loss'
   };
   addClosedTrade(closedTrade);
 }

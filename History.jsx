@@ -210,6 +210,7 @@ const History = () => {
     { id: 4, name: "Solana",   nameSwap: "btc",    amount: "+8.32",  bonus: "-0.076", icon: "⇄" }
   ];
 const [recentTransfers, setRecentTransfers] = useState([]);
+
   return (
     <div className="HistoryContent">
       <div className="Road-Home" onClick={roadHome}></div>
