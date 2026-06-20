@@ -197,25 +197,19 @@ const Trade = () => {
       priceLineRefs.current.push(el, ll);
     });
   }, [positions, currentCoin]);
- useEffect(function() {
+useEffect(function() {
   if (numericPrice <= 0) return;
 
-<<<<<<< HEAD
-=======
- useEffect(function() {
-  if (numericPrice <= 0) return;
-
->>>>>>> cc07bef7176388afbfc3ab5bace100a85c58df7c
   positions.filter(function(p) { return p.coin === currentCoin; }).forEach(function(pos) {
     if (!pos.entryPrice || pos.entryPrice <= 0) return;
-    if (!pos.liqPrice   || pos.liqPrice <= 0)   return;
-    if (!pos.margin     || pos.margin <= 0)      return;
-    if (!pos.leverage   || pos.leverage <= 0)    return;
+    if (!pos.liqPrice || pos.liqPrice <= 0) return;
+    if (!pos.margin || pos.margin <= 0) return;
+    if (!pos.leverage || pos.leverage <= 0) return;
 
     var priceMove = numericPrice - pos.entryPrice;
     var direction = pos.type === 'long' ? 1 : -1;
-    var rawPnl    = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
-    var pnlPct    = (rawPnl / pos.margin) * 100;
+    var rawPnl = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
+    var pnlPct = (rawPnl / pos.margin) * 100;
 
     // Ликвидация — цена дошла до уровня ИЛИ убыток >= 100% маржи
     var shouldLiq = pos.type === 'long'
@@ -237,10 +231,9 @@ const Trade = () => {
         closePositionById(pos.id, numericPrice);
         if (activePosId === pos.id) setActivePosId(null);
       }
-    }
+    } // <--- ДОБАВЛЕНА НЕДОСТАЮЩАЯ СКОБКА ТУТ
   });
 }, [numericPrice]);
-
   return (
     <div className="TradeContent">
       <div className="Road-Home" onClick={roadHome}></div>
