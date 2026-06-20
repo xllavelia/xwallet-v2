@@ -6,7 +6,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
 //  git commit -m "Total remake design, only hsl(61, 85%, 78%), (home, trade, order, history, home lend) "
-// git push origin master
+// git push origin main
 
 
 const Home = () => {
