@@ -8,7 +8,14 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 //  git commit -m "Total remake design, only hsl(61, 85%, 78%), (home, trade, order, history, home lend) "
 // git push main
 
-
+// rm -rf .git
+// git init
+// git checkout -b main
+// git add .
+// git commit -m "initial clean state"
+// git branch -M main
+// git remote add origin  https://github.com/xllavelia/xwallet-v2.git
+// git push -f origin main
 
 const Home = () => {
   const navigate = useNavigate();
