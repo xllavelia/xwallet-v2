@@ -385,7 +385,7 @@ const [recentTransfers, setRecentTransfers] = useState([]);
                   {positionCards.map(function(card) {
                     return (
                       <div key={card.id} className="ht-active-card" onClick={() => setSelectedActivePosId(card.id)}>
-                        <div className="ht-ac-glow" style={{background: card.pnl >= 0 ? 'rgba(0,212,170,0.05)' : 'rgba(255,68,102,0.05)'}}></div>
+                        <div className="ht-ac-glow"></div>
                         <div className="ht-ac-left">
                           <div className="ht-ac-header">
                             <span className={card.typeClass}>{card.type.toUpperCase()}</span>
@@ -448,7 +448,7 @@ const [recentTransfers, setRecentTransfers] = useState([]);
                         </div>
                         <div className="home-history-right">
                           <h4 className="home-history-amount-active">{pnlDisplay}</h4>
-                          <span className="home-history-bonus-active" style={{backgroundColor: bg}}>{pctDisplay}</span>
+                          <span className="home-history-bonus-active">{pctDisplay}</span>
                         </div>
                       </div>
                     );

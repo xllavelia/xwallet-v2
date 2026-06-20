@@ -302,7 +302,7 @@ const Trade = () => {
             {positionPanels.map(function(panel) {
               return (
                 <div key={panel.id} className="et-position-card" onClick={() => setActivePosId(panel.id)}>
-                  <div className="et-pc-glow" style={{background: panel.pnl >= 0 ? 'rgba(0,212,170,0.06)' : 'rgba(255,68,102,0.06)'}}></div>
+                  <div className="et-pc-glow" ></div>
                   <div className="et-pc-left">
                     <div className="et-pc-top">
                       <span className={panel.typeClass}>{panel.type.toUpperCase()}</span>

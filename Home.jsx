@@ -4,6 +4,9 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
  
 
 // npx vite --host 0.0.0.0 --port 5173 --force
+// git add .
+//  git commit -m ""
+// git push origin master
 
 
 const Home = () => {
@@ -52,7 +55,8 @@ const roadCard2 = () => {
     navigate("/card2");
   };
 
-  var balanceStr = balance.toFixed(2);
+  var balanceStr = balance.toFixed();
+  var balanceStr2 = balance.toFixed(2);
 
 const transactionsDB = [
   {
@@ -194,7 +198,83 @@ function handleRefresh() {
 
 var recentTransfers = transfers.slice(0, 3);
 
-  return (
+  const TREND_COINS = [
+  { id: 'BTC', symbol: 'BTCUSDT', name: 'Bitcoin', iconBg: '#f7931a', glyph: '₿' },
+  { id: 'ETH', symbol: 'ETHUSDT', name: 'Ethereum', iconBg: '#627eea', glyph: 'Ξ' },
+  { id: 'SOL', symbol: 'SOLUSDT', name: 'Solana', iconBg: '#14f195', glyph: '◎' },
+  { id: 'TON', symbol: 'TONUSDT', name: 'Toncoin', iconBg: '#0098ea', glyph: '◆' }
+];
+
+const [trendData, setTrendData] = useState({});
+
+useEffect(function() {
+  function fetchTrend() {
+    TREND_COINS.forEach(function(coin) {
+      var url = 'https://api.binance.com/api/v3/klines?symbol=' + coin.symbol + '&interval=1h&limit=25';
+      fetch(url)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (!data || data.length < 2) return;
+          var closes = data.map(function(d) { return parseFloat(d[4]); });
+          var first = closes[0];
+          var last = closes[closes.length - 1];
+          var pct = ((last - first) / first) * 100;
+          setTrendData(function(prev) {
+            var next = Object.assign({}, prev);
+            next[coin.id] = { price: last, changePct: pct, sparkline: closes };
+            return next;
+          });
+        })
+        .catch(function() {});
+    });
+  }
+  fetchTrend();
+  var iv = setInterval(fetchTrend, 30000);
+  return function() { clearInterval(iv); };
+}, []);
+
+var trendCards = TREND_COINS.map(function(coin) {
+  var d = trendData[coin.id];
+  var hasData = d && d.sparkline && d.sparkline.length > 1;
+  var pathD = '';
+  var pct = 0;
+  var priceStr = '...';
+  var isPos = true;
+
+  if (hasData) {
+    var points = d.sparkline;
+    var w = 100, h = 36;
+    var min = Math.min.apply(null, points);
+    var max = Math.max.apply(null, points);
+    var range = (max - min) || 1;
+    var coords = points.map(function(val, i) {
+      var x = (i / (points.length - 1)) * w;
+      var y = h - ((val - min) / range) * h;
+      return x.toFixed(2) + ',' + y.toFixed(2);
+    });
+    pathD = 'M' + coords.join(' L');
+    pct = d.changePct;
+    isPos = pct >= 0;
+    priceStr = d.price < 1
+      ? d.price.toFixed(5)
+      : d.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  return {
+    id: coin.id,
+    name: coin.name,
+    iconBg: coin.iconBg,
+    glyph: coin.glyph,
+    pathD: pathD,
+    hasData: hasData,
+    pctStr: (isPos ? '↑ +' : '↓ -') + Math.abs(pct).toFixed(2) + '%',
+    priceStr: priceStr + ' $',
+    isPos: isPos
+  };
+});
+
+
+return (
     
 <div className="content" > 
 
@@ -219,8 +299,7 @@ var recentTransfers = transfers.slice(0, 3);
           <h1 className="amount" onClick={() => setIsOpen(true)}>{balanceStr}</h1>
         </div>
         <div className="pnl-summary">
-     <div onClick={handleRefresh}>  <span className="upLast" >{profit24hStr + ' at last 24h'}</span>
-</div>
+     {/* <div onClick={handleRefresh}>  <span className="upLast" >{profit24hStr + ' at last 24h'}</span></div> */}
 {/* <button className={'home-refresh-btn ' + (refreshing ? 'spinning' : '')} onClick={handleRefresh}>↻</button> */}
         </div>
       </section>
@@ -228,24 +307,23 @@ var recentTransfers = transfers.slice(0, 3);
 
       <div className="actions-floating-grid">
         <div className="action-circle primary"  onClick={roadSend}>
-          <div className="icon">↑</div>
-          {/* <span style={{
-    color: "hsl(70, 80%, 80%)" ,
-    backgroundColor: "hsl(162, 50%, 15%)"
-  }}     >Send</span> */}
+          <div className="icon">
+
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 15l6-6l6 6"/></svg>
+</div>
+      
         </div>
          <div className="action-circle x-primary" onClick={roadHistory}>
-          <div className="icon"><svg height="45%" version="1.1" viewBox="0 0 24 24" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:serif="http://www.serif.com/" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Icon"><path d="M12,2.25c-5.381,0 -9.75,4.369 -9.75,9.75c0,5.381 4.369,9.75 9.75,9.75c5.381,0 9.75,-4.369 9.75,-9.75c0,-5.381 -4.369,-9.75 -9.75,-9.75Zm0,1.5c4.553,0 8.25,3.697 8.25,8.25c0,4.553 -3.697,8.25 -8.25,8.25c-4.553,0 -8.25,-3.697 -8.25,-8.25c0,-4.553 3.697,-8.25 8.25,-8.25Z"/><path d="M11.25,7l0,4.586c-0,0.464 0.184,0.909 0.513,1.237c0.754,0.755 2.707,2.707 2.707,2.707c0.292,0.293 0.768,0.293 1.06,0c0.293,-0.292 0.293,-0.768 0,-1.06c0,-0 -1.952,-1.953 -2.707,-2.707c-0.047,-0.047 -0.073,-0.111 -0.073,-0.177c0,-1.199 0,-4.586 0,-4.586c0,-0.414 -0.336,-0.75 -0.75,-0.75c-0.414,-0 -0.75,0.336 -0.75,0.75Z"/></g></svg>
+          <div className="icon">
+ <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></g></svg>
 </div>
-          {/* <span>Swap</span> */}
         </div>
         <div className="action-circle" onClick={roadBuy}>
-          <div className="icon">⇄</div>
-          {/* <span>Swap</span> */}
+          <div className="icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.5 9a10 10 0 0 0-19 0M2 5v4h4m12 6h4v4M2.5 15a10 10 0 0 0 19 0"/></svg></div>
         </div>
         <div className="action-circle">
-          <div className="icon" onClick={roadGet}>↓</div>
-          {/* <span>Get</span> */}
+                    <div className="icon" onClick={roadGet}> <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9l6 6l6-6"/></svg>
+</div>
         </div>
       </div>
  
@@ -359,7 +437,7 @@ var recentTransfers = transfers.slice(0, 3);
         </div>
 
         {/* Карточка 2: Белая */}
-        <div className={'mc-item mc-card ' + 'bg-white'} onClick={roadCard2}>
+        <div className={'mc-item mc-card ' + 'bg-lime'} onClick={roadCard2}>
           <div className="mc-top">
             <div>
               <div className="mc-label">Current Balance</div>
@@ -396,62 +474,42 @@ var recentTransfers = transfers.slice(0, 3);
     </div>
 
 
- <div className="home-wrapper">
-      
-      {/* МОНОЛИТНАЯ КАРТА */}
-      <div className="unified-card" onClick={() => setIsSelectorOpen(true)}>
-        
+<div className="trend-card-wrapper">
+  {/* <div className="trend-header">
+    <span className="trend-title">В тренде</span>
+    <span className="trend-all">Все</span>
+  </div> */}
 
-
-      <div className="ms-container">
-      
-      <div className="ms-mini-card">
-        <div className="ms-label">capitalization</div>
-        <div className="ms-value">2,42 trill $</div>
-        <div className={'ms-change ' + 'neg'}>-2,03 %</div>
-      </div>
-
-      <div className="ms-mini-card">
-        <div className="ms-label">volume</div>
-        <div className="ms-value">101,78 bill $</div>
-        <div className={'ms-change ' + 'pos'}>+15,53 %</div>
-      </div>
-
-      <div className="ms-mini-card">
-        <div className="ms-label">dominance</div>
-        <div className="ms-value">56,30 %</div>
-        <div className="ms-subtext">Bitcoin</div>
-      </div>
-
-    </div>
-      </div>
-
-      {/* ЛЕНДИНГ ВЫБОРА МОНЕТ (MODAL) */}
-      {isSelectorOpen && (
-        <div className="lend-overlay" onClick={() => setIsSelectorOpen(false)}>
-          <div className="lend-modal" onClick={e => e.stopPropagation()}>
-            <div className="lend-handle"></div>
-            <h2 className="lend-title">Select Asset</h2>
-            <div className="lend-list">
-              {coins.map(c => (
-                <div key={c.id} className="lend-item" onClick={() => handleTradeNav(c.id)}>
-                  <div className="lend-left">
-                    <div className="lend-info">
-                      <span className="lend-name">{c.name}</span>
-                      <span className="lend-ticker">{c.id + ' / USDT'}</span>
-                    </div>
-                  </div>
-                  <div className="lend-price">
-                    {'$' + (prices[c.id] || '0.00')}
-                  </div>
-                </div>
-              ))}
-            </div>
+  <div className="trend-grid">
+    {trendCards.map(function(card) {
+      return (
+        <div key={card.id} className="trend-item" onClick={() => handleTradeNav(card.id)}>
+          <div className="trend-item-top">
+            {/* <div className="trend-icon" style={{backgroundColor: card.iconBg}}>{card.glyph}</div> */}
+            {/* <svg className="trend-chart" viewBox="0 0 100 36" preserveAspectRatio="none">
+              {card.hasData && (
+                <path
+                  d={card.pathD}
+                  fill="none"
+                  stroke="hsl(61, 85%, 78%)"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              )}
+            </svg> */}
           </div>
+          <div className="trend-row-bottom">
+            <span className="trend-ticker">{card.id}</span>
+            <span className={'trend-badge ' + (card.isPos ? 'pos' : 'neg')}>{card.pctStr}</span>
+          </div>
+          <div className="trend-price">{card.priceStr}</div>
         </div>
-      )}
+      );
+    })}
+  </div>
+</div>
 
-    </div>
   
  <div className={'bo-overlay' + (isOpen ? ' open' : '')}>
         
@@ -465,19 +523,18 @@ var recentTransfers = transfers.slice(0, 3);
             {/* ШАПКА ТИКЕТА */}
             <div className="bo-header">
               <div className="bo-col">
-                <span className="bo-label">PORTFOLIO</span>
-                <span className="bo-status">LIVE</span>
+                <span className="bo-status"></span>
               </div>
-              <button className="bo-close-btn" onClick={() => setIsOpen(false)}>
+              {/* <button className="bo-close-btn" onClick={() => setIsOpen(false)}>
                 ✕
-              </button>
+              </button> */}
             </div>
 
             {/* ГЛАВНЫЙ БАЛАНС */}
             <div className="bo-main-balance">
               <span className="bo-bal-label">TOTAL BALANCE</span>
               <span className="bo-bal-val">
-                {'$ ' + balanceStr.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                {'' + balanceStr2.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </span>
             </div>
 

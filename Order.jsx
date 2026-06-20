@@ -150,7 +150,7 @@ if (parsedAmount > 0) {
 
           <section className="px-hero-input">
             <div className="px-input-container">
-              <span className="px-currency">$</span>
+              {/* <span className="px-currency">$</span> */}
               <input
                 type="number"
                 className="px-giant-input"
