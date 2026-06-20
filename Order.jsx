@@ -37,12 +37,10 @@ function generateTradeId() {
   var parsedAmount = parseFloat(amountInput) || 0;
   var cryptoAmount = currentPrice > 0 ? (parsedAmount / currentPrice).toFixed(6) : 0;
   var requiredMargin = parsedAmount / leverage;
-<<<<<<< HEAD
+
   var fees = parsedAmount * 0.005;
   //  var fees = requiredMargin * 0.01;
-=======
-  var fees = requiredMargin * 0.01;
->>>>>>> cc07bef7176388afbfc3ab5bace100a85c58df7c
+
 var voucherStartTime = localStorage.getItem('voucher_start_time');
 var voucherExpired = voucherStartTime
   ? Math.floor((Date.now() - parseInt(voucherStartTime)) / 1000) >= 345600

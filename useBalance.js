@@ -9,13 +9,10 @@ var PROFILE_KEY    = "user_profile";
 var ALL_PROFILES   = "all_profiles";
 var TRANSFERS_KEY  = "transfer_history";
 
-<<<<<<< HEAD
-var DEFAULT_BALANCE  = 100;
-var VOUCHER_TOTAL    = 100;
-=======
+
 var DEFAULT_BALANCE  = 100.00;
 var VOUCHER_TOTAL    = 400.00;
->>>>>>> cc07bef7176388afbfc3ab5bace100a85c58df7c
+
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function dispatch(name) { window.dispatchEvent(new Event(name)); }
@@ -137,11 +134,10 @@ var newBal     = Math.max(0, parseFloat((bal + pos.margin + clampedPnl).toFixed(
     margin:           pos.margin,
     fees:             pos.fees,
     feesPaidByVoucher: pos.feesPaidByVoucher || false,
-<<<<<<< HEAD
+
    pnl:               parseFloat(clampedPnl.toFixed(2)),
-=======
-    pnl:               parseFloat(clampedPnl.toFixed(2)),
->>>>>>> cc07bef7176388afbfc3ab5bace100a85c58df7c
+
+
 pnlPercent:        parseFloat(pnlPercent.toFixed(2)),
 liqPrice:          pos.liqPrice,
 openTime:          pos.openTime,
