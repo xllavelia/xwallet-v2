@@ -12,8 +12,8 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 const Home = () => {
   const navigate = useNavigate();
   const balance = useBalance();
-var profile   = useProfile();
-var transfers = useTransfers();
+ var profile   = useProfile();
+ var transfers = useTransfers();
 
 const roadSend = () => {
     navigate("/send");
