@@ -1,4 +1,6 @@
-
+:root{
+  --xlavelia: #fff;
+}
 /* ═══════════════════════════════════════
    DESIGN TOKENS
 ═══════════════════════════════════════ */
@@ -139,7 +141,7 @@
 .et-pos-modal-lev  { font-size: 12px; color: var(--g-gold); font-weight: 700; }
 .et-pos-modal-live {
   font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 5px;
- color: hsl(61, 85%, 78%);
+ color:var(--xlavelia);
   animation: ticker-pulse 2s infinite;
 }
 .et-pos-modal-x {
@@ -178,11 +180,11 @@
 background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
-.et-pma-dup:hover { border: 1px solid hsl(61, 85%, 78%); }
+.et-pma-dup:hover { border: 1px solidvar(--xlavelia); }
 .et-pma-close {
   flex: 2; padding: 12px; 
   border-radius: 12px;
@@ -191,12 +193,12 @@ background: rgba(255, 255, 255, 0.05);
 background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.et-pma-close:hover { border: 1px solid hsl(61, 85%, 78%); }
+.et-pma-close:hover { border: 1px solidvar(--xlavelia); }
 
 /* ═══════════════════════════════════════
    TRADE — LAST TRADE PANEL
@@ -225,7 +227,7 @@ background: rgba(255, 255, 255, 0.05);
    background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 14px;
@@ -262,7 +264,7 @@ background: rgba(255, 255, 255, 0.05);
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -365,13 +367,13 @@ background: rgba(255, 255, 255, 0.05);
 .px-autoclose-body   { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .px-ac-label   { font-size: 11px; color: var(--g-dim); }
 .px-ac-options { display: flex; gap: 6px; flex-wrap: wrap; }
-.px-ac-preview { font-size: 11px; color: hsl(61, 80%, 78%); margin-top: 2px; }
+.px-ac-preview { font-size: 11px; color:var(--xlavelia); margin-top: 2px; }
 
 .px-toggle {
   width: 44px; height: 26px; border-radius: 13px; cursor: pointer;
   position: relative; transition: background 0.2s; flex-shrink: 0;
 }
-.px-toggle.on  { background:  hsl(61, 80%, 78%); }
+.px-toggle.on  { background: var(--xlavelia); }
 .px-toggle.off { background: var(--g-elevated); border: 1px solid var(--g-border-hi); }
 .px-toggle-thumb {
   position: absolute; top: 4px; width: 18px; height: 18px;
@@ -600,7 +602,7 @@ background: rgba(255, 255, 255, 0.05);
 
 
 /* ── Metrics extras ── */
-.px-liq-price, .px-after-trade { color: hsl(61, 80%, 78%); font-weight: 600; }
+.px-liq-price, .px-after-trade { color:var(--xlavelia); font-weight: 600; }
 
 
 /* ── P&L preview table ── */
@@ -648,7 +650,7 @@ background: rgba(255, 255, 255, 0.05);
 .px-success-bar {
   text-align: center;
   font-size: 13px;
-  color: hsl(61, 85%, 78%);
+  color:var(--xlavelia);
   padding: 8px;
  
   border-radius: 8px;
@@ -792,10 +794,10 @@ background: rgba(255, 255, 255, 0.05);
   --g-text:     #ececec;
   --g-muted:    #888888;
   --g-dim:      #444444;
-  --g-gold:     hsl(61, 85%, 78%);
-  /* --g-gold:    hsl(61, 85%, 78%); */
-  --g-green:    hsl(61, 85%, 78%);
-  --g-red:      hsl(61, 85%, 78%);
+  --g-gold:    var(--xlavelia);
+  /* --g-gold:   var(--xlavelia); */
+  --g-green:   var(--xlavelia);
+  --g-red:     var(--xlavelia);
 }
 
 /* Override page backgrounds */
@@ -856,7 +858,7 @@ background: rgba(255, 255, 255, 0.05);
  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -943,7 +945,7 @@ background: rgba(255, 255, 255, 0.05);
  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   color: var(--g-muted);
@@ -954,8 +956,8 @@ background: rgba(255, 255, 255, 0.05);
 }
 
 .px-lev-btn.active {
- border: 1px solid  hsl(61, 85%, 78%);
-  color: hsl(61, 80%, 78%);
+ border: 1px solid var(--xlavelia);
+  color:var(--xlavelia);
 }
 
 
@@ -1018,7 +1020,7 @@ background: rgba(255, 255, 255, 0.05);
    background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -1039,7 +1041,7 @@ background: rgba(255, 255, 255, 0.05);
 }
 
 .ht-detail-pnl { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
-.ht-detail-pnl.pos, .ht-detail-pnl.neg { color: hsl(61, 85%, 78%); }
+.ht-detail-pnl.pos, .ht-detail-pnl.neg { color:var(--xlavelia); }
 .ht-detail-pnl-val { font-size: 34px; font-weight: 900; line-height: 1; }
 .ht-detail-pnl-pct { font-size: 14px; opacity: 0.75; }
 
@@ -1048,7 +1050,7 @@ background: rgba(255, 255, 255, 0.05);
 .ht-detail-row   { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
 .ht-dl     { color: var(--g-dim); }
 .ht-dv     { color: #c0c8d8; font-weight: 500; }
-.ht-dv-liq { color: hsl(61, 85%, 78%); }
+.ht-dv-liq { color:var(--xlavelia); }
 .ht-dv-lev { color: var(--g-gold); font-weight: 700; }
 .ht-dv-date{ font-size: 11px; color: var(--g-muted); }
 
@@ -1079,7 +1081,7 @@ background: rgba(255, 255, 255, 0.05);
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 10px;
@@ -1095,7 +1097,7 @@ background: rgba(255, 255, 255, 0.05);
    background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 10px;
@@ -1117,7 +1119,7 @@ background: rgba(255, 255, 255, 0.05);
 background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   /* border: 1px solid #121212;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -1138,7 +1140,7 @@ background: rgba(255, 255, 255, 0.05);
    /* background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: hsl(61, 80%, 78%);
+  color:var(--xlavelia);
   border: 1px solid rgba(255, 255, 255, 0.05); */
 }
 
