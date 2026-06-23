@@ -4,9 +4,9 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
  
 
 // npx vite --host 0.0.0.0 --port 5173 --force
-git add .
- git commit -m "Total remake send"
-git push main
+// git add .
+//  git commit -m "Total remake send, no server"
+// git push main
 
 // rm -rf .git
 // git init
