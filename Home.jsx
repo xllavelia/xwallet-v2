@@ -5,11 +5,11 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-//  git commit -m "Total remake send, no server"
-// git push 
+//  git commit -m "battle pass card, func. remake disign voucher and refferal: only hsl"
+
 // git push -u origin main 
 
-
+// git push 
 
 
 // rm -rf .git
@@ -67,6 +67,9 @@ const roadCard2 = () => {
     navigate("/card2");
   };
 
+const roadBattlePass = () => {
+    navigate("/battlepass");
+  };
   var balanceStr = balance.toFixed();
   var balanceStr2 = balance.toFixed(2);
 
@@ -279,12 +282,23 @@ var trendCards = TREND_COINS.map(function(coin) {
     glyph: coin.glyph,
     pathD: pathD,
     hasData: hasData,
-    pctStr: (isPos ? '↑ +' : '↓ -') + Math.abs(pct).toFixed(2) + '%',
+    pctStr: (isPos ? ' +' : ' -') + Math.abs(pct).toFixed(2),
     priceStr: priceStr + ' $',
     isPos: isPos
   };
 });
 
+
+// const TicketCard = () => {
+  const [copied, setCopied] = useState(false);
+  const referralCode = "XLAVELIA26";
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(referralCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+  // };
 
 return (
     
@@ -330,16 +344,90 @@ return (
  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></g></svg>
 </div>
         </div>
-        <div className="action-circle" onClick={roadBuy}>
-          <div className="icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.5 9a10 10 0 0 0-19 0M2 5v4h4m12 6h4v4M2.5 15a10 10 0 0 0 19 0"/></svg></div>
+        <div className="action-circle" onClick={roadReferral}>
+          <div className="icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 11q.825 0 1.413-.588Q14 9.825 14 9t-.587-1.413Q12.825 7 12 7q-.825 0-1.412.587Q10 8.175 10 9q0 .825.588 1.412Q11.175 11 12 11Zm0 2q-1.65 0-2.825-1.175Q8 10.65 8 9q0-1.65 1.175-2.825Q10.35 5 12 5q1.65 0 2.825 1.175Q16 7.35 16 9q0 1.65-1.175 2.825Q13.65 13 12 13Zm0 11q-2.475 0-4.662-.938q-2.188-.937-3.825-2.574Q1.875 18.85.938 16.663Q0 14.475 0 12t.938-4.663q.937-2.187 2.575-3.825Q5.15 1.875 7.338.938Q9.525 0 12 0t4.663.938q2.187.937 3.825 2.574q1.637 1.638 2.574 3.825Q24 9.525 24 12t-.938 4.663q-.937 2.187-2.574 3.825q-1.638 1.637-3.825 2.574Q14.475 24 12 24Zm0-2q1.8 0 3.375-.575T18.25 19.8q-.825-.925-2.425-1.612q-1.6-.688-3.825-.688t-3.825.688q-1.6.687-2.425 1.612q1.3 1.05 2.875 1.625T12 22Zm-7.7-3.6q1.2-1.3 3.225-2.1q2.025-.8 4.475-.8q2.45 0 4.463.8q2.012.8 3.212 2.1q1.1-1.325 1.713-2.95Q22 13.825 22 12q0-2.075-.788-3.887q-.787-1.813-2.15-3.175q-1.362-1.363-3.175-2.151Q14.075 2 12 2q-2.05 0-3.875.787q-1.825.788-3.187 2.151Q3.575 6.3 2.788 8.113Q2 9.925 2 12q0 1.825.6 3.463q.6 1.637 1.7 2.937Z"/></svg>
+            
+            </div>
         </div>
         <div className="action-circle">
-                    <div className="icon" onClick={roadGet}> <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 9l6 6l6-6"/></svg>
-</div>
+            
+                    <div className="icon" onClick={roadBonus}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 6H6c-.932 0-1.398 0-1.766.152a2 2 0 0 0-1.082 1.083C3 7.602 3 8.068 3 9a3 3 0 1 1 0 6c0 .932 0 1.398.152 1.765a2 2 0 0 0 1.082 1.083C4.602 18 5.068 18 6 18h8m0-12h4c.932 0 1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C21 7.602 21 8.068 21 9a3 3 0 1 0 0 6c0 .932 0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C19.398 18 18.932 18 18 18h-4m0-12v12"/></svg>
+                    </div>
         </div>
       </div>
  
 
+
+
+
+
+
+      <div className="ticket-wrapper-h" onClick={roadBattlePass}>
+        <div className="ticket-main">
+          <div className="tm-header">
+            </div><div className="div-svg-xlavelia">
+
+<svg
+  className="x-wallet-logo"
+  viewBox="0 0 1299 1536"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="
+      M 462 350
+      C 465 510 466 670 470 820
+      C 472 900 475 970 478 1035
+    "
+  />
+
+  <path
+    d="
+      M 660 360
+      C 663 520 665 680 670 830
+      C 675 920 680 1010 686 1085
+    "
+  />
+
+  <path
+    d="
+      M 125 985
+      C 220 865 330 760 470 690
+      C 600 625 735 575 850 585
+      C 905 590 935 615 900 655
+      C 830 725 700 800 560 865
+      C 450 915 350 960 250 970
+    "
+  />
+
+  <path
+    d="
+      M 245 970
+      C 330 975 405 970 470 970
+      C 545 970 615 1015 690 1085
+    "
+  />
+</svg>
+        </div>
+
+</div>
+        <div className="ticket-rip">
+          <div className="hole hole-top"></div>
+          <div className="rip-line"></div>
+          <div className="hole hole-bottom"></div>
+        </div>
+
+        <div className="ticket-stub-h">
+          <div className="ts-top">
+            <div className="ts-serial">NO. 192789 <br /> S. 01</div>
+            <div className="ts-barcode"></div>
+          </div>
+          <div className="ts-bottom"></div>
+        </div>
+
+      </div>
+{/* 
  <div className="eb-container-parent">
  <div className="eb-container">
       <div className="eb-top-section" >
@@ -368,9 +456,7 @@ return (
 
       <div className="eb-assets-row">
         <div className="eb-asset-card" onClick={roadReferral}>
-          {/* <div className="eb-asset-icon usdt-bg">
-            <span className="eb-icon-symbol">₮</span>
-          </div> */}
+      
           <div className="eb-asset-info">
             <div className="eb-tag">infite frends</div>
             <div className="eb-asset-data">
@@ -383,9 +469,7 @@ return (
         <div className="eb-divider-v"></div>
 
         <div className="eb-asset-card" onClick={roadBonus}>
-          {/* <div className="eb-asset-icon eth-bg">
-            <span className="eb-icon-symbol">Ξ</span>
-          </div> */}
+        
           <div className="eb-asset-info">
             <div className="eb-tag">Bonus</div>
             <div className="eb-asset-data">
@@ -396,13 +480,12 @@ return (
         </div>
       </div>
     </div> 
-    </div>  
+    </div>   */}
 
  <div className="mc-wrapper">
       
       <div className="mc-scroll-area">
-        
-        {/* Блок добавления карты (Заглушка) */}
+       {/* Блок добавления карты (Заглушка) */}
         <div className="mc-item mc-add-card">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
@@ -413,6 +496,9 @@ return (
             <line x1="28" y1="10" x2="28" y2="14"></line>
           </svg>
         </div>
+        
+
+
 
         {/* Карточка 1: Лаймовая */}
         <div className={'mc-item mc-card ' + 'bg-lime'} onClick={roadCard}>
@@ -448,44 +534,63 @@ return (
           </div>
         </div>
 
-        {/* Карточка 2: Белая */}
-        <div className={'mc-item mc-card ' + 'bg-lime'} onClick={roadCard2}>
-          <div className="mc-top">
-            <div>
-              <div className="mc-label">Current Balance</div>
-              <div className="mc-balance">$0.00</div>
-            </div>
-            <div className="mc-contactless">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M8.5 21.3c-2.8-2.6-4.5-6.4-4.5-10.6 0-4.2 1.7-8 4.5-10.6"></path>
-                <path d="M12.5 18.5c-2-1.9-3.2-4.6-3.2-7.6 0-3 1.2-5.7 3.2-7.6"></path>
-                <path d="M16 15.2c-1.1-1.1-1.8-2.6-1.8-4.3 0-1.7.7-3.2 1.8-4.3"></path>
-                <path d="M19 12c0-.8-.3-1.6-.8-2.2"></path>
-              </svg>
-            </div>
-          </div>
+      </div>
+    </div>
+{/* 
+ <div className="eb-container-parent">
+ <div className="eb-container">
+      <div className="eb-top-section" >
+        <div className="eb-header-row">
+          <span>Today's Profit</span>
+          <svg className="eb-icon-eye" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+        
+        <div className="eb-main-balance">
+       {profit24hStr + ' USD'}
+        </div>
 
-          <div className="mc-bottom">
-            <div className="mc-info-row">
-              <span>XLAVELIA LAGA</span>
-              <span>12/26</span>
-            </div>
-            <div className="mc-number-row">
-              <span>1234 **** **** 1234</span>
-              <div className="mc-mastercard">
-                <svg width="32" height="20" viewBox="0 0 32 20" fill="none">
-                  <circle cx="10" cy="10" r="10" fill="#eb001b" fillOpacity="0.9"></circle>
-                  <circle cx="22" cy="10" r="10" fill="#f79e1b" fillOpacity="0.9"></circle>
-                </svg>
-              </div>
+        <div className="eb-stats-grid">
+          <div className="eb-stat-item">
+             <div className="eb-stat-label">Total Profit</div>
+            <div className="eb-stat-value">{(totalIncome - totalOutcome).toFixed(2) + ' USD'}</div>
+          </div>
+        
+        </div>
+      </div>
+
+      <div className="eb-divider-h"></div>
+
+      <div className="eb-assets-row">
+        <div className="eb-asset-card" onClick={roadReferral}>
+      
+          <div className="eb-asset-info">
+            <div className="eb-tag">infite frends</div>
+            <div className="eb-asset-data">
+              <span className="eb-asset-name">USDT</span>
+              <span className="eb-asset-apr">0.3%</span>
             </div>
           </div>
         </div>
 
+        <div className="eb-divider-v"></div>
+
+        <div className="eb-asset-card" onClick={roadBonus}>
+        
+          <div className="eb-asset-info">
+            <div className="eb-tag">Bonus</div>
+            <div className="eb-asset-data">
+              <span className="eb-asset-name">Gift Card</span>
+              <span className="eb-asset-apr">100$</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
-
+    </div> 
+    </div>  */}
+    
 <div className="trend-card-wrapper">
   {/* <div className="trend-header">
     <span className="trend-title">В тренде</span>
@@ -522,6 +627,7 @@ return (
   </div>
 </div>
 
+  
   
  <div className={'bo-overlay' + (isOpen ? ' open' : '')}>
         

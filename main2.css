@@ -18,6 +18,7 @@
   --g-red:       #ff4466;
   --g-green-dim: rgba(0,212,170,0.12);
   --g-red-dim:   rgba(255,68,102,0.12);
+  --bg-dark: #1a1a1a;
 }
 
 /* ═══════════════════════════════════════
@@ -389,12 +390,11 @@ background: rgba(255, 255, 255, 0.05);
 ═══════════════════════════════════════ */
 .voucher-activate-btn {
   width: calc(100% - 32px); margin: 12px 16px 0;
-  padding: 13px; background-color: #004643;
-  border: 1px solid #ABD1C6; border-radius: 12px;
-  color: #ABD1C6; font-size: 13px; font-weight: 800;
+  padding: 13px; background-color: #1a1a1a;
+  border: 1px solid var(--xlavelia); border-radius: 12px;
+  color: var(--xlavelia); font-size: 13px; font-weight: 800;
   letter-spacing: 0.1em; cursor: pointer; transition: background 0.2s;
 }
-.voucher-activate-btn:hover { background: #ABD1C6; }
 
 
 .inactive-badge { color: var(--g-dim) !important; }
@@ -1581,3 +1581,619 @@ background: rgba(255, 255, 255, 0.05);
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+
+:root {
+
+--xlavelia-soft: hsla(61, 80%, 78%, 0.1);
+--xlavelia-border: hsla(61, 80%, 78%, 0.25);
+
+--bp-black: #050505;
+--bp-card: #0b0b0b;
+
+--bp-text: #f1f1f1;
+--bp-muted: rgba(255, 255, 255, 0.4);
+--bp-border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  }
+
+.battle-pass-page {
+margin-top: 8.5vh ;
+
+min-height: 100vh;
+padding: 22px;
+
+color: var(--bp-text);
+font-family: "Unbounded", sans-serif;
+overflow-x: hidden;
+}
+
+.battle-pass-shell {
+width: min(1350px, 100%);
+margin: 0 auto;
+}
+
+/* HEADER */
+
+
+.battle-pass-eyebrow,
+.hero-kicker,
+.section-kicker,
+.status-label {
+display: block;
+color: var(--bp-muted);
+font-size: 8px;
+letter-spacing: 0.16em;
+}
+
+.battle-pass-brand h1 {
+margin: 5px 0 0;
+font-size: 18px;
+letter-spacing: -0.07em;
+}
+
+.battle-pass-premium-badge {
+display: flex;
+align-items: center;
+gap: 9px;
+padding: 10px 13px;
+border: 1px solid var(--xlavelia-border);
+color: var(--xlavelia);
+font-size: 8px;
+letter-spacing: 0.12em;
+}
+
+.premium-dot,
+.footer-status-dot {
+width: 5px;
+height: 5px;
+border-radius: 50%;
+background: var(--xlavelia);
+box-shadow: 0 0 12px var(--xlavelia);
+}
+
+/* HERO */
+
+
+.hero-content {
+align-self: center;
+padding: 0px;
+}
+
+.hero-content h2 {
+margin: 0px 0 0px;
+font-size: clamp(48px, 7vw, 92px);
+line-height: 0.86;
+letter-spacing: 0em;
+}
+
+.hero-content h2 span {
+color: var(--xlavelia);
+}
+
+
+
+
+.hero-logo-large {
+position: absolute;
+top: 50%;
+left: 50%;
+width: 185px;
+height: 220px;
+transform: translate(-50%, -50%);
+animation: logoFloat 5s ease-in-out infinite;
+}
+
+.hero-logo-large svg {
+width: 100%;
+height: 100%;
+fill: none;
+stroke: var(--xlavelia);
+stroke-width: 30;
+stroke-linecap: round;
+stroke-linejoin: round;
+filter: drop-shadow(
+0 0 25px hsla(61, 80%, 78%, 0.2)
+);
+}
+
+.hero-orbit {
+position: absolute;
+top: 50%;
+left: 50%;
+border: 1px solid var(--xlavelia-border);
+border-radius: 50%;
+transform: translate(-50%, -50%);
+}
+
+.orbit-one {
+width: 320px;
+height: 170px;
+}
+
+.orbit-two {
+width: 230px;
+height: 370px;
+transform: translate(-50%, -50%) rotate(65deg);
+}
+
+/* STATUS */
+
+.battle-pass-status {
+display: grid;
+grid-template-columns: 1fr 200px;
+}
+
+.status-main,
+.status-side {
+padding: 22px;
+}
+
+.status-side {
+border-left: 1px solid var(--bp-border);
+}
+
+.status-top {
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+}
+
+.status-level {
+display: block;
+margin-top: 6px;
+color: var(--xlavelia);
+font-size: 29px;
+letter-spacing: -0.08em;
+}
+
+.status-xp {
+color: var(--xlavelia);
+font-size: 11px;
+}
+
+.status-xp small {
+color: var(--bp-muted);
+font-size: 8px;
+}
+
+.xp-progress-wrapper {
+margin-top: 22px;
+}
+
+.xp-progress-line {
+height: 5px;
+background: rgba(255, 255, 255, 0.07);
+}
+
+.xp-progress-fill {
+height: 100%;
+background: var(--xlavelia);
+transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+box-shadow: 0 0 15px hsla(61, 80%, 78%, 0.35);
+}
+
+.xp-progress-info {
+display: flex;
+justify-content: space-between;
+margin-top: 8px;
+color: var(--bp-muted);
+font-size: 7px;
+letter-spacing: 0.1em;
+}
+
+.status-side strong {
+display: block;
+margin: 10px 0 7px;
+color: var(--xlavelia);
+font-size: 26px;
+letter-spacing: -0.08em;
+}
+
+.status-side-caption {
+color: var(--bp-muted);
+font-size: 7px;
+letter-spacing: 0.12em;
+}
+
+/* ROAD */
+
+.battle-pass-road-section,
+.battle-pass-stats {
+margin-top: 10px;
+padding: 0 1rem;
+}
+
+.section-heading {
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+margin-bottom: 25px;
+}
+
+.section-heading h3 {
+margin: 0px 0 0;
+font-size: 25px;
+letter-spacing: -0.03em;
+}
+.status-pass  {
+margin: 8px 0 0;
+font-size: 25px;
+color: var(--xlavelia);
+letter-spacing: -0.08em;
+}
+
+.road-count {
+color: var(--xlavelia);
+font-size: 8px;
+letter-spacing: 0.12em;
+}
+
+.battle-pass-road {
+position: relative;
+overflow-x: auto;
+padding: 0px 0 5px;
+overflow-x:auto;
+scroll-snap-type: x mandatory;
+scrollbar-width: none;
+scroll-behavior: smooth;
+}
+
+.battle-pass-road:-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+  height: 0;
+  width: 0;
+}
+
+.reward-list {
+position: relative;
+display: grid;
+grid-template-columns: repeat(8, 155px);
+gap: 10vh;
+min-width: max-content;
+}
+
+.road-line {
+position: absolute;
+top: 59px;
+left: 60px;
+right: 60px;
+height: 2px;
+background: var(--bp-border);
+}
+
+.road-line-progress {
+height: 100%;
+background: var(--xlavelia);
+transition: width 0.8s ease;
+box-shadow: 0 0 14px hsla(61, 80%, 78%, 0.45);
+}
+
+.reward-node {
+position: relative;
+z-index: 2;
+}
+
+.reward-node-top {
+display: flex;
+justify-content: space-between;
+margin-bottom: 15px;
+color: var(--bp-muted);
+font-size: 7px;
+letter-spacing: 0.1em;
+}
+
+.is-unlocked .reward-node-top span:last-child {
+color: var(--xlavelia);
+}
+
+.reward-square {
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 32px;
+height: 32px;
+margin-bottom: 15px;
+border: 1px solid var(--bp-border);
+background: var(--bp-card);
+cursor: pointer;
+transition: 0.25s ease;
+}
+
+.reward-card span {
+width: 7px;
+height: 7px;
+/* background: var(--bp-border); */
+transition: 0.25s ease;
+}
+
+.is-unlocked .reward-card {
+border: px solid #1a1a1a;
+background-color: #0a0a0a;
+}
+
+
+
+
+.reward-card.is-claimed {
+background: #1a1a1a;
+border-color: var(--xlavelia);
+}
+
+.reward-card.is-claimed h4 {
+color: var(--xlavelia);
+}
+
+.reward-card {
+min-height: 15vh;
+width: 25vh;
+padding: 14px;
+border: 1px solid var(--bp-border);
+background: #000;
+transition: 0.25s ease;
+}
+
+.is-locked .reward-card {
+opacity: 0.4;
+}
+
+.reward-type {
+color: var(--bp-muted);
+font-size: 8px;
+}
+
+.reward-card h4 {
+margin: 22px 0 8px;
+font-size: 10px;
+letter-spacing: -0.04em;
+}
+
+.reward-card p {
+margin: 0;
+color: var(--bp-muted);
+font-size: 8px;
+line-height: 1.5;
+}
+
+/* STATS */
+
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 10px;
+}
+
+.stat-card {
+padding: 18px;
+border: 1px solid var(--bp-border);
+/* background: var(--bp-card); */
+}
+
+.stat-card span {
+color: var(--bp-muted);
+font-size: 7px;
+letter-spacing: 0.12em;
+}
+
+.stat-card strong {
+display: block;
+margin: 22px 0 10px;
+color: var(--xlavelia);
+font-size: 24px;
+letter-spacing: -0.08em;
+}
+
+.stat-card small {
+color: var(--bp-muted);
+font-size: 7px;
+}
+
+/* FOOTER */
+
+.battle-pass-footer {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-top: 60px;
+padding: 20px 20px;
+border-top: 1px solid var(--bp-border);
+color: var(--bp-muted);
+font-size: 7px;
+}
+
+.footer-brand {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.footer-links {
+display: flex;
+gap: 18px;
+}
+
+.footer-links button {
+padding: 0;
+border: 0;
+background: none;
+color: var(--bp-muted);
+font: inherit;
+font-size: 7px;
+letter-spacing: 0.12em;
+cursor: pointer;
+transition: 0.2s ease;
+}
+
+.footer-links button:hover {
+color: var(--xlavelia);
+}
+
+/* TOAST */
+
+.battle-pass-toast {
+position: fixed;
+right: 24px;
+bottom: 24px;
+z-index: 20;
+display: flex;
+align-items: center;
+gap: 12px;
+min-width: 230px;
+padding: 14px;
+border: 1px solid var(--xlavelia);
+background: var(--bp-card);
+box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+animation: toastIn 0.3s ease forwards;
+}
+
+.toast-check {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 25px;
+height: 25px;
+background: var(--xlavelia);
+color: var(--bp-black);
+font-size: 13px;
+}
+
+.battle-pass-toast strong,
+.battle-pass-toast span {
+display: block;
+}
+
+.battle-pass-toast strong {
+color: var(--xlavelia);
+font-size: 8px;
+letter-spacing: 0.1em;
+}
+
+.battle-pass-toast span {
+margin-top: 5px;
+color: var(--bp-muted);
+font-size: 8px;
+}
+
+/* TEST */
+
+.battle-pass-test-trigger {
+position: fixed;
+right: 5px;
+bottom: 5px;
+width: 3px;
+height: 3px;
+border: 0;
+background: transparent;
+}
+
+a{
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  color: inherit;
+  text-decoration: none;
+  transition: 0.5s ease;
+}
+
+
+/* ANIMATION */
+
+@keyframes logoFloat {
+0%,
+100% {
+transform: translate(-50%, -50%) translateY(0);
+}
+
+50% {
+transform: translate(-50%, -50%) translateY(-10px);
+}
+}
+
+@keyframes toastIn {
+from {
+opacity: 0;
+transform: translateY(12px);
+}
+
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+.battle-pass-hero {
+grid-template-columns: 1fr;
+}
+
+.hero-visual {
+min-height: 300px;
+border-top: 1px solid var(--bp-border);
+border-left: 0;
+}
+
+.battle-pass-status {
+grid-template-columns: 1fr;
+}
+
+.status-side {
+border-top: 1px solid var(--bp-border);
+border-left: 0;
+}
+
+.stats-grid {
+grid-template-columns: repeat(2, 1fr);
+}
+}
+
+@media (max-width: 600px) {
+.battle-pass-page {
+padding: 12px;
+}
+
+.battle-pass-header {
+align-items: flex-start;
+flex-direction: column;
+gap: 16px;
+}
+
+.battle-pass-premium-badge {
+width: 100%;
+}
+
+.hero-content {
+padding: 35px 25px;
+}
+
+.hero-content h2 {
+font-size: 54px;
+}
+
+.section-heading {
+align-items: flex-start;
+flex-direction: column;
+gap: 12px;
+}
+
+.stats-grid {
+grid-template-columns: 1fr 1fr;
+}
+
+.battle-pass-footer {
+align-items: flex-start;
+flex-direction: column;
+gap: 15px;
+}
+
+.footer-links {
+flex-wrap: wrap;
+}
+}
+
+
+

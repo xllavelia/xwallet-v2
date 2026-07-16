@@ -94,7 +94,7 @@ const Bonus = () => {
               <h2>DISCOUNT VOUCHER <span className="asterisk"></span></h2>
             </div>
             <div className="tm-amount">
-              <span className="digits">$100</span>
+              <span className="digits">$400</span>
             </div>
           </div>
 

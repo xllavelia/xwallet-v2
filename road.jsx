@@ -15,6 +15,8 @@ import Card from "./Card";
 import Card2 from "./Card2";
 import Trade from "./Trade";
 import Order from "./Order";
+import BattlePass from "./BattlePass";
+
 
 const NavigationBar = () => {
   return (
@@ -41,6 +43,8 @@ const App = () => {
          <Route path="/card2" element={<Card2 />} />
          <Route path="/trade" element={<Trade />} />
          <Route path="/order" element={<Order />} />
+         <Route path="/battlepass" element={<BattlePass />} />
+
       </Routes>
     </BrowserRouter>
   );
