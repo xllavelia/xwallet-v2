@@ -1626,7 +1626,7 @@ border-radius: 15px;
 border-top-right-radius: 30px;
 border-bottom-right-radius: 30px;
 /* padding: 5px; */
-  height: 22vh;
+  height: 20vh;
   position: relative;
   /* overflow: hidden; */
   /* box-shadow: 0 10px 0px rgba(0,0,0,0.5); */
@@ -1645,7 +1645,7 @@ border-radius: 15px;
 border-top-right-radius: 30px;
 border-bottom-right-radius: 30px;
 /* padding: 5px; */
-  height: 22vh;
+  height: 20vh;
   position: relative;
   /* overflow: hidden; */
   /* box-shadow: 0 10px 0px rgba(0,0,0,0.5); */
@@ -1876,6 +1876,26 @@ border-bottom-right-radius: 30px;
   );
 }
 
+
+/* Чистый CSS штрих-код */
+.ts-barcode-v {
+  width: 30px;
+  height: 80px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--tkt-lime),
+    var(--tkt-lime) 2px,
+    transparent 2px,
+    transparent 4px,
+    var(--tkt-lime) 4px,
+    var(--tkt-lime) 5px,
+    transparent 5px,
+    transparent 8px,
+    var(--tkt-lime) 8px,
+    var(--tkt-lime) 12px
+  );
+}
+
 .ts-code {
   font-size: 12px;
   font-weight: 900;
@@ -2080,7 +2100,7 @@ border-bottom-right-radius: 30px;
 }
 
 .voucher-container {
-  max-width: 88%;
+  max-width: 95%;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Inter', sans-serif;

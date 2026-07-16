@@ -121,7 +121,7 @@ const Bonus = () => {
         <div className="ticket-stub">
           <div className="ts-top">
             <div className="ts-serial">{'NO. ' + ticketId}</div>
-            <div className="ts-barcode"></div>
+            <div className="ts-barcode-v"></div>
           </div>
           <div className="ts-bottom"></div>
         </div>
