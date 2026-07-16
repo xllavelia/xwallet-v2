@@ -5,7 +5,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-//  git commit -m "fix console, hight and bug tap + animation lend "
+//  git commit -m "mini fix card battle pass "
 
 // git push -u origin main 
 
@@ -368,51 +368,37 @@ return (
       <div className="ticket-wrapper-h" onClick={roadBattlePass}>
         <div className="ticket-main">
           <div className="tm-header">
-            </div><div className="div-svg-xlavelia">
+            </div>
+            
 
-<svg
-  className="x-wallet-logo"
-  viewBox="0 0 1299 1536"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path
-    d="
-      M 462 350
-      C 465 510 466 670 470 820
-      C 472 900 475 970 478 1035
-    "
-  />
 
-  <path
-    d="
-      M 660 360
-      C 663 520 665 680 670 830
-      C 675 920 680 1010 686 1085
-    "
-  />
 
-  <path
-    d="
-      M 125 985
-      C 220 865 330 760 470 690
-      C 600 625 735 575 850 585
-      C 905 590 935 615 900 655
-      C 830 725 700 800 560 865
-      C 450 915 350 960 250 970
-    "
-  />
 
-  <path
-    d="
-      M 245 970
-      C 330 975 405 970 470 970
-      C 545 970 615 1015 690 1085
-    "
-  />
-</svg>
+        <div className="battle-pass-center">
+
+      
+            <h2>
+                BATTLE
+                <br />
+                PASS
+
+            </h2>
+{/* <div className="div-svg-xlavelia"> */}
+
+        {/* </div> */}
+
+
+            <div className="battle-pass-line"></div>
+
+            <p>
+                UNLOCK THE NEXT LEVEL
+            </p>
+
         </div>
 
-</div>
+    </div>
+    
+
         <div className="ticket-rip">
           <div className="hole hole-top"></div>
           <div className="rip-line"></div>

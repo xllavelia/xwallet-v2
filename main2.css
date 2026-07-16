@@ -21,6 +21,158 @@
   --bg-dark: #1a1a1a;
 }
 
+.apple-refresh {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 9999;
+
+  width: 92px;
+  height: 92px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  border-radius: 32px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.16),
+      transparent 65%
+    ),
+    rgba(20, 20, 20, 0.72);
+
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+
+  box-shadow:
+    0 15px 50px rgba(0, 0, 0, 0.35),
+    inset 0 1px rgba(255, 255, 255, 0.12);
+
+  pointer-events: none;
+
+  transition:
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
+}
+
+.apple-refresh::before {
+  content: "";
+
+  position: absolute;
+  inset: -18px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    hsl(61, 80%, 78%, 0.3),
+    transparent 65%
+  );
+
+  filter: blur(18px);
+
+  opacity: 0.6;
+
+  animation: appleGlow 2s ease-in-out infinite;
+}
+
+.apple-refresh__orb {
+  position: relative;
+  z-index: 1;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  animation: appleFloat 2s ease-in-out infinite;
+}
+
+.apple-refresh__orb span {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: hsl(61, 80%, 78%);
+
+  box-shadow: 0 0 12px hsl(61, 80%, 78%);
+
+  transform-origin: 0 0;
+}
+
+.apple-refresh__orb span:nth-child(1) {
+  transform: rotate(0deg) translateX(13px);
+}
+
+.apple-refresh__orb span:nth-child(2) {
+  transform: rotate(90deg) translateX(13px);
+}
+
+.apple-refresh__orb span:nth-child(3) {
+  transform: rotate(180deg) translateX(13px);
+}
+
+.apple-refresh__orb span:nth-child(4) {
+  transform: rotate(270deg) translateX(13px);
+}
+
+.apple-refresh__text {
+  position: relative;
+  z-index: 1;
+
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.is-refreshing .apple-refresh__orb {
+  animation: appleSpin 0.8s linear infinite;
+}
+
+@keyframes appleSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes appleFloat {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-3px) scale(1.08);
+  }
+}
+
+@keyframes appleGlow {
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+
 /* ═══════════════════════════════════════
    KEYFRAMES
 ═══════════════════════════════════════ */
@@ -1601,7 +1753,7 @@ background: rgba(255, 255, 255, 0.05);
   }
 
 .battle-pass-page {
-margin-top: 8.5vh ;
+margin-top: 1vh ;
 
 min-height: 100vh;
 padding: 22px;
@@ -2196,4 +2348,105 @@ flex-wrap: wrap;
 }
 
 
+
+
+/* CENTER */
+
+.battle-pass-center {
+padding: 1rem;
+}
+
+.battle-pass-eyebrow {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: hsla(61, 80%, 78%, 0.55);
+
+    font-size: 8px;
+    letter-spacing: 0.3em;
+}
+
+.battle-pass-center h2 {
+
+    color: hsl(61, 80%, 78%);
+
+    font-size: clamp(34px, 5vw, 54px);
+    line-height: 0.82;
+    letter-spacing: -0.06em;
+    font-weight: 500;
+}
+
+.battle-pass-line {
+    width: 35px;
+    height: 1px;
+
+    margin: 16px 0 10px;
+
+    background: hsl(61, 80%, 78%);
+}
+
+.battle-pass-center p {
+
+
+
+    color: rgba(255, 255, 255, 0.42);
+
+    font-size: 9px;
+    letter-spacing: 0.22em;
+}
+
+
+/* BOTTOM */
+
+.battle-pass-bottom {
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+}
+
+.battle-pass-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.battle-pass-info span {
+    color: hsl(61, 80%, 78%);
+
+    font-size: 15px;
+    line-height: 1;
+}
+
+.battle-pass-info small {
+    color: rgba(255, 255, 255, 0.28);
+
+    font-size: 7px;
+    letter-spacing: 0.16em;
+}
+
+.battle-pass-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-left: auto;
+
+    color: rgba(255, 255, 255, 0.32);
+
+    font-size: 8px;
+    letter-spacing: 0.16em;
+}
+
+.battle-pass-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: hsl(61, 80%, 78%);
+
+    box-shadow:
+        0 0 10px hsla(61, 80%, 78%, 0.8);
+}
 

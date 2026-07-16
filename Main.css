@@ -1702,18 +1702,13 @@ background: rgba(255, 255, 255, 0.05);
 
 .div-svg-xlavelia{
   display: flex;
-  justify-content: center;
-  align-items: center;
-  /* height: 2vh; */
- 
 }
 
 .x-wallet-logo { 
-  width: 210px;
-  height: 210px;
+  z-index: 10;
+  width: 60px;
+  height: 60px;
   color: var(--tkt-lime);
-margin-left: 15%;
-  align-items: center;
 }
 
 .x-wallet-logo path {
@@ -1767,7 +1762,7 @@ border-bottom-right-radius: 30px;
 .ticket-main {
   flex: 1;
   position: relative;
-  display: flex;
+  display: grid;
   flex-direction: column;
 }
 

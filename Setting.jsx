@@ -41,7 +41,9 @@ const Setting = () => {
   var avatarInitial  = profile.name ? profile.name[0].toUpperCase() : "U";
   var copyBtnLabel   = copyDone ? "Copied!" : "Copy";
   var toggleClass    = "custom-toggle " + (notifications ? "toggle-on" : "toggle-off");
-
+  function refresh(){
+    window.location.reload()
+  }
   return (
     <div className="SettingContent">
 
@@ -135,7 +137,7 @@ const Setting = () => {
             <div className="footer-link-item" 
             // onClick={resetAll}
             >Privacy Policy</div>
-            <div className="footer-link-item">Terms Of Use</div>
+            <div className="footer-link-item" onClick={refresh}>Terms Of Use</div>
           </div>
           <div className="app-version-info">
             <span>xwallet</span>
