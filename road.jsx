@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import {
   BrowserRouter,
   Routes,
   Route,
-  useLocation,
-  useNavigationType,
+  Outlet,
+  Navigate
 } from "react-router-dom";
 
 import "./Main.css";
@@ -27,21 +27,21 @@ import BattlePass from "./BattlePass";
 
 import PageTransition from "./PageTransition";
 
-const routes = [
-  { path: "/", element: <Home /> },
-  { path: "/send", element: <Send /> },
-  { path: "/buy", element: <Buy /> },
-  { path: "/get", element: <Get /> },
-  { path: "/setting", element: <Setting /> },
-  { path: "/history", element: <History /> },
-  { path: "/state", element: <State /> },
-  { path: "/bonus", element: <Bonus /> },
-  { path: "/referral", element: <Referral /> },
-  { path: "/card", element: <Card /> },
-  { path: "/card2", element: <Card2 /> },
-  { path: "/trade", element: <Trade /> },
-  { path: "/order", element: <Order /> },
-  { path: "/battlepass", element: <BattlePass /> },
+// Оставляем в массиве только острова (без "/")
+const islandRoutes = [
+  { path: "send", element: <Send /> },
+  { path: "buy", element: <Buy /> },
+  { path: "get", element: <Get /> },
+  { path: "setting", element: <Setting /> },
+  { path: "history", element: <History /> },
+  { path: "state", element: <State /> },
+  { path: "bonus", element: <Bonus /> },
+  { path: "referral", element: <Referral /> },
+  { path: "card", element: <Card /> },
+  { path: "card2", element: <Card2 /> },
+  { path: "trade", element: <Trade /> },
+  { path: "order", element: <Order /> },
+  { path: "battlepass", element: <BattlePass /> },
 ];
 
 const NavigationBar = () => {
@@ -49,49 +49,40 @@ const NavigationBar = () => {
 };
 
 const AppRoutes = () => {
-  const location = useLocation();
-  const navigationType = useNavigationType();
-
-  const previousLocation = useRef(location);
-
-  const isOpening =
-    navigationType === "PUSH" &&
-    previousLocation.current.key !== location.key && location.pathname !== "/";
-
-  const backgroundLocation = previousLocation.current;
-
-  useEffect(() => {
-    previousLocation.current = location;
-  }, [location]);
-
   return (
-    <>
-      <Routes location={isOpening ? backgroundLocation : location}>
-        {routes.map((route) => (
+    <Routes>
+      {/* 
+        Главный роут ("/").
+        Компонент <Home /> рендерится один раз и навсегда остается в DOM.
+        Компонент <Outlet /> работает как портал: роутер будет монтировать 
+        острова прямо в него, не трогая фон.
+      */}
+      <Route
+        path="/"
+        element={
+          <>
+            <Home />
+            <Outlet />
+          </>
+        }
+      >
+        {/* Все острова становятся дочерними маршрутами */}
+        {islandRoutes.map((route) => (
           <Route
             key={route.path}
             path={route.path}
-            element={route.element}
+            element={
+              <PageTransition>
+                {route.element}
+              </PageTransition>
+            }
           />
         ))}
-      </Routes>
+      </Route>
 
-<Routes>
-</Routes>
-      {isOpening && (
-        <PageTransition>
-          <Routes location={location}>
-            {routes.map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={route.element}
-              />
-            ))}
-          </Routes>
-        </PageTransition>
-      )}
-    </>
+      {/* Fallback для неизвестных путей */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
 
@@ -105,3 +96,5 @@ const App = () => {
 };
 
 export default App;
+
+

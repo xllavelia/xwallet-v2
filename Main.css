@@ -31,7 +31,7 @@ overflow: hidden;
 .page-transition {
   position: fixed;
 
-  inset: 50px 0 0;
+  inset: 70px 0 0;
 
   z-index: 1000;
 
@@ -45,25 +45,29 @@ overflow: hidden;
   border-radius: 28px 28px 0 0;
 
   box-shadow:
-    0 -12px 40px rgba(0, 0, 0, 0.18),
-    0 -2px 10px rgba(0, 0, 0, 0.12);
+    0 -12px 40px rgba(0, 0, 0, 0.21),
+    0 -2px 10px rgba(0, 0, 0, 0.15);
 
-  animation: sheetOpen 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: sheetOpen 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform; 
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 
-  transition:
-    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-  will-change: transform;
+
+.page-transition--dragging {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+}
+
+.page-transition--closing {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 1, 1);
 }
 
 .page-transition--dragging {
   transition: none;
 }
 
-.page-transition--closing {
-  transition:
-    transform 0.42s cubic-bezier(0.32, 0, 0.67, 0);
-}
 
 .page-transition__drag-zone {
   position: relative;
@@ -86,7 +90,7 @@ overflow: hidden;
 }
 
 .page-transition__handle {
-  width: 42px;
+  width: 62px;
   height: 5px;
 
   margin-top: 12px;
@@ -101,7 +105,7 @@ overflow: hidden;
 }
 
 .page-transition__drag-zone:active .page-transition__handle {
-  width: 52px;
+  width: 72px;
 
   background: rgba(255, 255, 255, 0.42);
 }

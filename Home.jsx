@@ -5,7 +5,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-//  git commit -m "add important lend for all, bug tap"
+//  git commit -m "fix console, hight and bug tap + animation lend "
 
 // git push -u origin main 
 

@@ -1,99 +1,137 @@
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
-
+import { useRef, useState, useEffect } from "react";
 
 function PageTransition({ children }) {
   const navigate = useNavigate();
+  
+  // Реф для зоны свайпа, чтобы повесить нативные слушатели
+  const dragZoneRef = useRef(null);
 
+  // Храним всю физику в рефах, чтобы не дергать рендер React лишний раз
   const startY = useRef(0);
   const lastY = useRef(0);
   const lastTime = useRef(0);
   const velocity = useRef(0);
+  const offsetRef = useRef(0); 
 
   const [offset, setOffset] = useState(0);
-  const [dragging, setDragging] = useState(false);
   const [closing, setClosing] = useState(false);
 
-  const handlePointerDown = (event) => {
-    startY.current = event.clientY;
-    lastY.current = event.clientY;
-    lastTime.current = performance.now();
-    velocity.current = 0;
+  useEffect(() => {
+    const dragZone = dragZoneRef.current;
+    if (!dragZone) return;
 
-    event.currentTarget.setPointerCapture(event.pointerId);
+    let dragging = false;
 
-    setDragging(true);
-  };
+    const handleTouchStart = (event) => {
+      if (closing) return;
+      
+      dragging = true;
+      // Поддерживаем и мышь, и пальцы
+      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+      
+      startY.current = clientY;
+      lastY.current = clientY;
+      lastTime.current = performance.now();
+      velocity.current = 0;
+    };
 
-  const handlePointerMove = (event) => {
-    if (!dragging || closing) return;
+    const handleTouchMove = (event) => {
+      if (!dragging || closing) return;
 
-    const now = performance.now();
-    const deltaY = event.clientY - lastY.current;
-    const deltaTime = now - lastTime.current;
+      // КРИТИЧЕСКИ ВАЖНО: Останавливает нативный скролл браузера. 
+      // Браузер больше не будет "глотать" клики после уничтожения компонента.
+      event.preventDefault();
 
-    if (deltaTime > 0) {
-      velocity.current = deltaY / deltaTime;
-    }
+      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+      const now = performance.now();
+      const deltaY = clientY - lastY.current;
+      const deltaTime = now - lastTime.current;
 
-    lastY.current = event.clientY;
-    lastTime.current = now;
+      if (deltaTime > 0) {
+        velocity.current = deltaY / deltaTime;
+      }
 
-    const distance = event.clientY - startY.current;
+      lastY.current = clientY;
+      lastTime.current = now;
 
-    if (distance > 0) {
-      const resistance = Math.min(distance * 0.72, 420);
+      const distance = clientY - startY.current;
 
-      setOffset(resistance);
-    }
-  };
+      if (distance > 0) {
+        const resistance = Math.min(distance * 0.72, 420);
+        offsetRef.current = resistance;
+        setOffset(resistance);
+      }
+    };
 
-  const handlePointerUp = () => {
-    if (!dragging || closing) return;
+    const handleTouchEnd = () => {
+      if (!dragging || closing) return;
+      dragging = false;
 
-    setDragging(false);
+      const shouldClose = offsetRef.current > 110 || velocity.current > 1.1;
 
-    const shouldClose =
-      offset > 110 || velocity.current > 1.1;
+      if (shouldClose) {
+        setClosing(true);
+        
+        // Сбрасываем фокус, чтобы убить :hover и :active состояния
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
 
-const fakeTap = () => {
-  const element = document.elementFromPoint(1, 1);
+        offsetRef.current = window.innerHeight;
+        setOffset(window.innerHeight);
 
-  if (element) {
-    element.click();
-  }
-};
+        setTimeout(() => {
+          navigate(-1);
+        }, 400);
+        
+        return;
+      }
 
-    if (shouldClose) {
-      setClosing(true);
+      // Возврат на место, если свайп был слишком слабым
+      offsetRef.current = 0;
+      setOffset(0);
+    };
 
-      setOffset(window.innerHeight);
+    // Вешаем слушатели с { passive: false }, чтобы preventDefault работал
+    const options = { passive: false };
+    
+    // Сенсорные события (мобилки)
+    dragZone.addEventListener("touchstart", handleTouchStart, options);
+    dragZone.addEventListener("touchmove", handleTouchMove, options);
+    dragZone.addEventListener("touchend", handleTouchEnd);
+    dragZone.addEventListener("touchcancel", handleTouchEnd);
+    
+    // События мыши (десктоп/тесты)
+    dragZone.addEventListener("mousedown", handleTouchStart, options);
+    window.addEventListener("mousemove", handleTouchMove, options);
+    window.addEventListener("mouseup", handleTouchEnd);
 
-      setTimeout(() => {
-        navigate(-1);
-      }, 420);
-
-      return;
-    }
-
-    setOffset(0);
-  };
+    return () => {
+      dragZone.removeEventListener("touchstart", handleTouchStart);
+      dragZone.removeEventListener("touchmove", handleTouchMove);
+      dragZone.removeEventListener("touchend", handleTouchEnd);
+      dragZone.removeEventListener("touchcancel", handleTouchEnd);
+      
+      dragZone.removeEventListener("mousedown", handleTouchStart);
+      window.removeEventListener("mousemove", handleTouchMove);
+      window.removeEventListener("mouseup", handleTouchEnd);
+    };
+  }, [closing, navigate]);
 
   return (
     <div
-      className={`page-transition ${
-        dragging ? "page-transition--dragging" : ""
-      } ${closing ? "page-transition--closing" : ""}`}
+      className={`page-transition ${closing ? "page-transition--closing" : ""}`}
       style={{
         transform: `translateY(${offset}px)`,
+        // Пропускаем клики сквозь остров во время 420мс анимации закрытия
+        pointerEvents: closing ? "none" : undefined,
       }}
     >
-      <div
-        className="page-transition__drag-zone"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
+      <div 
+        className="page-transition__drag-zone" 
+        ref={dragZoneRef}
+        style={{ touchAction: "none" }}
       >
         <div className="page-transition__handle" />
       </div>

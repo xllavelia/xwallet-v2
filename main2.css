@@ -1166,7 +1166,7 @@ background: rgba(255, 255, 255, 0.05);
 
 .SendContent {
   background: #121212;
-  min-height: 100vh;
+  min-height: 90vh;
   font-family: 'Inter', sans-serif;
   color: #ffffff;
   -webkit-tap-highlight-color: transparent;
@@ -1175,7 +1175,7 @@ background: rgba(255, 255, 255, 0.05);
 /* ── Step flow container — handles the slide transition ─────────────── */
 .snd-flow {
   position: relative;
-  min-height: 100vh;
+  min-height: 90vh;
   overflow: hidden;
 }
 
