@@ -38,7 +38,6 @@ const Get = () => {
 
   return (
     <div className="GetContent">
-      <div className="Road-Home" onClick={roadHome}></div>
 
       <div className="get-page">
         <div className="get-content">

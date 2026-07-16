@@ -122,7 +122,6 @@ const navigate = useNavigate();
   return (
     
     <main className="battle-pass-page">
-<div className="Road-Home" onClick={roadHome}></div>
 
       <section className="battle-pass-shell">
         {/* <section className="battle-pass-hero">

@@ -37,7 +37,6 @@ const roadHome = () => {
 
 
   return (<div className="CardContent">
-<div className="Road-Home" onClick={roadHome}></div>
 
  <div className="card-details-wrapper">
       

@@ -123,7 +123,7 @@ const Send = () => {
       setStatusMsg("Sent $" + amt.toFixed(2) + " to " + selectedContact.name);
       setStatusOk(true);
       setSent(true);
-      setTimeout(function () { navigate("/"); }, 1500);
+      setTimeout(function () { navigate(-1); }, 1500);
     } else {
       setSwipeX(0);
     }
@@ -159,7 +159,6 @@ const Send = () => {
 
         {/* ── STEP 1 — SEARCH & SELECT ───────────────────────────── */}
         <div className="snd-step snd-step-search">
-          <div className="Road-Home" onClick={roadHome}></div>
 
           <div className="snd-search-header">
             <span className="snd-eyebrow">Step 1 of 2</span>

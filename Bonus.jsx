@@ -73,7 +73,6 @@ const Bonus = () => {
 
   return (
     <div className="BonusContent">
-      <div className="Road-Home" onClick={roadHome}></div>
 
       <div className="ticket-wrapper">
         <div className="ticket-main">

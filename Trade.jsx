@@ -138,7 +138,7 @@ const Trade = () => {
     closePositionById(posId, numericPrice);
     setActivePosId(null);
   }
-  function roadHome()          { navigate("/"); }
+  function roadHome()          { navigate(-1); }
   function handleTimeframe(tf) { setTimeframe(tf); }
 
   useEffect(function() {
@@ -234,6 +234,22 @@ useEffect(function() {
     } // <--- ДОБАВЛЕНА НЕДОСТАЮЩАЯ СКОБКА ТУТ
   });
 }, [numericPrice]);
+
+function navigateLong(){
+  navigate(-1)
+
+setTimeout(() => {
+             navigate('/order', { state: { coin: currentCoin, type: 'long',  price: currentPrice, change: priceChange } })
+    }, 10)
+}
+
+function navigateShort(){
+  navigate(-1)
+
+setTimeout(() => {
+ navigate('/order', { state: { coin: currentCoin, type: 'short', price: currentPrice, change: priceChange } })   
+    }, 10)
+}
   return (
     <div className="TradeContent">
       <div className="Road-Home" onClick={roadHome}></div>
@@ -370,8 +386,8 @@ useEffect(function() {
         </div>
 
         <div className="et-bottom-bar">
-          <button className="et-btn-trade long"  onClick={() => navigate('/order', { state: { coin: currentCoin, type: 'long',  price: currentPrice, change: priceChange } })}>Long</button>
-          <button className="et-btn-trade short" onClick={() => navigate('/order', { state: { coin: currentCoin, type: 'short', price: currentPrice, change: priceChange } })}>Short</button>
+          <button className="et-btn-trade long"  onClick={navigateLong}>Long</button>
+          <button className="et-btn-trade short" onClick={navigateShort}>Short</button>
         </div>
       </div>
     </div>

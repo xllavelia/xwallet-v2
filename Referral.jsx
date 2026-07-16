@@ -21,7 +21,6 @@ const roadHome = () => {
 
   return (<div className="ReferralContent">
     <div className="ref-page-wrapper">
-<div className="Road-Home" onClick={roadHome}></div>
 
 
       {/* PARTNER CARD (Верхний блок) */}

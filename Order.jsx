@@ -102,7 +102,7 @@ if (parsedAmount > 0) {
   }
 }
 
-  function roadHome() { navigate("/trade"); }
+  function roadHome() { navigate(-1); }
 
   function handleOpenPosition() {
     if (isBalanceLow || parsedAmount <= 0 || submitted) return;
@@ -130,12 +130,13 @@ if (parsedAmount > 0) {
     if (feesFromVoucher > 0) { writeVoucherUsed(newVoucherUsed); }
     addPosition(pos);
     setSubmitted(true);
-    setTimeout(function() { navigate('/trade', { state: { coin: coin } }); }, 1200);
+    setTimeout(function() { navigate(-1, { state: { coin: coin } }); }, 1200);
   }
 
   return (
     <div className="OrderContent">
       <div className="Road-Home" onClick={roadHome}></div>
+
       <div className="premium-exchange-wrapper">
 
         <header className="px-header">

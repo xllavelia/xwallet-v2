@@ -93,7 +93,6 @@ const roadHome = () => {
    }; 
 
   return (<div className="BuyContent">
-<div className="Road-Home" onClick={roadHome}></div>
 
     <div className="ex-container">
       

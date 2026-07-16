@@ -5,7 +5,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-//  git commit -m "battle pass card, func. remake disign voucher and refferal: only hsl"
+//  git commit -m "add important lend for all, bug tap"
 
 // git push -u origin main 
 
@@ -22,6 +22,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 // git push -f origin main
 
 const Home = () => {
+  
   const navigate = useNavigate();
   const balance = useBalance();
  var profile   = useProfile();

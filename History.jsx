@@ -68,7 +68,7 @@ const History = () => {
   const [selectedActivePosId,    setSelectedActivePosId]   = useState(null);
   const [livePrices,             setLivePrices]            = useState({});
 
-  function roadHome() { navigate("/"); }
+  function roadHome() { navigate(-1); }
 
   useEffect(function() {
     if (positions.length === 0) return;
@@ -160,11 +160,20 @@ const History = () => {
   }
   function handleDuplicate() {
     if (!managedPos) return;
+navigate(-1)
+
+setTimeout(() => {
     navigate('/order', { state: { coin: managedPos.coin, type: managedPos.type, price: managedPos.livePrice > 0 ? managedPos.livePrice.toString() : managedPos.entryPrice.toString(), change: '+0.00%', leverage: managedPos.leverage, amount: managedPos.amount } });
+}, 10)
   }
+   
   function handleGoToChart() {
     if (!managedPos) return;
+navigate(-1)
+
+setTimeout(() => {
     navigate('/trade', { state: { coin: managedPos.coin } });
+    }, 10)
   }
 
   var sel = selectedCompletedTrade;
@@ -212,6 +221,7 @@ const History = () => {
 const [recentTransfers, setRecentTransfers] = useState([]);
 
   return (
+    
     <div className="HistoryContent">
       <div className="Road-Home" onClick={roadHome}></div>
 

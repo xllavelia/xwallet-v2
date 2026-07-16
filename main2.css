@@ -1165,7 +1165,7 @@ background: rgba(255, 255, 255, 0.05);
 
 
 .SendContent {
-  background: #111111;
+  background: #121212;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   color: #ffffff;
@@ -1182,7 +1182,7 @@ background: rgba(255, 255, 255, 0.05);
 .snd-step {
   position: absolute;
   inset: 0;
-  padding: 10.5vh 24px 32px;
+  padding: 1vh 24px 32px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

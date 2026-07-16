@@ -43,7 +43,6 @@ const roadHome = () => {
 
 
   return (<div className="StateContent">
-<div className="Road-Home" onClick={roadHome}></div>
 
       <div className="profit-panel-wrapper">
       <div className="profit-panel">

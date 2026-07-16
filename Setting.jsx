@@ -44,7 +44,6 @@ const Setting = () => {
 
   return (
     <div className="SettingContent">
-      <div className="Road-Home" onClick={roadHome}></div>
 
       <div className="settings-layout">
 
