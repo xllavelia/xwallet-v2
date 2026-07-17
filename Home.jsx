@@ -8,7 +8,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 // git commit -m "CENTER SUSTEM, new mudule emblem and ads!"
 // git push -u origin main 
 
-git push 
+// git push 
 
 
 // rm -rf .git
