@@ -11,6 +11,7 @@ import "./Main.css";
 import "./Transfersystem.css";
 
 import Home from "./Home";
+import HomeLend from "./HomeLend";
 import Send from "./Send";
 import Buy from "./Buy";
 import Get from "./Get";
@@ -24,12 +25,17 @@ import Card2 from "./Card2";
 import Trade from "./Trade";
 import Order from "./Order";
 import BattlePass from "./BattlePass";
+import Ads from "./Ads";
+import Emblem from "./Emblem";
+
+
 
 import PageTransition from "./PageTransition";
 
 // Оставляем в массиве только острова (без "/")
 const islandRoutes = [
   { path: "send", element: <Send /> },
+  { path: "homelend", element: <HomeLend /> },
   { path: "buy", element: <Buy /> },
   { path: "get", element: <Get /> },
   { path: "setting", element: <Setting /> },
@@ -42,6 +48,9 @@ const islandRoutes = [
   { path: "trade", element: <Trade /> },
   { path: "order", element: <Order /> },
   { path: "battlepass", element: <BattlePass /> },
+  { path: "ads", element: <Ads /> },
+  { path: "emblem", element: <Emblem /> }
+
 ];
 
 const NavigationBar = () => {

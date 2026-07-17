@@ -5,10 +5,10 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "card module !"
+// git commit -m "CENTER SUSTEM, new mudule emblem and ads!"
 // git push -u origin main 
 
-// git push 
+git push 
 
 
 // rm -rf .git
@@ -26,6 +26,11 @@ const Home = () => {
   const balance = useBalance();
  var profile   = useProfile();
  var transfers = useTransfers();
+
+ 
+const roadHomeLend = () => {
+    navigate("/homelend");
+  };
 
 const roadSend = () => {
     navigate("/send");
@@ -70,6 +75,11 @@ const roadCard2 = () => {
 const roadBattlePass = () => {
     navigate("/battlepass");
   };
+
+  const roadAds = () => {
+    navigate("/ads");
+  };
+
   var balanceStr = balance.toFixed();
   var balanceStr2 = balance.toFixed(2);
 
@@ -146,7 +156,6 @@ const [rates, setRates] = useState(null);
   const [bg, setBg] = useState("#000000");
 
 
-  const [isOpen, setIsOpen] = useState(false);
 
 // (импорты уже есть, добавь usePosition и useTradeHistory)
 
@@ -329,7 +338,7 @@ const slides = [
   }
 ];
 
-// function BannerCarousel(){
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -345,7 +354,8 @@ const slides = [
   }, [isVisible]);
 
   if (!isVisible) return null;
-// };
+
+
 return (
     
 <div className="content" > 
@@ -366,9 +376,13 @@ return (
       {/* 2. Total Balance */}
       <section className="balance-block">
         {/* <span className="label-dim">Total Assets</span> */}
-        <div className="balance-main">
-          <span className="symbol" onClick={() => setIsOpen(true)}>usdt</span>
-          <h1 className="amount" onClick={() => setIsOpen(true)}>{balanceStr}</h1>
+        <div className="balance-main" onClick={roadHomeLend}>
+          <span className="symbol" 
+          // onClick={() => setIsOpen(true)}
+          >usdt</span>
+          <h1 className="amount" 
+          // onClick={() => setIsOpen(true)}
+          >{balanceStr}</h1>
         </div>
         <div className="pnl-summary">
      {/* <div onClick={handleRefresh}>  <span className="upLast" >{profit24hStr + ' at last 24h'}</span></div> */}
@@ -420,52 +434,14 @@ return (
 
 
         <div className="battle-pass-center">
-          
-<svg
-  className="x-wallet-logo"
-  viewBox="0 0 1299 1536"
-  xmlns="http://www.w3.org/2000/svg"
->
-  {/* <path
-    d="
-      M 462 350
-      C 465 510 466 670 470 820
-      C 472 900 475 970 478 1035
-    "
-  />
 
-  <path
-    d="
-      M 660 360
-      C 663 520 665 680 670 830
-      C 675 920 680 1010 686 1085
-    "
-  />
-  <path
-    d="
-      M 125 985
-      C 220 865 330 760 470 690
-      C 600 625 735 575 850 585
-      C 905 590 935 615 900 655
-      C 830 725 700 800 560 865
-      C 450 915 350 960 250 970
-    "
-  />
-        <path
-    d="
-      M 245 970
-      C 330 975 405 970 470 970
-      C 545 970 615 1015 690 1085
-    "
-  /> */}
-</svg>
-            {/* <h2>
+            <h2>
                 BATTLE
                 <br />
                 PASS
 
-            </h2> */}
-{/* <div className="div-svg-xlavelia"> */}{/* </div> */}
+            </h2>
+
 
 
             <div className="battle-pass-line"></div>
@@ -551,17 +527,11 @@ return (
 
  <div className="mc-wrapper">
       
-      <div className="mc-scroll-area">
+      <div className="mc-scroll-area" onClick={roadAds}>
        {/* Блок добавления карты (Заглушка) */}
         <div className="mc-item mc-add-card">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="2" y1="10" x2="22" y2="10"></line>
-            <line x1="12" y1="15" x2="16" y2="15"></line>
-            {/* Имитация плюсика рядом */}
-            <line x1="26" y1="12" x2="30" y2="12"></line>
-            <line x1="28" y1="10" x2="28" y2="14"></line>
-          </svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M19 7c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h2v2h-4v2h4c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2h-2V9h4V7zM9 7v10h4c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm2 2h2v6h-2zM3 7c-1.1 0-2 .9-2 2v8h2v-4h2v4h2V9c0-1.1-.9-2-2-2zm0 2h2v2H3z" /></svg>
+          
         </div>
         
 
@@ -733,93 +703,7 @@ return (
 </div>
 
   
-  
- <div className={'bo-overlay' + (isOpen ? ' open' : '')}>
-        
-        {/* Клик по фону закрывает окно */}
-        <div className="bo-backdrop" onClick={() => setIsOpen(false)}></div>
-
-        {/* ОСТРОВ-ТИКЕТ ПО ЦЕНТРУ */}
-        <div className={'bo-ticket' + (isOpen ? ' open' : '')}>
-          
-          <div className="bo-ticket-inner">
-            {/* ШАПКА ТИКЕТА */}
-            <div className="bo-header">
-              <div className="bo-col">
-                <span className="bo-status"></span>
-              </div>
-              {/* <button className="bo-close-btn" onClick={() => setIsOpen(false)}>
-                ✕
-              </button> */}
-            </div>
-
-            {/* ГЛАВНЫЙ БАЛАНС */}
-            <div className="bo-main-balance">
-              <span className="bo-bal-label">TOTAL BALANCE</span>
-              <span className="bo-bal-val">
-                {'' + balanceStr2.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </span>
-            </div>
-
-            <div className="bo-divider"></div>
-
-            {/* БЛОК ПРОФИТА (24ч и 7д) */}
-            <div className="bo-row">
-              <div className="bo-col">
-                <span className="bo-label">24H PROFIT</span>
-                <span className="bo-val-bold">{profit24hStr}</span>
-              </div>
-              <div className="bo-col right">
-                <span className="bo-label">7D PROFIT</span>
-                <span className="bo-val-bold">{profit7dStr}</span>
-              </div>
-            </div>
-
-            <div className="bo-divider"></div>
-
-            {/* РАСШИРЕННАЯ СТАТИСТИКА */}
-            <div className="bo-stats-list">
-              <div className="bo-stat-item">
-                <span className="bo-s-label">Total Income</span>
-                <span className="bo-s-dots"></span>
-                <span className="bo-s-val">{'$ ' + totalIncome.toLocaleString()}</span>
-              </div>
-              <div className="bo-stat-item">
-                <span className="bo-s-label">Total Outcome</span>
-                <span className="bo-s-dots"></span>
-                <span className="bo-s-val">{'$ ' + totalOutcome.toLocaleString()}</span>
-              </div>
-              <div className="bo-stat-item">
-                <span className="bo-s-label">Active Trades</span>
-                <span className="bo-s-dots"></span>
-                <span className="bo-s-val">{activeTrades + ' Open'}</span>
-              </div>
-              <div className="bo-stat-item">
-                <span className="bo-s-label">Average Win Rate</span>
-                <span className="bo-s-dots"></span>
-                <span className="bo-s-val">{winRate + '%'}</span>
-              </div>
-              <div className="bo-stat-item">
-                <span className="bo-s-label">Cashback Earned</span>
-                <span className="bo-s-dots"></span>
-                <span className="bo-s-val">{'$ ' + cashbackEarned.toFixed(2)}</span>
-              </div>
-            </div>
-<button className="bo-settings-btn" onClick={roadSetting}>
-              {/* <span className="set-icon">⚙</span> */}
-              <span className="set-text">SYSTEM PREFERENCES</span>
-            </button>
-
-          </div>
-          
-          {/* Боковой корешок для стиля тикета */}
-          <div className="bo-ticket-stub">
-<span className="stub-text">{'ID ' + profile.id}</span>
-            <div className="stub-barcode"></div>
-          </div>
-
-        </div>
-      </div> </div>
+   </div>
 
           </div> </div>
 
