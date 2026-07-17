@@ -83,7 +83,7 @@ function PageTransition({ children }) {
 
         setTimeout(() => {
           navigate(-1);
-        }, 400);
+        }, 320);
         
         return;
       }

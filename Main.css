@@ -1704,14 +1704,22 @@ background: rgba(255, 255, 255, 0.05);
   display: flex;
 }
 
-.x-wallet-logo { 
+.x-wallet-logo {
+  margin-top: -1rem;
   z-index: 10;
-  width: 60px;
-  height: 60px;
+  width: 150px;
+  height: 150px;
   color: var(--tkt-lime);
 }
 
-.x-wallet-logo path {
+.x-wallet-logo-add {
+  z-index: 10;
+  width: 150px;
+  height: 150px;
+  color: var(--tkt-lime);
+}
+
+.x-wallet-logo path, .x-wallet-logo-add {
   fill: none;
   
   stroke: currentColor;
