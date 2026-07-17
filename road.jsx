@@ -26,10 +26,8 @@ import Trade from "./Trade";
 import Order from "./Order";
 import BattlePass from "./BattlePass";
 import Ads from "./Ads";
-import Emblem from "./Emblem";
 import About from "./About";
-
-
+import Emblem from "./Emblem";
 
 
 import PageTransition from "./PageTransition";
