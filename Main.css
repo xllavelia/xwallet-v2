@@ -304,11 +304,29 @@ font-family:'Unbounded' ; font-weight: 800;}
   align-items: center;
 }
 
+.mc-card-parent{
+  display: flex;
+  justify-content: center;
+}
+
 .mc-card {
   position: relative;
   overflow: hidden;
   font-family: 'Unbounded'; 
   width: 79%;
+  padding: 5%;
+  padding-bottom: 4%;
+  padding-top: 4%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.mc-card- {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Unbounded'; 
+  width: 90%;
   padding: 5%;
   padding-bottom: 4%;
   padding-top: 4%;
@@ -2405,18 +2423,7 @@ border-bottom-right-radius: 30px;
   margin-bottom: 2rem;
 }
 
-.mc-card- {
-  font-family: 'Unbounded', sans-serif; 
-  width: 90%;
-  padding: 5%;
-padding-bottom: 4%;
-padding-top: 4%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-}
+
 
 
 
