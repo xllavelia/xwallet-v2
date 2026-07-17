@@ -210,7 +210,7 @@ font-family:'Unbounded' ; font-weight: 800;}
   font-family: 'Inter', sans-serif;
   padding: 0px 5px;
   overflow: hidden; 
-  margin-top: 1.5rem;
+  margin-top: 0.6rem;
 }
 
 .mc-scroll-area {
@@ -358,8 +358,8 @@ font-family:'Unbounded' ; font-weight: 800;}
   background: #1A1A1A;
   border-radius: 22px;
   padding: 5px 20px;
-  margin: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin: 0.6rem 12px;
+  /* border: 1px solid rgba(255, 255, 255, 0.05); */
   font-family: 'Unbounded';
 }
 /* 
@@ -1705,7 +1705,7 @@ background: rgba(255, 255, 255, 0.05);
 }
 
 .x-wallet-logo {
-  margin-top: -1rem;
+  opacity: 0;
   z-index: 10;
   width: 150px;
   height: 150px;

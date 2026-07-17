@@ -420,12 +420,13 @@ return (
 
 
         <div className="battle-pass-center">
+          
 <svg
   className="x-wallet-logo"
   viewBox="0 0 1299 1536"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <path
+  {/* <path
     d="
       M 462 350
       C 465 510 466 670 470 820
@@ -456,7 +457,7 @@ return (
       C 330 975 405 970 470 970
       C 545 970 615 1015 690 1085
     "
-  />
+  /> */}
 </svg>
             {/* <h2>
                 BATTLE
