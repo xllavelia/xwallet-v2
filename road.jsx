@@ -27,7 +27,7 @@ import Order from "./Order";
 import BattlePass from "./BattlePass";
 import About from "./About";
 import Emblem from "./Emblem";
-import Ads from "./Ads";
+import Ads from "./Ads.jsx";
 
 
 import PageTransition from "./PageTransition";
