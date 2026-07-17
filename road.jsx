@@ -25,9 +25,9 @@ import Card2 from "./Card2";
 import Trade from "./Trade";
 import Order from "./Order";
 import BattlePass from "./BattlePass";
-import Ads from "./Ads";
 import About from "./About";
 import Emblem from "./Emblem";
+import Ads from "./Ads";
 
 
 import PageTransition from "./PageTransition";
@@ -48,9 +48,9 @@ const islandRoutes = [
   { path: "trade", element: <Trade /> },
   { path: "order", element: <Order /> },
   { path: "battlepass", element: <BattlePass /> },
-  { path: "ads", element: <Ads /> },
   { path: "emblem", element: <Emblem /> },
-  { path: "about", element: <About /> }
+  { path: "about", element: <About /> },
+    { path: "ads", element: <Ads /> },
 
 
 ];
