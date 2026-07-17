@@ -120,6 +120,20 @@ setTimeout(() => {
     navigate("/emblem");
     }, 10)
   };
+
+     
+const roadAbout = () => {
+      navigate(-1)
+
+setTimeout(() => {
+    navigate("/about");
+    }, 10)
+  };
+
+
+
+
+
     const [isOpen, setIsOpen] = useState(false);
     const balance = useBalance();
   
@@ -228,16 +242,17 @@ var profit7dStr   = (profit7d  >= 0 ? '+' : '-') + Math.abs(profit7d).toFixed(2)
 
 
       
-        </div>   <div className="action-circle">
+        </div>   <div className="action-circle" onClick={roadAbout}>
             
                     <div className="icon" >
                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m5.825 21l1.625-7.025L2 9.25l7.2-.625L12 2l2.8 6.625l7.2.625l-5.45 4.725L18.175 21L12 17.275z" /></svg> 
                     </div>
         </div>
         
-          <div className="action-circle">
+          <div className="action-circle"  onClick={roadEmblem}>
             
-                    <div className="icon" >
+                    <div className="icon" roadAbout>
+                      
                       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none"><path d="m12 22l-8.66-5V7L12 2l8.66 5v10z" /><path d="M20.66 12.006L16.34 14.5v4.995L20.66 17zM16.33 4.5L12 2L7.67 4.5L12 7zM7.66 19.495V14.5l-4.32-2.494V17z" clipRule="evenodd" /><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m12 12l8.66-5M12 12v10m0-10L3.34 7m17.32 0L12 2L3.34 7m17.32 0v10L12 22m0 0l-8.66-5V7m17.32 5.006L16.34 14.5v4.995L20.66 17zM12 2l4.33 2.5L12 7L7.67 4.5zM3.34 17v-4.994L7.66 14.5v4.995z" /></g></svg>
                     </div>
         </div>

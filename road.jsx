@@ -27,6 +27,8 @@ import Order from "./Order";
 import BattlePass from "./BattlePass";
 import Ads from "./Ads";
 import Emblem from "./Emblem";
+import About from "./About";
+
 
 
 
@@ -49,7 +51,9 @@ const islandRoutes = [
   { path: "order", element: <Order /> },
   { path: "battlepass", element: <BattlePass /> },
   { path: "ads", element: <Ads /> },
-  { path: "emblem", element: <Emblem /> }
+  { path: "emblem", element: <Emblem /> },
+  { path: "about", element: <About /> }
+
 
 ];
 
