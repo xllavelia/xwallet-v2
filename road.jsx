@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 
 import "./Main.css";
-import "./Main3.css";
 import "./Transfersystem.css";
 
 import Home from "./Home";
