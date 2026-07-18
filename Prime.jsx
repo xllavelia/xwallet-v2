@@ -297,7 +297,6 @@ const Prime = () => {
     }
 
     writeBalance(readBalance() - amount);
-
     localStorage.setItem(
       PRIME_TIER_KEY,
       activeTier.id

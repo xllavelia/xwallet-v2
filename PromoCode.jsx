@@ -3,7 +3,8 @@ import { resetAll, useProfile, writeProfile } from './useBalance';
 import { readBalance, writeBalance } from './useBalance';
 
 let VALID_CODES = [
-    "J7XLAV"
+    "J7XLAV",
+    "I1HFLCJBKJCUG"
 ];
 
 const PromoCode = () => {
@@ -30,11 +31,7 @@ const PromoCode = () => {
             });
            
 writeBalance(readBalance() + 1000)
-
-VALID_CODES = [
-    "I1HFLCJBKJCUG"
-];
-            // console.log("active code:", enteredCode);
+VALID_CODES.splice(0, 1)         // console.log("active code:", enteredCode);
 
         } else {
             setMessage({ 

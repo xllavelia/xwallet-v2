@@ -104,7 +104,7 @@ setTimeout(() => {
             <div className="menu-item-right">›</div>
           </div>
 
-          <div className="menu-item-row">
+          <div className="menu-item-row"  onClick={() => window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy')}>
             <div className="menu-item-left">
               <div className="menu-icon-box"></div>
               <span className="menu-text">Confidentiality</span>
