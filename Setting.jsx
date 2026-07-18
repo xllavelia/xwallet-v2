@@ -7,7 +7,15 @@ import { readBalance, writeBalance } from './useBalance';
 const Setting = () => {
   const navigate = useNavigate();
 
-  function roadHome() { navigate("/"); }
+     
+const roadPromoCode = () => {
+      navigate(-1)
+
+setTimeout(() => {
+    navigate("/promocode");
+    }, 10)
+  };
+
 
   var profile = useProfile();
 
@@ -104,6 +112,18 @@ const Setting = () => {
             <div className="menu-item-right">›</div>
           </div>
 
+
+  <div className="menu-item-row" onClick={roadPromoCode}>
+            <div className="menu-item-left">
+              <div className="menu-icon-box"></div>
+              <span className="menu-text">Promocode</span>
+            </div>
+            <div className="menu-item-right">
+              <span>›</span>
+            </div>
+          </div>
+
+
           <div className="menu-item-row">
             <div className="menu-item-left">
               <div className="menu-icon-box"></div>
@@ -115,6 +135,8 @@ const Setting = () => {
             </div>
           </div>
 
+         
+         
           <div className="menu-item-row" onClick={toggleNotifications}>
             <div className="menu-item-left">
               <div className="menu-icon-box"></div>
@@ -126,6 +148,7 @@ const Setting = () => {
               </div>
             </div>
           </div>
+
 
         </section>
 

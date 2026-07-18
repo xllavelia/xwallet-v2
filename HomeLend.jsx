@@ -139,6 +139,15 @@ setTimeout(() => {
     }, 10)
   };
 
+     
+const roadPromoCode = () => {
+      navigate(-1)
+
+setTimeout(() => {
+    navigate("/promocode");
+    }, 10)
+  };
+
 
 
 
@@ -257,7 +266,7 @@ var profit7dStr   = (profit7d  >= 0 ? '+' : '-') + Math.abs(profit7d).toFixed(2)
                     </div>
         </div>
         
-          <div className="action-circle"  onClick={roadEmblem}>
+          <div className="action-circle"  onClick={roadPromoCode}>
             
                     <div className="icon" roadAbout>
                       

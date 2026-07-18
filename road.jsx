@@ -31,6 +31,8 @@ import Emblem from "./Emblem";
 // DENGER FILE ADS. regstr
 import Ads from "./ads";
 import Prime from "./Prime";
+import PromoCode from "./PromoCode";
+
 
 import PageTransition from "./PageTransition";
 
@@ -54,6 +56,8 @@ const islandRoutes = [
   { path: "about", element: <About /> },
   { path: "ads", element: <Ads /> },
   { path: "prime", element: <Prime /> },
+  { path: "promocode", element: <PromoCode /> },
+
 
 
 ];
