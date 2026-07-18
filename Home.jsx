@@ -5,7 +5,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "try 5"
+// git commit -m "module prime!"
 // git push -u origin main 
 
 
@@ -64,8 +64,10 @@ const roadReferral = () => {
     navigate("/referral");
   };
 
-const roadCard = () => {
+  const roadCard = () => {
+
     navigate("/card");
+
   };
 
 const roadCard2 = () => {
@@ -79,6 +81,11 @@ const roadBattlePass = () => {
   const roadAds = () => {
     navigate("/ads");
   };
+
+    const roadPrime = () => {
+    navigate("/prime");
+  };
+
 
   var balanceStr = balance.toFixed();
   var balanceStr2 = balance.toFixed(2);
@@ -312,7 +319,7 @@ var trendCards = TREND_COINS.map(function(coin) {
 const slides = [
   {
     id: 1,
-    title: "PRIME",
+    title: "  Prime",
     description: "gift, status, more possibilities.",
     actionText: "",
     // Сюда вставляй свой SVG код напрямую
@@ -321,7 +328,7 @@ const slides = [
   },
   {
     id: 2,
-    title: "qwick send",
+    title: "Send",
     description: "fast transaction, low fees.",
     actionText: "",
     icon: (
@@ -329,7 +336,7 @@ const slides = [
   },
   {
     id: 3,
-    title: "referal system",
+    title: "Frend",
     description: "get 10% for fees, and more.",
     actionText: "",
     icon: (
@@ -355,6 +362,9 @@ const slides = [
 
   if (!isVisible) return null;
 
+
+
+  
 
 return (
     
@@ -527,10 +537,10 @@ return (
 
  <div className="mc-wrapper">
       
-      <div className="mc-scroll-area" onClick={roadAds}>
+      <div className="mc-scroll-area">
        {/* Блок добавления карты (Заглушка) */}
-        <div className="mc-item mc-add-card">
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M19 7c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h2v2h-4v2h4c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2h-2V9h4V7zM9 7v10h4c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm2 2h2v6h-2zM3 7c-1.1 0-2 .9-2 2v8h2v-4h2v4h2V9c0-1.1-.9-2-2-2zm0 2h2v2H3z" /></svg>
+        <div className="mc-item mc-add-card"onClick={roadPrime}>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m5.825 21l1.625-7.025L2 9.25l7.2-.625L12 2l2.8 6.625l7.2.625l-5.45 4.725L18.175 21L12 17.275z" /></svg> 
           
         </div>
         
@@ -585,7 +595,7 @@ return (
             <div className="slide-content">
               <div className="text-section">
                 <h3>{slide.title}</h3>
-                <p>{slide.description}</p>
+                <p>{slide.description} </p>
                 <button className="action-button">{slide.actionText}</button>
               </div>
               <div className="icon-section">

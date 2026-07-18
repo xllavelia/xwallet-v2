@@ -242,11 +242,11 @@ font-family:'Unbounded' ; font-weight: 800;}
 /* Блок создания карты */
 .mc-add-card {
   width: 22%;
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--xlavelia);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--xlavelia);
   cursor: pointer;
   background-color: transparent;
 }

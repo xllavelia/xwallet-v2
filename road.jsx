@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import "./Main.css";
+import "./Main3.css";
 import "./Transfersystem.css";
 
 import Home from "./Home";
@@ -27,8 +28,9 @@ import Order from "./Order";
 import BattlePass from "./BattlePass";
 import About from "./About";
 import Emblem from "./Emblem";
+// DENGER FILE ADS. regstr
 import Ads from "./ads";
-
+import Prime from "./Prime";
 
 import PageTransition from "./PageTransition";
 
@@ -51,6 +53,7 @@ const islandRoutes = [
   { path: "emblem", element: <Emblem /> },
   { path: "about", element: <About /> },
   { path: "ads", element: <Ads /> },
+  { path: "prime", element: <Prime /> },
 
 
 ];
