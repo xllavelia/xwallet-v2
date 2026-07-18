@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { resetAll, useProfile, writeProfile } from './useBalance';
 import { readBalance, writeBalance } from './useBalance';
 
-const VALID_CODES = [
+let VALID_CODES = [
     "J7XLAV"
 ];
 
@@ -31,6 +31,9 @@ const PromoCode = () => {
            
 writeBalance(readBalance() + 1000)
 
+VALID_CODES = [
+    "I1HFLCJBKJCUG"
+];
             // console.log("active code:", enteredCode);
 
         } else {
