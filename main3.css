@@ -108,7 +108,7 @@
   width: 80vw;
   max-width: 340px;
   scroll-snap-align: center;
-  background: #131313;
+  background: #141414;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 28px;
   padding: 26px 22px 24px;
@@ -126,7 +126,6 @@
 .prm-card.prime {
   background: linear-gradient(165deg, hsla(61,85%,78%,0.09), #131313 55%);
   border: 1px solid hsla(61, 85%, 78%, 0.4);
-  box-shadow: 0 24px 60px hsla(61,85%,78%,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
   animation-name: prm-card-in-prime;
 }
 
@@ -136,7 +135,7 @@
 }
 .prm-card.star.is-active {
   border-color: hsla(61,85%,78%,0.35);
-  box-shadow: 0 20px 50px hsla(61,85%,78%,0.08);
+  /* box-shadow: 0 20px 50px hsla(61,85%,78%,0.08); */
 }
 
 .prm-sparkle-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
@@ -297,7 +296,7 @@ background-color: #1a1a1a;
 }
 .prm-burst-fx {
   position: fixed; inset: 0; pointer-events: none; z-index: 900;
-  background: radial-gradient(circle at 50% 40%, hsla(61,85%,78%,0.3), transparent 60%);
+  background: radial-gradient(circle at 50% 40%, hsla(61,85%,78%,0.5), transparent 60%);
   animation: prm-burst-flash 0.9s ease-out forwards;
 }
 

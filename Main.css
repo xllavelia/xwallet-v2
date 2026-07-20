@@ -137,6 +137,12 @@ scrollbar-width: none;
 }
 
 
+.page-transition { will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden; -webkit-backface-visibility: hidden; contain: layout style paint; }
+.page-transition__drag-zone { touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+.page-transition__drag-zone:active { cursor: grabbing; }
+.page-transition__handle { will-change: transform; }
+.page-transition--closing { pointer-events: none; }
+
 .app-page-section {
   flex-shrink: 0;
   width: 100vw;
