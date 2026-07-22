@@ -3,14 +3,14 @@ import { useRef, useState, useEffect, useCallback } from "react";
 
 // Длительность анимации закрытия — держим в одном месте,
 // чтобы JS (setTimeout перед navigate) и CSS (transition) никогда не рассинхронились
-const CLOSE_DURATION_MS = 500;
+const CLOSE_DURATION_MS = 150;
 
 // Порог свайпа для закрытия
 const CLOSE_DISTANCE_THRESHOLD = 110;
 // Порог скорости (px/ms) — жест засчитывается как "флик"
 const CLOSE_VELOCITY_THRESHOLD = 0.5;
 // Сопротивление драгу (0..1) — чем меньше, тем "тяжелее" тянется лист
-const DRAG_RESISTANCE = 0.72;
+const DRAG_RESISTANCE = 0.62;
 const MAX_DRAG_OFFSET = 420;
 
 function PageTransition({ children }) {
