@@ -11,6 +11,10 @@
 margin-top: 8.5vh ;
 }
 
+
+
+
+
 .app-scroll-container {
   display: flex; 
 overflow: hidden;
@@ -26,11 +30,8 @@ overflow: hidden;
   background-color: transparent;
 }
 
-
-
 .page-transition {
   position: fixed;
-
   inset: 70px 0 0;
 
   z-index: 1000;
@@ -49,25 +50,28 @@ overflow: hidden;
     0 -2px 10px rgba(0, 0, 0, 0.15);
 
   animation: sheetOpen 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform; 
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 
+  /* Плавный возврат на место, когда драг отпущен без закрытия */
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              border-radius 0.35s ease;
 }
 
-
+/* Во время активного драга transition должен быть выключен полностью —
+   иначе палец "убегает" вперёд, а лист тащится следом с задержкой в 600мс.
+   Этот класс реально навешивается в JSX через состояние dragging. */
 .page-transition--dragging {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
-}
-
-.page-transition--closing {
-  transition: transform 0.5s cubic-bezier(0.4, 0, 1, 1);
-}
-
-.page-transition--dragging {
   transition: none;
 }
 
+/* Плавное, "тяжёлое" закрытие — длиннее и с мягким выездом за экран.
+   500ms совпадает с CLOSE_DURATION_MS в JS, так что navigate(-1)
+   срабатывает ровно к концу анимации, без рывка. */
+.page-transition--closing {
+  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
 
 .page-transition__drag-zone {
   position: relative;
@@ -104,9 +108,8 @@ overflow: hidden;
     background 0.35s ease;
 }
 
-.page-transition__drag-zone:active .page-transition__handle {
+.page-transition--dragging .page-transition__handle {
   width: 72px;
-
   background: rgba(255, 255, 255, 0.42);
 }
 
@@ -116,32 +119,28 @@ overflow: hidden;
   min-height: 0;
 
   overflow-y: auto;
-
   overflow-x: hidden;
 
   overscroll-behavior: contain;
 
   -webkit-overflow-scrolling: touch;
 
-scrollbar-width: none;
+  scrollbar-width: none;
+}
+
+.page-transition__content::-webkit-scrollbar {
+  display: none;
 }
 
 @keyframes sheetOpen {
   0% {
     transform: translateY(100%);
   }
-
   100% {
     transform: translateY(0);
   }
 }
 
-
-.page-transition { will-change: transform; transform: translate3d(0, 0, 0); backface-visibility: hidden; -webkit-backface-visibility: hidden; contain: layout style paint; }
-.page-transition__drag-zone { touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
-.page-transition__drag-zone:active { cursor: grabbing; }
-.page-transition__handle { will-change: transform; }
-.page-transition--closing { pointer-events: none; }
 
 .app-page-section {
   flex-shrink: 0;

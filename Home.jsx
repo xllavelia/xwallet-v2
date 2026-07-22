@@ -5,7 +5,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix page transition"
+// git commit -m "fix page transition 2"
 // git push -u origin main 
 
 

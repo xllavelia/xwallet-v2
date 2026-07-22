@@ -1,280 +1,181 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
+
+// Длительность анимации закрытия — держим в одном месте,
+// чтобы JS (setTimeout перед navigate) и CSS (transition) никогда не рассинхронились
+const CLOSE_DURATION_MS = 500;
+
+// Порог свайпа для закрытия
+const CLOSE_DISTANCE_THRESHOLD = 110;
+// Порог скорости (px/ms) — жест засчитывается как "флик"
+const CLOSE_VELOCITY_THRESHOLD = 0.5;
+// Сопротивление драгу (0..1) — чем меньше, тем "тяжелее" тянется лист
+const DRAG_RESISTANCE = 0.72;
+const MAX_DRAG_OFFSET = 420;
 
 function PageTransition({ children }) {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const dragZoneRef = useRef(null);
-const pageRef = useRef(null);
+  const dragZoneRef = useRef(null);
 
-const pointerId = useRef(null);
-const dragging = useRef(false);
-const closingRef = useRef(false);
+  // Вся физика жеста живёт в рефах — не дёргаем рендер на каждый touchmove
+  const startY = useRef(0);
+  const lastY = useRef(0);
+  const lastTime = useRef(0);
+  const velocity = useRef(0);
+  const offsetRef = useRef(0);
+  const draggingRef = useRef(false);
+  const closingRef = useRef(false);
+  const closeTimeoutRef = useRef(null);
 
-const startY = useRef(0);
-const lastY = useRef(0);
-const lastTime = useRef(0);
+  const [offset, setOffset] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [closing, setClosing] = useState(false);
 
-const velocity = useRef(0);
-const offset = useRef(0);
+  // Чистим отложенный navigate(-1), если компонент размонтируется раньше времени
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+      }
+    };
+  }, []);
 
-const animationFrame = useRef(null);
-const closeTimeout = useRef(null);
+  const handleTouchStart = useCallback((event) => {
+    if (closingRef.current) return;
 
-const [closing, setClosing] = useState(false);
+    draggingRef.current = true;
+    setDragging(true);
 
-const setPageOffset = (value) => {
-offset.current = value;
+    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
 
-if (pageRef.current) {
-  pageRef.current.style.transform = "translate3d(0, " + value + "px, 0)";
-}
+    startY.current = clientY;
+    lastY.current = clientY;
+    lastTime.current = performance.now();
+    velocity.current = 0;
+  }, []);
 
-};
+  const handleTouchMove = useCallback((event) => {
+    if (!draggingRef.current || closingRef.current) return;
 
-const animateTo = (target, duration, callback) => {
-if (animationFrame.current) {
-cancelAnimationFrame(animationFrame.current);
-}
+    // Останавливает нативный скролл/pull-to-refresh браузера во время драга
+    event.preventDefault();
 
-const start = offset.current;
-const distance = target - start;
-const startTime = performance.now();
+    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+    const now = performance.now();
+    const deltaY = clientY - lastY.current;
+    const deltaTime = now - lastTime.current;
 
-const animate = (currentTime) => {
-  const progress = Math.min(
-    (currentTime - startTime) / duration,
-    1
-  );
-
-  const eased = 1 - Math.pow(1 - progress, 4);
-
-  setPageOffset(start + distance * eased);
-
-  if (progress < 1) {
-    animationFrame.current = requestAnimationFrame(animate);
-  } else if (callback) {
-    callback();
-  }
-};
-
-animationFrame.current = requestAnimationFrame(animate);
-
-};
-
-const getClientY = (event) => {
-if (event.touches && event.touches.length > 0) {
-return event.touches[0].clientY;
-}
-
-return event.clientY;
-
-};
-
-const isInteractiveElement = (target) => {
-if (!(target instanceof HTMLElement)) {
-return false;
-}
-
-return Boolean(
-  target.closest(
-    "button, a, input, textarea, select, [role='button'], [data-no-swipe]"
-  )
-);
-
-};
-
-useEffect(() => {
-const dragZone = dragZoneRef.current;
-
-if (!dragZone) {
-  return undefined;
-}
-
-const handleStart = (event) => {
-  if (closingRef.current) {
-    return;
-  }
-
-  if (event.type === "mousedown" && event.button !== 0) {
-    return;
-  }
-
-  if (isInteractiveElement(event.target)) {
-    return;
-  }
-
-  const clientY = getClientY(event);
-
-  if (typeof clientY !== "number") {
-    return;
-  }
-
-  dragging.current = true;
-
-  if (event.pointerId !== undefined) {
-    pointerId.current = event.pointerId;
-  }
-
-  startY.current = clientY;
-  lastY.current = clientY;
-  lastTime.current = performance.now();
-  velocity.current = 0;
-
-  if (dragZone.setPointerCapture && event.pointerId !== undefined) {
-    dragZone.setPointerCapture(event.pointerId);
-  }
-};
-
-const handleMove = (event) => {
-  if (!dragging.current || closingRef.current) {
-    return;
-  }
-
-  if (
-    pointerId.current !== null &&
-    event.pointerId !== undefined &&
-    event.pointerId !== pointerId.current
-  ) {
-    return;
-  }
-
-  event.preventDefault();
-
-  const clientY = getClientY(event);
-
-  if (typeof clientY !== "number") {
-    return;
-  }
-
-  const now = performance.now();
-  const deltaY = clientY - lastY.current;
-  const deltaTime = now - lastTime.current;
-
-  if (deltaTime > 0) {
-    const instantVelocity = deltaY / deltaTime;
-
-    velocity.current =
-      velocity.current * 0.75 +
-      instantVelocity * 0.25;
-  }
-
-  lastY.current = clientY;
-  lastTime.current = now;
-
-  const distance = clientY - startY.current;
-
-  if (distance <= 0) {
-    setPageOffset(0);
-    return;
-  }
-
-  const resistance =
-    distance < 160
-      ? distance * 0.78
-      : 124.8 + (distance - 160) * 0.35;
-
-  setPageOffset(Math.min(resistance, 420));
-};
-
-const handleEnd = (event) => {
-  if (!dragging.current || closingRef.current) {
-    return;
-  }
-
-  if (
-    pointerId.current !== null &&
-    event.pointerId !== undefined &&
-    event.pointerId !== pointerId.current
-  ) {
-    return;
-  }
-
-  dragging.current = false;
-  pointerId.current = null;
-
-  const currentOffset = offset.current;
-  const currentVelocity = velocity.current;
-
-  const shouldClose =
-    currentOffset > 110 ||
-    currentVelocity > 1.1;
-
-  if (shouldClose) {
-    closingRef.current = true;
-    setClosing(true);
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
+    // Сглаживаем скорость (экспоненциальное скользящее среднее),
+    // чтобы один дрожащий фрейм не решал, закрывать лист или нет
+    if (deltaTime > 0) {
+      const instantVelocity = deltaY / deltaTime;
+      velocity.current = velocity.current * 0.7 + instantVelocity * 0.3;
     }
 
-    animateTo(window.innerHeight, 290, () => {
-      navigate(-1);
-    });
+    lastY.current = clientY;
+    lastTime.current = now;
 
-    return;
-  }
+    const distance = clientY - startY.current;
 
-  animateTo(0, 220);
-};
+    // Тянуть можно только вниз; на движение вверх лист не реагирует
+    const resistedOffset =
+      distance > 0 ? Math.min(distance * DRAG_RESISTANCE, MAX_DRAG_OFFSET) : 0;
 
-const handleCancel = () => {
-  if (!dragging.current || closingRef.current) {
-    return;
-  }
+    offsetRef.current = resistedOffset;
+    setOffset(resistedOffset);
+  }, []);
 
-  dragging.current = false;
-  pointerId.current = null;
+  const handleTouchEnd = useCallback(() => {
+    if (!draggingRef.current || closingRef.current) return;
 
-  animateTo(0, 220);
-};
+    draggingRef.current = false;
+    setDragging(false);
 
-const options = {
-  passive: false,
-};
+    const shouldClose =
+      offsetRef.current > CLOSE_DISTANCE_THRESHOLD ||
+      velocity.current > CLOSE_VELOCITY_THRESHOLD;
 
-dragZone.addEventListener("pointerdown", handleStart, options);
-dragZone.addEventListener("pointermove", handleMove, options);
-dragZone.addEventListener("pointerup", handleEnd, options);
-dragZone.addEventListener("pointercancel", handleCancel, options);
+    if (shouldClose) {
+      closingRef.current = true;
+      setClosing(true);
 
-return () => {
-  dragZone.removeEventListener("pointerdown", handleStart);
-  dragZone.removeEventListener("pointermove", handleMove);
-  dragZone.removeEventListener("pointerup", handleEnd);
-  dragZone.removeEventListener("pointercancel", handleCancel);
+      // Сбрасываем фокус, чтобы убить :hover/:active до анимации
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
 
-  if (animationFrame.current) {
-    cancelAnimationFrame(animationFrame.current);
-  }
+      offsetRef.current = window.innerHeight;
+      setOffset(window.innerHeight);
 
-  if (closeTimeout.current) {
-    clearTimeout(closeTimeout.current);
-  }
-};
+      // Таймер совпадает с CLOSE_DURATION_MS в CSS — никакого рывка в конце
+      closeTimeoutRef.current = setTimeout(() => {
+        navigate(-1);
+      }, CLOSE_DURATION_MS);
 
-}, [navigate]);
+      return;
+    }
 
-return (
-<div
-ref={pageRef}
-className={
-"page-transition" +
-(closing ? " page-transition--closing" : "")
-}
->
-<div
-ref={dragZoneRef}
-className="page-transition__drag-zone"
->
-<div className="page-transition__handle" />
-</div>
+    // Свайп был слишком слабым — плавно возвращаем на место
+    offsetRef.current = 0;
+    setOffset(0);
+  }, [navigate]);
 
-  <div className="page-transition__content">
-    {children}
-  </div>
-</div>
+  useEffect(() => {
+    const dragZone = dragZoneRef.current;
+    if (!dragZone) return;
 
-);
+    const options = { passive: false };
+
+    dragZone.addEventListener("touchstart", handleTouchStart, options);
+    dragZone.addEventListener("touchmove", handleTouchMove, options);
+    dragZone.addEventListener("touchend", handleTouchEnd);
+    dragZone.addEventListener("touchcancel", handleTouchEnd);
+
+    dragZone.addEventListener("mousedown", handleTouchStart);
+    window.addEventListener("mousemove", handleTouchMove, options);
+    window.addEventListener("mouseup", handleTouchEnd);
+
+    return () => {
+      dragZone.removeEventListener("touchstart", handleTouchStart);
+      dragZone.removeEventListener("touchmove", handleTouchMove);
+      dragZone.removeEventListener("touchend", handleTouchEnd);
+      dragZone.removeEventListener("touchcancel", handleTouchEnd);
+
+      dragZone.removeEventListener("mousedown", handleTouchStart);
+      window.removeEventListener("mousemove", handleTouchMove);
+      window.removeEventListener("mouseup", handleTouchEnd);
+    };
+    // handleTouchStart/Move/End стабильны за счёт useCallback,
+    // так что слушатели вешаются один раз и не пересоздаются на каждый рендер
+  }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
+
+  return (
+    <div
+      className={[
+        "page-transition",
+        dragging && "page-transition--dragging",
+        closing && "page-transition--closing",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      style={{
+        transform: `translateY(${offset}px)`,
+        // Пропускаем клики сквозь лист во время анимации закрытия
+        pointerEvents: closing ? "none" : undefined,
+      }}
+    >
+      <div
+        className="page-transition__drag-zone"
+        ref={dragZoneRef}
+        style={{ touchAction: "none" }}
+      >
+        <div className="page-transition__handle" />
+      </div>
+
+      <div className="page-transition__content">{children}</div>
+    </div>
+  );
 }
 
 export default PageTransition;
