@@ -535,12 +535,13 @@ top: 90%;
 
 /* Выделенный "большой экран" — не на весь вьюпорт */
 .story-stage {
+  margin-top: 3rem;
   position: relative;
   width: min(420px, 92vw);
   height: min(760px, 88vh);
   border-radius: 22px;
   overflow: hidden;
-  background: #060a16;
+  background: #000;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: story-stage-in 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
