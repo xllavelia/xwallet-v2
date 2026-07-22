@@ -5,7 +5,7 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix HomeLend"
+// git commit -m "add stories"
 // git push -u origin main 
 
 
@@ -364,7 +364,188 @@ const slides = [
 
 
 
-  
+  const STORIES = [
+  {
+    id: 1,
+    cover: 'history1.jpg',
+    // title: 'transfers',
+    layout: 'top-left',
+    slides: [
+      {
+        image: 'history1.jpg',
+        title: 'fast transfers \nwithout commissions',
+        text: 'Transfer funds to your loved ones quickly and securely, with no fees for the first 3 months.',
+      },
+    ],
+  },
+  {
+    id: 2,
+    cover: 'history2.jpg',
+    // title: 'prime',
+    layout: 'bottom-right',
+    slides: [
+      {
+        image: 'history2.jpg',
+        title: 'prime subscribe',
+        text: 'Buy a premium subscription, different plans to choose from, benefits, status, rewards',
+      },
+      {
+        image: 'history2.jpg',
+        title: 'all in one subscription',
+        text: 'Reduced fees, battle passes, vouchers, increased limits, all in one app – with prime',
+      },
+    ],
+  },
+  {
+    id: 3,
+    cover: 'history3.jpg',
+    // title: 'refferal',
+    layout: 'center-right',
+    slides: [
+      {
+        image: 'history3.jpg',
+        title: 'refferal system',
+        text: 'Invite your friends and receive numerous rewards and bonuses',
+      },
+    ],
+  },
+  {
+    id: 4,
+    cover: 'history4.jpg',
+    // title: 'storage',
+    layout: 'top-left',
+    slides: [
+      {
+        image: 'history4.jpg',
+        title: 'crypto storage',
+        text: 'Store your cryptocurrency conveniently and securely',
+      },
+    ],
+  },
+];
+ 
+const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
+  const [openIndex, setOpenIndex] = useState(null); // индекс открытой истории
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [closing, setClosing] = useState(false);
+  const [opening, setOpening] = useState(false);
+ 
+  const rafRef = useRef(null);
+  const startRef = useRef(0);
+  const pausedRef = useRef(false);
+ 
+  const isOpen = openIndex !== null;
+  const activeStory = isOpen ? STORIES[openIndex] : null;
+  const totalSlides = activeStory ? activeStory.slides.length : 0;
+ 
+  useEffect(() => {
+    if (!isOpen) return;
+ 
+    function tick(now) {
+      if (pausedRef.current) {
+        startRef.current = now - progress * SLIDE_DURATION;
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
+      if (!startRef.current) startRef.current = now;
+      const elapsed = now - startRef.current;
+      const pct = Math.min(elapsed / SLIDE_DURATION, 1);
+      setProgress(pct);
+ 
+      if (pct >= 1) {
+        goNextSlide();
+        return;
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    }
+ 
+    startRef.current = 0;
+    rafRef.current = requestAnimationFrame(tick);
+ 
+    return function cleanup() {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [isOpen, openIndex, slideIndex]);
+ 
+  function openStory(index) {
+    setOpenIndex(index);
+    setSlideIndex(0);
+    setProgress(0);
+    setOpening(true);
+    window.setTimeout(function () {
+      setOpening(false);
+    }, 260);
+  }
+ 
+  function closeStory() {
+    setClosing(true);
+    window.setTimeout(function () {
+      setClosing(false);
+      setOpenIndex(null);
+      setSlideIndex(0);
+      setProgress(0);
+    }, 220);
+  }
+ 
+  function goNextSlide() {
+    const isLastSlide = slideIndex >= totalSlides - 1;
+    const isLastStory = openIndex >= STORIES.length - 1;
+ 
+    if (!isLastSlide) {
+      setSlideIndex(slideIndex + 1);
+      setProgress(0);
+      return;
+    }
+    if (!isLastStory) {
+      setOpenIndex(openIndex + 1);
+      setSlideIndex(0);
+      setProgress(0);
+      return;
+    }
+    closeStory();
+  }
+ 
+  function goPrevSlide() {
+    const isFirstSlide = slideIndex === 0;
+    const isFirstStory = openIndex === 0;
+ 
+    if (!isFirstSlide) {
+      setSlideIndex(slideIndex - 1);
+      setProgress(0);
+      return;
+    }
+    if (!isFirstStory) {
+      const prevStory = STORIES[openIndex - 1];
+      setOpenIndex(openIndex - 1);
+      setSlideIndex(prevStory.slides.length - 1);
+      setProgress(0);
+      return;
+    }
+    setProgress(0);
+  }
+ 
+  function handleStageClick(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const isRightSide = clickX > rect.width / 2;
+    if (isRightSide) {
+      goNextSlide();
+    } else {
+      goPrevSlide();
+    }
+  }
+ 
+  function handlePressStart() {
+    pausedRef.current = true;
+  }
+ 
+  function handlePressEnd() {
+    pausedRef.current = false;
+  }
+ 
+  const currentSlide = activeStory ? activeStory.slides[slideIndex] : null;
+ 
 
 return (
     
@@ -428,6 +609,9 @@ return (
         </div>
       </div>
  
+
+
+
 
 
 
@@ -584,8 +768,75 @@ return (
     </div>
 
 
+ <div className="stories-root">
+      <div className="stories-scroll">
+        {STORIES.map(function (story, index) {
+          return (
+            <button
+              key={story.id}
+              className="story-card"
+              onClick={function () {
+                openStory(index);
+              }}
+            >
+              <img className="story-card-img" src={story.cover} alt={story.title} />
+              <div className="story-card-overlay" />
+              <span className="story-card-title">{story.title}</span>
+            </button>
+          );
+        })}
+      </div>
+ 
+      {isOpen && (
+        <div
+          className={
+            'story-viewer' +
+            (opening ? ' story-viewer--opening' : '') +
+            (closing ? ' story-viewer--closing' : '')
+          }
+        >
+          <div className="story-stage">
+            <div className="story-progress-row">
+              {activeStory.slides.map(function (_, i) {
+                const filled = i < slideIndex ? 1 : i === slideIndex ? progress : 0;
+                return (
+                  <div className="story-progress-track" key={i}>
+                    <div
+                      className="story-progress-fill"
+                      style={{ transform: 'scaleX(' + filled + ')' }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+ 
+            <button className="story-close" onClick={closeStory} aria-label="Закрыть">
+              ✕
+            </button>
+ 
+            <div
+              className="story-tap-zone"
+              onClick={handleStageClick}
+              onMouseDown={handlePressStart}
+              onMouseUp={handlePressEnd}
+              onMouseLeave={handlePressEnd}
+              onTouchStart={handlePressStart}
+              onTouchEnd={handlePressEnd}
+            >
+              <img className="story-image" src={currentSlide.image} alt="" />
+ 
+              <div className={'story-text story-text--' + activeStory.layout}>
+                <h3 className="story-text-title">{currentSlide.title}</h3>
+                <p className="story-text-body">{currentSlide.text}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
 
-    <div className="carousel-container">
+
+    {/* <div className="carousel-container">
       <div 
         className="carousel-track" 
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -599,7 +850,7 @@ return (
                 <button className="action-button">{slide.actionText}</button>
               </div>
               <div className="icon-section">
-                {/* Если SVG нет, рендерим заглушку. Если есть - он отрендерится тут */}
+               
                 {slide.icon ? slide.icon : <div className="svg-placeholder">place SVG</div>}
               </div>
             </div>
@@ -607,9 +858,6 @@ return (
         ))}
       </div>
 
-      {/* <button className="close-button" onClick={() => setIsVisible(false)}>
-        &times;
-      </button> */}
 
       <div className="pagination">
         {slides.map((_, index) => (
@@ -620,7 +868,7 @@ return (
           />
         ))}
       </div>
-    </div>
+    </div> */}
 {/* 
  <div className="eb-container-parent">
  <div className="eb-container">
