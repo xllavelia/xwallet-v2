@@ -1,11 +1,15 @@
 import React, {useState, useRef, useEffect} from "react";
   import { useNavigate, useLocation } from "react-router-dom";
 import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } from './useBalance';
- 
+ import history1 from "./history1.jpg"
+ import history2 from "./history2.jpg"
+ import history3 from "./history3.jpg"
+ import history4 from "./history4.jpg"
+
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "add stories"
+// git commit -m "fix stories"
 // git push -u origin main 
 
 
@@ -367,12 +371,12 @@ const slides = [
   const STORIES = [
   {
     id: 1,
-    cover: 'history1.jpg',
+    cover: history1,
     // title: 'transfers',
     layout: 'top-left',
     slides: [
       {
-        image: 'history1.jpg',
+        image:  history1,
         title: 'fast transfers \nwithout commissions',
         text: 'Transfer funds to your loved ones quickly and securely, with no fees for the first 3 months.',
       },
@@ -380,17 +384,17 @@ const slides = [
   },
   {
     id: 2,
-    cover: 'history2.jpg',
+    cover: history2,
     // title: 'prime',
     layout: 'bottom-right',
     slides: [
       {
-        image: 'history2.jpg',
+        image: history2,
         title: 'prime subscribe',
         text: 'Buy a premium subscription, different plans to choose from, benefits, status, rewards',
       },
       {
-        image: 'history2.jpg',
+        image: history2,
         title: 'all in one subscription',
         text: 'Reduced fees, battle passes, vouchers, increased limits, all in one app – with prime',
       },
@@ -398,12 +402,12 @@ const slides = [
   },
   {
     id: 3,
-    cover: 'history3.jpg',
+    cover: history3,
     // title: 'refferal',
     layout: 'center-right',
     slides: [
       {
-        image: 'history3.jpg',
+        image: history3,
         title: 'refferal system',
         text: 'Invite your friends and receive numerous rewards and bonuses',
       },
@@ -411,12 +415,12 @@ const slides = [
   },
   {
     id: 4,
-    cover: 'history4.jpg',
+    cover: history4,
     // title: 'storage',
     layout: 'top-left',
     slides: [
       {
-        image: 'history4.jpg',
+        image: history4,
         title: 'crypto storage',
         text: 'Store your cryptocurrency conveniently and securely',
       },
