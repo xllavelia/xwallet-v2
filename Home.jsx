@@ -5,11 +5,13 @@ import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } f
  import history2 from "./history2.jpg"
  import history3 from "./history3.jpg"
  import history4 from "./history4.jpg"
+import { color } from "framer-motion";
+import { title } from "framer-motion/client";
 
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix stories"
+// git commit -m "fix stories 2"
 // git push -u origin main 
 
 
@@ -371,9 +373,9 @@ const slides = [
   const STORIES = [
   {
     id: 1,
-    cover: history1,
-    // title: 'transfers',
+    title: 'transfers',
     layout: 'top-left',
+        text: 'Transfer funds to your loved ones quickly and securely, with no fees for the first 3 months.',
     slides: [
       {
         image:  history1,
@@ -384,9 +386,9 @@ const slides = [
   },
   {
     id: 2,
-    cover: history2,
-    // title: 'prime',
+    title: 'prime',
     layout: 'bottom-right',
+        text: 'Buy a premium subscription, different plans to choose from, benefits, status, rewards',
     slides: [
       {
         image: history2,
@@ -402,9 +404,9 @@ const slides = [
   },
   {
     id: 3,
-    cover: history3,
-    // title: 'refferal',
+    title: 'refferal',
     layout: 'center-right',
+        text: 'Invite your friends and receive numerous rewards and bonuses',
     slides: [
       {
         image: history3,
@@ -415,9 +417,9 @@ const slides = [
   },
   {
     id: 4,
-    cover: history4,
-    // title: 'storage',
+    title: 'storage',
     layout: 'top-left',
+        text: 'Store your cryptocurrency conveniently and securely',
     slides: [
       {
         image: history4,
@@ -776,17 +778,31 @@ return (
       <div className="stories-scroll">
         {STORIES.map(function (story, index) {
           return (
-            <button
-              key={story.id}
-              className="story-card"
+            // <button
+              // key={story.id}
+             
+              // onClick={function () {
+              //   openStory(index);
+              // }}
+            // >
+               
+            // </button>
+
+           
+          <div className="story-card"  key={story.id}
+             
               onClick={function () {
                 openStory(index);
-              }}
-            >
-              <img className="story-card-img" src={story.cover} alt={story.title} />
-              <div className="story-card-overlay" />
-              <span className="story-card-title">{story.title}</span>
-            </button>
+              }} >
+            <article className="newsCard newsCardMain">
+              {/* <span className="newsTag">UPDATE</span> */}
+              <h4 style={{color: "var(--xlavelia)" }}>{story.title}</h4>
+              <p className="text-story-card">{story.text}</p>
+              {/* <span className="newsDate">Today · 2 min read</span> */}
+            </article>
+
+          </div>
+      
           );
         })}
       </div>

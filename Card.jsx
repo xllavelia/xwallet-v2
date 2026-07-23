@@ -187,9 +187,9 @@ const Vault = () => {
                 Assets stay in their native form until you choose to swap or withdraw.
               </p>
               <div className="vlt-legal-row">
-                <a href="#terms">Terms of Use</a>
+                <a  >Terms of Use</a>
                 <span className="vlt-sep">·</span>
-                <a href="#privacy">Privacy Policy</a>
+                <a  >Privacy Policy</a>
               </div>
             </div>
           </div>

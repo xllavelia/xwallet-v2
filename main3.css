@@ -451,12 +451,12 @@ top: 90%;
 .story-card {
   position: relative;
   flex: 0 0 auto;
-  width:40%;
+  width:48%;
   height: 90px;
   border-radius: 16px;
-  /* border: 2px solid var(--xlavelia); */
-  border: none;
-  background: #000;
+  /* border: 1px solid #000; */
+  /* border: none; */
+  /* background: #1a1a1a; */
   overflow: hidden;
   padding: 0;
   font-family: 'Unbounded', sans-serif;
@@ -472,7 +472,12 @@ top: 90%;
 }
 
 
-
+.text-story-card {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .story-card-img {
   position: absolute;

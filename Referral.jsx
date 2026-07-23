@@ -105,7 +105,7 @@ const roadHome = () => {
               <span className="sep">/</span>
               <a href="#support">Support</a>
               <span className="sep">/</span>
-              <a href="#privacy">Privacy</a>
+              <a  >Privacy</a>
             </div>
           </div>
         </div>

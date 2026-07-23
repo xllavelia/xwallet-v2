@@ -15,7 +15,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 var MOCK_CONTACTS = [
-  { id: "DBECH", name: "Mara Chen",      color: "hsl(61, 85%, 78%)" },
+  { id: "DBECH", name: "Xlavelia Laga",      color: "hsl(61, 85%, 78%)" },
   { id: "5SEI1", name: "Jonah Park",     color: "hsl(61, 85%, 78%)" },
   { id: "K3RZX", name: "Aiko Tanaka",    color: "hsl(61, 85%, 78%)" },
   { id: "QW7T9", name: "Lucas Ferreira", color: "hsl(61, 85%, 78%)" },

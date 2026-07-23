@@ -171,9 +171,9 @@ const Bonus = () => {
                 to all pairs. Refund is processed in USDT to your main balance.
               </p>
               <div className="legal-row">
-                <a href="#terms" onClick={handleReset}>Terms of Use</a>
+                <a   onClick={handleReset}>Terms of Use</a>
                 <span className="sep">·</span>
-                <a href="#privacy">Privacy Policy</a>
+                <a  >Privacy Policy</a>
               </div>
             </div>
           </div>

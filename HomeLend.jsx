@@ -326,7 +326,7 @@ const HomeLend = () => {
         </div>
 
         <div className="action-circle" onClick={() => goVia("promocode")}>
-          <div className="icon" onClick={() => goVia("about")}>
+          <div className="icon" >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="32"
