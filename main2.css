@@ -1320,7 +1320,7 @@ background: rgba(255, 255, 255, 0.05);
 .SendContent {
   background: #121212;
   min-height: 90vh;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Unbounded', sans-serif;
   color: #ffffff;
   -webkit-tap-highlight-color: transparent;
 }
@@ -1431,7 +1431,7 @@ background: rgba(255, 255, 255, 0.05);
   border: none;
   outline: none;
   color: #fff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Unbounded', sans-serif;
   font-size: 16px;
   font-weight: 500;
 }
@@ -2625,7 +2625,7 @@ background-color: #1a1a1a;
   background: #121212;
   min-height: 100vh;
   color: #fff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Unbounded', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -3837,7 +3837,7 @@ background-color: #1a1a1a;
 }
 
 .tech-eyebrow {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Unbounded', sans-serif;
   font-weight: 600;
   font-size: 0.85rem;
   letter-spacing: 0.4em;

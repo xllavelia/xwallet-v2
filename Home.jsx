@@ -1,17 +1,16 @@
 import React, {useState, useRef, useEffect} from "react";
-  import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } from './useBalance';
- import history1 from "./history1.jpg"
- import history2 from "./history2.jpg"
- import history3 from "./history3.jpg"
- import history4 from "./history4.jpg"
+import history1 from "./history1.jpg"
+import history2 from "./history2.jpg"
+import history3 from "./history3.jpg"
+import history4 from "./history4.jpg"
 import { color } from "framer-motion";
 import { title } from "framer-motion/client";
 
-
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix stories 2"
+// git commit -m "optimization"
 // git push -u origin main 
 
 
@@ -557,6 +556,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 return (
     
 <div className="content" > 
+  
 
  <div className="app-scroll-container">
 
@@ -564,7 +564,7 @@ return (
       <section className="app-page-section">
         <div className="page-content"> <div className="crypto">
 
-
+{/* <SpeedInsights/> */}
 
  <div className="crypto-layout">
       

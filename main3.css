@@ -4,7 +4,7 @@
   background: #121212;
   /* min-height: 100vh; */
   color: #fff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Unbounded', sans-serif;
   -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
 }
@@ -73,7 +73,7 @@
   flex: 1;
   background: none; border: none;
   padding: 11px 10px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Unbounded', sans-serif;
   font-size: 13px; font-weight: 700;
   color: rgba(255,255,255,0.5);
   cursor: pointer;
