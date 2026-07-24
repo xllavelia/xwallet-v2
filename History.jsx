@@ -223,7 +223,6 @@ const [recentTransfers, setRecentTransfers] = useState([]);
   return (
     
     <div className="HistoryContent">
-      <div className="Road-Home" onClick={roadHome}></div>
 
       {managedPos && (
         <div className="ht-detail-overlay" onClick={() => setSelectedActivePosId(null)}>
@@ -407,14 +406,14 @@ const [recentTransfers, setRecentTransfers] = useState([]);
                             {card.autoClose && <span className="ht-ac-tp-badge">TP</span>}
                           </div>
                           <div className="ht-ac-coin">{card.coin}</div>
-                          <div className="ht-ac-entry">{'Entry ' + card.entryStr + ' · ' + card.openedAgo}</div>
+                          <div className="ht-ac-entry">{card.livePriceStr}</div>
                           <div className="ht-ac-liq">{'Liq ' + card.liqStr}</div>
                         </div>
                         <div className="ht-ac-right">
                           <div className={'ht-ac-pnl ' + card.pnlClass}>{card.pnlStr}</div>
                           <div className={'ht-ac-pct ' + card.pnlClass}>{card.pnlPctStr}</div>
                           <div className="ht-ac-live-price">{card.livePriceStr}</div>
-                          <div className="ht-ac-tap">tap ›</div>
+                          <div className="ht-ac-tap"></div>
                         </div>
                       </div>
                     );
@@ -476,3 +475,4 @@ const [recentTransfers, setRecentTransfers] = useState([]);
 };
 
 export default History;
+

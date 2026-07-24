@@ -140,7 +140,7 @@ const navigate = useNavigate();
             <div>
              
 
-              <h3> <span onClick={addTestXp}>ROAD OF REWARDS </span><span className="status-pass" onClick={() => setIsOpen(true)}>PRIME</span></h3>
+              <h3> <span onClick={addTestXp}>ROAD OF REWARDS </span></h3>
             </div>
 
             <span className="road-count">
@@ -355,88 +355,6 @@ const navigate = useNavigate();
         </div>
       )}
 
- <div className={'bo-overlay' + (isOpen ? ' open' : '')}>
-        
-        {/* Клик по фону закрывает окно */}
-        <div className="bo-backdrop" onClick={() => setIsOpen(false)}></div>
-
-        {/* ОСТРОВ-ТИКЕТ ПО ЦЕНТРУ */}
-        <div className={'bo-ticket' + (isOpen ? ' open' : '')}>
-          
-          <div className="bo-ticket-inner">
-            {/* ШАПКА ТИКЕТА */}
-            <div className="bo-header">
-              <div className="bo-col">
-                <span className="bo-status"></span>
-              </div>
-              {/* <button className="bo-close-btn" onClick={() => setIsOpen(false)}>
-                ✕
-              </button> */}
-            </div>
-
-            {/* ГЛАВНЫЙ БАЛАНС */}
-            <div className="bo-main-balance">
-              <span className="bo-bal-label">subcribe </span>
-              <span className="bo-bal-val">
-PRIME
-              </span>
-            </div>
-
-            <div className="bo-divider"></div>
-
-            {/* БЛОК ПРОФИТА (24ч и 7д) */}
-            <div className="bo-row">
-              <div className="bo-col">
-                <span className="bo-label"> owner </span>
-                <span className="bo-val-bold"> xlavelia </span>
-              </div>
-              <div className="bo-col right">
-                <span className="bo-label">status</span>
-                <span className="bo-val-bold">active</span>
-              </div>
-            </div>
-
-            <div className="bo-divider"></div>
-
-            {/* РАСШИРЕННАЯ СТАТИСТИКА */}
-            <div className="bo-stats-list">
-              
-              <div className="bo-stat-item">
-<ul>
-<li> Exclusive Rewards</li>
-<li> Zero-Fee Transfers</li>
-<li> Fee Vouchers</li>
-<li> Referral Boosts</li>
-<li> Cashback Rewards</li>
-<li>  Premium Features</li>
-<li> Early Access </li>
-<li> Priority Support </li>
-<li> Custom Wallet ID </li>
-<li> Advanced History </li>
-<li> Extra Wallet Slots</li>
-<li> Transfer Templates</li>
-<li> Limited Drops</li>
-<li> Exclusive Perks</li>
-<li> Seasonal Rewards</li>
-</ul>
-              </div>
-           
-            </div>
-<button className="bo-settings-btn">
-              {/* <span className="set-icon">⚙</span> */}
-              <span className="set-text"><a href="http://t.me/xwlltbot">@xwlltbot</a></span>
-            </button>
-
-          </div>
-          
-          {/* Боковой корешок для стиля тикета */}
-          <div className="bo-ticket-stub">
-<span className="stub-text"></span>
-            <div className="stub-barcode"></div>
-          </div>
-
-        </div>
-      </div>
     
     </main>
   );

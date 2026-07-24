@@ -252,7 +252,6 @@ setTimeout(() => {
 }
   return (
     <div className="TradeContent">
-      <div className="Road-Home" onClick={roadHome}></div>
 
       {activePanel && (
         <div className="et-pos-modal-overlay" onClick={() => setActivePosId(null)}>
@@ -330,7 +329,7 @@ setTimeout(() => {
             )}
           </div>
         </div>
-
+{/* et-pos-modal */}
         {totalOpenCount > 0 && (
           <div className="et-positions-container">
             <div className="et-positions-title">

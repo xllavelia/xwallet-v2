@@ -1641,8 +1641,8 @@ justify-content: center;
 }
 
 .home-history-amount-active {
-  color: #FFFFFF;
-  font-size: 1.1rem;
+  color: var(--xlavelia);
+  font-size: 1.2rem;
   font-weight: 700;
   margin: 0;
   letter-spacing: -0.5px;
@@ -1650,14 +1650,10 @@ justify-content: center;
 
 /* Плашка кэшбека */
 .home-history-bonus-active {
-background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color: var(--xlavelia);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  font-size: 0.75rem;
+color: white;
+  font-size: 0.70rem;
   font-weight: 700;
-  padding: 4px 8px;
+  padding: 4px 0px;
   border-radius: 8px;
 }
 
@@ -2888,7 +2884,7 @@ font-family: 'Unbounded';
   bottom: 0;
   left: 0;
   right: 0;
-  max-width: 90%;
+  max-width: 100%;
   margin: 0 auto;
   background: transparent;
   padding: 16px;
@@ -2910,7 +2906,7 @@ font-family: 'Unbounded';
 }
 
 .et-btn-trade.long, .et-btn-trade.short {
-   background: rgba(255, 255, 255, 0.05);
+   background: #1a1a1a;
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color: var(--xlavelia);
@@ -2939,7 +2935,7 @@ font-family: 'Unbounded';
   --px-amber: #e5b344;
   
   --font-display: 'Unbounded', sans-serif;
-  --font-ui: 'Unbounded', sans-serif;
+  --font-ui: 'Inter', sans-serif;
 }
 
 body {
