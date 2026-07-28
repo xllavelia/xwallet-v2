@@ -7,7 +7,13 @@ import { readBalance, writeBalance } from './useBalance';
 const Setting = () => {
   const navigate = useNavigate();
 
-     
+     function handleLogout() {
+  localStorage.removeItem("xw_session");
+  localStorage.removeItem("xw_token");
+  navigate("/");
+}
+
+
 const roadPromoCode = () => {
       navigate(-1)
 
@@ -96,7 +102,7 @@ setTimeout(() => {
 
         <section className="settings-menu-block">
 
-          <div className="menu-item-row">
+          <div className="menu-item-row" onClick={handleLogout}>
             <div className="menu-item-left">
               <div className="menu-icon-box"></div>
               <span className="menu-text">Account Details</span>
@@ -104,7 +110,7 @@ setTimeout(() => {
             <div className="menu-item-right">›</div>
           </div>
 
-          <div className="menu-item-row">
+          <div className="menu-item-row" >
             <div className="menu-item-left">
               <div className="menu-icon-box"></div>
               <span className="menu-text">Confidentiality</span>

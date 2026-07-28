@@ -10,6 +10,7 @@ import {
 import "./Main.css";
 import "./Transfersystem.css";
 
+import RootGate from "./RootGate";
 import Home from "./Home";
 import HomeLend from "./HomeLend";
 import Send from "./Send";
@@ -31,7 +32,7 @@ import Emblem from "./Emblem";
 import Ads from "./ads";
 import Prime from "./Prime";
 import PromoCode from "./PromoCode";
-
+import RequireAuth from "./RequireAuth";
 
 import PageTransition from "./PageTransition";
 
@@ -78,7 +79,7 @@ const AppRoutes = () => {
         path="/"
         element={
           <>
-            <Home />
+            <RootGate />
             <Outlet />
           </>
         }
@@ -89,9 +90,11 @@ const AppRoutes = () => {
             key={route.path}
             path={route.path}
             element={
+              <RequireAuth>
               <PageTransition>
                 {route.element}
               </PageTransition>
+              </RequireAuth>
             }
           />
         ))}

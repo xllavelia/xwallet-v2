@@ -10,7 +10,7 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix design tade"
+// git commit -m "ADD GOLANG, FORM REG"
 // git push -u origin main 
 
 
@@ -23,8 +23,9 @@ import { title } from "framer-motion/client";
 // git add .
 // git commit -m "initial clean state"
 // git branch -M main
-// git remote add origin  https://github.com/xllavelia/xwallet-v2.git
+// git remote add origin  https://github.com/xllavelia/xwallet-GO.git
 // git push -f origin main
+
 
 const Home = () => {
   
@@ -551,7 +552,13 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
   }
  
   const currentSlide = activeStory ? activeStory.slides[slideIndex] : null;
- 
+
+
+function handleLogout() {
+  localStorage.removeItem("xw_session");
+  navigate("/");
+}
+
 
 return (
     
@@ -786,10 +793,11 @@ return (
 
            
           <div className="story-card"  key={story.id}
-             
               onClick={function () {
                 openStory(index);
-              }} >
+              }} 
+            >
+
             <article className="newsCard newsCardMain">
               {/* <span className="newsTag">UPDATE</span> */}
               <h4 style={{color: "var(--xlavelia)" }}>{story.title}</h4>
