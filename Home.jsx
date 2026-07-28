@@ -10,9 +10,8 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "ADD GOLANG, FORM REG"
+// git commit -m "fix git"
 // git push -u origin main 
-
 
 
 
