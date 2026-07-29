@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Welcome.css";
 
 var SESSION_KEY = "xw_session";
 var TOKEN_KEY = "xw_token";
