@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { writeProfile } from "./useBalance";
+import "./Welcome.css";
 
 var SESSION_KEY = "xw_session";
+var TOKEN_KEY = "xw_token";
+var API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 
 var SLIDES = [
   {
     eyebrow: "Welcome to XWallet",
-    title: "xwallet own your flow",
+    title: "Trade crypto without the noise",
     text: "Real-time markets, deep charts, and leverage up to 200x — all in one focused wallet."
   },
   {
@@ -73,19 +75,55 @@ function RefreshIcon() {
   );
 }
 
-function generatePlayerId() {
-  var digits = "0123456789";
-  var out = "";
-  for (var i = 0; i < 6; i++) out += digits[Math.floor(Math.random() * digits.length)];
-  return out;
+async function apiRegister(username, playerId, password) {
+  console.log("[XWallet] POST", API_BASE + "/auth/register");
+  var res = await fetch(API_BASE + "/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: username, playerId: playerId, password: password })
+  });
+  var data = await res.json().catch(function () { return null; });
+  console.log("[XWallet] register response", res.status, data);
+  if (!res.ok) {
+    var message = (data && data.error) ? data.error : ("Registration failed (" + res.status + ")");
+    throw new Error(message);
+  }
+  return data;
+}
+
+async function apiLogin(identifier, password) {
+  console.log("[XWallet] POST", API_BASE + "/auth/login");
+  var res = await fetch(API_BASE + "/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ identifier: identifier, password: password })
+  });
+  var data = await res.json().catch(function () { return null; });
+  console.log("[XWallet] login response", res.status, data);
+  if (!res.ok) {
+    var message = (data && data.error) ? data.error : ("Login failed (" + res.status + ")");
+    throw new Error(message);
+  }
+  return data;
+}
+
+async function apiGenerateId() {
+  console.log("[XWallet] GET", API_BASE + "/auth/generate-id");
+  var res = await fetch(API_BASE + "/auth/generate-id");
+  var data = await res.json().catch(function () { return null; });
+  console.log("[XWallet] generate-id response", res.status, data);
+  if (!res.ok) {
+    throw new Error("Could not generate an ID, try again");
+  }
+  return data.playerId;
 }
 
 const Welcome = () => {
   const navigate = useNavigate();
 
-  var [stage, setStage] = useState("onboarding"); // "onboarding" | "auth"
+  var [stage, setStage] = useState("onboarding");
   var [slideIndex, setSlideIndex] = useState(0);
-  var [mode, setMode] = useState("register"); // "register" | "login"
+  var [mode, setMode] = useState("register");
 
   var [username, setUsername] = useState("");
   var [playerId, setPlayerId] = useState("");
@@ -95,6 +133,8 @@ const Welcome = () => {
   var [loginPassword, setLoginPassword] = useState("");
   var [showPassword, setShowPassword] = useState(false);
   var [error, setError] = useState(null);
+  var [isSubmitting, setIsSubmitting] = useState(false);
+  var [isGeneratingId, setIsGeneratingId] = useState(false);
 
   var slide = SLIDES[slideIndex];
   var isLastSlide = slideIndex === SLIDES.length - 1;
@@ -108,11 +148,26 @@ const Welcome = () => {
     setSlideIndex(slideIndex + 1);
   }
 
-  function handleGenerateId() {
-    setPlayerId(generatePlayerId());
+  function completeSession(data) {
+    localStorage.setItem(TOKEN_KEY, data.token);
+    localStorage.setItem(SESSION_KEY, "1");
+    navigate("/");
   }
 
-  function handleRegisterSubmit(e) {
+  async function handleGenerateId() {
+    setError(null);
+    setIsGeneratingId(true);
+    try {
+      var id = await apiGenerateId();
+      setPlayerId(id);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsGeneratingId(false);
+    }
+  }
+
+  async function handleRegisterSubmit(e) {
     e.preventDefault();
     setError(null);
 
@@ -133,16 +188,18 @@ const Welcome = () => {
       return;
     }
 
-    // TEMP — local-only account creation until the Go + Postgres backend
-    // is wired in. Replace this block with:
-    //   const res = await fetch('/api/auth/register', { method:'POST', body: JSON.stringify({ username, playerId, password }) });
-    // and store the returned session token instead of the flag below.
-    writeProfile({ id: playerId, name: username.trim() });
-    localStorage.setItem(SESSION_KEY, "1");
-    navigate("/");
+    setIsSubmitting(true);
+    try {
+      var data = await apiRegister(username.trim(), playerId, password);
+      completeSession(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
-  function handleLoginSubmit(e) {
+  async function handleLoginSubmit(e) {
     e.preventDefault();
     setError(null);
 
@@ -151,11 +208,19 @@ const Welcome = () => {
       return;
     }
 
-    // TEMP — real credential verification requires the backend.
-    setError("Login isn't connected yet — backend coming in the next step");
+    setIsSubmitting(true);
+    try {
+      var data = await apiLogin(loginId.trim(), loginPassword);
+      completeSession(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   var modePillClass = "wlc-mode-pill " + mode;
+  var submitLabel = isSubmitting ? "Please wait..." : (mode === "register" ? "Create Account" : "Log In");
 
   return (
     <div className="WelcomeContent">
@@ -180,7 +245,7 @@ const Welcome = () => {
           <div className="wlc-content">
             <div className="wlc-text-block" key={slideIndex}>
               <span className="wlc-eyebrow">{slide.eyebrow}</span>
-              <h1 className="wlc-title">{slide.title} </h1>
+              <h1 className="wlc-title">{slide.title}</h1>
               <p className="wlc-subtitle">{slide.text}</p>
             </div>
 
@@ -196,7 +261,6 @@ const Welcome = () => {
                   );
                 })}
               </div>
-
               <button className="wlc-next-btn" onClick={handleNextSlide}>
                 {nextLabel}
                 <ArrowIcon />
@@ -255,7 +319,7 @@ const Welcome = () => {
                       value={playerId}
                       onChange={(e) => setPlayerId(e.target.value.replace(/\D/g, "").slice(0, 6))}
                     />
-                    <button type="button" className="wlc-generate-btn" onClick={handleGenerateId}>
+                    <button type="button" className="wlc-generate-btn" onClick={handleGenerateId} disabled={isGeneratingId}>
                       <RefreshIcon />
                     </button>
                   </div>
@@ -289,7 +353,7 @@ const Welcome = () => {
                   />
                 </div>
 
-                <button type="submit" className="wlc-submit-btn">Create Account</button>
+                <button type="submit" className="wlc-submit-btn" disabled={isSubmitting}>{submitLabel}</button>
               </form>
             )}
 
@@ -322,7 +386,7 @@ const Welcome = () => {
                   </div>
                 </div>
 
-                <button type="submit" className="wlc-submit-btn">Log In</button>
+                <button type="submit" className="wlc-submit-btn" disabled={isSubmitting}>{submitLabel}</button>
               </form>
             )}
 

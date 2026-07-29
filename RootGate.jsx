@@ -8,7 +8,7 @@ var API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 const Welcome = lazy(() => import("./Welcome"));
 
 function RootGate() {
-  var [status, setStatus] = useState("checking"); // "checking" | "authed" | "guest"
+  var [status, setStatus] = useState("checking");
 
   useEffect(function () {
     var token = localStorage.getItem(TOKEN_KEY);
