@@ -191,14 +191,13 @@ const Welcome = () => {
     try {
       var data = await apiRegister(username.trim(), playerId, password);
       completeSession(data);
+      setTimeout(() => {
+    window.location.reload()
+    }, 200)
     } catch (err) {
       setError(err.message);
     } finally {
       setIsSubmitting(false);
-      
-setTimeout(() => {
-    window.location.reload()
-    }, 200)
     }
   }
 
@@ -215,13 +214,14 @@ setTimeout(() => {
     try {
       var data = await apiLogin(loginId.trim(), loginPassword);
       completeSession(data);
+           setTimeout(() => {
+    window.location.reload()
+    }, 200)
+    
     } catch (err) {
       setError(err.message);
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => {
-    window.location.reload()
-    }, 200)
     }
   }
 
@@ -365,16 +365,18 @@ setTimeout(() => {
 
             {mode === "login" && (
               <form className="wlc-form" onSubmit={handleLoginSubmit}>
-                <div className="wlc-field">
-                  <label className="wlc-label">Username or Player ID</label>
-                  <input
-                    className="wlc-input"
-                    type="text"
-                    placeholder="Username or 6-digit ID"
-                    value={loginId}
-                    onChange={(e) => setLoginId(e.target.value)}
-                  />
-                </div>
+              <div className="wlc-field">
+  <label className="wlc-label">Player ID</label>
+  <input
+    className="wlc-input"
+    type="text"
+    inputMode="numeric"
+    maxLength={6}
+    placeholder="6-digit ID"
+    value={loginId}
+    onChange={(e) => setLoginId(e.target.value.replace(/\D/g, "").slice(0, 6))}
+  />
+</div>
 
                 <div className="wlc-field">
                   <label className="wlc-label">Password</label>
