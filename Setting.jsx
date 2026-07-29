@@ -11,6 +11,7 @@ const Setting = () => {
   localStorage.removeItem("xw_session");
   localStorage.removeItem("xw_token");
   navigate("/");
+    window.location.reload()
 }
 
 

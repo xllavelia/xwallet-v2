@@ -7,8 +7,8 @@ var API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 
 var SLIDES = [
   {
-    eyebrow: "Welcome to XWallet",
-    title: "Trade crypto without the noise",
+    eyebrow: "Welcome to xwallet",
+    title: "xwallet own your flow",
     text: "Real-time markets, deep charts, and leverage up to 200x — all in one focused wallet."
   },
   {
@@ -195,6 +195,10 @@ const Welcome = () => {
       setError(err.message);
     } finally {
       setIsSubmitting(false);
+      
+setTimeout(() => {
+    window.location.reload()
+    }, 200)
     }
   }
 
@@ -215,6 +219,9 @@ const Welcome = () => {
       setError(err.message);
     } finally {
       setIsSubmitting(false);
+      setTimeout(() => {
+    window.location.reload()
+    }, 200)
     }
   }
 
