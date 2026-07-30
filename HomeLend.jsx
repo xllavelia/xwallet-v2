@@ -1,14 +1,13 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  useBalance,
   usePositions,
   useTradeHistory,
   useProfile,
   useTransfers,
 } from "./useBalance";
+import { useWalletBalance } from "./useWallet";
 
-// Некоторые переходы требуют доп. state в history (например /trade)
 const NAV_TARGETS = {
   home: "/homelend",
   send: "/send",
@@ -28,12 +27,7 @@ const NAV_TARGETS = {
   promocode: "/promocode",
 };
 
-// Небольшая задержка нужна, чтобы дать роутеру обработать navigate(-1)
-// до пуша нового route — иначе на медленных устройствах переход может
-// уйти поверх недомонтированного предыдущего экрана и сломать state.
-// Сделано намеренно: разворачивать текущий экран нужно всегда,
-// даже если сюда попали не из /home (см. обсуждение).
-const NAV_STEP_DELAY_MS =  20;
+const NAV_STEP_DELAY_MS = 20;
 
 function safeNum(val) {
   const n = parseFloat(val);
@@ -44,14 +38,12 @@ const HomeLend = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const balance = useBalance();
+  const { wallet } = useWalletBalance();
   const positions = usePositions();
   const tradeHistory = useTradeHistory();
   const profile = useProfile();
   const transfers = useTransfers();
 
-  // Единая функция навигации вместо 14 копий одной и той же функции.
-  // Разница только в целевом пути — держим её в NAV_TARGETS.
   const goVia = useCallback(
     (key) => {
       const target = NAV_TARGETS[key];
@@ -69,13 +61,10 @@ const HomeLend = () => {
   );
 
   const balanceStr = useMemo(
-    () => (balance ?? 0).toFixed(2),
-    [balance]
+    () => (wallet.balance ?? 0).toFixed(2),
+    [wallet.balance]
   );
 
-  // Тяжёлые вычисления по tradeHistory пересчитываются только когда
-  // реально меняются исходные данные — а не на любой ре-рендер
-  // (например, от открытия/закрытия модалки баланса через isOpen).
   const stats = useMemo(() => {
     const now = Date.now();
     const closedWins = tradeHistory.filter((t) => t.result === "win");
@@ -124,7 +113,9 @@ const HomeLend = () => {
 
   return (
     <div className="BonusContent">
-      <div className="actions-floating-grid-">
+
+
+    <div className="actions-floating-grid-">
         <div className="action-circle" onClick={() => goVia("send")}>
           <div className="icon">
             <svg
@@ -404,11 +395,11 @@ const HomeLend = () => {
         </section>
       </div>
 
+
+
       <div className={"bo-overlay" + (isOpen ? " open" : "")}>
-        {/* Клик по фону закрывает окно */}
         <div className="bo-backdrop" onClick={() => setIsOpen(false)}></div>
 
-        {/* ОСТРОВ-ТИКЕТ ПО ЦЕНТРУ */}
         <div className={"bo-ticket" + (isOpen ? " open" : "")}>
           <div className="bo-ticket-inner">
             <div className="bo-header">
@@ -480,7 +471,6 @@ const HomeLend = () => {
             </button>
           </div>
 
-          {/* Боковой корешок для стиля тикета */}
           <div className="bo-ticket-stub">
             <span className="stub-text">{"ID " + (profile?.id ?? "—")}</span>
             <div className="stub-barcode"></div>

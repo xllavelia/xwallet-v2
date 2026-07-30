@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useBalance, usePositions, useTradeHistory, useProfile, useTransfers } from './useBalance';
+import { useWalletBalance } from "./useWallet";
 import history1 from "./history1.jpg"
 import history2 from "./history2.jpg"
 import history3 from "./history3.jpg"
@@ -10,7 +10,7 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix refresh"
+// git commit -m "create walet balance!"
 // git push -u origin main 
 
 
@@ -29,10 +29,8 @@ import { title } from "framer-motion/client";
 const Home = () => {
   
   const navigate = useNavigate();
-  const balance = useBalance();
- var profile   = useProfile();
- var transfers = useTransfers();
-
+const { wallet } = useWalletBalance();
+const balance = wallet.balance;
  
 const roadHomeLend = () => {
     navigate("/homelend");
