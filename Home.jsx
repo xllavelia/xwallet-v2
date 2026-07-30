@@ -10,7 +10,7 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix bug create walet balance!"
+// git commit -m "fix bug create walet balance"
 // git push -u origin main 
 
 
@@ -198,7 +198,6 @@ function handleRefresh() {
   setTimeout(function () { setRefreshing(false); }, 700);
 }
 
-var recentTransfers = transfers.slice(0, 3);
 
   const TREND_COINS = [
   { id: 'BTC', symbol: 'BTCUSDT', name: 'Bitcoin', iconBg: '#f7931a', glyph: '₿' },
