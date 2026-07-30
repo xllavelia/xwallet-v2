@@ -1,33 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createChart, CandlestickSeries, HistogramSeries } from 'lightweight-charts';
-import { useBalance, usePositions, useTradeHistory, closePositionById } from './useBalance';
+import { useWalletBalance } from './useWallet';
+import { usePositionsRemote, closePosition } from './usePositions';
 
 function safeNum(val) {
   var n = parseFloat(val);
   return isNaN(n) ? 0 : n;
-}
-
-function migratePos(pos) {
-  var amount   = safeNum(pos.amount);
-  var leverage = safeNum(pos.leverage) || 1;
-  var margin   = safeNum(pos.margin) || (leverage > 0 ? amount / leverage : 0);
-  return {
-    id:                pos.id || Date.now(),
-    tradeId:           pos.tradeId || null,
-    coin:              pos.coin || 'BTC',
-    type:              pos.type || 'long',
-    entryPrice:        safeNum(pos.entryPrice),
-    leverage:          leverage,
-    amount:            amount,
-    margin:            margin,
-    fees:              safeNum(pos.fees),
-    feesPaidByVoucher: pos.feesPaidByVoucher || false,
-    liqPrice:          safeNum(pos.liqPrice),
-    openTime:          safeNum(pos.openTime) || Date.now(),
-    autoClose:         pos.autoClose || false,
-    autoCloseTarget:   safeNum(pos.autoCloseTarget) || null
-  };
 }
 
 const Trade = () => {
@@ -47,18 +26,16 @@ const Trade = () => {
   const [isMoreOpen,   setIsMoreOpen]   = useState(false);
   const [activePosId,  setActivePosId]  = useState(null);
 
-  const balance      = useBalance();
-  const rawPositions = usePositions();
-  const tradeHistory = useTradeHistory();
-
-  const positions = rawPositions.map(migratePos);
+  const { wallet } = useWalletBalance();
+  const balance = wallet.balance;
+  const { positions, refresh } = usePositionsRemote();
 
   const coinStats = {
-  BTC: { lev: '200x', vol: '$2.21B', oi: '$1.80B', fund: '0.0000%' },
-  ETH: { lev: '200x', vol: '$1.02B', oi: '$1.19B', fund: '0.0012%' },
-  SOL: { lev: '150x', vol: '$850M',  oi: '$420M',  fund: '-0.0020%' },
-  TON: { lev: '75x',  vol: '$120M',  oi: '$65M',   fund: '0.0050%' }
-};
+    BTC: { lev: '200x', vol: '$2.21B', oi: '$1.80B', fund: '0.0000%' },
+    ETH: { lev: '200x', vol: '$1.02B', oi: '$1.19B', fund: '0.0012%' },
+    SOL: { lev: '150x', vol: '$850M',  oi: '$420M',  fund: '-0.0020%' },
+    TON: { lev: '75x',  vol: '$120M',  oi: '$65M',   fund: '0.0050%' }
+  };
   const stats = coinStats[currentCoin] || coinStats['BTC'];
 
   var numericPrice   = safeNum(currentPrice.toString().replace(/,/g, ''));
@@ -77,7 +54,7 @@ const Trade = () => {
     var pnl    = calcPnl(pos);
     var pnlPct = pos.margin > 0 ? (pnl / pos.margin) * 100 : 0;
     var sign   = pnl >= 0 ? '+' : '';
-    var dMs    = Date.now() - pos.openTime;
+    var dMs    = Date.now() - new Date(pos.openedAt).getTime();
     var dH     = Math.floor(dMs / 3600000);
     var dM     = Math.floor((dMs % 3600000) / 60000);
     var durStr = dH > 0 ? dH + 'h ' + dM + 'm' : dM + 'm';
@@ -112,22 +89,6 @@ const Trade = () => {
     if (positionPanels[k].id === activePosId) { activePanel = positionPanels[k]; break; }
   }
 
-  var lastTrade     = null;
-  for (var i = 0; i < tradeHistory.length; i++) {
-    if (tradeHistory[i].coin === currentCoin) { lastTrade = tradeHistory[i]; break; }
-  }
-  var lastPnl       = lastTrade ? safeNum(lastTrade.pnl) : 0;
-  var lastPct       = lastTrade ? safeNum(lastTrade.pnlPercent) : 0;
-  var lastSign      = lastPnl >= 0 ? '+' : '';
-  var lastPnlStr    = lastTrade ? lastSign + '$' + lastPnl.toFixed(2) : '';
-  var lastPctStr    = lastTrade ? lastSign + lastPct.toFixed(2) + '%' : '';
-  var lastPnlClass  = lastTrade ? (lastPnl >= 0 ? 'et-last-trade-pnl pos' : 'et-last-trade-pnl neg') : '';
-  var lastTypeClass = lastTrade ? ('et-pos-badge ' + (lastTrade.type || 'long')) : '';
-  var lastCloseTime = lastTrade ? safeNum(lastTrade.closeTime) : 0;
-  var lastDateStr   = lastCloseTime > 0
-    ? new Date(lastCloseTime).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-    : '';
-
   var modalPnlClass  = activePanel ? (activePanel.pnl >= 0 ? 'et-modal-pnl pos' : 'et-modal-pnl neg') : '';
   var modalTypeClass = activePanel ? ('et-pos-badge ' + activePanel.type) : '';
   var modalAcStr     = activePanel && activePanel.autoClose && activePanel.autoCloseTarget
@@ -135,11 +96,24 @@ const Trade = () => {
 
   function handleClose(posId) {
     if (numericPrice <= 0) return;
-    closePositionById(posId, numericPrice);
+    closePosition(posId, numericPrice).then(refresh);
     setActivePosId(null);
   }
   function roadHome()          { navigate(-1); }
   function handleTimeframe(tf) { setTimeframe(tf); }
+
+  function navigateLong() {
+    navigate(-1);
+    setTimeout(function () {
+      navigate('/order', { state: { coin: currentCoin, type: 'long', price: currentPrice, change: priceChange } });
+    }, 10);
+  }
+  function navigateShort() {
+    navigate(-1);
+    setTimeout(function () {
+      navigate('/order', { state: { coin: currentCoin, type: 'short', price: currentPrice, change: priceChange } });
+    }, 10);
+  }
 
   useEffect(function() {
     if (!chartContainerRef.current) return;
@@ -197,59 +171,7 @@ const Trade = () => {
       priceLineRefs.current.push(el, ll);
     });
   }, [positions, currentCoin]);
-useEffect(function() {
-  if (numericPrice <= 0) return;
 
-  positions.filter(function(p) { return p.coin === currentCoin; }).forEach(function(pos) {
-    if (!pos.entryPrice || pos.entryPrice <= 0) return;
-    if (!pos.liqPrice || pos.liqPrice <= 0) return;
-    if (!pos.margin || pos.margin <= 0) return;
-    if (!pos.leverage || pos.leverage <= 0) return;
-
-    var priceMove = numericPrice - pos.entryPrice;
-    var direction = pos.type === 'long' ? 1 : -1;
-    var rawPnl = pos.margin * pos.leverage * (priceMove / pos.entryPrice) * direction;
-    var pnlPct = (rawPnl / pos.margin) * 100;
-
-    // Ликвидация — цена дошла до уровня ИЛИ убыток >= 100% маржи
-    var shouldLiq = pos.type === 'long'
-      ? numericPrice <= pos.liqPrice
-      : numericPrice >= pos.liqPrice;
-
-    var deepLoss = pnlPct <= -100;
-
-    if (shouldLiq || deepLoss) {
-      var liqClose = shouldLiq ? pos.liqPrice : numericPrice;
-      closePositionById(pos.id, liqClose);
-      if (activePosId === pos.id) setActivePosId(null);
-      return;
-    }
-
-    // Auto close — только если включён и прибыль достигнута
-    if (pos.autoClose && pos.autoCloseTarget && pos.autoCloseTarget > 0) {
-      if (pnlPct >= pos.autoCloseTarget) {
-        closePositionById(pos.id, numericPrice);
-        if (activePosId === pos.id) setActivePosId(null);
-      }
-    } // <--- ДОБАВЛЕНА НЕДОСТАЮЩАЯ СКОБКА ТУТ
-  });
-}, [numericPrice]);
-
-function navigateLong(){
-  navigate(-1)
-
-setTimeout(() => {
-             navigate('/order', { state: { coin: currentCoin, type: 'long',  price: currentPrice, change: priceChange } })
-    }, 10)
-}
-
-function navigateShort(){
-  navigate(-1)
-
-setTimeout(() => {
- navigate('/order', { state: { coin: currentCoin, type: 'short', price: currentPrice, change: priceChange } })   
-    }, 10)
-}
   return (
     <div className="TradeContent">
 
@@ -329,7 +251,7 @@ setTimeout(() => {
             )}
           </div>
         </div>
-{/* et-pos-modal */}
+
         {totalOpenCount > 0 && (
           <div className="et-positions-container">
             <div className="et-positions-title">
@@ -339,7 +261,7 @@ setTimeout(() => {
             {positionPanels.map(function(panel) {
               return (
                 <div key={panel.id} className="et-position-card" onClick={() => setActivePosId(panel.id)}>
-                  <div className="et-pc-glow" ></div>
+                  <div className="et-pc-glow"></div>
                   <div className="et-pc-left">
                     <div className="et-pc-top">
                       <span className={panel.typeClass}>{panel.type.toUpperCase()}</span>
@@ -357,23 +279,6 @@ setTimeout(() => {
                 </div>
               );
             })}
-          </div>
-        )}
-
-        {totalOpenCount === 0 && lastTrade && (
-          <div className="et-last-trade-panel">
-            <div className="et-last-trade-header">
-              <span className="et-last-trade-title">Last Trade</span>
-              <span className="et-last-trade-date">{lastDateStr}</span>
-            </div>
-            <div className="et-last-trade-body">
-              <span className={lastTypeClass}>{(lastTrade.type || 'trade').toUpperCase()}</span>
-              <span className="et-last-entry">{'Entry $' + safeNum(lastTrade.entryPrice).toLocaleString('en-US')}</span>
-              <div className={lastPnlClass}>
-                <span>{lastPnlStr}</span>
-                <span className="et-last-pct">{lastPctStr}</span>
-              </div>
-            </div>
           </div>
         )}
 

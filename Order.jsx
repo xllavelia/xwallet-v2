@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useBalance, useVoucherUsed, addPosition, writeBalance, writeVoucherUsed, VOUCHER_TOTAL } from './useBalance';
+import { useWalletBalance } from './useWallet';
+import { openPosition } from './usePositions';
 
 const Order = () => {
   const navigate = useNavigate();
@@ -16,43 +17,21 @@ const Order = () => {
 
   var currentPrice = parseFloat(rawPrice.toString().replace(/,/g, '')) || 69035;
 
-  var balance = useBalance();
-  var voucherUsed = useVoucherUsed();
+  var { wallet } = useWalletBalance();
+  var balance = wallet.balance;
 
   const [amountInput, setAmountInput] = useState(prefillAmount);
   const [leverage, setLeverage] = useState(prefillLeverage);
-const [submitted, setSubmitted] = useState(false);
-const [autoCloseEnabled, setAutoCloseEnabled] = useState(false);
-const [autoCloseTarget, setAutoCloseTarget] = useState(5);
-
-function generateTradeId() {
-  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var result = 'TRD-';
-  for (var i = 0; i < 6; i++) {
-    result = result + chars[Math.floor(Math.random() * chars.length)];
-  }
-  return result;
-}
+  const [submitted, setSubmitted] = useState(false);
+  const [autoCloseEnabled, setAutoCloseEnabled] = useState(false);
+  const [autoCloseTarget, setAutoCloseTarget] = useState(5);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   var parsedAmount = parseFloat(amountInput) || 0;
   var cryptoAmount = currentPrice > 0 ? (parsedAmount / currentPrice).toFixed(6) : 0;
   var requiredMargin = parsedAmount / leverage;
-
   var fees = parsedAmount * 0.005;
-  //  var fees = requiredMargin * 0.01;
-
-var voucherStartTime = localStorage.getItem('voucher_start_time');
-var voucherExpired = voucherStartTime
-  ? Math.floor((Date.now() - parseInt(voucherStartTime)) / 1000) >= 345600
-  : true;
-var voucherActive = voucherStartTime !== null && !voucherExpired;
-var voucherRemaining = voucherActive ? Math.max(0, VOUCHER_TOTAL - voucherUsed) : 0;
-  var feesFromVoucher = fees <= voucherRemaining ? fees : (voucherRemaining > 0 ? voucherRemaining : 0);
-  var feesFromBalance = fees - feesFromVoucher;
-  var voucherCoversAll = fees > 0 && feesFromVoucher >= fees;
-  var voucherCoversPartial = feesFromVoucher > 0 && feesFromVoucher < fees;
-
-  var totalRequired = requiredMargin + feesFromBalance;
+  var totalRequired = requiredMargin + fees;
   var isBalanceLow = balance < totalRequired;
 
   var liqPrice = 0;
@@ -89,48 +68,30 @@ var voucherRemaining = voucherActive ? Math.max(0, VOUCHER_TOTAL - voucherUsed) 
   var afterTradeStr = '$' + (balance - totalRequired).toFixed(2);
   var btnClass = 'px-action-btn ' + (isBalanceLow ? 'btn-locked' : (type === 'short' ? 'btn-short' : 'btn-long'));
   var btnText = isBalanceLow ? 'Insufficient Funds' : ('Open ' + type.charAt(0).toUpperCase() + type.slice(1));
-  var voucherRemainingStr = '$' + voucherRemaining.toFixed(2);
 
-var feesDisplayStr = '-';
-if (parsedAmount > 0) {
-  if (voucherCoversAll) {
-    feesDisplayStr = '$' + formatUsd(fees) + ' FREE';
-  } else if (voucherCoversPartial) {
-    feesDisplayStr = '$' + formatUsd(fees) + ' (-$' + feesFromVoucher.toFixed(2) + ')';
-  } else {
-    feesDisplayStr = '$' + formatUsd(fees);
-  }
-}
+  var feesDisplayStr = parsedAmount > 0 ? '$' + formatUsd(fees) : '-';
 
   function roadHome() { navigate(-1); }
 
-  function handleOpenPosition() {
+  async function handleOpenPosition() {
     if (isBalanceLow || parsedAmount <= 0 || submitted) return;
-    var newBalance = parseFloat((balance - totalRequired).toFixed(2));
-    var newVoucherUsed = parseFloat((voucherUsed + feesFromVoucher).toFixed(2));
-    var pos = {
-  tradeId: generateTradeId(),
-  autoClose: autoCloseEnabled,
-  autoCloseTarget: autoCloseEnabled ? autoCloseTarget : null,
-      id: Date.now(),
-      coin: coin,
-      type: type,
-      entryPrice: currentPrice,
-      amount: parsedAmount,
-      leverage: leverage,
-      margin: requiredMargin,
-      fees: fees,
-      feesFromVoucher: feesFromVoucher,
-      feesFromBalance: feesFromBalance,
-      feesPaidByVoucher: voucherCoversAll,
-      liqPrice: liqPrice,
-      openTime: Date.now()
-    };
-    writeBalance(newBalance);
-    if (feesFromVoucher > 0) { writeVoucherUsed(newVoucherUsed); }
-    addPosition(pos);
-    setSubmitted(true);
-    setTimeout(function() { navigate(-1, { state: { coin: coin } }); }, 1200);
+    setErrorMsg(null);
+
+    try {
+      await openPosition({
+        coin: coin,
+        type: type,
+        entryPrice: currentPrice,
+        leverage: leverage,
+        amount: parsedAmount,
+        autoClose: autoCloseEnabled,
+        autoCloseTarget: autoCloseEnabled ? autoCloseTarget : null
+      });
+      setSubmitted(true);
+      setTimeout(function() { navigate(-1, { state: { coin: coin } }); }, 1200);
+    } catch (err) {
+      setErrorMsg(err.message);
+    }
   }
 
   return (
@@ -154,7 +115,6 @@ if (parsedAmount > 0) {
 
           <section className="px-hero-input">
             <div className="px-input-container">
-              {/* <span className="px-currency">$</span> */}
               <input
                 type="number"
                 className="px-giant-input"
@@ -170,6 +130,13 @@ if (parsedAmount > 0) {
             <div className="px-alert-inline">
               <div className="px-alert-dot"></div>
               <span>Not enough funds. Deposit or change method.</span>
+            </div>
+          )}
+
+          {errorMsg && (
+            <div className="px-alert-inline">
+              <div className="px-alert-dot"></div>
+              <span>{errorMsg}</span>
             </div>
           )}
 
@@ -196,38 +163,40 @@ if (parsedAmount > 0) {
               })}
             </div>
           </section>
-<section className="px-autoclose-section">
-  <div className="px-autoclose-header">
-    <span className="px-leverage-title">Auto Close (Take Profit)</span>
-    <div
-      className={'px-toggle ' + (autoCloseEnabled ? 'on' : 'off')}
-      onClick={() => setAutoCloseEnabled(!autoCloseEnabled)}
-    >
-      <div className="px-toggle-thumb"></div>
-    </div>
-  </div>
-  {autoCloseEnabled && (
-    <div className="px-autoclose-body">
-      <span className="px-ac-label">Close when profit reaches</span>
-      <div className="px-ac-options">
-        {[3, 5, 10, 20, 50].map(function(pct) {
-          return (
-            <button
-              key={pct}
-              className={'px-lev-btn ' + (autoCloseTarget === pct ? 'active' : '')}
-              onClick={() => setAutoCloseTarget(pct)}
-            >
-              {'+' + pct + '%'}
-            </button>
-          );
-        })}
-      </div>
-      <div className="px-ac-preview">
-        {'TP at $' + formatUsd(requiredMargin * leverage * (autoCloseTarget / 100)) + ' profit'}
-      </div>
-    </div>
-  )}
-</section>
+
+          <section className="px-autoclose-section">
+            <div className="px-autoclose-header">
+              <span className="px-leverage-title">Auto Close (Take Profit)</span>
+              <div
+                className={'px-toggle ' + (autoCloseEnabled ? 'on' : 'off')}
+                onClick={() => setAutoCloseEnabled(!autoCloseEnabled)}
+              >
+                <div className="px-toggle-thumb"></div>
+              </div>
+            </div>
+            {autoCloseEnabled && (
+              <div className="px-autoclose-body">
+                <span className="px-ac-label">Close when profit reaches</span>
+                <div className="px-ac-options">
+                  {[3, 5, 10, 20, 50].map(function(pct) {
+                    return (
+                      <button
+                        key={pct}
+                        className={'px-lev-btn ' + (autoCloseTarget === pct ? 'active' : '')}
+                        onClick={() => setAutoCloseTarget(pct)}
+                      >
+                        {'+' + pct + '%'}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="px-ac-preview">
+                  {'TP at $' + formatUsd(requiredMargin * leverage * (autoCloseTarget / 100)) + ' profit'}
+                </div>
+              </div>
+            )}
+          </section>
+
           <section className="px-details-card glass-card">
             <div className="px-row">
               <span className="px-label">Leverage</span>
@@ -242,10 +211,6 @@ if (parsedAmount > 0) {
               <span className="px-val flex-val">Total Balance</span>
             </div>
           </section>
-{/* 
-          {isBalanceLow && (
-            <div className="px-alert-card glass-card-error">Insufficient funds to cover the trade</div>
-          )} */}
 
           <section className="px-metrics-card">
             <div className="px-row">
@@ -258,7 +223,7 @@ if (parsedAmount > 0) {
             </div>
             <div className="px-row">
               <span className="px-label">Fees</span>
-              <span className={'px-val ' + (voucherCoversAll ? 'px-fees-free' : '')}>{feesDisplayStr}</span>
+              <span className="px-val">{feesDisplayStr}</span>
             </div>
             <div className="px-row">
               <span className="px-label">Balance Now</span>
@@ -269,18 +234,6 @@ if (parsedAmount > 0) {
               <span className="px-val px-after-trade">{parsedAmount > 0 ? afterTradeStr : balanceStr}</span>
             </div>
           </section>
-{/* 
-          {parsedAmount > 0 && (
-            <section className="px-pnl-preview">
-              <div className="px-pnl-title">Estimated P&L</div>
-              <div className="px-pnl-table">
-                <div className="px-pnl-row px-pnl-header"><span>Move</span><span>P&L</span></div>
-                <div className="px-pnl-row"><span className="px-pnl-label">2%</span><span className={pnl2Class}>{pnl2Str}</span></div>
-                <div className="px-pnl-row"><span className="px-pnl-label">5%</span><span className={pnl5Class}>{pnl5Str}</span></div>
-                <div className="px-pnl-row"><span className="px-pnl-label">10%</span><span className={pnl10Class}>{pnl10Str}</span></div>
-              </div>
-            </section>
-          )} */}
 
         </main>
 

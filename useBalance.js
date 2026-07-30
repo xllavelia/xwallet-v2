@@ -10,7 +10,7 @@ var ALL_PROFILES   = "all_profiles";
 var TRANSFERS_KEY  = "transfer_history";
 
 
-var DEFAULT_BALANCE  = 100.00;
+var DEFAULT_BALANCE  = 0;
 var VOUCHER_TOTAL    = 400.00;
 
 
