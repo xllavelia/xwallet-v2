@@ -10,7 +10,7 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create walet balance!"
+// git commit -m "fix bug create walet balance!"
 // git push -u origin main 
 
 
@@ -132,17 +132,6 @@ const transactionsDB = [
   }
 ];
 
-// 2. Стейт, в котором изначально лежит только первая транзакция
-const [history, setHistory] = useState([transactionsDB[0]]);
-const [clickCount, setClickCount] = useState(1);
-
-// 3. Функция добавления новой карточки при клике
-const handleAddTransaction = () => {
-  if (clickCount < transactionsDB.length) {
-    setHistory([ transactionsDB[clickCount], ...history]);
-    setClickCount(clickCount + 1);
-  }
-};
 const [rates, setRates] = useState(null);
   const [activeHistory, setActiveHistory] = useState(null);
 
@@ -167,28 +156,6 @@ const [rates, setRates] = useState(null);
   const [bg, setBg] = useState("#000000");
 
 
-
-// (импорты уже есть, добавь usePosition и useTradeHistory)
-
-const position = usePositions();
-const tradeHistory = useTradeHistory();
-
-// стало:
-function safeNum(val) { var n = parseFloat(val); return isNaN(n) ? 0 : n; }
-var closedWins   = tradeHistory.filter(function(t) { return t.result === 'win'; });
-var now          = Date.now();
-var last24h      = tradeHistory.filter(function(t) { return now - safeNum(t.closeTime) < 86400000; });
-var last7d       = tradeHistory.filter(function(t) { return now - safeNum(t.closeTime) < 604800000; });
-var profit24h    = last24h.reduce(function(acc, t) { return acc + safeNum(t.pnl); }, 0);
-var profit7d     = last7d.reduce(function(acc, t) { return acc + safeNum(t.pnl); }, 0);
-var totalIncome  = tradeHistory.filter(function(t) { return safeNum(t.pnl) > 0; }).reduce(function(acc, t) { return acc + safeNum(t.pnl); }, 0);
-var totalOutcome = tradeHistory.filter(function(t) { return safeNum(t.pnl) < 0; }).reduce(function(acc, t) { return acc + Math.abs(safeNum(t.pnl)); }, 0);
-var activeTrades = position.length;
-var winRate      = tradeHistory.length > 0 ? parseFloat(((closedWins.length / tradeHistory.length) * 100).toFixed(1)) : 0;
-var cashbackEarned = tradeHistory.reduce(function(acc, t) { return acc + safeNum(t.fees) * 0.1; }, 0);
-
-var profit24hStr  = (profit24h >= 0 ? '+' : '-') + Math.abs(profit24h).toFixed(2);
-var profit7dStr   = (profit7d  >= 0 ? '+' : '-') + Math.abs(profit7d).toFixed(2);
 
 const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [prices, setPrices] = useState({ BTC: '0.00', ETH: '0.00', SOL: '0.00', TON: '0.00' });
@@ -844,7 +811,7 @@ return (
               onTouchStart={handlePressStart}
               onTouchEnd={handlePressEnd}
             >
-              <img className="story-image" src={currentSlide.image} alt="" />
+              {/* <img className="story-image" src={currentSlide.image} alt="" /> */}
  
               <div className={'story-text story-text--' + activeStory.layout}>
                 <h3 className="story-text-title">{currentSlide.title}</h3>
