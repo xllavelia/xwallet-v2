@@ -1,76 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePositions, useTradeHistory, closePositionById} from "./useBalance";
+import { usePositionsRemote, useClosedPositionsRemote, closePosition } from "./usePositions";
+import { useTransfersRemote } from "./useTransfers";
 
 function safeNum(val) {
   var n = parseFloat(val);
   return isNaN(n) ? 0 : n;
 }
 
-function migratePos(pos) {
-  var amount   = safeNum(pos.amount);
-  var leverage = safeNum(pos.leverage) || 1;
-  var margin   = safeNum(pos.margin) || (leverage > 0 ? amount / leverage : 0);
-  return {
-    id:                pos.id || Date.now(),
-    tradeId:           pos.tradeId || null,
-    coin:              pos.coin || 'BTC',
-    type:              pos.type || 'long',
-    entryPrice:        safeNum(pos.entryPrice),
-    leverage:          leverage,
-    amount:            amount,
-    margin:            margin,
-    fees:              safeNum(pos.fees),
-    feesPaidByVoucher: pos.feesPaidByVoucher || false,
-    liqPrice:          safeNum(pos.liqPrice),
-    openTime:          safeNum(pos.openTime) || Date.now(),
-    autoClose:         pos.autoClose || false,
-    autoCloseTarget:   safeNum(pos.autoCloseTarget) || null
-  };
-}
-
-function migrateClosedTrade(t) {
-  var amount   = safeNum(t.amount);
-  var leverage = safeNum(t.leverage) || 1;
-  var margin   = safeNum(t.margin) || (leverage > 0 ? amount / leverage : 0);
-  return {
-    id:                t.id || Date.now(),
-    tradeId:           t.tradeId || null,
-    coin:              t.coin || 'BTC',
-    type:              t.type || 'long',
-    entryPrice:        safeNum(t.entryPrice),
-    closePrice:        safeNum(t.closePrice),
-    leverage:          leverage,
-    amount:            amount,
-    margin:            margin,
-    fees:              safeNum(t.fees),
-    feesPaidByVoucher: t.feesPaidByVoucher || false,
-    pnl:               safeNum(t.pnl),
-    pnlPercent:        safeNum(t.pnlPercent),
-    liqPrice:          safeNum(t.liqPrice),
-    openTime:          safeNum(t.openTime),
-    closeTime:         safeNum(t.closeTime),
-    duration:          safeNum(t.duration),
-    result:            t.result || (safeNum(t.pnl) >= 0 ? 'win' : 'loss')
-  };
-}
-
 const History = () => {
-  const navigate     = useNavigate();
-  const rawPositions = usePositions();
-  const rawHistory   = useTradeHistory();
+  const navigate = useNavigate();
 
-  const positions    = rawPositions.map(migratePos);
-  const tradeHistory = rawHistory.map(migrateClosedTrade);
+  const { positions, refresh: refreshOpen } = usePositionsRemote();
+  const { closedPositions } = useClosedPositionsRemote();
+  const { transfers } = useTransfersRemote();
 
-  const [activeTab,             setActiveTab]             = useState('transactions');
+  const [activeTab, setActiveTab] = useState('transfers');
   const [selectedCompletedTrade, setSelectedCompletedTrade] = useState(null);
-  const [selectedActivePosId,    setSelectedActivePosId]   = useState(null);
-  const [livePrices,             setLivePrices]            = useState({});
+  const [selectedActivePosId, setSelectedActivePosId] = useState(null);
+  const [livePrices, setLivePrices] = useState({});
 
   function roadHome() { navigate(-1); }
 
-  useEffect(function() {
+  React.useEffect(function() {
     if (positions.length === 0) return;
     var uniqueCoins = [];
     positions.forEach(function(p) { if (uniqueCoins.indexOf(p.coin) === -1) uniqueCoins.push(p.coin); });
@@ -90,8 +42,9 @@ const History = () => {
     return function() { clearInterval(interval); };
   }, [positions.length]);
 
-  function formatDuration(ms) {
-    var s = Math.floor(safeNum(ms) / 1000);
+  function formatDuration(openedAt, closedAt) {
+    var ms = new Date(closedAt).getTime() - new Date(openedAt).getTime();
+    var s = Math.floor(ms / 1000);
     var h = Math.floor(s / 3600);
     var m = Math.floor((s % 3600) / 60);
     var sec = s % 60;
@@ -99,13 +52,12 @@ const History = () => {
     if (m > 0) return m + 'm ' + sec + 's';
     return sec + 's';
   }
-  function formatDate(ts) {
-    var n = safeNum(ts);
-    if (n <= 0) return '--';
-    return new Date(n).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  function formatDate(iso) {
+    if (!iso) return '--';
+    return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
-  function timeAgo(openTime) {
-    var ms = Date.now() - safeNum(openTime);
+  function timeAgo(iso) {
+    var ms = Date.now() - new Date(iso).getTime();
     var h  = Math.floor(ms / 3600000);
     var m  = Math.floor((ms % 3600000) / 60000);
     if (h > 0) return h + 'h ' + m + 'm ago';
@@ -144,7 +96,7 @@ const History = () => {
       liqStr:            '$' + Math.round(pos.liqPrice).toLocaleString('en-US'),
       livePriceStr:      livePrice > 0 ? '$' + livePrice.toLocaleString('en-US') : '--',
       marginStr:         '$' + pos.margin.toFixed(2),
-      openedAgo:         timeAgo(pos.openTime)
+      openedAgo:         timeAgo(pos.openedAt)
     };
   });
 
@@ -155,30 +107,27 @@ const History = () => {
 
   function handleCloseFromHistory() {
     if (!managedPos || managedPos.livePrice <= 0) return;
-    closePositionById(managedPos.id, managedPos.livePrice);
+    closePosition(managedPos.id, managedPos.livePrice).then(refreshOpen);
     setSelectedActivePosId(null);
   }
   function handleDuplicate() {
     if (!managedPos) return;
-navigate(-1)
-
-setTimeout(() => {
-    navigate('/order', { state: { coin: managedPos.coin, type: managedPos.type, price: managedPos.livePrice > 0 ? managedPos.livePrice.toString() : managedPos.entryPrice.toString(), change: '+0.00%', leverage: managedPos.leverage, amount: managedPos.amount } });
-}, 10)
+    navigate(-1);
+    setTimeout(function () {
+      navigate('/order', { state: { coin: managedPos.coin, type: managedPos.type, price: managedPos.livePrice > 0 ? managedPos.livePrice.toString() : managedPos.entryPrice.toString(), change: '+0.00%', leverage: managedPos.leverage, amount: managedPos.amount } });
+    }, 10);
   }
-   
   function handleGoToChart() {
     if (!managedPos) return;
-navigate(-1)
-
-setTimeout(() => {
-    navigate('/trade', { state: { coin: managedPos.coin } });
-    }, 10)
+    navigate(-1);
+    setTimeout(function () {
+      navigate('/trade', { state: { coin: managedPos.coin } });
+    }, 10);
   }
 
   var sel = selectedCompletedTrade;
-  var selPnl     = sel ? sel.pnl    : 0;
-  var selPnlPct  = sel ? sel.pnlPercent : 0;
+  var selPnl     = sel ? safeNum(sel.pnl)    : 0;
+  var selPnlPct  = sel ? safeNum(sel.pnlPercent) : 0;
   var selMargin  = sel ? sel.margin : 0;
   var selAmount  = sel ? sel.amount : 0;
   var selFees    = sel ? sel.fees   : 0;
@@ -190,38 +139,23 @@ setTimeout(() => {
   var selTypeClass     = sel ? ('et-pos-badge ' + (sel.type || 'long')) : '';
   var selResultClass   = sel ? ('ht-result-badge ' + (sel.result || 'loss')) : '';
   var selEntryStr      = sel ? '$' + sel.entryPrice.toLocaleString('en-US') : '';
-  var selCloseStr      = sel ? '$' + sel.closePrice.toLocaleString('en-US') : '';
+  var selCloseStr      = sel ? '$' + (sel.closePrice || 0).toLocaleString('en-US') : '';
   var selLiqStr        = sel ? '$' + Math.round(sel.liqPrice).toLocaleString('en-US') : '';
   var selMarginStr     = sel ? '$' + selMargin.toFixed(2) : '';
   var selAmountStr     = sel ? '$' + selAmount.toFixed(2) : '';
   var selFeesStr       = sel ? (sel.feesPaidByVoucher ? 'Covered by Voucher' : '$' + selFees.toFixed(2)) : '';
   var selLevStr        = sel ? sel.leverage + 'x' : '';
   var selRoiStr        = sel ? (selRoi >= 0 ? '+' : '') + selRoi.toFixed(2) + '%' : '';
-  var selDurationStr   = sel ? formatDuration(sel.duration) : '';
-  var selOpenDate      = sel ? formatDate(sel.openTime) : '';
-  var selCloseDate     = sel ? formatDate(sel.closeTime) : '';
+  var selDurationStr   = sel ? formatDuration(sel.openedAt, sel.closedAt) : '';
+  var selOpenDate      = sel ? formatDate(sel.openedAt) : '';
+  var selCloseDate     = sel ? formatDate(sel.closedAt) : '';
 
   var managedPnlClass  = managedPos ? (managedPos.pnl >= 0 ? 'ht-detail-pnl pos' : 'ht-detail-pnl neg') : '';
   var managedTypeClass = managedPos ? ('et-pos-badge ' + managedPos.type) : '';
   var managedAcStr     = managedPos && managedPos.autoClose && managedPos.autoCloseTarget
     ? 'TP +' + managedPos.autoCloseTarget + '%' : 'Off';
 
-  var transactionsDB = [
-    { id: 1, name: "Get USDT",  network: "mainnet", date: "October 17, 09:00 PM", amount: "44.80",  bonus: "44.80$", icon: "↓" },
-    { id: 2, name: "Get BTC",   network: "btc",     date: "October 15, 08:15 AM", amount: "0.07",   bonus: "560$",   icon: "↓" },
-    { id: 3, name: "Send ETH",  network: "erc20",   date: "October 16, 12:30 PM", amount: "-0.85",  bonus: "3450$",  icon: "↑" },
-    { id: 4, name: "Send SOL",  network: "solana",  date: "October 17, 02:30 PM", amount: "-7.00",  bonus: "689$",   icon: "↑" }
-  ];
-  var swapDB = [
-    { id: 1, name: "Bitcoin",  nameSwap: "usdt",   amount: "+0.003", bonus: "-650",   icon: "⇄" },
-    { id: 2, name: "Ethereum", nameSwap: "solana", amount: "+0.90",  bonus: "-25",    icon: "⇄" },
-    { id: 3, name: "Usdt",     nameSwap: "Ton",    amount: "+700",   bonus: "-2.3",   icon: "⇄" },
-    { id: 4, name: "Solana",   nameSwap: "btc",    amount: "+8.32",  bonus: "-0.076", icon: "⇄" }
-  ];
-const [recentTransfers, setRecentTransfers] = useState([]);
-
   return (
-    
     <div className="HistoryContent">
 
       {managedPos && (
@@ -301,18 +235,14 @@ const [recentTransfers, setRecentTransfers] = useState([]);
         <div className="history-header"><h1>History</h1></div>
 
         <div className="history-tabs">
-          <button className={'history-tab ' + (activeTab === 'transactions' ? 'active-tab' : '')} onClick={() => setActiveTab('transactions')}>
-
-            <span style={{fontFamily: "Unbounded"}}>Transaction</span>
-
+          <button className={'history-tab ' + (activeTab === 'transfers' ? 'active-tab' : '')} onClick={() => setActiveTab('transfers')}>
+            <span style={{fontFamily: "Unbounded"}}>Transfers</span>
           </button>
-          <button className={'history-tab ' + (activeTab === 'swap' ? 'active-tab' : '')} onClick={() => setActiveTab('swap')}>
-            <span style={{fontFamily: "Unbounded"}}>Swap</span>
+          <button className={'history-tab ' + (activeTab === 'card' ? 'active-tab' : '')} onClick={() => setActiveTab('card')}>
+            <span style={{fontFamily: "Unbounded"}}>Card</span>
           </button>
           <button className={'history-tab ht-tab-with-badge ' + (activeTab === 'active' ? 'active-tab' : '')} onClick={() => setActiveTab('active')}>
-
             <span style={{fontFamily: "Unbounded"}}>Active Trade</span>
-            {/* {positions.length > 0 && <span className="ht-tab-badge">{positions.length}</span>} */}
           </button>
           <button className={'history-tab ' + (activeTab === 'completed' ? 'active-tab' : '')} onClick={() => setActiveTab('completed')}>
             <span style={{fontFamily: "Unbounded"}}>Completed Trade</span>
@@ -321,64 +251,42 @@ const [recentTransfers, setRecentTransfers] = useState([]);
 
         <div className="history-content">
 
-          {activeTab === 'transactions' && (
-            <div className="home-history-wrapper-parent">
-              <div className="home-history-wrapper">
-               <div className="home-history-list">
-  {recentTransfers.length === 0 && (
-    <div className="home-history-empty">No recent transfers</div>
-  )}
-  {recentTransfers.map(function(item) {
-    var isSend    = item.type === 'send';
-    var amtNum    = parseFloat(item.amount) || 0;
-    var amtStr    = (isSend ? '-' : '+') + '$' + amtNum.toFixed(2);
-    var label     = isSend ? ('→ ' + item.toName) : ('← ' + item.fromName);
-    var d         = new Date(item.timestamp);
-    var dateStr   = d.toLocaleString('en-US', {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'});
-    return (
-      <div key={item.id} className="home-history-item">
-        <div className="home-history-left">
-          <div className="home-history-img">{isSend ? '↑' : '↓'}</div>
-          <div className="home-history-info">
-            <h4 className="home-history-name">{label}</h4>
-            <span className="home-history-date">{dateStr}</span>
-          </div>
-        </div>
-        <div className="home-history-right">
-          <h4 className={'home-history-amount ' + (isSend ? 'tx-send' : 'tx-receive')}>{amtStr}</h4>
-          <span className="home-history-bonus">USDT</span>
-        </div>
-      </div>
-    );
-  })}
-</div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'swap' && (
+          {activeTab === 'transfers' && (
             <div className="home-history-wrapper-parent">
               <div className="home-history-wrapper">
                 <div className="home-history-list">
-                  {swapDB.map(function(item) {
+                  {transfers.length === 0 && (
+                    <div className="home-history-empty">No recent transfers</div>
+                  )}
+                  {transfers.map(function(item) {
+                    var isSend  = item.direction === 'send';
+                    var amtStr  = (isSend ? '-' : '+') + '$' + safeNum(item.amount).toFixed(2);
+                    var label   = isSend ? ('→ ' + item.counterparty) : ('← ' + item.counterparty);
+                    var dateStr = formatDate(item.createdAt);
                     return (
                       <div key={item.id} className="home-history-item">
                         <div className="home-history-left">
-                          <div className="home-history-img">{item.icon}</div>
+                          <div className="home-history-img">{isSend ? '↑' : '↓'}</div>
                           <div className="home-history-info">
-                            <h4 className="home-history-name">{item.name}</h4>
-                            <span className="home-history-date">{item.nameSwap}</span>
+                            <h4 className="home-history-name">{label}</h4>
+                            <span className="home-history-date">{dateStr}</span>
                           </div>
                         </div>
                         <div className="home-history-right">
-                          <h4 className="home-history-amount">{item.amount}</h4>
-                          {item.bonus && <span className="home-history-bonus">{item.bonus}</span>}
+                          <h4 className={'home-history-amount ' + (isSend ? 'tx-send' : 'tx-receive')}>{amtStr}</h4>
+                          <span className="home-history-bonus">USDT</span>
                         </div>
                       </div>
                     );
                   })}
                 </div>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'card' && (
+            <div className="ht-empty">
+              <span className="ht-empty-text">Card activity is coming soon.</span>
             </div>
           )}
 
@@ -400,9 +308,7 @@ const [recentTransfers, setRecentTransfers] = useState([]);
                           <div className="ht-ac-header">
                             <span className={card.typeClass}>{card.type.toUpperCase()}</span>
                             <span className="ht-lev-tag">{card.leverage + 'x'}</span>
-
                             {card.feesPaidByVoucher && <span className="ht-voucher-badge">voucher</span>}
-
                             {card.autoClose && <span className="ht-ac-tp-badge">TP</span>}
                           </div>
                           <div className="ht-ac-coin">{card.coin}</div>
@@ -423,25 +329,23 @@ const [recentTransfers, setRecentTransfers] = useState([]);
             </div>
           )}
 
-          {activeTab === 'completed' && tradeHistory.length === 0 && (
+          {activeTab === 'completed' && closedPositions.length === 0 && (
             <div className="ht-empty">
               <span className="ht-empty-text">No closed trades yet.</span>
             </div>
           )}
 
-          {activeTab === 'completed' && tradeHistory.length > 0 && (
+          {activeTab === 'completed' && closedPositions.length > 0 && (
             <div className="home-history-wrapper-parent">
               <div className="home-history-wrapper">
                 <div className="home-history-list">
-                  {tradeHistory.map(function(item) {
-                    var sign       = item.pnl >= 0 ? '+' : '';
-                    var pnlDisplay = sign + '$' + item.pnl.toFixed(2);
-                    var pctDisplay = sign + item.pnlPercent.toFixed(2) + '%';
-                    var bg         = item.pnl >= 0 ? '#26a17b' : '#ff5e62';
-                    var closeTime  = item.closeTime;
-                    var dateStr    = closeTime > 0
-                      ? new Date(closeTime).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-                      : '--';
+                  {closedPositions.map(function(item) {
+                    var pnl        = safeNum(item.pnl);
+                    var pnlPercent = safeNum(item.pnlPercent);
+                    var sign       = pnl >= 0 ? '+' : '';
+                    var pnlDisplay = sign + '$' + pnl.toFixed(2);
+                    var pctDisplay = sign + pnlPercent.toFixed(2) + '%';
+                    var dateStr    = formatDate(item.closedAt);
                     return (
                       <div key={item.id} className="home-history-item ht-trade-row" onClick={() => setSelectedCompletedTrade(item)}>
                         <div className="home-history-left">
@@ -449,9 +353,7 @@ const [recentTransfers, setRecentTransfers] = useState([]);
                             <div className="ht-active-top">
                               <h4 className="home-history-name-active">{item.coin}</h4>
                               <span className={'et-pos-badge ' + item.type}>{item.type.toUpperCase()}</span>
-
                               {item.feesPaidByVoucher && <span className="ht-voucher-badge">voucher</span>}
-
                             </div>
                             <span className="home-history-date-active"><span style={{color:"rgba(255,255,255,0.4)"}}>{dateStr}</span></span>
                           </div>
@@ -475,4 +377,3 @@ const [recentTransfers, setRecentTransfers] = useState([]);
 };
 
 export default History;
-

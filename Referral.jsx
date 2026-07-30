@@ -101,9 +101,9 @@ const roadHome = () => {
               Multiple accounts are strictly prohibited.
             </p>
             <div className="legal-links">
-              <a href="#rules">Rules</a>
+              <a >Rules</a>
               <span className="sep">/</span>
-              <a href="#support">Support</a>
+              <a>Support</a>
               <span className="sep">/</span>
               <a  >Privacy</a>
             </div>

@@ -40,5 +40,26 @@ async function closePosition(id, closePrice) {
     body: JSON.stringify({ closePrice: closePrice })
   });
 }
+function useClosedPositionsRemote() {
+  var [closedPositions, setClosedPositions] = useState([]);
+  var [isLoading, setIsLoading] = useState(true);
 
-export { usePositionsRemote, openPosition, closePosition };
+  var refresh = useCallback(function () {
+    return authFetch("/positions/closed-list")
+      .then(function (data) {
+        setClosedPositions(data || []);
+        setIsLoading(false);
+      })
+      .catch(function () {
+        setIsLoading(false);
+      });
+  }, []);
+
+  useEffect(function () {
+    refresh();
+  }, [refresh]);
+
+  return { closedPositions: closedPositions, isLoading: isLoading, refresh: refresh };
+}
+
+export { usePositionsRemote, useClosedPositionsRemote, openPosition, closePosition };

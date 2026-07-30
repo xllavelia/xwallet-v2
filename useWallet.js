@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { authFetch } from "./apiClient";
 
 function useWalletBalance() {
@@ -12,25 +12,37 @@ function useWalletBalance() {
   var [isLoading, setIsLoading] = useState(true);
   var [error, setError] = useState(null);
 
-  useEffect(function () {
-    var isMounted = true;
-
-    authFetch("/wallet")
+  var refresh = useCallback(function () {
+    return authFetch("/wallet")
       .then(function (data) {
-        if (!isMounted) return;
         setWallet(data);
         setIsLoading(false);
       })
       .catch(function (err) {
-        if (!isMounted) return;
         setError(err.message);
         setIsLoading(false);
       });
-
-    return function () { isMounted = false; };
   }, []);
 
-  return { wallet: wallet, isLoading: isLoading, error: error };
+  useEffect(function () {
+    refresh();
+
+    var iv = setInterval(refresh, 10000);
+
+    function onVisibilityChange() {
+      if (document.visibilityState === "visible") {
+        refresh();
+      }
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return function () {
+      clearInterval(iv);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, [refresh]);
+
+  return { wallet: wallet, isLoading: isLoading, error: error, refresh: refresh };
 }
 
 export { useWalletBalance };

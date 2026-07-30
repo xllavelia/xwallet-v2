@@ -1,18 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────
-// MOCK CONTACT DIRECTORY
-//
-// STAGE 2 (Postgres + Golang): this whole file gets deleted. Replace the
-// body of `searchContacts` with a real call, e.g.:
-//
-//   async function searchContacts(query) {
-//     var res = await fetch('/api/contacts/search?q=' + encodeURIComponent(query));
-//     return res.json();
-//   }
-//
-// Keep the return shape identical: Array<{ id, name, color }>
-// Everything in Send.jsx already awaits this as a Promise, so the swap
-// is a one-function change with zero edits anywhere else.
-// ─────────────────────────────────────────────────────────────────────────
 
 var MOCK_CONTACTS = [
   { id: "DBECH", name: "Xlavelia Laga",      color: "hsl(61, 85%, 78%)" },
