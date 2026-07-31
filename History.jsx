@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePositionsRemote, useClosedPositionsRemote, closePosition } from "./usePositions";
 import { useTransfersRemote } from "./useTransfers";
@@ -6,6 +6,23 @@ import { useTransfersRemote } from "./useTransfers";
 function safeNum(val) {
   var n = parseFloat(val);
   return isNaN(n) ? 0 : n;
+}
+
+function SendIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="7" y1="17" x2="17" y2="7"></line>
+      <polyline points="8 7 17 7 17 16"></polyline>
+    </svg>
+  );
+}
+function ReceiveIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="17" y1="7" x2="7" y2="17"></line>
+      <polyline points="16 17 7 17 7 8"></polyline>
+    </svg>
+  );
 }
 
 const History = () => {
@@ -22,7 +39,7 @@ const History = () => {
 
   function roadHome() { navigate(-1); }
 
-  React.useEffect(function() {
+  useEffect(function() {
     if (positions.length === 0) return;
     var uniqueCoins = [];
     positions.forEach(function(p) { if (uniqueCoins.indexOf(p.coin) === -1) uniqueCoins.push(p.coin); });
@@ -55,6 +72,10 @@ const History = () => {
   function formatDate(iso) {
     if (!iso) return '--';
     return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+  function formatShortDate(iso) {
+    if (!iso) return '--';
+    return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
   function timeAgo(iso) {
     var ms = Date.now() - new Date(iso).getTime();
@@ -123,6 +144,9 @@ const History = () => {
     setTimeout(function () {
       navigate('/trade', { state: { coin: managedPos.coin } });
     }, 10);
+  }
+  function handleOpenTransfer(transferId) {
+    navigate('/sendchek', { state: { transferId: transferId } });
   }
 
   var sel = selectedCompletedTrade;
@@ -243,6 +267,7 @@ const History = () => {
           </button>
           <button className={'history-tab ht-tab-with-badge ' + (activeTab === 'active' ? 'active-tab' : '')} onClick={() => setActiveTab('active')}>
             <span style={{fontFamily: "Unbounded"}}>Active Trade</span>
+            {positions.length > 0 && <span className="ht-tab-badge">{positions.length}</span>}
           </button>
           <button className={'history-tab ' + (activeTab === 'completed' ? 'active-tab' : '')} onClick={() => setActiveTab('completed')}>
             <span style={{fontFamily: "Unbounded"}}>Completed Trade</span>
@@ -252,35 +277,38 @@ const History = () => {
         <div className="history-content">
 
           {activeTab === 'transfers' && (
-            <div className="home-history-wrapper-parent">
-              <div className="home-history-wrapper">
-                <div className="home-history-list">
-                  {transfers.length === 0 && (
-                    <div className="home-history-empty">No recent transfers</div>
-                  )}
-                  {transfers.map(function(item) {
-                    var isSend  = item.direction === 'send';
-                    var amtStr  = (isSend ? '-' : '+') + '$' + safeNum(item.amount).toFixed(2);
-                    var label   = isSend ? ('→ ' + item.counterparty) : ('← ' + item.counterparty);
-                    var dateStr = formatDate(item.createdAt);
-                    return (
-                      <div key={item.id} className="home-history-item">
-                        <div className="home-history-left">
-                          <div className="home-history-img">{isSend ? '↑' : '↓'}</div>
-                          <div className="home-history-info">
-                            <h4 className="home-history-name">{label}</h4>
-                            <span className="home-history-date">{dateStr}</span>
-                          </div>
-                        </div>
-                        <div className="home-history-right">
-                          <h4 className={'home-history-amount ' + (isSend ? 'tx-send' : 'tx-receive')}>{amtStr}</h4>
-                          <span className="home-history-bonus">USDT</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+            <div className="tf-list">
+              {transfers.length === 0 && (
+                <div className="ht-empty">
+                  <span className="ht-empty-text">No recent transfers</span>
                 </div>
-              </div>
+              )}
+              {transfers.map(function(item, idx) {
+                var isSend  = item.direction === 'send';
+                var amtStr  = (isSend ? '-' : '+') + '$' + safeNum(item.amount).toFixed(2);
+                var dateStr = formatShortDate(item.createdAt);
+                var rowClass = 'tf-row ' + (isSend ? 'send' : 'receive');
+                var iconClass = 'tf-icon-wrap ' + (isSend ? 'send' : 'receive');
+                var amtClass = 'tf-amount ' + (isSend ? 'send' : 'receive');
+                var delayStyle = { animationDelay: (idx * 0.03) + 's' };
+                return (
+                  <div key={item.id} className={rowClass} style={delayStyle} onClick={() => handleOpenTransfer(item.id)}>
+                    <div className="tf-row-glow"></div>
+                    <div className={iconClass}>
+                      {isSend ? <SendIcon /> : <ReceiveIcon />}
+                    </div>
+                    <div className="tf-info">
+                      <span className="tf-name">{(isSend ? 'To ' : 'From ') + item.counterparty}</span>
+                      <span className="tf-date">{dateStr}</span>
+                    </div>
+                    <div className="tf-right">
+                      <span className={amtClass}>{amtStr}</span>
+                      <span className="tf-currency">USDT</span>
+                    </div>
+                    <div className="tf-chevron">›</div>
+                  </div>
+                );
+              })}
             </div>
           )}
 

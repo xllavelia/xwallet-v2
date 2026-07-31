@@ -1,33 +1,48 @@
+import { authFetch } from "./apiClient";
 
-var MOCK_CONTACTS = [
-  { id: "DBECH", name: "Xlavelia Laga",      color: "hsl(61, 85%, 78%)" },
-  { id: "5SEI1", name: "Jonah Park",     color: "hsl(61, 85%, 78%)" },
-  { id: "K3RZX", name: "Aiko Tanaka",    color: "hsl(61, 85%, 78%)" },
-  { id: "QW7T9", name: "Lucas Ferreira", color: "hsl(61, 85%, 78%)" },
-  { id: "M02VB", name: "Sasha Ivanova",  color: "hsl(61, 85%, 78%)" },
-  { id: "7XLM2", name: "Theo Brandt",    color: "hsl(61, 85%, 78%)" }
-];
+var AVATAR_PALETTE = ["#5B8C7B", "#C97B63", "#6E7FD1", "#B98B4E", "#8B6FA8", "#4F8FA3"];
 
 function getInitials(name) {
+  if (!name) return "?";
   var parts = name.trim().split(" ");
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-function searchContacts(query) {
-  var q = query.trim().toUpperCase();
-  return new Promise(function (resolve) {
-    setTimeout(function () {
-      if (q.length === 0) {
-        resolve(MOCK_CONTACTS.slice(0, 4));
-        return;
-      }
-      var results = MOCK_CONTACTS.filter(function (c) {
-        return c.id.indexOf(q) !== -1 || c.name.toUpperCase().indexOf(q) !== -1;
-      });
-      resolve(results);
-    }, 260);
+function colorForId(id) {
+  var sum = 0;
+  for (var i = 0; i < id.length; i++) sum += id.charCodeAt(i);
+  return AVATAR_PALETTE[sum % AVATAR_PALETTE.length];
+}
+
+function decorate(item) {
+  return {
+    id: item.playerId,
+    name: item.username,
+    isContact: !!item.isContact,
+    color: colorForId(item.playerId)
+  };
+}
+
+async function searchUsers(query) {
+  if (!query || query.length === 0) return [];
+  var res = await authFetch("/users/search?q=" + encodeURIComponent(query));
+  return (res || []).map(decorate);
+}
+
+async function listContacts() {
+  var res = await authFetch("/contacts/list");
+  return (res || []).map(function (c) {
+    return decorate({ playerId: c.playerId, username: c.username, isContact: true });
   });
 }
 
-export { MOCK_CONTACTS, searchContacts, getInitials };
+async function addContact(playerId) {
+  return authFetch("/contacts/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contactPlayerId: playerId })
+  });
+}
+
+export { searchUsers, listContacts, addContact, getInitials };

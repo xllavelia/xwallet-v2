@@ -1,43 +1,49 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useBalance, writeBalance } from "./useBalance";
-import { searchContacts, getInitials } from "./contacts";
+import { useWalletBalance } from "./useWallet";
+import { searchUsers, listContacts, addContact, getInitials } from "./contacts";
 
 const Send = () => {
   const navigate = useNavigate();
   const trackRef = useRef(null);
 
-  var balance = useBalance();
+  var { wallet, refresh: refreshWallet } = useWalletBalance();
+  var balance = wallet.balance;
 
-  // ── Step machine ──────────────────────────────────────────────────────
-  var [step, setStep] = useState("search"); // "search" | "amount"
+  var [step, setStep] = useState("search");
 
-  // ── Step 1: search & select ──────────────────────────────────────────
   var [query, setQuery] = useState("");
   var [results, setResults] = useState([]);
-  var [isLoadingSearch, setIsLoadingSearch] = useState(true);
+  var [isLoadingSearch, setIsLoadingSearch] = useState(false);
   var [selectedContact, setSelectedContact] = useState(null);
+  var [addingId, setAddingId] = useState(null);
 
-  // ── Step 2: amount & swipe (logic preserved from original) ──────────
   var [amount, setAmount] = useState("");
   var [swipeX, setSwipeX] = useState(0);
   var [isDragging, setIsDragging] = useState(false);
-  var [statusMsg, setStatusMsg] = useState(true);
+  var [statusMsg, setStatusMsg] = useState(null);
   var [statusOk, setStatusOk] = useState(true);
   var [sent, setSent] = useState(false);
 
   function roadHome() { navigate("/"); }
 
-  // ── Debounced contact search ─────────────────────────────────────────
   useEffect(function () {
-    setIsLoadingSearch(true);
-    var delay = query.length === 0 ? 0 : 220;
-    var handle = setTimeout(function () {
-      searchContacts(query).then(function (res) {
+    if (query.length === 0) {
+      setIsLoadingSearch(true);
+      listContacts().then(function (res) {
         setResults(res);
         setIsLoadingSearch(false);
       });
-    }, delay);
+      return;
+    }
+
+    setIsLoadingSearch(true);
+    var handle = setTimeout(function () {
+      searchUsers(query).then(function (res) {
+        setResults(res);
+        setIsLoadingSearch(false);
+      });
+    }, 220);
     return function () { clearTimeout(handle); };
   }, [query]);
 
@@ -58,7 +64,22 @@ const Send = () => {
     setStep("search");
   }
 
-  // ── Numpad (unchanged logic) ─────────────────────────────────────────
+  function handleAddContact(e, contact) {
+    e.stopPropagation();
+    if (contact.isContact || addingId === contact.id) return;
+    setAddingId(contact.id);
+    addContact(contact.id).then(function () {
+      setResults(function (prev) {
+        return prev.map(function (r) {
+          return r.id === contact.id ? Object.assign({}, r, { isContact: true }) : r;
+        });
+      });
+      setAddingId(null);
+    }).catch(function () {
+      setAddingId(null);
+    });
+  }
+
   function handleNumpad(val) {
     if (val === "del") {
       setAmount(amount.slice(0, -1));
@@ -76,7 +97,6 @@ const Send = () => {
     return parts.join(".");
   }
 
-  // ── Swipe gesture (unchanged logic) ──────────────────────────────────
   function onPointerDown(e) {
     if (sent) return;
     setIsDragging(true);
@@ -91,7 +111,7 @@ const Send = () => {
     if (newX > maxX) newX = maxX;
     setSwipeX(newX);
   }
-  function onPointerUp(e) {
+  async function onPointerUp(e) {
     if (!isDragging) return;
     setIsDragging(false);
     e.currentTarget.releasePointerCapture(e.pointerId);
@@ -117,19 +137,34 @@ const Send = () => {
         return;
       }
 
-      var newBalance = parseFloat((balance - amt).toFixed(2));
-      writeBalance(newBalance);
-
-      setStatusMsg("Sent $" + amt.toFixed(2) + " to " + selectedContact.name);
-      setStatusOk(true);
-      setSent(true);
-      setTimeout(function () { navigate(-1); }, 1500);
+      try {
+        var result = await authFetchSend(selectedContact.id, amt);
+        setStatusMsg("Sent $" + amt.toFixed(2) + " to " + selectedContact.name);
+        setStatusOk(true);
+        setSent(true);
+        refreshWallet();
+        setTimeout(function () {
+          navigate("/sendcheck", { state: { transferId: result.id } });
+        }, 900);
+      } catch (err) {
+        setStatusMsg(err.message);
+        setStatusOk(false);
+        setSwipeX(0);
+      }
     } else {
       setSwipeX(0);
     }
   }
 
-  // ── Computed display values ──────────────────────────────────────────
+  async function authFetchSend(recipientPlayerId, amt) {
+    var { authFetch } = await import("./apiClient");
+    return authFetch("/transfers/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ recipientPlayerId: recipientPlayerId, amount: amt })
+    });
+  }
+
   var amountDisplay = amount ? formatAmount(amount) : "0.00";
   var amountClass = "snd-fake-input " + (amount ? "has-value" : "is-empty");
   var balanceDisplay = "Balance $" + balance.toFixed(2);
@@ -148,7 +183,7 @@ const Send = () => {
   var nextBtnClass = "snd-next-btn " + (selectedContact ? "active" : "disabled");
 
   var showEmpty = !isLoadingSearch && results.length === 0;
-  var resultsLabel = query.length === 0 ? "Suggested" : "Results";
+  var resultsLabel = query.length === 0 ? "Contacts" : "Results";
 
   var recipientInitials = selectedContact ? getInitials(selectedContact.name) : "";
   var swipeThumbClass = sent ? "snd-swipe-thumb sent" : "snd-swipe-thumb";
@@ -157,7 +192,6 @@ const Send = () => {
     <div className="SendContent">
       <div className={flowClass}>
 
-        {/* ── STEP 1 — SEARCH & SELECT ───────────────────────────── */}
         <div className="snd-step snd-step-search">
 
           <div className="snd-search-header">
@@ -200,6 +234,7 @@ const Send = () => {
               var isSelected = selectedContact && selectedContact.id === contact.id;
               var cardClass = "snd-contact-card " + (isSelected ? "selected" : "");
               var delayStyle = { animationDelay: (idx * 0.04) + "s" };
+              var isAddingThis = addingId === contact.id;
               return (
                 <div key={contact.id} className={cardClass} style={delayStyle} onClick={() => handleSelectContact(contact)}>
                   <div className="snd-contact-avatar" style={{ backgroundColor: contact.color }}>
@@ -209,17 +244,37 @@ const Send = () => {
                     <span className="snd-contact-name">{contact.name}</span>
                     <span className="snd-contact-id">{contact.id}</span>
                   </div>
-                  {isSelected && (
-                    <div className="snd-contact-check"></div>
-                  )}
+                  <button
+                    className={"snd-add-contact-btn " + (contact.isContact ? "added" : "")}
+                    onClick={(e) => handleAddContact(e, contact)}
+                    disabled={contact.isContact || isAddingThis}
+                  >
+                    {contact.isContact ? (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="4 12.5 9.5 18 20 6"></polyline>
+                      </svg>
+                    ) : (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="9" cy="7" r="3.5"></circle>
+                        <path d="M3 19c0-3.3 2.7-5.5 6-5.5"></path>
+                        <line x1="17" y1="8" x2="17" y2="14"></line>
+                        <line x1="14" y1="11" x2="20" y2="11"></line>
+                      </svg>
+                    )}
+                  </button>
+                  {isSelected && <div className="snd-contact-check">✓</div>}
                 </div>
               );
             })}
 
             {showEmpty && (
               <div className="snd-empty">
-                <span className="snd-empty-text">{"No matches for \u201C" + query + "\u201D"}</span>
-                <span className="snd-empty-hint">Try a different name or ID</span>
+                <span className="snd-empty-text">
+                  {query.length === 0 ? "No contacts yet" : ("No matches for \u201C" + query + "\u201D")}
+                </span>
+                <span className="snd-empty-hint">
+                  {query.length === 0 ? "Search by name or ID to find someone" : "Try a different name or ID"}
+                </span>
               </div>
             )}
           </div>
@@ -231,7 +286,6 @@ const Send = () => {
           </div>
         </div>
 
-        {/* ── STEP 2 — AMOUNT & SWIPE ────────────────────────────── */}
         <div className="snd-step snd-step-amount">
 
           <div className="snd-amount-header">
@@ -245,7 +299,6 @@ const Send = () => {
                 <span className="snd-pill-id">{selectedContact.id}</span>
               </div>
             )}
-            {/* <button className="snd-change-btn" onClick={handleBackToSearch}>Change</button> */}
           </div>
 
           <div className="snd-amount-display-container">
@@ -254,8 +307,8 @@ const Send = () => {
           </div>
 
           {statusMsg && (
-            <div className={statusClass}>{statusMsg} </div>
-           )}  
+            <div className={statusClass}>{statusMsg}</div>
+          )}
 
           <div className="snd-balance-chip">{balanceDisplay}</div>
 

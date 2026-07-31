@@ -32,6 +32,7 @@ import Emblem from "./Emblem";
 import Ads from "./ads";
 import Prime from "./Prime";
 import PromoCode from "./PromoCode";
+import SendCheck  from "./SendCheck";
 import RequireAuth from "./RequireAuth";
 
 import PageTransition from "./PageTransition";
@@ -57,6 +58,7 @@ const islandRoutes = [
   { path: "ads", element: <Ads /> },
   { path: "prime", element: <Prime /> },
   { path: "promocode", element: <PromoCode /> },
+  { path: "sendcheck", element: <SendCheck /> },
 
 
 
