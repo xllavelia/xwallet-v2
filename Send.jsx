@@ -27,25 +27,53 @@ const Send = () => {
 
   function roadHome() { navigate("/"); }
 
-  useEffect(function () {
-    if (query.length === 0) {
-      setIsLoadingSearch(true);
-      listContacts().then(function (res) {
-        setResults(res);
-        setIsLoadingSearch(false);
-      });
-      return;
-    }
+var [searchError, setSearchError] = useState(null);
+var latestQueryRef = useRef("");
 
+useEffect(function () {
+  var thisQuery = query;
+  latestQueryRef.current = thisQuery;
+
+  if (query.length === 0) {
     setIsLoadingSearch(true);
-    var handle = setTimeout(function () {
-      searchUsers(query).then(function (res) {
+    setSearchError(null);
+    listContacts()
+      .then(function (res) {
+        if (latestQueryRef.current !== thisQuery) return;
         setResults(res);
+      })
+      .catch(function () {
+        if (latestQueryRef.current !== thisQuery) return;
+        setResults([]);
+        setSearchError("Could not load contacts");
+      })
+      .finally(function () {
+        if (latestQueryRef.current !== thisQuery) return;
         setIsLoadingSearch(false);
       });
-    }, 220);
-    return function () { clearTimeout(handle); };
-  }, [query]);
+    return;
+  }
+
+  setIsLoadingSearch(true);
+  setSearchError(null);
+  var handle = setTimeout(function () {
+    searchUsers(thisQuery)
+      .then(function (res) {
+        if (latestQueryRef.current !== thisQuery) return;
+        setResults(res);
+      })
+      .catch(function () {
+        if (latestQueryRef.current !== thisQuery) return;
+        setResults([]);
+        setSearchError("Search failed, try again");
+      })
+      .finally(function () {
+        if (latestQueryRef.current !== thisQuery) return;
+        setIsLoadingSearch(false);
+      });
+  }, 220);
+  return function () { clearTimeout(handle); };
+}, [query]);
 
   function handleSelectContact(contact) {
     setSelectedContact(contact);
@@ -267,16 +295,22 @@ const Send = () => {
               );
             })}
 
-            {showEmpty && (
-              <div className="snd-empty">
-                <span className="snd-empty-text">
-                  {query.length === 0 ? "No contacts yet" : ("No matches for \u201C" + query + "\u201D")}
-                </span>
-                <span className="snd-empty-hint">
-                  {query.length === 0 ? "Search by name or ID to find someone" : "Try a different name or ID"}
-                </span>
-              </div>
-            )}
+          {searchError && (
+  <div className="snd-empty">
+    <span className="snd-empty-text">{searchError}</span>
+    <span className="snd-empty-hint">Check your connection and try again</span>
+  </div>
+)}
+{!searchError && showEmpty && (
+  <div className="snd-empty">
+    <span className="snd-empty-text">
+      {query.length === 0 ? "No contacts yet" : ("No matches for \u201C" + query + "\u201D")}
+    </span>
+    <span className="snd-empty-hint">
+      {query.length === 0 ? "Search by name or ID to find someone" : "Try a different name or ID"}
+    </span>
+  </div>
+)}
           </div>
 
           <div className="snd-step-footer">
