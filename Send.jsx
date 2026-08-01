@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWalletBalance } from "./useWallet";
-import { searchUsers, listContacts, addContact, getInitials } from "./contacts";
+import { searchUsers, listContacts, addContact, removeContact, getInitials } from "./contacts";
 
 const Send = () => {
   const navigate = useNavigate();
@@ -47,13 +47,13 @@ useEffect(function () {
     searchPromise.then(function (outcome) {
       if (searchRequestIdRef.current !== requestId) return;
       setResults(outcome.results);
-      setDebugInfo(outcome.debug);
       setIsLoadingSearch(false);
     });
   }, delay);
 
   return function () { clearTimeout(handle); };
 }, [query]);
+
 
   function handleSelectContact(contact) {
     setSelectedContact(contact);
@@ -72,21 +72,24 @@ useEffect(function () {
     setStep("search");
   }
 
-  function handleAddContact(e, contact) {
-    e.stopPropagation();
-    if (contact.isContact || addingId === contact.id) return;
-    setAddingId(contact.id);
-    addContact(contact.id).then(function () {
-      setResults(function (prev) {
-        return prev.map(function (r) {
-          return r.id === contact.id ? Object.assign({}, r, { isContact: true }) : r;
-        });
+function handleToggleContact(e, contact) {
+  e.stopPropagation();
+  if (addingId === contact.id) return;
+  setAddingId(contact.id);
+
+  var action = contact.isContact ? removeContact(contact.id) : addContact(contact.id);
+
+  action.then(function () {
+    setResults(function (prev) {
+      return prev.map(function (r) {
+        return r.id === contact.id ? Object.assign({}, r, { isContact: !contact.isContact }) : r;
       });
-      setAddingId(null);
-    }).catch(function () {
-      setAddingId(null);
     });
-  }
+    setAddingId(null);
+  }).catch(function () {
+    setAddingId(null);
+  });
+}
 
   function handleNumpad(val) {
     if (val === "del") {
@@ -235,20 +238,6 @@ useEffect(function () {
             {isLoadingSearch && <div className="snd-search-spinner"></div>}
           </div>
 
-
-
-{debugInfo && (
-  <div className="snd-debug-panel">
-    <div className="snd-debug-row"><b>URL:</b> {debugInfo.url}</div>
-    <div className="snd-debug-row"><b>Status:</b> {debugInfo.status}</div>
-    <div className="snd-debug-row"><b>Error:</b> {debugInfo.error || "none"}</div>
-    <div className="snd-debug-row snd-debug-raw"><b>Raw:</b> {debugInfo.rawText}</div>
-  </div>
-)}
-
-
-
-
           <div className="snd-results-label">{resultsLabel}</div>
 
           <div className="snd-results-list">
@@ -266,11 +255,11 @@ useEffect(function () {
                     <span className="snd-contact-name">{contact.name}</span>
                     <span className="snd-contact-id">{contact.id}</span>
                   </div>
-                  <button
-                    className={"snd-add-contact-btn " + (contact.isContact ? "added" : "")}
-                    onClick={(e) => handleAddContact(e, contact)}
-                    disabled={contact.isContact || isAddingThis}
-                  >
+                 <button
+  className={"snd-add-contact-btn " + (contact.isContact ? "added" : "")}
+  onClick={(e) => handleToggleContact(e, contact)}
+  disabled={isAddingThis}
+>
                     {contact.isContact ? (
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="4 12.5 9.5 18 20 6"></polyline>

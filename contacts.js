@@ -11,18 +11,32 @@ function getInitials(name) {
 }
 
 function colorForId(id) {
+  if (!id) return AVATAR_PALETTE[0];
   var sum = 0;
   for (var i = 0; i < id.length; i++) sum += id.charCodeAt(i);
   return AVATAR_PALETTE[sum % AVATAR_PALETTE.length];
 }
 
 function decorate(item) {
+  var playerId = item.playerId || item.PlayerID || "";
+  var username = item.username || item.Username || "";
+  var isContact = item.isContact !== undefined ? item.isContact : !!item.IsContact;
+
   return {
-    id: item.playerId,
-    name: item.username,
-    isContact: !!item.isContact,
-    color: colorForId(item.playerId)
+    id: playerId,
+    name: username,
+    isContact: isContact,
+    color: colorForId(playerId || "?")
   };
+}
+
+async function removeContact(playerId) {
+  var token = localStorage.getItem(TOKEN_KEY);
+  return fetch(API_BASE + "/contacts/remove", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ contactPlayerId: playerId })
+  });
 }
 
 // Возвращает { results, debug } — debug всегда заполнен, независимо от исхода.
@@ -92,4 +106,4 @@ async function addContact(playerId) {
   });
 }
 
-export { searchUsers, listContacts, addContact, getInitials };
+export { searchUsers, listContacts, addContact, removeContact, getInitials };

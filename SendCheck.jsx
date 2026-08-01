@@ -159,28 +159,16 @@ const SendCheck = () => {
             <span className="sc-value sc-dim">—</span>
           </div>
         </div>
+<div className="sc-stamp">
 
-        <svg className="sc-stamp" viewBox="0 0 200 200">
-          <defs>
-            <path id="scStampCircle" d="M 100,100 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" />
-          </defs>
-          <circle cx="100" cy="100" r="78" className="sc-stamp-ring-outer" />
-          <circle cx="100" cy="100" r="60" className="sc-stamp-ring-inner" />
-          <text className="sc-stamp-text">
-            <textPath href="#scStampCircle" startOffset="0%">
-              XWALLET · SECURE · FAST · RELIABLE ·
-            </textPath>
-          </text>
-          <svg x="65" y="60" width="70" height="83" viewBox="0 0 1299 1536" className="sc-stamp-logo" fill="none" stroke="currentColor" strokeWidth="70" strokeLinecap="round" strokeLinejoin="round">
-            <LogoMark />
-          </svg>
-        </svg>
+  <div className="sc-stamp-text">
+    <span>xwallet own</span>
+    <span>your flow</span>
+  </div>
+</div>
 
         <div className="sc-wordmark">
           <span>xwallet</span>
-          <svg className="sc-swash" viewBox="0 0 120 14" preserveAspectRatio="none">
-            <path d="M2,4 Q40,14 80,4 T118,6" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"></path>
-          </svg>
         </div>
 
         <button className="sc-close-btn" onClick={handleClose}>Close</button>

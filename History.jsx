@@ -136,17 +136,17 @@ const History = () => {
     navigate(-1);
     setTimeout(function () {
       navigate('/order', { state: { coin: managedPos.coin, type: managedPos.type, price: managedPos.livePrice > 0 ? managedPos.livePrice.toString() : managedPos.entryPrice.toString(), change: '+0.00%', leverage: managedPos.leverage, amount: managedPos.amount } });
-    }, 10);
+    }, 20);
   }
   function handleGoToChart() {
     if (!managedPos) return;
     navigate(-1);
     setTimeout(function () {
       navigate('/trade', { state: { coin: managedPos.coin } });
-    }, 10);
+    }, 20);
   }
   function handleOpenTransfer(transferId) {
-    navigate('/sendchek', { state: { transferId: transferId } });
+    navigate('/sendcheck', { state: { transferId: transferId } });
   }
 
   var sel = selectedCompletedTrade;

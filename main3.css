@@ -963,7 +963,7 @@ top: 90%;
 
 .SendCheckContent {
   background: #121212;
-  min-height: 100vh;
+  max-height: 100vh;
   color: #fff;
   font-family: 'Inter', sans-serif;
 }
@@ -983,11 +983,11 @@ top: 90%;
   position: relative;
   max-width: 420px;
   margin: 0 auto;
-  padding: 10vh 26px 32px;
+  padding: 1vh 26px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  min-height: 90vh;
   box-sizing: border-box;
 }
 
@@ -1073,35 +1073,34 @@ top: 90%;
 }
 .sc-copy-icon { color: rgba(255,255,255,0.4); display: flex; }
 
-/* Stamp watermark */
 .sc-stamp {
   position: absolute;
-  bottom: 190px;
-  left: -20px;
-  width: 190px;
-  height: 190px;
-  opacity: 0.08;
+  bottom: 200px;
+  left: -0px;
+  width: 360px;
+  opacity: 0.1;
   color: var(--xlavelia);
   pointer-events: none;
-  animation: sc-stamp-spin 40s linear infinite;
   z-index: 1;
 }
-.sc-stamp-ring-outer, .sc-stamp-ring-inner {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.2;
-}
+
+
 .sc-stamp-text {
-  fill: currentColor;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 3px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 20px;
+  font-family: "Permanent Marker", "Yellowtail", cursive; 
+  font-size: 52px;
+  line-height: 1.05;
+  color: currentColor;
 }
-.sc-stamp-logo { color: currentColor; }
 
 .sc-wordmark {
   margin-top: auto;
-  padding-top: 40px;
+  padding-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1124,7 +1123,7 @@ top: 90%;
 
 .sc-close-btn {
   width: 100%;
-  margin-top: 24px;
+  margin-top: 12px;
   padding: 15px;
   background: transparent;
   border: 1.5px solid hsla(61,85%,78%,0.5);
@@ -1145,10 +1144,6 @@ top: 90%;
 @keyframes sc-pop {
   from { opacity: 0; transform: translateY(10px) scale(0.96); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes sc-stamp-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
 }
 
 
@@ -1181,7 +1176,8 @@ top: 90%;
 .tf-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  margin-top: 1.5rem;
+  gap: 14px;
 }
 
 .tf-row {
@@ -1190,10 +1186,10 @@ top: 90%;
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #131313;
+  background: #1a1a1a;
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 16px;
-  padding: 13px 14px;
+  padding: 22px 14px;
   cursor: pointer;
   animation: tf-fade-in 0.3s cubic-bezier(0.22,1,0.36,1) both;
   transition: transform 0.12s, border-color 0.15s;
@@ -1206,8 +1202,8 @@ top: 90%;
   pointer-events: none;
   opacity: 0.5;
 }
-.tf-row.send .tf-row-glow { background: radial-gradient(circle at 0% 50%, rgba(255,68,102,0.05), transparent 60%); }
-.tf-row.receive .tf-row-glow { background: radial-gradient(circle at 0% 50%, rgba(0,212,170,0.05), transparent 60%); }
+.tf-row.send .tf-row-glow { color: #1a1a1a;}
+.tf-row.receive .tf-row-glow { background-color: #1a1a1a; }
 
 .tf-icon-wrap {
   position: relative;
@@ -1221,14 +1217,14 @@ top: 90%;
   flex-shrink: 0;
 }
 .tf-icon-wrap.send {
-  background: rgba(255,68,102,0.1);
-  border: 1px solid rgba(255,68,102,0.25);
-  color: #ff4466;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
 }
 .tf-icon-wrap.receive {
-  background: rgba(0,212,170,0.1);
-  border: 1px solid rgba(0,212,170,0.25);
-  color: #00d4aa;
+  background: transparent;
+  border: 1px solid var(--xlavelia);
+  color: var(--xlavelia);
 }
 
 .tf-info {
@@ -1266,8 +1262,8 @@ top: 90%;
   font-size: 14px;
   font-weight: 800;
 }
-.tf-amount.send { color: #ff4466; }
-.tf-amount.receive { color: #00d4aa; }
+.tf-amount.send { color: white; }
+.tf-amount.receive { color: var(--xlavelia); }
 .tf-currency {
   font-size: 9.5px;
   color: rgba(255,255,255,0.3);
@@ -1288,17 +1284,3 @@ top: 90%;
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-.snd-debug-panel {
-  background: #1a0f0f;
-  border: 1px solid var(--xlavelia);
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin: 10px 0;
-  font-family: monospace;
-  font-size: 11px;
-  color: #ffb3b3;
-  word-break: break-all;
-}
-.snd-debug-row { margin-bottom: 4px; }
-.snd-debug-row b { color: var(--xlavelia); }
