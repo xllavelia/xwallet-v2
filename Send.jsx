@@ -14,10 +14,11 @@ const Send = () => {
 var [query, setQuery] = useState("");
 var [results, setResults] = useState([]);
 var [isLoadingSearch, setIsLoadingSearch] = useState(false);
-var [searchError, setSearchError] = useState(null);
 var [selectedContact, setSelectedContact] = useState(null);
 var [addingId, setAddingId] = useState(null);
+var [debugInfo, setDebugInfo] = useState(null);
 
+var searchRequestIdRef = useRef(0);
 var searchRequestIdRef = useRef(0);
 
   var [amount, setAmount] = useState("");
@@ -34,34 +35,25 @@ var latestQueryRef = useRef("");
 
 useEffect(function () {
   var requestId = ++searchRequestIdRef.current;
-
   setIsLoadingSearch(true);
-  setSearchError(null);
 
   var delay = query.length === 0 ? 0 : 220;
 
   var handle = setTimeout(function () {
     var searchPromise = query.length === 0
-      ? listContacts()
+      ? listContacts().then(function (res) { return { results: res, debug: null }; })
       : searchUsers(query);
 
-    searchPromise
-      .then(function (res) {
-        if (searchRequestIdRef.current !== requestId) return; // ответ устарел, игнорируем
-        setResults(res);
-        setIsLoadingSearch(false);
-      })
-      .catch(function (err) {
-        if (searchRequestIdRef.current !== requestId) return;
-        setResults([]);
-        setSearchError(err.message || "Search failed");
-        setIsLoadingSearch(false);
-      });
+    searchPromise.then(function (outcome) {
+      if (searchRequestIdRef.current !== requestId) return;
+      setResults(outcome.results);
+      setDebugInfo(outcome.debug);
+      setIsLoadingSearch(false);
+    });
   }, delay);
 
   return function () { clearTimeout(handle); };
 }, [query]);
-
 
   function handleSelectContact(contact) {
     setSelectedContact(contact);
@@ -242,6 +234,20 @@ useEffect(function () {
             />
             {isLoadingSearch && <div className="snd-search-spinner"></div>}
           </div>
+
+
+
+{debugInfo && (
+  <div className="snd-debug-panel">
+    <div className="snd-debug-row"><b>URL:</b> {debugInfo.url}</div>
+    <div className="snd-debug-row"><b>Status:</b> {debugInfo.status}</div>
+    <div className="snd-debug-row"><b>Error:</b> {debugInfo.error || "none"}</div>
+    <div className="snd-debug-row snd-debug-raw"><b>Raw:</b> {debugInfo.rawText}</div>
+  </div>
+)}
+
+
+
 
           <div className="snd-results-label">{resultsLabel}</div>
 

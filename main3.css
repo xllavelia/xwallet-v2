@@ -1288,3 +1288,17 @@ top: 90%;
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+.snd-debug-panel {
+  background: #1a0f0f;
+  border: 1px solid var(--xlavelia);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 10px 0;
+  font-family: monospace;
+  font-size: 11px;
+  color: #ffb3b3;
+  word-break: break-all;
+}
+.snd-debug-row { margin-bottom: 4px; }
+.snd-debug-row b { color: var(--xlavelia); }

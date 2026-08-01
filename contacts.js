@@ -1,6 +1,7 @@
-import { authFetch } from "./apiClient";
+import { API_BASE } from "./apiClient";
 
 var AVATAR_PALETTE = ["#5B8C7B", "#C97B63", "#6E7FD1", "#B98B4E", "#8B6FA8", "#4F8FA3"];
+var TOKEN_KEY = "xw_token";
 
 function getInitials(name) {
   if (!name) return "?";
@@ -24,29 +25,69 @@ function decorate(item) {
   };
 }
 
-// Бросает Error при любой сетевой/серверной проблеме.
-// Возвращает [] ТОЛЬКО когда сервер явно подтвердил: результатов нет.
+// Возвращает { results, debug } — debug всегда заполнен, независимо от исхода.
 async function searchUsers(query) {
-  if (!query || query.length === 0) return [];
-  var res = await authFetch("/users/search?q=" + encodeURIComponent(query));
-  if (!Array.isArray(res)) {
-    throw new Error("Unexpected response from server");
+  var debug = { url: null, status: null, rawText: null, error: null };
+
+  if (!query || query.length === 0) {
+    return { results: [], debug: debug };
   }
-  return res.map(decorate);
+
+  var token = localStorage.getItem(TOKEN_KEY);
+  var url = API_BASE + "/users/search?q=" + encodeURIComponent(query);
+  debug.url = url;
+
+  try {
+    var res = await fetch(url, { headers: { "Authorization": "Bearer " + token } });
+    debug.status = res.status;
+
+    var text = await res.text();
+    debug.rawText = text;
+
+    var data = null;
+    try { data = JSON.parse(text); } catch (parseErr) {
+      debug.error = "Response is not valid JSON";
+      return { results: [], debug: debug };
+    }
+
+    if (!res.ok) {
+      debug.error = (data && data.error) ? data.error : ("HTTP " + res.status);
+      return { results: [], debug: debug };
+    }
+
+    if (!data || !Array.isArray(data.results)) {
+      debug.error = "Response missing 'results' array";
+      return { results: [], debug: debug };
+    }
+
+    debug.error = null;
+    return { results: data.results.map(decorate), debug: debug };
+
+  } catch (err) {
+    debug.error = "Network error: " + err.message;
+    return { results: [], debug: debug };
+  }
 }
 
 async function listContacts() {
-  var res = await authFetch("/contacts/list");
-  if (!Array.isArray(res)) return [];
-  return res.map(function (c) {
-    return decorate({ playerId: c.playerId, username: c.username, isContact: true });
-  });
+  var token = localStorage.getItem(TOKEN_KEY);
+  try {
+    var res = await fetch(API_BASE + "/contacts/list", { headers: { "Authorization": "Bearer " + token } });
+    var data = await res.json();
+    if (!Array.isArray(data)) return [];
+    return data.map(function (c) {
+      return decorate({ playerId: c.playerId, username: c.username, isContact: true });
+    });
+  } catch (err) {
+    return [];
+  }
 }
 
 async function addContact(playerId) {
-  return authFetch("/contacts/add", {
+  var token = localStorage.getItem(TOKEN_KEY);
+  return fetch(API_BASE + "/contacts/add", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ contactPlayerId: playerId })
   });
 }
