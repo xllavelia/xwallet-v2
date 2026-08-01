@@ -24,15 +24,21 @@ function decorate(item) {
   };
 }
 
+// Бросает Error при любой сетевой/серверной проблеме.
+// Возвращает [] ТОЛЬКО когда сервер явно подтвердил: результатов нет.
 async function searchUsers(query) {
   if (!query || query.length === 0) return [];
   var res = await authFetch("/users/search?q=" + encodeURIComponent(query));
-  return (res || []).map(decorate);
+  if (!Array.isArray(res)) {
+    throw new Error("Unexpected response from server");
+  }
+  return res.map(decorate);
 }
 
 async function listContacts() {
   var res = await authFetch("/contacts/list");
-  return (res || []).map(function (c) {
+  if (!Array.isArray(res)) return [];
+  return res.map(function (c) {
     return decorate({ playerId: c.playerId, username: c.username, isContact: true });
   });
 }

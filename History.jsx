@@ -267,7 +267,6 @@ const History = () => {
           </button>
           <button className={'history-tab ht-tab-with-badge ' + (activeTab === 'active' ? 'active-tab' : '')} onClick={() => setActiveTab('active')}>
             <span style={{fontFamily: "Unbounded"}}>Active Trade</span>
-            {positions.length > 0 && <span className="ht-tab-badge">{positions.length}</span>}
           </button>
           <button className={'history-tab ' + (activeTab === 'completed' ? 'active-tab' : '')} onClick={() => setActiveTab('completed')}>
             <span style={{fontFamily: "Unbounded"}}>Completed Trade</span>

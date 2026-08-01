@@ -11,12 +11,14 @@ const Send = () => {
   var balance = wallet.balance;
 
   var [step, setStep] = useState("search");
+var [query, setQuery] = useState("");
+var [results, setResults] = useState([]);
+var [isLoadingSearch, setIsLoadingSearch] = useState(false);
+var [searchError, setSearchError] = useState(null);
+var [selectedContact, setSelectedContact] = useState(null);
+var [addingId, setAddingId] = useState(null);
 
-  var [query, setQuery] = useState("");
-  var [results, setResults] = useState([]);
-  var [isLoadingSearch, setIsLoadingSearch] = useState(false);
-  var [selectedContact, setSelectedContact] = useState(null);
-  var [addingId, setAddingId] = useState(null);
+var searchRequestIdRef = useRef(0);
 
   var [amount, setAmount] = useState("");
   var [swipeX, setSwipeX] = useState(0);
@@ -31,49 +33,35 @@ var [searchError, setSearchError] = useState(null);
 var latestQueryRef = useRef("");
 
 useEffect(function () {
-  var thisQuery = query;
-  latestQueryRef.current = thisQuery;
-
-  if (query.length === 0) {
-    setIsLoadingSearch(true);
-    setSearchError(null);
-    listContacts()
-      .then(function (res) {
-        if (latestQueryRef.current !== thisQuery) return;
-        setResults(res);
-      })
-      .catch(function () {
-        if (latestQueryRef.current !== thisQuery) return;
-        setResults([]);
-        setSearchError("Could not load contacts");
-      })
-      .finally(function () {
-        if (latestQueryRef.current !== thisQuery) return;
-        setIsLoadingSearch(false);
-      });
-    return;
-  }
+  var requestId = ++searchRequestIdRef.current;
 
   setIsLoadingSearch(true);
   setSearchError(null);
+
+  var delay = query.length === 0 ? 0 : 220;
+
   var handle = setTimeout(function () {
-    searchUsers(thisQuery)
+    var searchPromise = query.length === 0
+      ? listContacts()
+      : searchUsers(query);
+
+    searchPromise
       .then(function (res) {
-        if (latestQueryRef.current !== thisQuery) return;
+        if (searchRequestIdRef.current !== requestId) return; // ответ устарел, игнорируем
         setResults(res);
+        setIsLoadingSearch(false);
       })
-      .catch(function () {
-        if (latestQueryRef.current !== thisQuery) return;
+      .catch(function (err) {
+        if (searchRequestIdRef.current !== requestId) return;
         setResults([]);
-        setSearchError("Search failed, try again");
-      })
-      .finally(function () {
-        if (latestQueryRef.current !== thisQuery) return;
+        setSearchError(err.message || "Search failed");
         setIsLoadingSearch(false);
       });
-  }, 220);
+  }, delay);
+
   return function () { clearTimeout(handle); };
 }, [query]);
+
 
   function handleSelectContact(contact) {
     setSelectedContact(contact);
@@ -294,14 +282,14 @@ useEffect(function () {
                 </div>
               );
             })}
-
-          {searchError && (
-  <div className="snd-empty">
-    <span className="snd-empty-text">{searchError}</span>
-    <span className="snd-empty-hint">Check your connection and try again</span>
+{searchError && (
+  <div className="snd-empty snd-empty-error">
+    <span className="snd-empty-text">Search failed</span>
+    <span className="snd-empty-hint">{searchError}</span>
   </div>
 )}
-{!searchError && showEmpty && (
+
+{!searchError && !isLoadingSearch && results.length === 0 && (
   <div className="snd-empty">
     <span className="snd-empty-text">
       {query.length === 0 ? "No contacts yet" : ("No matches for \u201C" + query + "\u201D")}
