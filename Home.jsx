@@ -1,16 +1,13 @@
 import React, {useState, useRef, useEffect} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWalletBalance } from "./useWallet";
-import history1 from "./history1.jpg"
-import history2 from "./history2.jpg"
-import history3 from "./history3.jpg"
-import history4 from "./history4.jpg"
+
 import { color } from "framer-motion";
 import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "connection card, add swap buy sell for sql/go"
+// git commit -m "connection voucher for sql/go"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -343,7 +340,6 @@ const slides = [
         text: 'Transfer funds to your loved ones quickly and securely, with no fees for the first 3 months.',
     slides: [
       {
-        image:  history1,
         title: 'fast transfers \nwithout commissions',
         text: 'Transfer funds to your loved ones quickly and securely, with no fees for the first 3 months.',
       },
@@ -356,12 +352,10 @@ const slides = [
         text: 'Buy a premium subscription, different plans to choose from, benefits, status, rewards',
     slides: [
       {
-        image: history2,
         title: 'prime subscribe',
         text: 'Buy a premium subscription, different plans to choose from, benefits, status, rewards',
       },
       {
-        image: history2,
         title: 'all in one subscription',
         text: 'Reduced fees, battle passes, vouchers, increased limits, all in one app – with prime',
       },
@@ -374,7 +368,6 @@ const slides = [
         text: 'Invite your friends and receive numerous rewards and bonuses',
     slides: [
       {
-        image: history3,
         title: 'refferal system',
         text: 'Invite your friends and receive numerous rewards and bonuses',
       },
@@ -387,7 +380,6 @@ const slides = [
         text: 'Store your cryptocurrency conveniently and securely',
     slides: [
       {
-        image: history4,
         title: 'crypto storage',
         text: 'Store your cryptocurrency conveniently and securely',
       },
