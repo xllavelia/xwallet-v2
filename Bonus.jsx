@@ -424,7 +424,7 @@ const Bonus = () => {
           </>
         )}
 
-        <div className="vch-dev-tools">
+        {/* <div className="vch-dev-tools">
           <span className="vch-dev-label">DEV</span>
           <button onClick={() => handleDevGrant("usdt_credit", 25)}>+$25</button>
           <button onClick={() => handleDevGrant("usdt_credit", 50)}>+$50</button>
@@ -433,7 +433,7 @@ const Bonus = () => {
           <button onClick={() => handleDevGrant("ref_xp_credit", 50)}>+50 RefXP</button>
           <button onClick={() => handleDevGrant("fee_discount", 100)}>+Fee</button>
           <button onClick={handleDevReset}>Reset</button>
-        </div>
+        </div> */}
 
       </div>
     </div>
