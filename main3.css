@@ -540,13 +540,13 @@ top: 90%;
 
 /* Выделенный "большой экран" — не на весь вьюпорт */
 .story-stage {
-  margin-top: 3rem;
+  margin-top: 4rem;
   position: relative;
   width: min(420px, 92vw);
   height: min(760px, 88vh);
   border-radius: 22px;
   overflow: hidden;
-  background: #000;
+  background: #1a1a1a;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: story-stage-in 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -600,7 +600,7 @@ top: 90%;
 .story-progress-fill {
   height: 100%;
   width: 100%;
-  background: var(--xlavelia);
+  background: white;
   transform-origin: left center;
   transform: scaleX(0);
 }
@@ -648,7 +648,7 @@ top: 90%;
 }
 
 .story-text-title {
-  color: #fff;
+  color: var(--xlavelia);
   font-size: 24px;
   font-weight: 800;
   line-height: 1.2;
@@ -657,7 +657,7 @@ top: 90%;
 }
 
 .story-text-body {
-  color: rgba(255, 255, 255, 0.85);
+  color:var(--xlavelia);
   font-size: 14px;
   line-height: 1.45;
   margin: 0;
@@ -1180,6 +1180,10 @@ top: 90%;
   gap: 14px;
 }
 
+.tf-row:last-child{
+  margin-bottom: 1.5rem;
+}
+
 .tf-row {
   position: relative;
   overflow: hidden;
@@ -1283,4 +1287,245 @@ top: 90%;
 @keyframes tf-fade-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+
+
+.deco-ball,
+.deco-ring,
+.deco-star,
+.deco-burst,
+.deco-core {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* Шары */
+
+.ball-1 {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    left: 40px;
+    top: -70px;
+    background: radial-gradient(circle at 40% 30%,
+            rgba(255, 242, 120, .25),
+            rgba(255, 242, 120, .05) 70%,
+            transparent);
+}
+
+.ball-2 {
+    width: 290px;
+    height: 280px;
+    border-radius: 50%;
+    right: -120px;
+    top: -80px;
+    background: radial-gradient(circle at 40% 30%,
+            rgba(255, 242, 120, .18),
+            rgba(255, 242, 120, .04) 75%,
+            transparent);
+}
+
+/* Кольца */
+
+.deco-ring {
+    border: 2px solid rgba(255, 245, 160, .18);
+    border-radius: 50%;
+}
+
+.ring-1 {
+    width: 260px;
+    height: 260px;
+    right: -40px;
+    top: 60px;
+}
+
+.ring-2 {
+    width: 180px;
+    height: 180px;
+    left: 30px;
+    top: 30px;
+}
+
+/* Звезда */
+
+.deco-star, .deco-star-2, .deco-star-3{
+    width: 18px;
+    height: 18px;
+    left: 32px;
+    top: 120px;
+    background: var(--xlavelia);
+    clip-path: polygon(50% 0%,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);
+    filter: drop-shadow(0 0 8px rgba(255,240,120,.5));
+}
+
+
+.deco-star-2 {
+margin-left: 80%;
+    top: 20px;
+}
+
+
+.deco-star-3 {
+margin-left: 60%;
+margin-bottom: 20px;
+}
+
+/* Лучи */
+
+.deco-burst {
+    width: 220px;
+    height: 220px;
+    right: -35px;
+    bottom: -35px;
+}
+
+.deco-burst span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1px;
+    height: 110px;
+    background: rgba(255,245,160,.18);
+    transform-origin: bottom;
+    transform: translateX(-50%) rotate(calc(var(--i) * 5deg));
+}
+
+/* Светящаяся точка */
+
+.deco-core {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    right: 66px;
+    bottom: 66px;
+    background: #f5ef7c;
+    box-shadow:
+        0 0 12px #f5ef7c,
+        0 0 28px rgba(245,239,124,.6);
+}
+
+
+.vlt-card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 22px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: inherit;
+}
+.vlt-card-label { font-size: 12px; font-weight: 600; opacity: 0.75; letter-spacing: 0.02em; }
+.vlt-card-balance { font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 800; letter-spacing: -1px; }
+.vlt-card-bottom-row { display: flex; justify-content: space-between; align-items: center; }
+.vlt-card-holder, .vlt-card-expiry { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; opacity: 0.8; }
+
+/* ── Action tiles row ─────────────────────────────────────── */
+.crd-actions-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 4px 0; }
+.crd-action-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 16px 8px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+.crd-action-tile:active { transform: scale(0.95); }
+.crd-action-icon {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  border: none;
+  color: var(--xlavelia);
+}
+
+.crd-action-label { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
+
+/* ── Trade/Swap shared page shell ────────────────────────── */
+.TradeCoinContent, .SwapContent { background: #121212; min-height: 90vh; color: #fff; font-family: 'Inter', sans-serif; }
+.crd-page {margin: 0 auto; padding: 1vh 22px 40px; display: flex; flex-direction: column; gap: 16px; }
+.crd-header { display: flex; flex-direction: column; gap: 4px; margin-bottom: 4px; }
+.crd-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--xlavelia); opacity: 0.85; }
+.crd-title { font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
+
+/* ── Buy/Sell toggle ──────────────────────────────────────── */
+.crd-toggle { position: relative; display: flex; background: #131313; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 4px; }
+.crd-toggle-pill { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 12px; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.2s; }
+.crd-toggle-pill.buy { background: var(--xlavelia); }
+.crd-toggle-pill.sell { background: white; transform: translateX(100%); }
+.crd-toggle-btn { position: relative; z-index: 1; flex: 1; background: none; border: none; padding: 11px 0; font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5); cursor: pointer; transition: color 0.2s; }
+.crd-toggle-btn.active { color: #000; }
+
+.crd-coin-row { display: flex; gap: 8px; }
+.crd-coin-chip {
+  flex: 1; padding: 10px 0;
+  background: #131313; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+}
+.crd-coin-chip.active { background: #1a1a1a; border-color: var(--xlavelia); color: var(--xlavelia); }
+
+.crd-balance-line { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+.crd-input-wrap-div {
+display: flex;
+justify-content: center;
+margin-top: 42%;
+margin-bottom: 42%;
+}
+
+.crd-input-wrap { gap: 6px; border-radius: 16px; padding: 16px 0px; }
+.crd-input-currency { font-family: 'Unbounded', sans-serif; font-size: 34px; font-weight: 800; color: var(--xlavelia); }
+.crd-input { width: 11vh; background: transparent; border: none; outline: none; color: #fff; font-family: 'Unbounded', sans-serif; font-size: 34px; font-weight: 800; }
+.crd-input::-webkit-outer-spin-button, .crd-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* .crd-preview-line { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 35%;} */
+
+.crd-presets { display: flex; gap: 8px; }
+.crd-preset-btn { font-family: 'Unbounded', sans-serif; flex: 1; padding: 9px 0; background: #141414; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 600; cursor: pointer; }
+/* .crd-preset-btn:active { background: #1a1a1a; } */
+
+.crd-alert { text-align: center; color: white; font-size: 12px; font-weight: 500; }
+.crd-status { font-size: 13px; font-weight: 600; padding: 0px 12px; text-align: center; }
+.crd-status.ok { color: var(--xlavelia);  }
+.crd-status.err {  color: white; }
+
+.crd-submit-btn { padding: 18px; border: none; border-radius: 16px; font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; color: #000; }
+.crd-submit-btn.buy { background: var(--xlavelia); }
+.crd-submit-btn.sell { background: white; color: black; }
+.crd-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Swap screen ──────────────────────────────────────────── */
+.swp-box { position: relative; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; }
+.swp-row-header { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 600; }
+.swp-available { color: var(--xlavelia); }
+.swp-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.swp-input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-family: 'Unbounded', sans-serif; font-size: 28px; font-weight: 800; min-width: 0; }
+.swp-input::-webkit-outer-spin-button, .swp-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.swp-receive-amount { flex: 1; font-family: 'Unbounded', sans-serif; font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.85); }
+.swp-asset-btn { display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 12px; color: #fff; font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+.swp-chevron { color: rgba(255,255,255,0.3); font-size: 12px; }
+
+.swp-picker { position: absolute; top: 100%; left: 0; right: 0; margin-top: 6px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; z-index: 5; box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+.swp-picker-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.swp-picker-item:last-child { border-bottom: none; }
+.swp-picker-item:active { background: rgba(255,255,255,0.05); }
+.swp-picker-item span:first-child { font-weight: 800; color: #fff; font-family: 'Unbounded', sans-serif; font-size: 13px; }
+.swp-picker-label { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+.swp-flip-wrap { display: flex; justify-content: center; margin: -8px 0; z-index: 1; }
+.swp-flip-btn { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; border: 3px solid #0a0a0a; color: var(--xlavelia); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
+.swp-flip-btn:active { transform: rotate(180deg); }
+
+.swp-rate-line { margin-top: 70%; font-size: 12px; color: rgba(255,255,255,0.4); text-align: center; }
+
+.swp-submit-btn { padding: 18px; border: none; border-radius: 16px; background: var(--xlavelia); color: #000; font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+.swp-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.tf-coin-glyph {
+  font-size: 18px;
+  font-weight: 800;
+  color: currentColor;
 }

@@ -10,7 +10,7 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "connect send, add sendcheck for sql/go"
+// git commit -m "connection card, add swap buy sell for sql/go"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -77,10 +77,6 @@ const roadReferral = () => {
 
     navigate("/card");
 
-  };
-
-const roadCard2 = () => {
-    navigate("/card2");
   };
 
 const roadBattlePass = () => {
@@ -714,35 +710,20 @@ return (
 
         {/* Карточка 1: Лаймовая */}
         <div className={'mc-item mc-card ' + 'bg-lime'} onClick={roadCard}>
-          <div className="mc-top">
-            <div>
-              <div className="mc-label">Current Balance</div>
-              <div className="mc-balance">$17.24</div>
-            </div>
-            <div className="mc-contactless">
-          
-            </div>
-          </div>
+         
 
-          <div className="mc-bottom">
-            <div className="mc-info-row">
-              <span>XLAVELIA LAGA</span>
-              <span>08/24</span>
-            </div>
-            <div className="mc-number-row">
-              <span>7901 **** **** 4581</span>
-              <div className="mc-mastercard">
-                <svg width="32" height="20" viewBox="0 0 32 20" fill="none">
-                  <circle cx="10" cy="10" r="10" fill="#eb001b" fillOpacity="0.9"></circle>
-                  <circle cx="22" cy="10" r="10" fill="#f79e1b" fillOpacity="0.9"></circle>
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div className="deco-ball ball-1"></div>
+  <div className="deco-ball ball-2"></div>
 
-      </div>
+  <div className="deco-ring ring-1"></div>
+  <div className="deco-ring ring-2"></div>
+
+  <div className="deco-star"></div>
+    <div className="deco-star-2"></div>
+    <div className="deco-star-3"></div>
+    
     </div>
+    </div> </div>
 
 
  <div className="stories-root">

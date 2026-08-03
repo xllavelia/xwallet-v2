@@ -22,7 +22,6 @@ import State from "./State";
 import Bonus from "./Bonus";
 import Referral from "./Referral";
 import Card from "./Card";
-import Card2 from "./Card2";
 import Trade from "./Trade";
 import Order from "./Order";
 import BattlePass from "./BattlePass";
@@ -34,6 +33,9 @@ import Prime from "./Prime";
 import PromoCode from "./PromoCode";
 import SendCheck  from "./SendCheck";
 import RequireAuth from "./RequireAuth";
+import TradeCoin from "./TradeCoin";
+import Swap from "./Swap";
+
 
 import PageTransition from "./PageTransition";
 
@@ -49,7 +51,6 @@ const islandRoutes = [
   { path: "bonus", element: <Bonus /> },
   { path: "referral", element: <Referral /> },
   { path: "card", element: <Card /> },
-  { path: "card2", element: <Card2 /> },
   { path: "trade", element: <Trade /> },
   { path: "order", element: <Order /> },
   { path: "battlepass", element: <BattlePass /> },
@@ -59,7 +60,8 @@ const islandRoutes = [
   { path: "prime", element: <Prime /> },
   { path: "promocode", element: <PromoCode /> },
   { path: "sendcheck", element: <SendCheck /> },
-
+  { path: "tradecoin", element: <TradeCoin /> },
+  { path: "swap", element: <Swap /> },
 
 
 ];

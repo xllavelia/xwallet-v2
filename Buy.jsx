@@ -63,8 +63,8 @@ const roadHome = () => {
      
      const trackRect = trackRef.current.getBoundingClientRect();
      // 28 - это ровно половина ширины нашего кружка (56px), чтобы он был по центру пальца
-     let newX = e.clientX - trackRect.left - 28;
-     const maxX = trackRect.width - 56;
+     let newX = e.clientX - trackRect.left - 30;
+     const maxX = trackRect.width - 60;
  
      // Жесткие рамки: от 0 до конца трека
      if (newX < 0) newX = 0;

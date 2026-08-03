@@ -116,8 +116,8 @@ function handleToggleContact(e, contact) {
   function onPointerMove(e) {
     if (!isDragging || !trackRef.current) return;
     var trackRect = trackRef.current.getBoundingClientRect();
-    var newX = e.clientX - trackRect.left - 28;
-    var maxX = trackRect.width - 56;
+    var newX = e.clientX - trackRect.left - 30;
+    var maxX = trackRect.width - 70;
     if (newX < 0) newX = 0;
     if (newX > maxX) newX = maxX;
     setSwipeX(newX);
@@ -129,7 +129,7 @@ function handleToggleContact(e, contact) {
 
     if (!trackRef.current) return;
     var trackRect = trackRef.current.getBoundingClientRect();
-    var maxX = trackRect.width - 56;
+    var maxX = trackRect.width - 60;
 
     if (swipeX > maxX * 0.8) {
       setSwipeX(maxX);
@@ -273,7 +273,7 @@ function handleToggleContact(e, contact) {
                       </svg>
                     )}
                   </button>
-                  {isSelected && <div className="snd-contact-check">✓</div>}
+                  {isSelected && <div className="snd-contact-check"></div>}
                 </div>
               );
             })}

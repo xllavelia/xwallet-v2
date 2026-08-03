@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePositionsRemote, useClosedPositionsRemote, closePosition } from "./usePositions";
 import { useTransfersRemote } from "./useTransfers";
+import { useCardHistory } from "./useCardHistory";
 
 function safeNum(val) {
   var n = parseFloat(val);
@@ -31,6 +32,8 @@ const History = () => {
   const { positions, refresh: refreshOpen } = usePositionsRemote();
   const { closedPositions } = useClosedPositionsRemote();
   const { transfers } = useTransfersRemote();
+  const { history: cardHistory } = useCardHistory();
+  const [selectedCardEntry, setSelectedCardEntry] = useState(null);
 
   const [activeTab, setActiveTab] = useState('transfers');
   const [selectedCompletedTrade, setSelectedCompletedTrade] = useState(null);
@@ -77,6 +80,35 @@ const History = () => {
     if (!iso) return '--';
     return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
+
+function coinGlyph(asset) {
+  if (asset === "BTC") return "₿";
+  if (asset === "ETH") return "Ξ";
+  if (asset === "SOL") return "◎";
+  if (asset === "TON") return "◆";
+  return "$";
+}
+
+function cardEntryLabel(item) {
+  if (item.operationType === "buy") {
+    return "Bought " + item.toAsset;
+  }
+  if (item.operationType === "sell") {
+    return "Sold " + item.fromAsset;
+  }
+  return item.fromAsset + " → " + item.toAsset;
+}
+
+function cardEntryAmountStr(item) {
+  if (item.operationType === "buy") {
+    return "+" + item.toAmount.toFixed(6) + " " + item.toAsset;
+  }
+  if (item.operationType === "sell") {
+    return "+$" + item.toAmount.toFixed(2);
+  }
+  return "+" + item.toAmount.toFixed(6) + " " + item.toAsset;
+}
+
   function timeAgo(iso) {
     var ms = Date.now() - new Date(iso).getTime();
     var h  = Math.floor(ms / 3600000);
@@ -255,6 +287,64 @@ const History = () => {
         </div>
       )}
 
+{selectedCardEntry && (
+  <div className="ht-detail-overlay" onClick={() => setSelectedCardEntry(null)}>
+    <div className="ht-detail-modal" onClick={function(e) { e.stopPropagation(); }}>
+      <div className="ht-detail-handle"></div>
+      <div className="ht-detail-top">
+        <span className={'et-pos-badge ' + (selectedCardEntry.operationType === 'sell' ? 'short' : 'long')}>
+          {selectedCardEntry.operationType.toUpperCase()}
+        </span>
+        <span className="ht-detail-coin">
+          {selectedCardEntry.operationType === 'swap'
+            ? selectedCardEntry.fromAsset + ' → ' + selectedCardEntry.toAsset
+            : (selectedCardEntry.operationType === 'buy' ? selectedCardEntry.toAsset : selectedCardEntry.fromAsset)}
+        </span>
+        <button className="ht-detail-close" onClick={() => setSelectedCardEntry(null)}>✕</button>
+      </div>
+
+      <div className="ht-detail-pnl pos">
+        <span className="ht-detail-pnl-val">{cardEntryAmountStr(selectedCardEntry)}</span>
+      </div>
+
+      <div className="ht-detail-divider"></div>
+
+      <div className="ht-detail-grid">
+        <div className="ht-detail-row"><span className="ht-dl">Type</span><span className="ht-dv">{selectedCardEntry.operationType.charAt(0).toUpperCase() + selectedCardEntry.operationType.slice(1)}</span></div>
+
+        {selectedCardEntry.operationType === 'swap' && (
+          <>
+            <div className="ht-detail-row"><span className="ht-dl">From</span><span className="ht-dv">{selectedCardEntry.fromAmount.toFixed(6) + ' ' + selectedCardEntry.fromAsset}</span></div>
+            <div className="ht-detail-row"><span className="ht-dl">To</span><span className="ht-dv">{selectedCardEntry.toAmount.toFixed(6) + ' ' + selectedCardEntry.toAsset}</span></div>
+          </>
+        )}
+
+        {selectedCardEntry.operationType === 'buy' && (
+          <>
+            <div className="ht-detail-row"><span className="ht-dl">Spent</span><span className="ht-dv">{'$' + selectedCardEntry.fromAmount.toFixed(2)}</span></div>
+            <div className="ht-detail-row"><span className="ht-dl">Received</span><span className="ht-dv">{selectedCardEntry.toAmount.toFixed(6) + ' ' + selectedCardEntry.toAsset}</span></div>
+          </>
+        )}
+
+        {selectedCardEntry.operationType === 'sell' && (
+          <>
+            <div className="ht-detail-row"><span className="ht-dl">Sold</span><span className="ht-dv">{selectedCardEntry.fromAmount.toFixed(6) + ' ' + selectedCardEntry.fromAsset}</span></div>
+            <div className="ht-detail-row"><span className="ht-dl">Received</span><span className="ht-dv">{'$' + selectedCardEntry.toAmount.toFixed(2)}</span></div>
+          </>
+        )}
+
+        <div className="ht-detail-row"><span className="ht-dl">Price</span><span className="ht-dv">{'$' + selectedCardEntry.price.toLocaleString('en-US')}</span></div>
+      </div>
+
+      <div className="ht-detail-divider"></div>
+
+      <div className="ht-detail-dates">
+        <div className="ht-detail-row"><span className="ht-dl">Executed</span><span className="ht-dv ht-dv-date">{formatDate(selectedCardEntry.createdAt)}</span></div>
+      </div>
+    </div>
+  </div>
+)}
+
       <div className="history-screen">
         <div className="history-header"><h1>History</h1></div>
 
@@ -311,11 +401,41 @@ const History = () => {
             </div>
           )}
 
-          {activeTab === 'card' && (
-            <div className="ht-empty">
-              <span className="ht-empty-text">Card activity is coming soon.</span>
-            </div>
-          )}
+    {activeTab === 'card' && cardHistory.length === 0 && (
+  <div className="ht-empty">
+    <span className="ht-empty-text">No card activity yet.</span>
+  </div>
+)}
+
+{activeTab === 'card' && cardHistory.length > 0 && (
+  <div className="tf-list">
+    {cardHistory.map(function(item, idx) {
+      var isPositive = item.operationType !== 'sell' ? true : true; // все "to" всегда прирост актива, визуально зелёный
+      var rowClass = 'tf-row ' + (item.operationType === 'sell' ? 'receive' : (item.operationType === 'swap' ? 'receive' : 'receive'));
+      var iconClass = 'tf-icon-wrap receive';
+      var amtClass = 'tf-amount receive';
+      var dateStr = formatShortDate(item.createdAt);
+      var delayStyle = { animationDelay: (idx * 0.03) + 's' };
+      return (
+        <div key={item.id} className={rowClass} style={delayStyle} onClick={() => setSelectedCardEntry(item)}>
+          <div className="tf-row-glow"></div>
+          <div className={iconClass}>
+            <span className="tf-coin-glyph">{coinGlyph(item.operationType === 'buy' ? item.toAsset : item.fromAsset)}</span>
+          </div>
+          <div className="tf-info">
+            <span className="tf-name">{cardEntryLabel(item)}</span>
+            <span className="tf-date">{dateStr}</span>
+          </div>
+          <div className="tf-right">
+            <span className={amtClass}>{cardEntryAmountStr(item)}</span>
+            <span className="tf-currency">{item.operationType.toUpperCase()}</span>
+          </div>
+          <div className="tf-chevron">›</div>
+        </div>
+      );
+    })}
+  </div>
+)}
 
           {activeTab === 'active' && positions.length === 0 && (
             <div className="ht-empty">
