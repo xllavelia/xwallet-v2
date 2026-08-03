@@ -1680,3 +1680,74 @@ margin-bottom: 42%;
 /* ── Keyframes ────────────────────────────────────────────── */
 @keyframes vch-toast-in { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes vch-burst-flash { 0% { opacity: 0; } 25% { opacity: 1; } 100% { opacity: 0; } }
+
+
+
+/* ── Level progress ───────────────────────────────────────── */
+.rlp-progress-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;}
+.rlp-progress-top { display: flex; justify-content: space-between; align-items: center; }
+.rlp-progress-level { display: flex; align-items: baseline; gap: 8px; }
+.rlp-progress-num { font-family: 'Unbounded', sans-serif; font-size: 11px; font-weight: 800; color: var(--xlavelia); }
+.rlp-progress-name { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 800; color: #fff; }
+.rlp-progress-xp { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; }
+.rlp-progress-max { font-size: 11px; color: var(--xlavelia); font-weight: 800; letter-spacing: 0.06em; }
+
+.rlp-progress-bar { height: 8px; border-radius: 8px; background: rgba(255,255,255,0.06); overflow: hidden; }
+.rlp-progress-bar-fill { height: 100%; background: linear-gradient(90deg, hsla(61,85%,78%,0.5), var(--xlavelia)); border-radius: 8px; transition: width 0.6s cubic-bezier(0.22,1,0.36,1); }
+.rlp-progress-next { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+/* ── Level ladder ─────────────────────────────────────────── */
+.rlp-ladder { display: flex; flex-direction: column; gap: 6px; }
+.rlp-ladder-row {
+  display: flex; align-items: center; gap: 12px;
+  background: #101010; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+  padding: 10px 14px;
+  opacity: 0.45;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.rlp-ladder-row.past { opacity: 0.7; }
+.rlp-ladder-row.current { opacity: 1; border-color: hsla(61,85%,78%,0.4); background: hsla(61,85%,78%,0.06); }
+.rlp-ladder-badge {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5);
+  font-family: 'Unbounded', sans-serif; font-size: 10px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.rlp-ladder-row.current .rlp-ladder-badge { background: var(--xlavelia); color: #000; }
+.rlp-ladder-name { flex: 1; font-size: 13px; font-weight: 700; color: #fff; }
+.rlp-ladder-rate { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800; color: var(--xlavelia); }
+
+/* ── Details sections (reused voucher-style layout) ──────── */
+.ref-details { display: flex; flex-direction: column; gap: 18px; }
+.details-group { display: flex; flex-direction: column; gap: 10px; }
+.group-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin: 0; }
+.stats-list { display: flex; flex-direction: column; gap: 9px; }
+.stats-item { display: flex; align-items: baseline; gap: 8px; font-size: 13px; }
+.s-label { color: rgba(255,255,255,0.5); white-space: nowrap; }
+.s-dots { flex: 1; border-bottom: 1px dotted rgba(255,255,255,0.15); transform: translateY(-3px); }
+.s-value { color: #fff; font-weight: 600; white-space: nowrap; }
+
+.rlp-xp-sources { display: flex; flex-direction: column; gap: 8px; }
+.rlp-xp-source { display: flex; align-items: center; gap: 10px; background: #131313; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 12px; }
+.rlp-xp-badge { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800; color: var(--xlavelia); background: hsla(61,85%,78%,0.1); border: 1px solid hsla(61,85%,78%,0.25); border-radius: 8px; padding: 4px 9px; flex-shrink: 0; }
+.rlp-xp-source-text { font-size: 12px; color: rgba(255,255,255,0.6); }
+.rlp-xp-hint { font-size: 11px; color: rgba(255,255,255,0.3); margin: 2px 0 0; }
+
+.policy-box { background: #131313; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.policy-text { font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,0.55); margin: 0; }
+.legal-links { display: flex; gap: 8px; font-size: 11.5px; }
+.legal-links a { color: rgba(255,255,255,0.4); text-decoration: none; cursor: pointer; }
+.legal-links .sep { color: rgba(255,255,255,0.2); }
+
+/* ── Dev tools ────────────────────────────────────────────── */
+.rlp-dev-tools {
+  position: fixed; bottom: 14px; right: 14px;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(10,10,10,0.85); border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 12px; padding: 6px 8px; z-index: 9998;
+  backdrop-filter: blur(6px); opacity: 0.55; transition: opacity 0.2s;
+}
+.rlp-dev-tools:hover { opacity: 1; }
+.rlp-dev-label { font-size: 8px; font-weight: 800; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-right: 2px; }
+.rlp-dev-tools button { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; font-size: 10px; font-weight: 700; padding: 6px 8px; border-radius: 8px; cursor: pointer; }
+.rlp-dev-tools button:active { background: var(--xlavelia); color: #000; }

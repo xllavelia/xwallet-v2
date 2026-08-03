@@ -224,11 +224,18 @@ const Bonus = () => {
                             {!isCredit && (<><h2>COMMISSION</h2><h2>DISCOUNT VOUCHER</h2></>)}
                             {voucher.voucherType === "usdt_credit" && (<><h2>USDT</h2><h2>BONUS CREDIT</h2></>)}
                             {voucher.voucherType === "lavx_credit" && (<><h2>LAVX</h2><h2>BONUS CREDIT <GemIcon /></h2></>)}
+                            {voucher.voucherType === "ref_xp_credit" && (<><h2>REFERRAL</h2><h2>XP BOOST</h2></>)}
                           </div>
                           <div className="tm-amount">
                             <span className="digits">
-                              {!isCredit ? ("$" + voucher.limitAmount) : (voucher.voucherType === "usdt_credit" ? ("$" + voucher.creditAmount) : (voucher.creditAmount + " ◈"))}
-                            </span>
+  {!isCredit
+    ? ("$" + voucher.limitAmount)
+    : voucher.voucherType === "usdt_credit"
+      ? ("$" + voucher.creditAmount)
+      : voucher.voucherType === "lavx_credit"
+        ? (voucher.creditAmount + "#")
+        : (voucher.creditAmount + " XP")}
+</span>
                           </div>
                         </div>
 
@@ -400,7 +407,11 @@ const Bonus = () => {
 
                         {isCredit && (
                           <button className="voucher-activate-btn vch-claim-btn" disabled={isBusy} onClick={() => handleActivate(voucher)}>
-                            {isBusy ? "CLAIMING..." : ("CLAIM " + (voucher.voucherType === "usdt_credit" ? ("$" + voucher.creditAmount) : (voucher.creditAmount + " LAVX")))}
+{isBusy ? "CLAIMING..." : ("CLAIM " + (
+  voucher.voucherType === "usdt_credit" ? ("$" + voucher.creditAmount) :
+  voucher.voucherType === "lavx_credit" ? (voucher.creditAmount + " LAVX") :
+  (voucher.creditAmount + " Referral XP")
+))}
                           </button>
                         )}
 
@@ -413,15 +424,16 @@ const Bonus = () => {
           </>
         )}
 
-        {/* <div className="vch-dev-tools">
+        <div className="vch-dev-tools">
           <span className="vch-dev-label">DEV</span>
           <button onClick={() => handleDevGrant("usdt_credit", 25)}>+$25</button>
           <button onClick={() => handleDevGrant("usdt_credit", 50)}>+$50</button>
           <button onClick={() => handleDevGrant("usdt_credit", 100)}>+$100</button>
           <button onClick={() => handleDevGrant("lavx_credit", 25)}>+LAVX</button>
+          <button onClick={() => handleDevGrant("ref_xp_credit", 50)}>+50 RefXP</button>
           <button onClick={() => handleDevGrant("fee_discount", 100)}>+Fee</button>
           <button onClick={handleDevReset}>Reset</button>
-        </div> */}
+        </div>
 
       </div>
     </div>
