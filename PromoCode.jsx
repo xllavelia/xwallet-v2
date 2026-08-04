@@ -1,76 +1,68 @@
 import React, { useState } from 'react';
-import { resetAll, useProfile, writeProfile } from './useBalance';
-import { readBalance, writeBalance } from './useBalance';
-
-let VALID_CODES = [
-    "J7XLAV",
-    "I1HFLCJBKJCUG"
-];
+import { authFetch } from './apiClient';
 
 const PromoCode = () => {
     const [inputValue, setInputValue] = useState("");
     const [message, setMessage] = useState({ text: "", type: "" });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleCheckPromocode = () => {
+    async function handleCheckPromocode() {
         const enteredCode = inputValue.trim().toUpperCase();
 
         if (!enteredCode) {
-            setMessage({ text: "error: emprty input", type: "msg-error" });
+            setMessage({ text: "error: empty input", type: "msg-error" });
             return;
         }
+        if (isSubmitting) return;
 
-        if (enteredCode === "ZERO-1"){
-            resetAll
-    
-}
-
-        if (VALID_CODES.includes(enteredCode)) {
-            setMessage({ 
-                text: "Great! code: [" + enteredCode + "] work...", 
-                type: "msg-success" 
+        setIsSubmitting(true);
+        try {
+            const result = await authFetch('/promo/redeem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: enteredCode })
             });
-           
-writeBalance(readBalance() + 1000)
-VALID_CODES.splice(0, 1)         // console.log("active code:", enteredCode);
-
-        } else {
-            setMessage({ 
-                text: "error: code [" + enteredCode + "] no found.", 
-                type: "msg-error" 
-            });
+            setMessage({ text: result.message, type: "msg-success" });
+            setInputValue("");
+        } catch (err) {
+            setMessage({ text: "error: " + err.message, type: "msg-error" });
+        } finally {
+            setIsSubmitting(false);
         }
-    };
+    }
 
-    const handleKeyDown = (e) => {
+    function handleKeyDown(e) {
         if (e.key === 'Enter') {
             handleCheckPromocode();
         }
-    };
+    }
 
     return (
         <div className="promo-terminal">
-          
-            
+
             <div className="input-line">
                 <span className="prompt">xwallet@user:~#</span>
-                <input 
-                    type="text" 
-                    className="promo-input" 
-                    placeholder="enter the code" 
+                <input
+                    type="text"
+                    className="promo-input"
+                    placeholder="enter the code"
                     autoComplete="off"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    disabled={isSubmitting}
                 />
             </div>
-            
+
             <div className={"message-box " + message.type}>
                 {message.text}
             </div>
-           <div className="promo-btn-d">
-            <button className="promo-btn"onClick={handleCheckPromocode}>
-                Active
-            </button> </div> 
+
+            <div className="promo-btn-d">
+                <button className="promo-btn" onClick={handleCheckPromocode} disabled={isSubmitting}>
+                    {isSubmitting ? "Checking..." : "Active"}
+                </button>
+            </div>
         </div>
     );
 };
