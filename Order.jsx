@@ -26,7 +26,7 @@ const Order = () => {
   const [autoCloseEnabled, setAutoCloseEnabled] = useState(false);
   const [autoCloseTarget, setAutoCloseTarget] = useState(5);
   const [errorMsg, setErrorMsg] = useState(null);
-
+const [voucherMsg, setVoucherMsg] = useState(null);
   var parsedAmount = parseFloat(amountInput) || 0;
   var cryptoAmount = currentPrice > 0 ? (parsedAmount / currentPrice).toFixed(6) : 0;
   var requiredMargin = parsedAmount / leverage;
@@ -77,21 +77,26 @@ const Order = () => {
     if (isBalanceLow || parsedAmount <= 0 || submitted) return;
     setErrorMsg(null);
 
-    try {
-      await openPosition({
-        coin: coin,
-        type: type,
-        entryPrice: currentPrice,
-        leverage: leverage,
-        amount: parsedAmount,
-        autoClose: autoCloseEnabled,
-        autoCloseTarget: autoCloseEnabled ? autoCloseTarget : null
-      });
-      setSubmitted(true);
-      setTimeout(function() { navigate(-1, { state: { coin: coin } }); }, 1200);
-    } catch (err) {
-      setErrorMsg(err.message);
-    }
+  try {
+  var result = await openPosition({
+    coin: coin,
+    type: type,
+    entryPrice: currentPrice,
+    leverage: leverage,
+    amount: parsedAmount,
+    autoClose: autoCloseEnabled,
+    autoCloseTarget: autoCloseEnabled ? autoCloseTarget : null
+  });
+  setSubmitted(true);
+  if (result.feesFromVoucher > 0) {
+    setVoucherMsg(result.feesPaidByVoucher
+      ? "Fee fully covered by your voucher!"
+      : ('$' + result.feesFromVoucher.toFixed(2) + ' of your fee was covered by a voucher'));
+  }
+  setTimeout(function() { navigate(-1, { state: { coin: coin } }); }, 1200);
+} catch (err) {
+  setErrorMsg(err.message);
+}
   }
 
   return (
@@ -244,6 +249,9 @@ const Order = () => {
           {submitted && (
             <div className="px-success-bar">Position opened! Returning to chart...</div>
           )}
+          {voucherMsg && (
+  <div className="px-success-bar" style={{color: 'var(--xlavelia)'}}>{voucherMsg}</div>
+)}
           <button className={btnClass} disabled={isBalanceLow || submitted} onClick={handleOpenPosition}>
             {btnText}
           </button>
