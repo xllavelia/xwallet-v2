@@ -18,6 +18,7 @@ const Order = () => {
   var currentPrice = parseFloat(rawPrice.toString().replace(/,/g, '')) || 69035;
 
   var { wallet } = useWalletBalance();
+  var liveFeeRate = wallet.feeRatePercent || 1.0;
   var balance = wallet.balance;
 
   const [amountInput, setAmountInput] = useState(prefillAmount);
@@ -29,9 +30,9 @@ const Order = () => {
 const [voucherMsg, setVoucherMsg] = useState(null);
   var parsedAmount = parseFloat(amountInput) || 0;
   var cryptoAmount = currentPrice > 0 ? (parsedAmount / currentPrice).toFixed(6) : 0;
-  var requiredMargin = parsedAmount / leverage;
-  var fees = parsedAmount * 0.005;
-  var totalRequired = requiredMargin + fees;
+var requiredMargin = parsedAmount / leverage;
+var fees = requiredMargin * (liveFeeRate / 100);
+var totalRequired = requiredMargin + fees;
   var isBalanceLow = balance < totalRequired;
 
   var liqPrice = 0;
@@ -228,7 +229,7 @@ const [voucherMsg, setVoucherMsg] = useState(null);
             </div>
             <div className="px-row">
               <span className="px-label">Fees</span>
-              <span className="px-val">{feesDisplayStr}</span>
+          <span className="px-label">{'Fees (' + liveFeeRate + '%)'}</span>
             </div>
             <div className="px-row">
               <span className="px-label">Balance Now</span>

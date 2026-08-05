@@ -419,9 +419,9 @@ function cardEntryAmountStr(item) {
       return (
         <div key={item.id} className={rowClass} style={delayStyle} onClick={() => setSelectedCardEntry(item)}>
           <div className="tf-row-glow"></div>
-          <div className={iconClass}>
+          {/* <div className={iconClass}>
             <span className="tf-coin-glyph">{coinGlyph(item.operationType === 'buy' ? item.toAsset : item.fromAsset)}</span>
-          </div>
+          </div> */}
           <div className="tf-info">
             <span className="tf-name">{cardEntryLabel(item)}</span>
             <span className="tf-date">{dateStr}</span>

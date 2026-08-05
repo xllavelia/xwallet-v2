@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useVouchers, activateVoucher, deleteVoucher, devGrantVoucher, devResetVouchers } from "./useVouchers";
+import { useWalletBalance } from "./useWallet";
 
-var TOTAL_SLOTS = 5;
 
 function GemIcon() {
   return (
@@ -33,6 +33,9 @@ function formatCountdown(totalSeconds) {
 
 const Bonus = () => {
   var { vouchers, refresh } = useVouchers();
+  
+var { wallet } = useWalletBalance();
+var TOTAL_SLOTS = wallet.maxVoucherSlots || 5;
 
   var [nowTick, setNowTick] = useState(Date.now());
   var [continuousIndex, setContinuousIndex] = useState(0);

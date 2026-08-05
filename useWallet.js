@@ -2,13 +2,19 @@ import { useState, useEffect, useCallback } from "react";
 import { authFetch } from "./apiClient";
 
 function useWalletBalance() {
-  var [wallet, setWallet] = useState({
-    balance: 0,
-    profit24h: 0,
-    profit7d: 0,
-    activeTradesCount: 0,
-    winRate: 0
-  });
+var [wallet, setWallet] = useState({
+  balance: 0,
+  lavxBalance: 0,
+  profit24h: 0,
+  profit7d: 0,
+  activeTradesCount: 0,
+  winRate: 0,
+  primeTier: "",
+  feeRatePercent: 1.0,
+  maxVoucherSlots: 5
+});
+
+
   var [isLoading, setIsLoading] = useState(true);
   var [error, setError] = useState(null);
 

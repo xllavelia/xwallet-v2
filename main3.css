@@ -1193,7 +1193,7 @@ top: 90%;
   background: #1a1a1a;
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 16px;
-  padding: 22px 14px;
+  padding: 26px 12px;
   cursor: pointer;
   animation: tf-fade-in 0.3s cubic-bezier(0.22,1,0.36,1) both;
   transition: transform 0.12s, border-color 0.15s;
@@ -1248,7 +1248,7 @@ top: 90%;
   text-overflow: ellipsis;
 }
 .tf-date {
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(255,255,255,0.35);
   margin-top: 2px;
 }
@@ -1751,3 +1751,37 @@ margin-bottom: 42%;
 .rlp-dev-label { font-size: 8px; font-weight: 800; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-right: 2px; }
 .rlp-dev-tools button { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; font-size: 10px; font-weight: 700; padding: 6px 8px; border-radius: 8px; cursor: pointer; }
 .rlp-dev-tools button:active { background: var(--xlavelia); color: #000; }
+
+
+
+.prm-lavx-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--xlavelia);
+  border-radius: 16px;
+}
+.prm-lavx-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  color: var(--xlavelia);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.prm-lavx-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.prm-lavx-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: rgba(255,255,255,0.4); text-transform: uppercase; }
+.prm-lavx-value { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 800; color: var(--xlavelia); }
+.prm-lavx-active-badge {
+  font-size: 10px; font-weight: 700; color: var(--xlavelia);
+  background: hsla(61,85%,78%,0.1); border: 1px solid hsla(61,85%,78%,0.3);
+  padding: 5px 9px; border-radius: 8px; white-space: nowrap;
+}
+.prm-lavx-hint { margin: -4px 24px 0; font-size: 11px; color: rgba(255,255,255,0.3); }
+
+.prm-price-row { display: flex; align-items: center; gap: 6px; color: var(--xlavelia); }
+.prm-price-row .prm-price-amount { font-family: 'Unbounded', sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -1.2px; color: #fff; }
+.prm-price-row .prm-price-period { font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 500; align-self: flex-end; margin-bottom: 6px; }
+
+.prm-feature-italic span { font-style: italic; color: var(--xlavelia); font-weight: 700; }
+.prm-feature-italic svg { color: var(--xlavelia); }
