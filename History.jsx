@@ -278,6 +278,10 @@ function cardEntryAmountStr(item) {
               <div className="ht-detail-row"><span className="ht-dl">Duration</span><span className="ht-dv">{selDurationStr}</span></div>
               {sel.tradeId && <div className="ht-detail-row"><span className="ht-dl">Trade ID</span><span className="ht-dv et-pmv-id">{sel.tradeId}</span></div>}
             </div>
+            
+            {sel.xpAwarded > 0 && (
+  <div className="ht-detail-row"><span className="ht-dl">Battle Pass XP</span><span className="ht-dv" style={{color:'var(--xlavelia)'}}>{'+' + sel.xpAwarded}</span></div>
+)}
             <div className="ht-detail-divider"></div>
             <div className="ht-detail-dates">
               <div className="ht-detail-row"><span className="ht-dl">Opened</span><span className="ht-dv ht-dv-date">{selOpenDate}</span></div>
@@ -334,6 +338,9 @@ function cardEntryAmountStr(item) {
         )}
 
         <div className="ht-detail-row"><span className="ht-dl">Price</span><span className="ht-dv">{'$' + selectedCardEntry.price.toLocaleString('en-US')}</span></div>
+      {selectedCardEntry.xpAwarded > 0 && (
+  <div className="ht-detail-row"><span className="ht-dl">Battle Pass XP</span><span className="ht-dv" style={{color:'var(--xlavelia)'}}>{'+' + selectedCardEntry.xpAwarded}</span></div>
+)}
       </div>
 
       <div className="ht-detail-divider"></div>
@@ -422,10 +429,15 @@ function cardEntryAmountStr(item) {
           {/* <div className={iconClass}>
             <span className="tf-coin-glyph">{coinGlyph(item.operationType === 'buy' ? item.toAsset : item.fromAsset)}</span>
           </div> */}
-          <div className="tf-info">
-            <span className="tf-name">{cardEntryLabel(item)}</span>
-            <span className="tf-date">{dateStr}</span>
-          </div>
+  
+<div className="tf-info">
+  <span className="tf-name">{cardEntryLabel(item)}</span>
+  <span className="tf-date">
+    {dateStr}
+    {item.xpAwarded > 0 && <span className="xp-inline-badge" style={{marginLeft:'6px'}}>{'+' + item.xpAwarded + ' XP'}</span>}
+  </span>
+</div>
+
           <div className="tf-right">
             <span className={amtClass}>{cardEntryAmountStr(item)}</span>
             <span className="tf-currency">{item.operationType.toUpperCase()}</span>
@@ -502,8 +514,11 @@ function cardEntryAmountStr(item) {
                               <span className={'et-pos-badge ' + item.type}>{item.type.toUpperCase()}</span>
                               {item.feesPaidByVoucher && <span className="ht-voucher-badge">voucher</span>}
                             </div>
-                            <span className="home-history-date-active"><span style={{color:"rgba(255,255,255,0.4)"}}>{dateStr}</span></span>
-                          </div>
+                           <span className="home-history-date-active">
+  <span style={{color:"rgba(255,255,255,0.4)"}}>{dateStr}</span>
+  {item.xpAwarded > 0 && <span className="xp-inline-badge" style={{marginLeft:'6px'}}>{'+' + item.xpAwarded + ' XP'}</span>}
+</span>
+                            </div>
                         </div>
                         <div className="home-history-right">
                           <h4 className="home-history-amount-active">{pnlDisplay}</h4>

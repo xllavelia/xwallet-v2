@@ -15,6 +15,7 @@ const Trade = () => {
   const chartContainerRef = useRef(null);
   const candleSeriesRef   = useRef(null);
   const priceLineRefs     = useRef([]);
+  const [xpToast, setXpToast] = useState(null);
 
   const currentCoin = location.state && location.state.coin ? location.state.coin : 'BTC';
   const symbol      = currentCoin + 'USDT';
@@ -93,12 +94,18 @@ const Trade = () => {
   var modalTypeClass = activePanel ? ('et-pos-badge ' + activePanel.type) : '';
   var modalAcStr     = activePanel && activePanel.autoClose && activePanel.autoCloseTarget
     ? 'TP +' + activePanel.autoCloseTarget + '%' : 'Off';
+function handleClose(posId) {
+  if (numericPrice <= 0) return;
+  closePosition(posId, numericPrice).then(function(result) {
+    refresh();
+    if (result && result.xpAwarded > 0) {
+      setXpToast('+' + result.xpAwarded + ' Battle Pass XP');
+      setTimeout(function() { setXpToast(null); }, 2400);
+    }
+  });
+  setActivePosId(null);
+}
 
-  function handleClose(posId) {
-    if (numericPrice <= 0) return;
-    closePosition(posId, numericPrice).then(refresh);
-    setActivePosId(null);
-  }
   function roadHome()          { navigate(-1); }
   function handleTimeframe(tf) { setTimeframe(tf); }
 
@@ -174,6 +181,8 @@ const Trade = () => {
 
   return (
     <div className="TradeContent">
+
+{xpToast && <div className="et-xp-toast">{xpToast}</div>}
 
       {activePanel && (
         <div className="et-pos-modal-overlay" onClick={() => setActivePosId(null)}>

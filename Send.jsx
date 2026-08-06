@@ -149,8 +149,12 @@ function handleToggleContact(e, contact) {
       }
 
       try {
-        var result = await authFetchSend(selectedContact.id, amt);
-        setStatusMsg("Sent $" + amt.toFixed(2) + " to " + selectedContact.name);
+       var result = await authFetchSend(selectedContact.id, amt);
+if (result.xpAwarded > 0) {
+  setStatusMsg("Sent $" + amt.toFixed(2) + " to " + selectedContact.name + " · +" + result.xpAwarded + " XP");
+} else {
+  setStatusMsg("Sent $" + amt.toFixed(2) + " to " + selectedContact.name);
+}
         setStatusOk(true);
         setSent(true);
         refreshWallet();

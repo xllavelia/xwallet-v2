@@ -154,6 +154,12 @@ const SendCheck = () => {
             <span className="sc-label">TYPE</span>
             <span className="sc-value">{typeLabel}</span>
           </div>
+          {detail.xpAwarded > 0 && (
+  <div className="sc-row">
+    <span className="sc-label">BATTLE PASS XP</span>
+    <span className="sc-value" style={{color: 'var(--xlavelia)'}}>{'+' + detail.xpAwarded}</span>
+  </div>
+)}
           <div className="sc-row">
             <span className="sc-label">NOTE</span>
             <span className="sc-value sc-dim">—</span>

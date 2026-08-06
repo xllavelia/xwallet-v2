@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { usePrime, purchasePrime } from "./usePrime";
+import { useBattlePass } from "./useBattlePass";
+import XDrop from "./XDrop";
 
 function ArrowIcon() {
   return (
@@ -56,7 +58,7 @@ var TAGLINES = {
 
 const Prime = () => {
   var { status, refresh } = usePrime();
-
+var { data: bpData, refresh: refreshBp } = useBattlePass();
   var [billing, setBilling] = useState("monthly");
   var [activeIndex, setActiveIndex] = useState(1);
   var [toasts, setToasts] = useState([]);
@@ -269,6 +271,13 @@ const Prime = () => {
           <span className="prm-trust-dot"></span>
           <span>Instant activation</span>
         </div>
+
+        {bpData && (
+  <XDrop
+    counts={{ epicCases: bpData.epicCases, mythicCases: bpData.mythicCases, legendaryCases: bpData.legendaryCases }}
+    onOpened={refreshBp}
+  />
+)}
       </div>
 
       <div className="prm-sticky-bar">
