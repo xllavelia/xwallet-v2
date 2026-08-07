@@ -888,7 +888,7 @@ bottom: 10%;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 .profile-avatar-large {
-  width: 64px;
+  width: 64px ;
   height: 64px;
   background: linear-gradient(135deg, var(--accent-lime) 0%, var(--xlavelia) 100%);
   color: #000;

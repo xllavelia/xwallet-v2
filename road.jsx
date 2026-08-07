@@ -35,7 +35,8 @@ import SendCheck  from "./SendCheck";
 import RequireAuth from "./RequireAuth";
 import TradeCoin from "./TradeCoin";
 import Swap from "./Swap";
-
+import RequireAdmin from "./RequireAdmin";
+import AdminPanel from "./AdminPanel";
 
 import PageTransition from "./PageTransition";
 
@@ -62,6 +63,7 @@ const islandRoutes = [
   { path: "sendcheck", element: <SendCheck /> },
   { path: "tradecoin", element: <TradeCoin /> },
   { path: "swap", element: <Swap /> },
+  
 
 
 ];
@@ -106,6 +108,7 @@ const AppRoutes = () => {
 
       {/* Fallback для неизвестных путей */}
       <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/admin" element={<RequireAuth><RequireAdmin><AdminPanel /></RequireAdmin></RequireAuth>} />
     </Routes>
   );
 };
