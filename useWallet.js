@@ -11,7 +11,7 @@ var [wallet, setWallet] = useState({
   winRate: 0,
   primeTier: "",
   feeRatePercent: 1.0,
-  maxVoucherSlots: 5
+  maxVoucherSlots: 10
 });
 
 

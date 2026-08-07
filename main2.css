@@ -3005,7 +3005,7 @@ background-color: #1a1a1a;
   flex-direction: column;
   border: 1px solid var(--ads-border);
   border-radius: 24px;
-  background: var(--ads-glass);
+  background: rgba(255, 255, 255, 0.035);
   overflow: hidden;
   scroll-snap-align: center;
   transition:
@@ -3016,20 +3016,12 @@ background-color: #1a1a1a;
 
 .ads-price-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(220, 235, 155, 0.28);
-}
 
+}
+/* 
 .ads-price-card-featured {
-  background:
-    radial-gradient(
-      circle at 100% 0,
-      rgba(220, 235, 155, 0.12),
-      transparent 45%
-    ),
-    var(--ads-glass);
 
-  border-color: rgba(220, 235, 155, 0.3);
-}
+} */
 
 .ads-price-top {
   display: flex;

@@ -35,7 +35,7 @@ const Bonus = () => {
   var { vouchers, refresh } = useVouchers();
   
 var { wallet } = useWalletBalance();
-var TOTAL_SLOTS = wallet.maxVoucherSlots || 5;
+var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
 
   var [nowTick, setNowTick] = useState(Date.now());
   var [continuousIndex, setContinuousIndex] = useState(0);
@@ -399,11 +399,17 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 5;
                           <button className="voucher-activate-btn" disabled={isBusy} onClick={() => handleActivate(voucher)}>
                             {isBusy ? "ACTIVATING..." : "ACTIVATE VOUCHER"}
                           </button>
+                          
+                        )}
+
+                        {!isCredit && voucher.status === "active" && (
+                          <>
+                            <button className="vch-delete-btn" onClick={() => handleDelete(voucher)}>Remove Ticket</button>
+                          </>
                         )}
 
                         {!isCredit && timing.isExpired && (
                           <>
-                            <div className="voucher-expired-banner">This voucher has expired and can no longer be used.</div>
                             <button className="vch-delete-btn" onClick={() => handleDelete(voucher)}>Remove Ticket</button>
                           </>
                         )}

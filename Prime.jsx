@@ -274,7 +274,7 @@ var { data: bpData, refresh: refreshBp } = useBattlePass();
 
         {bpData && (
   <XDrop
-    counts={{ epicCases: bpData.epicCases, mythicCases: bpData.mythicCases, legendaryCases: bpData.legendaryCases }}
+    counts={{ classicoCases: bpData.classicoCases, elysiumCases: bpData.elysiumCases, legendaryCases: bpData.legendaryCases }}
     onOpened={refreshBp}
   />
 )}

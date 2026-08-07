@@ -1843,70 +1843,112 @@ display: flex;
 
 
 :root {
-  --xco-epic: hsl(265, 75%, 62%);
-  --xco-mythic: hsl(322, 80%, 60%);
-  --xco-legendary: hsl(42, 95%, 55%);
+  --xco-classico: hsl(61, 85%, 78%);
+  --xco-elysium: hsl(61, 85%, 78%);
 }
-
 .xdrop-section { margin: 28px 24px 8px; display: flex; flex-direction: column; gap: 14px; }
 .xdrop-header { display: flex; flex-direction: column; gap: 2px; }
 .xdrop-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--xlavelia); opacity: 0.85; }
 .xdrop-title { font-family: 'Unbounded', sans-serif; font-size: 22px; font-weight: 800; margin: 0; color: #fff; }
 
 .xdrop-list { display: flex; flex-direction: column; gap: 14px; }
-
-.xdrop-card {
-  position: relative; overflow: hidden; width: 100%;
-  border-radius: 20px; padding: 16px 18px;
-  background: #131313; border: 1px solid rgba(255,255,255,0.08);
-  cursor: pointer; transition: transform 0.15s ease;
-  display: grid; grid-template-rows: repeat(4, auto); gap: 6px;
+.xdrop-carousel {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
-.xdrop-card:active { transform: scale(0.98); }
-.xdrop-card.xdrop-empty { opacity: 0.4; cursor: not-allowed; }
+.xdrop-carousel::-webkit-scrollbar { display: none; }
 
-.xdrop-glow { position: absolute; inset: -30%; pointer-events: none; opacity: 0.5; filter: blur(30px); }
-.xdrop-epic .xdrop-glow { background: radial-gradient(circle at 20% 30%, var(--xco-epic), transparent 65%); }
-.xdrop-mythic .xdrop-glow { background: radial-gradient(circle at 20% 30%, var(--xco-mythic), transparent 65%); animation: xdrop-pulse 3s ease-in-out infinite; }
-.xdrop-legendary .xdrop-glow { background: radial-gradient(circle at 20% 30%, var(--xco-legendary), transparent 60%); animation: xdrop-pulse 2s ease-in-out infinite; }
-@keyframes xdrop-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.7; } }
 
-.xdrop-epic { border-color: hsla(265,75%,62%,0.35); }
-.xdrop-mythic { border-color: hsla(322,80%,60%,0.4); box-shadow: 0 0 24px hsla(322,80%,60%,0.08); }
-.xdrop-legendary { border-color: hsla(42,95%,55%,0.5); box-shadow: 0 0 32px hsla(42,95%,55%,0.14); }
-
-.xdrop-shimmer {
-  position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(115deg, transparent 30%, hsla(42,95%,70%,0.18) 48%, transparent 65%);
-  background-size: 250% 250%;
-  animation: xdrop-shimmer-sweep 3.4s linear infinite;
+.xdrop-price-card:first-child {
+  margin-left: 1.5rem;
 }
-@keyframes xdrop-shimmer-sweep { 0% { background-position: -60% -60%; } 100% { background-position: 60% 60%; } }
 
-.xdrop-row { position: relative; z-index: 1; }
-.xdrop-row-top, .xdrop-row-bottom { font-size: 11.5px; color: rgba(255,255,255,0.55); line-height: 1.4; }
-.xdrop-row-count { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 10px 0; }
-.xdrop-x-mark { font-family: 'Unbounded', sans-serif; font-size: 22px; font-weight: 900; color: rgba(255,255,255,0.15); }
-.xdrop-count-block { display: flex; flex-direction: column; align-items: center; }
-.xdrop-count-num { font-family: 'Unbounded', sans-serif; font-size: 30px; font-weight: 900; color: #fff; line-height: 1; }
-.xdrop-count-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); }
-.xdrop-rarity-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; padding: 4px 9px; border-radius: 8px; }
-.xdrop-epic .xdrop-rarity-tag { color: var(--xco-epic); background: hsla(265,75%,62%,0.12); border: 1px solid hsla(265,75%,62%,0.3); }
-.xdrop-mythic .xdrop-rarity-tag { color: var(--xco-mythic); background: hsla(322,80%,60%,0.12); border: 1px solid hsla(322,80%,60%,0.3); }
-.xdrop-legendary .xdrop-rarity-tag { color: var(--xco-legendary); background: hsla(42,95%,55%,0.14); border: 1px solid hsla(42,95%,55%,0.35); }
+.xdrop-price-card:last-child {
+  margin-right: 1.5rem;
+}
 
-.xdrop-row-cta { text-align: center; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; color: rgba(255,255,255,0.3); padding-top: 6px; }
-.xdrop-card:not(.xdrop-empty) .xdrop-row-cta { color: var(--xlavelia); }
 
+.xdrop-price-card {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 68%;
+  scroll-snap-align: start;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  padding: 26px 15px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.xdrop-price-card-empty { opacity: 0.5; }
+.xdrop-price-card-featured { border-width: 1.5px; transform: scale(1.02); }
+
+/* .xdrop-legendary.xdrop-price-card { border-color: var(--xlavelia); } */
+
+.xdrop-price-card .ads-price-top {
+  position: relative; z-index: 1;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.xdrop-price-card .ads-price-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+.xdrop-classico .ads-price-label { color: var(--xco-classico); }
+.xdrop-elysium .ads-price-label { color: var(--xco-elysium); }
+.xdrop-legendary .ads-price-label { color: var(--xlavelia); }
+.xdrop-price-card .ads-price-index { font-family: 'Unbounded', sans-serif; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.2); }
+
+.xdrop-price-card h3 {
+  position: relative; z-index: 1;
+  font-family: 'Unbounded', sans-serif; font-size: 24px; font-weight: 800; color: #fff; margin: 0;
+}
+
+.xdrop-price-card .ads-price { position: relative; z-index: 1; display: flex; align-items: baseline; gap: 6px; }
+.xdrop-price-card .ads-price strong { font-family: 'Unbounded', sans-serif; font-size: 30px; font-weight: 900; color: var(--xlavelia); }
+.xdrop-classico .ads-price strong { color: var(--xco-classico); }
+.xdrop-elysium .ads-price strong { color: var(--xco-elysium); }
+.xdrop-legendary .ads-price strong { color: var(--xlavelia); }
+.xdrop-price-card .ads-price span { font-size: 11px; color: rgba(255,255,255,0.35); }
+
+.xdrop-price-card p { position: relative; z-index: 1; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5; margin: 0; }
+
+.xdrop-price-card ul { position: relative; z-index: 1; list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+.xdrop-price-card ul li { font-size: 11.5px; color: rgba(255,255,255,0.6); padding-left: 16px; position: relative; }
+.xdrop-price-card ul li::before {
+  content: ''; position: absolute; left: 0; top: 6px;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--xlavelia);
+}
+.xdrop-classico ul li::before { background: var(--xco-classico); }
+.xdrop-elysium ul li::before { background: var(--xco-elysium); }
+.xdrop-legendary ul li::before { background: var(--xlavelia); }
+
+.xdrop-price-card button {
+  position: relative; z-index: 1; margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 13px; border: none; border-radius: 14px;
+  background: transparent; color: #000;
+
+  font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+  cursor: pointer;
+}
+.xdrop-classico button {  color: var(--xlavelia);  border: 2px solid var(--xlavelia);}
+.xdrop-elysium button {  color: var(--xlavelia);  border: 2px solid var(--xlavelia);}
+.xdrop-legendary button { background: var(--xlavelia); color: #000; }
+.xdrop-price-card button:disabled { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); cursor: not-allowed; }
 /* ── Case opening overlay ─────────────────────────────────── */
-.xco-overlay { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.xco-overlay { position: fixed; inset: 0; z-index: 99; display: flex; align-items: center; justify-content: center; }
 .xco-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); animation: xco-fade-in 0.35s ease; }
 @keyframes xco-fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 .xco-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .xco-particle {
   position: absolute; width: 4px; height: 4px; border-radius: 50%;
-  background: var(--xco-legendary); box-shadow: 0 0 8px var(--xco-legendary);
+  background: var(--xlavelia); box-shadow: 0 0 8px var(--xlavelia);
   animation: xco-particle-float 3.5s ease-in-out infinite;
 }
 .xco-particle.p0 { left: 10%; top: 20%; animation-delay: 0s; }
@@ -1936,14 +1978,14 @@ display: flex;
   border: 2px solid rgba(255,255,255,0.12);
   box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
-.xco-epic .xco-card-back { border-color: hsla(265,75%,62%,0.5); box-shadow: 0 0 40px hsla(265,75%,62%,0.25), 0 20px 60px rgba(0,0,0,0.6); }
-.xco-mythic .xco-card-back { border-color: hsla(322,80%,60%,0.55); box-shadow: 0 0 50px hsla(322,80%,60%,0.3), 0 20px 60px rgba(0,0,0,0.6); }
-.xco-legendary .xco-card-back { border-color: hsla(42,95%,55%,0.6); box-shadow: 0 0 70px hsla(42,95%,55%,0.4), 0 20px 60px rgba(0,0,0,0.6); }
+.xco-classico .xco-card-back { border-color: #1a1a1a; }
+.xco-elysium .xco-card-back { border-color: #1a1a1a; box-shadow: 0 0 50px hsla(61,85%,78%,0.2), 0 20px 60px rgba(0,0,0,0.6); }
+.xco-legendary .xco-card-back { border-color: var(--xlavelia); box-shadow: 0 0 70px hsl(61, 85%, 78%, 0.5), 0 20px 60px rgba(0,0,0,0.6); }
 
 .xco-card-back-x { font-family: 'Unbounded', sans-serif; font-size: 56px; font-weight: 900; color: rgba(255,255,255,0.12); }
-.xco-epic .xco-card-back-x { color: hsla(265,75%,62%,0.4); }
-.xco-mythic .xco-card-back-x { color: hsla(322,80%,60%,0.45); }
-.xco-legendary .xco-card-back-x { color: hsla(42,95%,55%,0.55); }
+.xco-classico .xco-card-back-x { color: white; }
+.xco-elysium .xco-card-back-x { color: var(--xlavelia); }
+.xco-legendary .xco-card-back-x { color: var(--xlavelia); }
 .xco-card-back-rarity { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; color: rgba(255,255,255,0.3); }
 
 .xco-stage-anticipating .xco-card-back { animation: xco-shake 0.5s ease-in-out infinite; }
@@ -1966,9 +2008,9 @@ display: flex;
   box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px hsla(61,85%,78%,0.15);
   animation: xco-reveal-pop 0.45s cubic-bezier(0.22,1,0.36,1) both;
 }
-.xco-epic.xco-reveal-card { border-color: hsla(265,75%,62%,0.5); box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px hsla(265,75%,62%,0.2); }
-.xco-mythic.xco-reveal-card { border-color: hsla(322,80%,60%,0.55); box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 40px hsla(322,80%,60%,0.25); }
-.xco-legendary.xco-reveal-card { border-color: hsla(42,95%,55%,0.6); box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 50px hsla(42,95%,55%,0.3); }
+.xco-classico.xco-reveal-card { border-color: #1a1a1a; }
+.xco-elysium.xco-reveal-card { border-color: #1a1a1a; box-shadow: 0 0 40px hsl(61, 85%, 78%, 0.2); }
+.xco-legendary.xco-reveal-card { border-color: var(--xlavelia); box-shadow:  0 0 50px hsl(61, 85%, 78%, 0.3); }
 
 @keyframes xco-reveal-pop {
   0% { opacity: 0; transform: scale(0.6) rotateY(90deg); }

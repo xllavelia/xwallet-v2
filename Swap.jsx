@@ -84,7 +84,7 @@ const Swap = () => {
     setFromAmount("");
   }
 
-  function handlePickAsset(side, assetId) {
+  function handlclassicokAsset(side, assetId) {
     if (side === "from") {
       if (assetId === toAsset) setToAsset(fromAsset);
       setFromAsset(assetId);
@@ -146,7 +146,7 @@ const Swap = () => {
             <div className="swp-picker">
               {ASSETS.map(function (a) {
                 return (
-                  <div key={a.id} className="swp-picker-item" onClick={() => handlePickAsset("from", a.id)}>
+                  <div key={a.id} className="swp-picker-item" onClick={() => handlclassicokAsset("from", a.id)}>
                     <span>{a.id}</span>
                     <span className="swp-picker-label">{a.label}</span>
                   </div>
@@ -174,7 +174,7 @@ const Swap = () => {
             <div className="swp-picker">
               {ASSETS.map(function (a) {
                 return (
-                  <div key={a.id} className="swp-picker-item" onClick={() => handlePickAsset("to", a.id)}>
+                  <div key={a.id} className="swp-picker-item" onClick={() => handlclassicokAsset("to", a.id)}>
                     <span>{a.id}</span>
                     <span className="swp-picker-label">{a.label}</span>
                   </div>

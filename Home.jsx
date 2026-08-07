@@ -7,7 +7,7 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "connection battle pass, add xdrop for sql/go"
+// git commit -m "fix battle pass, add xdrop for sql/go"
 // git push -u origin main 
 
 // git commit -m "fix"

@@ -17,15 +17,21 @@ function describeComponent(c) {
 }
 
 var TRACK_INFO = {
-  pro: { name: "Pro Pass", levels: 10, tagline: "5 USDT, fee vouchers, and an Epic Case along the way." },
-  prime: { name: "Prime Pass", levels: 14, tagline: "Bigger drops, XP boosters, and a Mythic Case finale." },
+  pro: { name: "Pro Pass", levels: 10, tagline: "5 USDT, fee vouchers, and an classico Case along the way." },
+  prime: { name: "Prime Pass", levels: 14, tagline: "Bigger drops, XP boosters, and a elysium Case finale." },
   star: { name: "Star Pass", levels: 15, tagline: "The full track — Legendary case, max boosters, elite statuses." }
 };
 
 function BattlePass() {
   const navigate = useNavigate();
-  function roadHome() { navigate("/"); }
-
+  
+  function roadPrime() {
+    navigate(-1);
+    setTimeout(function () {
+      navigate( "/prime" );
+    }, 10);
+  }
+  
   var { data, refresh } = useBattlePass();
   var [notification, setNotification] = useState(null);
   var [claimingLevel, setClaimingLevel] = useState(null);
@@ -73,7 +79,7 @@ function BattlePass() {
                   <span className="bp-landing-name">{info.name}</span>
                   <span className="bp-landing-levels">{info.levels + " LEVELS"}</span>
                   <p className="bp-landing-tagline">{info.tagline}</p>
-                  <button className="bp-landing-cta" onClick={() => navigate("/prime")}>Unlock in Prime</button>
+                  <button className="bp-landing-cta" onClick={roadPrime}>Unlock in Prime</button>
                 </div>
               );
             })}
@@ -93,7 +99,6 @@ function BattlePass() {
 
   return (
     <main className="battle-pass-page">
-      <div className="Road-Home" onClick={roadHome}></div>
 
       <section className="battle-pass-shell">
         <section className="battle-pass-road-section">
@@ -164,7 +169,7 @@ function BattlePass() {
             <div className="stat-card"><span>LEVEL</span><strong>{String(currentLevel).padStart(2, "0")}</strong><small>CURRENT POSITION</small></div>
             <div className="stat-card"><span>XP</span><strong>{data.xp.toLocaleString()}</strong><small>TOTAL EARNED</small></div>
             <div className="stat-card"><span>REWARDS</span><strong>{String(unlockedCount).padStart(2, "0")}</strong><small>UNLOCKED</small></div>
-            <div className="stat-card"><span>CASES</span><strong>{data.epicCases + data.mythicCases + data.legendaryCases}</strong><small>IN INVENTORY</small></div>
+            <div className="stat-card"><span>CASES</span><strong>{data.classicoCases + data.elysiumCases + data.legendaryCases}</strong><small>IN INVENTORY</small></div>
           </div>
           {data.statuses.length > 0 && (
             <div className="bp-status-badges">
