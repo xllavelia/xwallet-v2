@@ -395,12 +395,14 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
                           </div>
                         </div>
 
-                        {!isCredit && voucher.status === "inactive" && (
-                          <button className="voucher-activate-btn" disabled={isBusy} onClick={() => handleActivate(voucher)}>
-                            {isBusy ? "ACTIVATING..." : "ACTIVATE VOUCHER"}
-                          </button>
-                          
-                        )}
+                 {!isCredit && voucher.status === "inactive" && (
+  <div className="vch-inactive-actions">
+    <button className="voucher-activate-btn" disabled={isBusy} onClick={() => handleActivate(voucher)}>
+      {isBusy ? "ACTIVATING..." : "ACTIVATE VOUCHER"}
+    </button>
+    <button className="vch-delete-btn" onClick={() => handleDelete(voucher)}>Remove Ticket</button>
+  </div>
+)}
 
                         {!isCredit && voucher.status === "active" && (
                           <>

@@ -1979,7 +1979,7 @@ display: flex;
   box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
 .xco-classico .xco-card-back { border-color: #1a1a1a; }
-.xco-elysium .xco-card-back { border-color: #1a1a1a; box-shadow: 0 0 50px hsla(61,85%,78%,0.2), 0 20px 60px rgba(0,0,0,0.6); }
+.xco-elysium .xco-card-back { border-color: #1a1a1a;  }
 .xco-legendary .xco-card-back { border-color: var(--xlavelia); box-shadow: 0 0 70px hsl(61, 85%, 78%, 0.5), 0 20px 60px rgba(0,0,0,0.6); }
 
 .xco-card-back-x { font-family: 'Unbounded', sans-serif; font-size: 56px; font-weight: 900; color: rgba(255,255,255,0.12); }
@@ -2009,7 +2009,7 @@ display: flex;
   animation: xco-reveal-pop 0.45s cubic-bezier(0.22,1,0.36,1) both;
 }
 .xco-classico.xco-reveal-card { border-color: #1a1a1a; }
-.xco-elysium.xco-reveal-card { border-color: #1a1a1a; box-shadow: 0 0 40px hsl(61, 85%, 78%, 0.2); }
+.xco-elysium.xco-reveal-card { border-color: #1a1a1a;  }
 .xco-legendary.xco-reveal-card { border-color: var(--xlavelia); box-shadow:  0 0 50px hsl(61, 85%, 78%, 0.3); }
 
 @keyframes xco-reveal-pop {
@@ -2037,9 +2037,9 @@ display: flex;
 .et-xp-toast, .ht-xp-toast {
   position: fixed;
   top: 14px; left: 50%; transform: translateX(-50%);
-  z-index: 9999;
+  z-index: 99;
   background: #161616;
-  border: 1px solid hsla(61,85%,78%,0.35);
+  border: 1px solid hsla(61,85%,78%,0.45);
   color: var(--xlavelia);
   font-family: 'Unbounded', sans-serif;
   font-size: 12px; font-weight: 800;
@@ -2059,4 +2059,10 @@ display: flex;
   background: hsla(61,85%,78%,0.1);
   border: 1px solid hsla(61,85%,78%,0.28);
   padding: 2px 7px; border-radius: 7px;
+}
+
+.vch-inactive-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
