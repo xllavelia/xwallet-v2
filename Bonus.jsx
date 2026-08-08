@@ -78,9 +78,9 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
     el.scrollTo({ left: idx * el.clientWidth, behavior: "smooth" });
   }
 
-  function resetScroll() {
-    setTimeout(function () { scrollToIndex(0); }, 50);
-  }
+  // function resetScroll(x) {
+  //   setTimeout(function () { scrollToIndex(); }, 20);
+  // }
 
   async function handleActivate(voucher) {
     if (busyId) return;
@@ -96,7 +96,8 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
       }
       setBurstKey(function (k) { return k + 1; });
       await refresh();
-      if (result.voucherType !== "fee_discount") resetScroll();
+      if (result.voucherType !== "fee_discount");
+      
     } catch (err) {
       pushToast(err.message);
     } finally {
@@ -111,7 +112,7 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
       await deleteVoucher(voucher.id);
       setTimeout(async function () {
         await refresh();
-        resetScroll();
+        // resetScroll(voucher.id);
         setDeletingId(null);
       }, 380);
     } catch (err) {
@@ -134,7 +135,7 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
     await devResetVouchers();
     pushToast("All vouchers reset");
     await refresh();
-    resetScroll();
+    // resetScroll();
   }
 
   var slots = [];
@@ -400,15 +401,9 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
     <button className="voucher-activate-btn" disabled={isBusy} onClick={() => handleActivate(voucher)}>
       {isBusy ? "ACTIVATING..." : "ACTIVATE VOUCHER"}
     </button>
-    <button className="vch-delete-btn" onClick={() => handleDelete(voucher)}>Remove Ticket</button>
+    <button  className="voucher-activate-btn" onClick={() => handleDelete(voucher)}>Remove Ticket</button>
   </div>
 )}
-
-                        {!isCredit && voucher.status === "active" && (
-                          <>
-                            <button className="vch-delete-btn" onClick={() => handleDelete(voucher)}>Remove Ticket</button>
-                          </>
-                        )}
 
                         {!isCredit && timing.isExpired && (
                           <>

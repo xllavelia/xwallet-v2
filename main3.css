@@ -2003,7 +2003,6 @@ display: flex;
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   background: linear-gradient(155deg, #181818, #0a0a0a);
   border: 2px solid hsla(61,85%,78%,0.4);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px hsla(61,85%,78%,0.15);
   animation: xco-reveal-pop 0.45s cubic-bezier(0.22,1,0.36,1) both;
 }
 .xco-classico.xco-reveal-card { border-color: #1a1a1a; }

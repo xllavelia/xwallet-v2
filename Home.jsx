@@ -8,7 +8,7 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix loading gate for sql/go"
+// git commit -m "fix design home"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -604,6 +604,7 @@ return (
       </div>
  
 
+        <div className="prime-home">
 
    <div className="ticket-wrapper-h" onClick={roadBattlePass}>
         <div className="ticket-main">
@@ -628,21 +629,14 @@ return (
     </div>
     
 
-        <div className="ticket-rip">
-          <div className="hole hole-top"></div>
-          <div className="rip-line"></div>
-          <div className="hole hole-bottom"></div>
-        </div>
-
-        <div className="ticket-stub-h">
-          <div className="ts-top">
-            <div className="ts-serial">NO. 192789 </div>
-            <div className="ts-barcode"></div>
-          </div>
-          <div className="ts-bottom"></div>
-        </div>
-
       </div>
+         <div className="mc-item mc-add-card"onClick={roadPrime}>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m5.825 21l1.625-7.025L2 9.25l7.2-.625L12 2l2.8 6.625l7.2.625l-5.45 4.725L18.175 21L12 17.275z" /></svg> 
+          
+        </div>
+        </div>
+
+        
 {/* 
  <div className="eb-container-parent">
  <div className="eb-container">
@@ -701,11 +695,8 @@ return (
  <div className="mc-wrapper">
       
       <div className="mc-scroll-area">
-       {/* Блок добавления карты (Заглушка) */}
-        <div className="mc-item mc-add-card"onClick={roadPrime}>
-                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m5.825 21l1.625-7.025L2 9.25l7.2-.625L12 2l2.8 6.625l7.2.625l-5.45 4.725L18.175 21L12 17.275z" /></svg> 
-          
-        </div>
+       
+     
         
 <div  className="crypto-mini-cards-container">
 

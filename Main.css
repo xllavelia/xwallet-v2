@@ -228,8 +228,7 @@ font-family:'Unbounded' ; font-weight: 800;}
 .mc-scroll-area {
   display: flex;
   gap: 10px;
-  padding: 0 20px 10px 10px; /* Нижний паддинг для теней */
-
+padding-bottom: 10px;
 }
 
 .mc-scroll-area::-webkit-scrollbar {
@@ -246,14 +245,15 @@ font-family:'Unbounded' ; font-weight: 800;}
 
 /* Блок создания карты */
 .mc-add-card {
-  width: 22%;
+  width: 25%;
+  margin: 0 7.5px;
   border: 2px solid var(--xlavelia);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--xlavelia);
   cursor: pointer;
-  background-color: transparent;
+  background-color: #1a1a1a;
 }
 
 
@@ -487,9 +487,9 @@ font-family:'Unbounded' ; font-weight: 800;}
 
 .crypto-mini-cards-container {
   display: flex;
-  padding: 0px;
   border-radius: 12px;
-  width: 100%;
+  width: 95%;
+  margin: 0 auto;
 }
 
 .crypto-mini-card {
@@ -557,11 +557,6 @@ font-family:'Unbounded' ; font-weight: 800;}
   color: #9CA3AF;
 }
 
-/* Стили для прибыли в USD */
-.mini-card-profit-usd {
-  font-size: 14px;
-  color: #10B981; /* Зеленый цвет для прибыли */
-}
 
 /* Стили для процентного прироста прибыли */
 .mini-card-profit-percent {
@@ -598,6 +593,7 @@ font-family:'Unbounded' ; font-weight: 800;}
   text-align: center;
   border-radius: 8px;
   padding: 8px;
+margin-top: 0.8vh;
   font-size: 14px;
   font-weight: bold;
   text-transform: uppercase; /* Текст в верхнем регистре */
@@ -1729,38 +1725,15 @@ color: white;
   --tkt-dark:#1a1a1a   ;  
   --tkt-lime: hsl(61, 85%, 78%); 
    /* --tkt-dark:  hsl(61, 85%, 78%) ;  
-  --tkt-lime: #1a1a1a;  */
+ --xlavelia: #1a1a1a;  */
 }
 
-.div-svg-xlavelia{
+.prime-home {
   display: flex;
-}
-/* 
-.x-wallet-logo {
-  opacity: 0;
-  z-index: 10;
-  width: 150px;
-  height: 150px;
-  color: var(--tkt-lime);
+  align-items: center;
+  justify-content: center;
 }
 
-.x-wallet-logo-add {
-  z-index: 10;
-  width: 150px;
-  height: 150px;
-  color: var(--tkt-lime);
-}
-
-.x-wallet-logo path, .x-wallet-logo-add {
-  fill: none;
-  
-  stroke: currentColor;
-  stroke-width: 64;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-} */
-
-/* Контейнер билета */
 .ticket-wrapper {
   opacity: 1;
   display: flex;
@@ -1783,20 +1756,16 @@ border-bottom-right-radius: 30px;
 .ticket-wrapper-h {
   opacity: 1;
   display: flex;
-  width: 90%;
-  max-width: 90%;
+  width: 65%;
+  max-width: 70%;
   background-color: var(--tkt-dark);
   color:  var(--tkt-lime);
   font-family: 'Unbounded'; 
 border-radius: 15px;
-border-top-right-radius: 30px;
-border-bottom-right-radius: 30px;
-/* padding: 5px; */
-  height: 20vh;
+  height: 19.2vh;
   position: relative;
-  /* overflow: hidden; */
-  /* box-shadow: 0 10px 0px rgba(0,0,0,0.5); */
-  margin: 0px auto;
+  margin: 0 7.5px;
+
 }
 /* ================= ОСНОВНАЯ ЧАСТЬ ================= */
 .ticket-main {
@@ -1808,7 +1777,6 @@ border-bottom-right-radius: 30px;
 
 .tm-header {
   display: flex;
-  /* border-bottom: 3px solid var(--tkt-dark); */
 }
 
 .tm-block {
@@ -1818,10 +1786,7 @@ border-bottom-right-radius: 30px;
   flex-direction: column;
   gap: 4px;
 }
-/* 
-.tm-block.border-left {
-  border-left: 3px solid var(--tkt-dark);
-} */
+
 
 .tm-label {
   font-size: 10px;

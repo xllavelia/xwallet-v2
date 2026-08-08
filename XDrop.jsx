@@ -3,7 +3,7 @@ import CaseOpenModal from "./CaseOpenModal";
 
 var RARITY_CONFIG = {
   classico: {
-    name: "classico", key: "classicoCases", index: "01", label: "classico tier",
+    name: "Classico", key: "classicoCases", index: "01", label: "classico tier",
     description: "A solid drop with fair odds and steady rewards.",
     features: [
       "$10 – $30 USDT drop",
@@ -13,7 +13,7 @@ var RARITY_CONFIG = {
     ]
   },
   elysium: {
-    name: "elysium", key: "elysiumCases", index: "02", label: "most valuable",
+    name: "Elysium", key: "elysiumCases", index: "02", label: "most valuable",
     description: "Bigger rolls across the board — the fan favorite.",
     features: [
       "$20 – $100 USDT drop",
