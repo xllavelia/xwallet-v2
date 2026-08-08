@@ -27,7 +27,7 @@ import Order from "./Order";
 import BattlePass from "./BattlePass";
 import About from "./About";
 import Emblem from "./Emblem";
-// DENGER FILE ADS. regstr
+// DENGER FILE ADS regstr
 import Ads from "./ads";
 import Prime from "./Prime";
 import PromoCode from "./PromoCode";
@@ -37,6 +37,7 @@ import TradeCoin from "./TradeCoin";
 import Swap from "./Swap";
 import RequireAdmin from "./RequireAdmin";
 import AdminPanel from "./AdminPanel";
+import LoadingGate from "./LoadingGate";
 
 import PageTransition from "./PageTransition";
 
@@ -81,15 +82,18 @@ const AppRoutes = () => {
         Компонент <Outlet /> работает как портал: роутер будет монтировать 
         острова прямо в него, не трогая фон.
       */}
+    
       <Route
-        path="/"
-        element={
-          <>
-            <RootGate />
-            <Outlet />
-          </>
-        }
-      >
+  path="/"
+  element={
+    <>
+      <RootGate />
+      <LoadingGate>
+        <Outlet />
+      </LoadingGate>
+    </>
+  }
+>
         {/* Все острова становятся дочерними маршрутами */}
         {islandRoutes.map((route) => (
           <Route
@@ -123,5 +127,4 @@ const App = () => {
 };
 
 export default App;
-
 

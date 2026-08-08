@@ -2239,3 +2239,154 @@ display: flex;
   background: rgba(255,68,102,0.1); border: 1px solid rgba(255,68,102,0.3);
   color: #ff6b6b; font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer;
 }
+
+
+.welcome-block{
+  height: 25vh;
+  padding: 1rem;
+  border-radius: 20px;
+  margin: 1rem;
+  background-color: #1a1a1a;
+  color: var(--xco-classico);
+  font-family: 'Unbounded', sans-serif;
+   font-size: 20px;
+}
+
+.welcome-block h1{
+  animation: lg-intro-fade-in 0.9s ease both;
+  animation-delay: 2.4s;
+}
+
+.welcome-block span{
+  animation: lg-intro-fade-in 0.8s ease both;
+  animation-delay: 2.7s;
+}
+
+
+
+
+.lg-root {
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  background: #0a0a0a;
+  overflow: hidden;
+  padding-top: 9vh;
+}
+
+.lg-block-touch {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  touch-action: none;
+}
+
+.lg-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+/* ── Фаза 1 — полноэкранная заставка ─────────────────────── */
+
+
+.lg-frame-intro {
+  border-radius: 20px;
+  border: 2px solid #1a1a1a;
+  margin: 1rem;
+
+  animation: pull-welcome 2.2s cubic-bezier(0.26, 1, 0.34, 1) 1.8s forwards;
+
+  will-change: height, transform;
+}
+
+@keyframes pull-welcome {
+  from {
+    height: 90vh;
+    transform: translateY(0);
+  }
+
+  to {
+    height: 60vh;
+    transform: translateY(35vh);
+  }
+}
+
+.lg-intro {
+  position: absolute;
+  inset: 0;
+  animation: lg-intro-fade-in 0.5s ease both;
+}
+@keyframes lg-intro-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.lg-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, hsl(61, 85%, 78%, 0.5),  hsla(61,50%,25%,0.1) 70%);
+  filter: blur(1px);
+  animation: lg-orb-float 8s ease-in-out infinite;
+}
+.lg-orb-1 { width: 46vw; height: 46vw; top: -14vw; left: -6vw; opacity: 0.85; }
+.lg-orb-2 { width: 58vw; height: 58vw; top: -20vw; right: -18vw; opacity: 0.9; animation-delay: -3s; }
+@keyframes lg-orb-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-16px); }
+}
+
+.lg-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.4px solid hsla(61,70%,65%,0.28);
+}
+.lg-ring-1 { width: 62vw; height: 62vw; top: 10vh; right: -14vw; }
+.lg-ring-2 { width: 46vw; height: 46vw; top: 42vh; left: -14vw; }
+
+.lg-sparkle {
+  position: absolute;
+  top: 24vh; left: 16vw;
+  width: 34px; height: 34px;
+  background: var(--xlavelia);
+  clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+  filter: drop-shadow(0 0 10px hsla(61,85%,78%,0.6));
+  animation: lg-twinkle 2.4s ease-in-out infinite;
+}
+@keyframes lg-twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50%      { opacity: 1;   transform: scale(1.15); }
+}
+
+.lg-burst {
+  position: absolute;
+  bottom: -8vh; right: -8vw;
+  width: 70vw; height: 70vw;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, transparent 0deg 3.2deg, hsla(61,70%,60%,0.35) 3.4deg 3.6deg);
+  -webkit-mask-image: radial-gradient(circle, transparent 16%, black 42%, black 68%, transparent 90%);
+  mask-image: radial-gradient(circle, transparent 16%, black 42%, black 68%, transparent 90%);
+  animation: lg-rotate 50s linear infinite;
+}
+.lg-burst-core {
+  position: absolute;
+  top: 42%; left: 42%;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--xlavelia);
+  box-shadow: 0 0 22px 6px hsla(61,85%,78%,0.7);
+}
+@keyframes lg-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Переход между фазами — раскрытие вниз ──────────────── */
+.lg-frame-welcome {
+  animation: lg-reveal-down 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes lg-reveal-down {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0% 0); }
+}
