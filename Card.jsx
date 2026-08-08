@@ -61,8 +61,7 @@ const Vault = () => {
           <h1 className="vlt-title">Crypto Storage</h1>
         </div>
 
-        {/* ── HERO CARD ─────────────────────────────────────────── */}
-        <div className="mc-card-parent">
+        {/* <div className="mc-card-parent">
           <div className={'mc-item mc-card- ' + 'bg-lime'}>
             <div className="deco-ball ball-1"></div>
             <div className="deco-ball ball-2"></div>
@@ -72,32 +71,27 @@ const Vault = () => {
             <div className="deco-star-2"></div>
             <div className="deco-star-3"></div>
 
-            {/* <div className="vlt-card-content">
-              <span className="vlt-card-label">Total Balance</span>
-              <span className="vlt-card-balance">{formatUsd(card.balanceUsd)}</span>
-              <div className="vlt-card-bottom-row">
-                <span className="vlt-card-holder">{card.holder}</span>
-                <span className="vlt-card-expiry">{card.validThru}</span>
-              </div>
-            </div> */}
           </div>
-        </div>
+        </div> */}
 
-        {/* ── ACTION TILES ─────────────────────────────────────── */}
-        <div className="crd-actions-row">
-          <div className="crd-action-tile " onClick={goBuy}>
+     
+       
+          {/* <div className="crd-action-tile " onClick={goBuy}>
             <div className="crd-action-icon"><BuyIcon /></div>
-            {/* <span className="crd-action-label">Buy</span> */}
           </div>
           <div className="crd-action-tile" onClick={goSwap}>
             <div className="crd-action-icon"><SwapIcon /></div>
-            {/* <span className="crd-action-label">Swap</span> */}
           </div>
           <div className="crd-action-tile" onClick={goSell}>
             <div className="crd-action-icon"><SellIcon /></div>
-            {/* <span className="crd-action-label">Sell</span> */}
-          </div>
-        </div>
+          </div> */}
+
+            <div  className="mini-card-actions">
+      <button  className="btn-mini-card- btn-swap" onClick={goSwap}>Swap</button>
+      <button  className="btn-mini-card- btn-buy" onClick={goBuy}>Buy</button>
+      <button  className="btn-mini-card- btn-send" onClick={goSell}>Sell</button>
+    </div>
+   
 
         {/* ── ALLOCATION ─────────────────────────────────────────── */}
         <div className="vlt-section">

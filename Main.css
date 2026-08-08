@@ -486,31 +486,21 @@ font-family:'Unbounded' ; font-weight: 800;}
 
 
 .crypto-mini-cards-container {
-   overflow-x: auto ;
- overflow-y: hidden ;
- scroll-snap-type: x mandatory;
-scrollbar-width: none;
-scroll-behavior: smooth;
-justify-content: start;
- margin-left: 2%;
-margin-top: 0vh;
   display: flex;
-  gap: 15px; 
-  background-color: #000000;
   padding: 0px;
   border-radius: 12px;
+  width: 100%;
 }
 
 .crypto-mini-card {
-  background-color: #121212; 
+  background-color: #1a1a1a; 
   color: #FFFFFF; 
   font-family: 'Unbounded', sans-serif; 
   border-radius: 12px; 
   padding: 15px; 
   display: flex;
   flex-direction: column;
- min-width: 33vh;
-
+  width: 100%;
 }
 
 .mini-card-header {
@@ -533,7 +523,7 @@ margin-top: 0vh;
 }
 
 .mini-card-balance-section {
-  margin-top: 0.5rem;
+  margin-top: 0.8rem;
   margin-bottom: -7px;
 }
 
@@ -585,6 +575,22 @@ margin-top: 0vh;
   gap: 8px; /* Отступ между кнопками */
   justify-content: space-between;
 }
+
+
+
+/* Стили для общей кнопки */
+.btn-mini-card- {
+  flex: 1; /* Кнопки занимают все доступное место */
+  text-align: center;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase; /* Текст в верхнем регистре */
+  border: none;
+  cursor: pointer;
+}
+
 
 /* Стили для общей кнопки */
 .btn-mini-card {

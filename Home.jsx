@@ -1,5 +1,6 @@
 import React, {useState, useRef, useEffect} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useCard } from "./useCard";
 import { useWalletBalance } from "./useWallet";
 
 import { color } from "framer-motion";
@@ -90,6 +91,8 @@ const roadBattlePass = () => {
 
   var balanceStr = balance.toFixed();
   var balanceStr2 = balance.toFixed(2);
+  var { card } = useCard();
+function formatUsd(n) { return "" + n.toFixed(2); }
 
 const transactionsDB = [
   {
@@ -515,6 +518,28 @@ function handleLogout() {
 }
 
 
+  function goBuy() { 
+  navigate(-1);
+    setTimeout(function () {
+    navigate("/tradecoin", { state: { direction: "buy" } });
+    }, 20);
+
+   }
+  
+  function goSwap() { 
+        navigate(-1);
+    setTimeout(function () {
+    navigate("/swap"); 
+    }, 20);
+  }
+
+  function goSell() { 
+      navigate(-1);
+    setTimeout(function () {
+    navigate("/tradecoin", { state: { direction: "sell" } });
+    }, 20);
+
+   }
 return (
     
 <div className="content" > 
@@ -580,20 +605,10 @@ return (
  
 
 
-
-
-
-
-
-
-
-      <div className="ticket-wrapper-h" onClick={roadBattlePass}>
+   <div className="ticket-wrapper-h" onClick={roadBattlePass}>
         <div className="ticket-main">
           <div className="tm-header">
             </div>
-            
-
-
 
 
         <div className="battle-pass-center">
@@ -604,17 +619,12 @@ return (
                 PASS
 
             </h2>
-
-
-
             <div className="battle-pass-line"></div>
 
             <p>
                 UNLOCK THE NEXT LEVEL
             </p>
-
         </div>
-
     </div>
     
 
@@ -626,7 +636,7 @@ return (
 
         <div className="ticket-stub-h">
           <div className="ts-top">
-            <div className="ts-serial">NO. 192789 <br /> S. 01</div>
+            <div className="ts-serial">NO. 192789 </div>
             <div className="ts-barcode"></div>
           </div>
           <div className="ts-bottom"></div>
@@ -697,23 +707,34 @@ return (
           
         </div>
         
+<div  className="crypto-mini-cards-container">
 
-
-        {/* Карточка 1: Лаймовая */}
-        <div className={'mc-item mc-card ' + 'bg-lime'} onClick={roadCard}>
-         
-
-  <div className="deco-ball ball-1"></div>
-  <div className="deco-ball ball-2"></div>
-
-  <div className="deco-ring ring-1"></div>
-  <div className="deco-ring ring-2"></div>
-
-  <div className="deco-star"></div>
-    <div className="deco-star-2"></div>
-    <div className="deco-star-3"></div>
-    
+  <div  className="crypto-mini-card" onClick={roadCard}>
+    <div  className="mini-card-header">
+      <div>
+        {/* <div  className="mini-card-icon icon-btc">₿</div> */}
+        <div  className="mini-card-title">Crypro Storage</div>
+      </div>
+      {/* <div  className="mini-card-rate">1 BTC = $19,509</div> */}
     </div>
+    <div  className="mini-card-balance-section">
+      <div  className="mini-card-crypto-balance">{formatUsd(card.balanceUsd)}</div>
+      <div  className="mini-card-fiat-balance">$213,017.17</div>
+    </div>
+    <div  className="mini-card-profit-section">
+       {/* <div  className="mini-card-profit-title">multi-chain</div> */}
+      <div  className="mini-card-profit-percent">multi-chain</div>
+    </div> 
+    <div  className="mini-card-actions">
+      <button  className="btn-mini-card btn-swap">Swap</button>
+      <button  className="btn-mini-card btn-buy">Buy</button>
+      <button  className="btn-mini-card btn-send">Send</button>
+    </div>
+  </div>
+  </div>
+
+
+
     </div> </div>
 
 
