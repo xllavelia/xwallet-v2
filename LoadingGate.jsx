@@ -13,12 +13,12 @@ const LoadingGate = (props) => {
 
   var balanceReady = !isLoading && wallet && typeof wallet.balance === "number";
 
-  // useEffect(function () {
-  //   var timer = setTimeout(function () {
-  //     setPhase("welcome");
-  //   }, 5000);
-  //   return function () { clearTimeout(timer); };
-  // }, []);
+  useEffect(function () {
+    var timer = setTimeout(function () {
+      setPhase("welcome");
+    }, 5000);
+    return function () { clearTimeout(timer); };
+  }, []);
 
   useEffect(function () {
     if (phase === "welcome" && balanceReady) {
