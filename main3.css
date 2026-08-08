@@ -1834,7 +1834,7 @@ display: flex;
 .bp-status-young { border-color: hsl(280,70%,55%); color: hsl(280,70%,75%); background: hsla(280,70%,55%,0.08); }
 .bp-status-saint { border-color: #ffd700; color: #ffd700; background: rgba(255,215,0,0.08); animation: bp-saint-glow 2.4s ease-in-out infinite; }
 .bp-status-legendary { border-color: #ff9d00; color: #ff9d00; background: rgba(255,157,0,0.08); animation: bp-saint-glow 2.4s ease-in-out infinite; }
-.bp-status-force_pro, .bp-status-force_prime, .bp-status-force_star { border-color: rgba(255,255,255,0.3); }
+.bp-status-legacy, .bp-status-rivender, .bp-status-royal { border-color: rgba(255,255,255,0.3); }
 
 @keyframes bp-saint-glow {
   0%, 100% { box-shadow: 0 0 0 rgba(255,215,0,0); }
@@ -1846,8 +1846,8 @@ display: flex;
   --xco-classico: hsl(61, 85%, 78%);
   --xco-elysium: hsl(61, 85%, 78%);
 }
-.xdrop-section { margin: 28px 24px 8px; display: flex; flex-direction: column; gap: 14px; }
-.xdrop-header { display: flex; flex-direction: column; gap: 2px; }
+.xdrop-section { margin: 28px 0px 8px; display: flex; flex-direction: column; gap: 14px; }
+.xdrop-header { display: flex; flex-direction: column; gap: 2px; padding: 0 20px;}
 .xdrop-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--xlavelia); opacity: 0.85; }
 .xdrop-title { font-family: 'Unbounded', sans-serif; font-size: 22px; font-weight: 800; margin: 0; color: #fff; }
 
@@ -1923,9 +1923,8 @@ display: flex;
   content: ''; position: absolute; left: 0; top: 6px;
   width: 5px; height: 5px; border-radius: 50%; background: var(--xlavelia);
 }
-.xdrop-classico ul li::before { background: var(--xco-classico); }
-.xdrop-elysium ul li::before { background: var(--xco-elysium); }
-.xdrop-legendary ul li::before { background: var(--xlavelia); }
+
+.xdrop-legendary ul li::before, .xdrop-elysium ul li::before, .xdrop-classico ul li::before  { background: var(--xlavelia); }
 
 .xdrop-price-card button {
   position: relative; z-index: 1; margin-top: 8px;
@@ -1936,9 +1935,8 @@ display: flex;
   font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
   cursor: pointer;
 }
-.xdrop-classico button {  color: var(--xlavelia);  border: 2px solid var(--xlavelia);}
-.xdrop-elysium button {  color: var(--xlavelia);  border: 2px solid var(--xlavelia);}
-.xdrop-legendary button { background: var(--xlavelia); color: #000; }
+
+.xdrop-legendary button, .xdrop-classico button, .xdrop-elysium button{ margin-top: auto; background: var(--xlavelia); color: #000; }
 .xdrop-price-card button:disabled { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); cursor: not-allowed; }
 /* ── Case opening overlay ─────────────────────────────────── */
 .xco-overlay { position: fixed; inset: 0; z-index: 99; display: flex; align-items: center; justify-content: center; }
@@ -2098,7 +2096,7 @@ display: flex;
 .stx-input:focus { border-color: hsla(61,85%,78%,0.5); }
 .stx-full-width { width: 100%; }
 
-.stx-danger-row .menu-text { color: #ff6b6b; }
+.stx-danger-row .menu-text { color: var(--xco-classico); }
 .stx-admin-row .menu-text { color: var(--xlavelia); font-weight: 700; }
 
 .stx-modal-overlay {
@@ -2191,7 +2189,7 @@ display: flex;
 }
 .adm-detail-modal {
   width: 100%; max-width: 480px; max-height: 88vh; overflow-y: auto;
-  background: #131320; border-radius: 24px 24px 0 0; padding: 8px 20px 36px;
+  background: #1a1a1a; border-radius: 24px 24px 0 0; padding: 8px 20px 36px;
   border-top: 1px solid rgba(255,255,255,0.1);
 }
 .adm-detail-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 8px auto 16px; }
@@ -2254,12 +2252,12 @@ display: flex;
 
 .welcome-block h1{
   animation: lg-intro-fade-in 0.9s ease both;
-  animation-delay: 2.4s;
+  animation-delay: 1.9s;
 }
 
 .welcome-block span{
-  animation: lg-intro-fade-in 0.8s ease both;
-  animation-delay: 2.7s;
+  animation: lg-intro-fade-in 0.9s ease both;
+  animation-delay: 2.3s;
 }
 
 
@@ -2296,7 +2294,7 @@ display: flex;
   border: 2px solid #1a1a1a;
   margin: 1rem;
 
-  animation: pull-welcome 2.2s cubic-bezier(0.26, 1, 0.34, 1) 1.8s forwards;
+  animation: pull-welcome 2.1s cubic-bezier(0.26, 1, 0.30, 1) 0.8s forwards;
 
   will-change: height, transform;
 }

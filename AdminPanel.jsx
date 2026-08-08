@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { authFetch } from "./apiClient";
 
 
-var STATUS_OPTIONS = ["lucky", "young", "saint", "legendary", "force_pro", "force_prime", "force_star"];
+var STATUS_OPTIONS = ["lucky", "young", "saint", "legendary", "legacy", "rivender", "royal"];
 
 function AdminPanel() {
   const navigate = useNavigate();
