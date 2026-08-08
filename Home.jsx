@@ -7,11 +7,10 @@ import { title } from "framer-motion/client";
 
 // npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "connection setting, add admin for sql/go"
+// git commit -m "fix for sql/go"
 // git push -u origin main 
 
 // git commit -m "fix"
-
 
 // git add .
 // git commit --amend --no-edit
