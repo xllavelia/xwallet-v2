@@ -14,7 +14,7 @@ const LoadingGate = (props) => {
   useEffect(function () {
     var timer = setTimeout(function () {
       setPhase("welcome");
-    }, 3500);
+    }, 10);
     return function () { clearTimeout(timer); };
   }, []);
 
