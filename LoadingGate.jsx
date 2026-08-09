@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useWalletBalance } from "./useWallet";
 import { useAccount } from "./useAccount";
-import { div } from "framer-motion/m";
-
 
 const LoadingGate = (props) => {
   var { wallet, isLoading } = useWalletBalance();
