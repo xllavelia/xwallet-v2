@@ -186,8 +186,8 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
                   );
                 }
 
-                var isCredit = voucher.voucherType !== "fee_discount";
-                var timing = !isCredit ? computeFeeTiming(voucher, nowTick) : null;
+               var isTimed = voucher.voucherType === "fee_discount" || voucher.voucherType === "xp_boost" || voucher.voucherType === "fee_boost";
+              var isCredit = !isTimed;
                 var slideClass = "vch-slide" + (deletingId === voucher.id ? " vch-deleting" : "");
 
                 return (
@@ -195,7 +195,7 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
                     <div className="ticket-wrapper">
                       <div className="ticket-main">
 
-                        {!isCredit && (
+                        {isTimed && (
                           <div className="tm-header">
                             <div className="tm-block border-left">
                               <span className="tm-label">DURATION</span>
@@ -225,14 +225,16 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
 
                         <div className="tm-hero">
                           <div className="tm-title-wrapper">
-                            {!isCredit && (<><h2>COMMISSION</h2><h2>DISCOUNT VOUCHER</h2></>)}
+                            {voucher.voucherType === "fee_discount" && (<><h2>COMMISSION</h2><h2>DISCOUNT VOUCHER</h2></>)}
+{voucher.voucherType === "xp_boost" && (<><h2>BATTLE PASS</h2><h2>XP BOOSTER</h2></>)}
+{voucher.voucherType === "fee_boost" && (<><h2>PERMANENT</h2><h2>FEE REDUCTION</h2></>)}
                             {voucher.voucherType === "usdt_credit" && (<><h2>USDT</h2><h2>BONUS CREDIT</h2></>)}
                             {voucher.voucherType === "lavx_credit" && (<><h2>LAVX</h2><h2>BONUS CREDIT <GemIcon /></h2></>)}
                             {voucher.voucherType === "ref_xp_credit" && (<><h2>REFERRAL</h2><h2>XP BOOST</h2></>)}
                           </div>
                           <div className="tm-amount">
                             <span className="digits">
-  {!isCredit
+  {isTimed
     ? ("$" + voucher.limitAmount)
     : voucher.voucherType === "usdt_credit"
       ? ("$" + voucher.creditAmount)
@@ -243,7 +245,7 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
                           </div>
                         </div>
 
-                        {!isCredit && (
+                        {isTimed && (
                           <div className="tm-stats-section">
                             <div className="tm-stats-row">
                               <div className="stat-box">
@@ -312,7 +314,7 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
                 var opacity = Math.max(0, 1 - Math.abs(continuousIndex - idx));
                 var isNear = idx === activeIndex;
                 var isCredit = voucher.voucherType !== "fee_discount";
-                var timing = !isCredit ? computeFeeTiming(voucher, nowTick) : null;
+                var timing = isTimed ? computeFeeTiming(voucher, nowTick) : null;
                 var panelStyle = {
                   opacity: opacity,
                   transform: "translateY(" + ((1 - opacity) * 10) + "px)",
@@ -326,7 +328,7 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
                     <div className="voucher-container">
                       <div className="details-section">
 
-                        {!isCredit && (
+                        {isTimed && (
                           <>
                             <div className="details-group">
                               <h3 className="group-title">USAGE STATISTICS</h3>
@@ -389,14 +391,14 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
                               <span className="d-tag">{voucher.voucherType.toUpperCase()}</span>
                             </div>
                             <p className="doc-text">
-                              {!isCredit
+                              {isTimed
                                 ? "This voucher reduces trading commission. Applied automatically to all pairs while active."
                                 : "One-time credit voucher. Claiming it instantly adds the amount to your balance and removes this ticket."}
                             </p>
                           </div>
                         </div>
 
-                 {!isCredit && voucher.status === "inactive" && (
+                 {isTimed && voucher.status === "inactive" && (
   <div className="vch-inactive-actions">
     <button className="voucher-activate-btn" disabled={isBusy} onClick={() => handleActivate(voucher)}>
       {isBusy ? "ACTIVATING..." : "ACTIVATE VOUCHER"}
@@ -405,7 +407,7 @@ var TOTAL_SLOTS = wallet.maxVoucherSlots || 10;
   </div>
 )}
 
-                        {!isCredit && timing.isExpired && (
+                        {isTimed && timing.isExpired && (
                           <>
                             <button className="vch-delete-btn" onClick={() => handleDelete(voucher)}>Remove Ticket</button>
                           </>
