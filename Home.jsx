@@ -14,7 +14,7 @@ import history4 from './history4.jpg';
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix design"
+// git commit -m "fix hrd"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -297,7 +297,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
             </div>
           </div>
           <button className="hrd-invite-btn" onClick={() => navigate("/referral")}>
-            <GiftIcon /> Invite
+            <GiftIcon /> Frend
           </button>
         </div>
 
@@ -379,7 +379,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 
         <div className="hrd-summary-row">
           <div className="hrd-summary-card" onClick={() => navigate("/history")}>
-            <span className="hrd-summary-label">All Operations</span>
+            <span className="hrd-summary-label">All Operations <br /> main wallet</span>
             <span className="hrd-summary-value">{"$" + wallet.balance.toFixed(2)}</span>
             <div className="hrd-summary-bar">
               <span style={{ width: "60%", background: "hsl(61,85%,78%)" }}></span>
@@ -388,45 +388,121 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
             </div>
           </div>
           <div className="hrd-summary-card" onClick={() => navigate("/bonus")}>
-            <span className="hrd-summary-label">Rewards & Bonuses</span>
-            <span className="hrd-summary-value">Vouchers</span>
+            <span className="hrd-summary-label">Vouchers </span>
+            <span className="hrd-summary-value">Rewards and vouchers</span>
             <span className="hrd-summary-cta">View all</span>
           </div>
         </div>
    
 
-        <div className="hrd-accounts-list">
-          <div className="hrd-account-row" onClick={() => navigate("/history")}>
-            <div className="hrd-account-icon wallet"><WalletIcon /></div>
-            <div className="hrd-account-info">
-              <span className="hrd-account-balance">{"$" + wallet.balance.toFixed(2)}</span>
-              <span className="hrd-account-name">Main Wallet</span>
-              
-            </div>
-              
-            <div className="hrd-account-chevron">›</div>
-          </div> 
-   
-          
+       <div className="hrd-accounts-list">
 
-          <div className="hrd-account-row" onClick={() => navigate("/savings")}>
-            <div className="hrd-account-icon savings"><SavingsIcon /></div>
-            <div className="hrd-account-info">
-              <span className="hrd-account-balance">{"$" + savingsBalance.toFixed(2)}</span>
-              <span className="hrd-account-name">Savings Account · 12% APY</span>
-            </div>
-            <div className="hrd-account-chevron">›</div>
-          </div>
+  {/* Main Wallet */}
+  <div className="hrd-account-row" onClick={() => navigate("/history")}>
+    <div className="hrd-account-icon wallet">
+      <WalletIcon />
+    </div>
 
-          <div className="hrd-account-row" onClick={() => navigate("/card")}>
-            <div className="hrd-account-icon card"><CardIcon /></div>
-            <div className="hrd-account-info">
-              <span className="hrd-account-balance">{"$" + cardBalance.toFixed(2)}</span>
-              <span className="hrd-account-name">Crypto Card</span>
-            </div>
-            <div className="hrd-account-chevron">›</div>
-          </div>
-        </div>
+    <div className="hrd-account-info">
+      <span className="hrd-account-balance">
+        {"$" + wallet.balance.toFixed(2)}
+      </span>
+
+      <span className="hrd-account-name">
+        Main Wallet
+      </span>
+
+      <div className="hrd-account-actions">
+        <button
+          className="hrd-native-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("/promocode");
+          }}
+        >
+          Promocodes
+        </button>
+
+        <button
+          className="hrd-native-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("/ads");
+          }}
+        >
+          ads
+        </button>
+      </div>
+    </div>
+
+    <div className="hrd-account-chevron">›</div>
+  </div>
+
+
+  {/* Savings */}
+  <div className="hrd-account-row" onClick={() => navigate("/savings")}>
+    <div className="hrd-account-icon savings">
+      <SavingsIcon />
+    </div>
+
+    <div className="hrd-account-info">
+      <span className="hrd-account-balance">
+        {"$" + savingsBalance.toFixed(2)}
+      </span>
+
+      <span className="hrd-account-name">
+        Savings Account · 12% APY
+      </span>
+
+      <div className="hrd-account-actions">
+        <button
+          className="hrd-native-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("/prime");
+          }}
+        >
+          Prime subscription
+        </button>
+      </div>
+    </div>
+
+    <div className="hrd-account-chevron">›</div>
+  </div>
+
+
+  {/* Crypto Card */}
+  <div className="hrd-account-row" onClick={() => navigate("/card")}>
+    <div className="hrd-account-icon card">
+      <CardIcon />
+    </div>
+
+    <div className="hrd-account-info">
+      <span className="hrd-account-balance">
+        {"$" + cardBalance.toFixed(2)}
+      </span>
+
+      <span className="hrd-account-name">
+        Crypto Card
+      </span>
+
+      <div className="hrd-account-actions">
+        <button
+          className="hrd-native-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("/battlepass");
+          }}
+        >
+          Battle pass
+        </button>
+      </div>
+    </div>
+
+    <div className="hrd-account-chevron">›</div>
+  </div>
+
+</div>
 
         <div className="hrd-recent-section">
           <div className="hrd-recent-header">

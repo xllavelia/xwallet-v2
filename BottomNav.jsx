@@ -44,6 +44,16 @@ function BottomNav() {
   if (!shouldShow) {
     return null;
   }
+const navigateWithTransition = (path) => {
+  if (!document.startViewTransition) {
+    navigate(path);
+    return;
+  }
+
+  document.startViewTransition(() => {
+    navigate(path);
+  });
+};
 
   return (
     <nav className="bnav-wrap">
@@ -55,7 +65,7 @@ function BottomNav() {
             <button
               key={tab.path}
               className={"bnav-item " + (isActive ? "active" : "")}
-              onClick={() => navigate(tab.path)}
+              onClick={() => navigateWithTransition(tab.path)}
               ref={function (el) { itemRefs.current[idx] = el; }}
             >
               <tab.Icon active={isActive} />

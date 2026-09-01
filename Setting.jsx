@@ -107,172 +107,443 @@ function goTo(path) {
   var statuses = (bpData && bpData.statuses) || [];
   var deleteMatches = deleteConfirmInput.trim().toLowerCase() === account.username.toLowerCase();
 
-  return (
-    <div className="SettingContent">
-      <div className="settings-layout">
+return (
+  <div className="SettingContent">
+    <div className="settings-layout">
 
-  
+      {/* PROFILE HERO */}
+      <section className="stx-profile-hero">
 
-        <section className="profile-section">
-          <div className="profile-card-glass">
-            {/* <div className="profile-avatar-large">{avatarInitial}</div> */}
-            <div className="profile-info">
+        <div className="stx-profile-glow"></div>
 
-              {editingName ? (
-                <div className="profile-name-edit">
-                  <input
-                    className="profile-name-input"
-                    value={nameInput}
-                    onChange={(e) => setNameInput(e.target.value)}
-                    maxLength={24}
-                    autoFocus
-                  />
-                  <button className="btn-save-name" onClick={handleSaveName}>Save</button>
-                </div>
-              ) : (
-                <h2 className="profile-nickname" onClick={handleStartEdit}>{account.username}</h2>
-              )}
-              {nameError && <span className="stx-error-text">{nameError}</span>}
+        <div className="stx-profile-top">
+          <div className="stx-avatar">
+            {avatarInitial}
+          </div>
 
-              <div className="profile-id-box">
-                <span className="id-label">ID:</span>
-                <span className="id-value id-mono">{account.playerId}</span>
-                <button className="btn-copy" onClick={handleCopyId}>{copyBtnLabel}</button>
+          <div className="stx-profile-main">
+            {editingName ? (
+              <div className="profile-name-edit">
+                <input
+                  className="profile-name-input"
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  maxLength={24}
+                  autoFocus
+                />
+
+                <button
+                  className="btn-save-name"
+                  onClick={handleSaveName}
+                >
+                  Save
+                </button>
               </div>
+            ) : (
+              <button
+                className="stx-name-button"
+                onClick={handleStartEdit}
+              >
+                <span>{account.username}</span>
+                <span className="stx-edit-icon">✎</span>
+              </button>
+            )}
 
-              <span className="stx-member-since">{"Member since " + memberSince}</span>
+            {nameError && (
+              <span className="stx-error-text">{nameError}</span>
+            )}
 
-              {statuses.length > 0 && (
-                <div className="stx-status-row">
-                  {statuses.map(function (s) {
-                    return <span key={s} className={"bp-status-badge bp-status-" + s}>{s.toUpperCase()}</span>;
-                  })}
-                </div>
-              )}
+            <div className="stx-member-since">
+              Member since {memberSince}
             </div>
           </div>
-        </section>
 
-        <section className="settings-menu-block">
+          <div className="stx-profile-status">
+            <span className="stx-online-dot"></span>
+            Active
+          </div>
+        </div>
 
-          <div className="menu-item-row" onClick={() => setShowPasswordForm(!showPasswordForm)}>
+        {/* PLAYER ID */}
+        <button
+          className="stx-player-id"
+          onClick={handleCopyId}
+        >
+          <div>
+            <span className="stx-id-caption">PLAYER ID</span>
+            <span className="id-mono">{account.playerId}</span>
+          </div>
+
+          <span className={"stx-copy-action " + (copyDone ? "copied" : "")}>
+            {copyDone ? "✓ Copied" : "Copy"}
+          </span>
+        </button>
+
+        {/* STATUS */}
+        {statuses.length > 0 && (
+          <div className="stx-status-row">
+            {statuses.map(function (s) {
+              return (
+                <span
+                  key={s}
+                  className={"bp-status-badge bp-status-" + s}
+                >
+                  {s.toUpperCase()}
+                </span>
+              );
+            })}
+          </div>
+        )}
+
+      </section>
+
+
+      {/* ACCOUNT */}
+      <section className="stx-section">
+        <div className="stx-section-header">
+          <span>ACCOUNT</span>
+        </div>
+
+        <div className="settings-menu-block">
+
+          <div
+            className="menu-item-row"
+            onClick={() => setShowPasswordForm(!showPasswordForm)}
+          >
             <div className="menu-item-left">
-              <div className="menu-icon-box"></div>
-              <span className="menu-text">Change Password</span>
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Password & Security</span>
+                <small>Keep your account protected</small>
+              </div>
             </div>
-            <div className="menu-item-right">›</div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">
+                {showPasswordForm ? "⌃" : "›"}
+              </span>
+            </div>
           </div>
 
           {showPasswordForm && (
             <div className="stx-password-form">
-              <input type="password" placeholder="Current password" className="stx-input" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} />
-              <input type="password" placeholder="New password" className="stx-input" value={newPw} onChange={(e) => setNewPw(e.target.value)} />
-              <input type="password" placeholder="Confirm new password" className="stx-input" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} />
-              {pwError && <span className="stx-error-text">{pwError}</span>}
-              {pwSuccess && <span className="stx-success-text">{pwSuccess}</span>}
-              <button className="btn-save-name stx-full-width" disabled={pwBusy} onClick={handleSubmitPassword}>
+
+              <input
+                type="password"
+                placeholder="Current password"
+                className="stx-input"
+                value={currentPw}
+                onChange={(e) => setCurrentPw(e.target.value)}
+              />
+
+              <input
+                type="password"
+                placeholder="New password"
+                className="stx-input"
+                value={newPw}
+                onChange={(e) => setNewPw(e.target.value)}
+              />
+
+              <input
+                type="password"
+                placeholder="Confirm new password"
+                className="stx-input"
+                value={confirmPw}
+                onChange={(e) => setConfirmPw(e.target.value)}
+              />
+
+              {pwError && (
+                <span className="stx-error-text">{pwError}</span>
+              )}
+
+              {pwSuccess && (
+                <span className="stx-success-text">{pwSuccess}</span>
+              )}
+
+              <button
+                className="btn-save-name stx-full-width"
+                disabled={pwBusy}
+                onClick={handleSubmitPassword}
+              >
                 {pwBusy ? "Updating..." : "Update Password"}
               </button>
             </div>
           )}
 
-          <div className="menu-item-row" onClick={handleLogout}>
+          <div
+            className="menu-item-row stx-logout-row"
+            onClick={handleLogout}
+          >
             <div className="menu-item-left">
-              <div className="menu-icon-box"></div>
-              <span className="menu-text">Log Out</span>
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Log Out</span>
+                <small>Sign out of this device</small>
+              </div>
             </div>
-            <div className="menu-item-right">›</div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">›</span>
+            </div>
           </div>
 
-          <div className="menu-item-row stx-danger-row" onClick={() => setShowDeleteModal(true)}>
+        </div>
+      </section>
+
+
+      {/* REWARDS & BENEFITS */}
+      <section className="stx-section">
+        <div className="stx-section-header">
+          <span>REWARDS & BENEFITS</span>
+        </div>
+
+        <div className="settings-menu-block">
+
+          <div
+            className="menu-item-row stx-feature-row"
+            onClick={() => goTo("/promocode")}
+          >
             <div className="menu-item-left">
-              <div className="menu-icon-box"></div>
-              <span className="menu-text">Delete Account</span>
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Promocodes</span>
+                <small>Redeem special offers</small>
+              </div>
             </div>
-            <div className="menu-item-right">›</div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">›</span>
+            </div>
+          </div>
+
+
+          <div
+            className="menu-item-row stx-feature-row"
+            onClick={() => goTo("/referral")}
+          >
+            <div className="menu-item-left">
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Invite Friends</span>
+                <small>Earn rewards together</small>
+              </div>
+            </div>
+
+            <div className="menu-item-right">
+              {/* <span className="menu-badge">BONUS</span> */}
+              <span className="stx-arrow">›</span>
+            </div>
+          </div>
+
+
+          <div
+            className="menu-item-row stx-feature-row"
+            onClick={() => goTo("/bonus")}
+          >
+            <div className="menu-item-left">
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">My Vouchers</span>
+                <small>Your available rewards</small>
+              </div>
+            </div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">›</span>
+            </div>
+          </div>
+
+
+          <div
+            className="menu-item-row stx-feature-row"
+            onClick={() => goTo("/prime")}
+          >
+            <div className="menu-item-left">
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Prime Membership</span>
+                <small>Unlock premium benefits</small>
+              </div>
+            </div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">›</span>
+            </div>
+          </div>
+
+
+          <div
+            className="menu-item-row stx-feature-row"
+            onClick={() => goTo("/battlepass")}
+          >
+            <div className="menu-item-left">
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Battle Pass</span>
+                <small>Complete missions & earn XP</small>
+              </div>
+            </div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">›</span>
+            </div>
+          </div>
+
+
+          <div
+            className="menu-item-row stx-feature-row"
+            onClick={() => goTo("/card")}
+          >
+            <div className="menu-item-left">
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Crypto Card</span>
+                <small>Manage your virtual card</small>
+              </div>
+            </div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">›</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* DANGER */}
+      <section className="stx-section">
+        <div className="stx-section-header danger-header">
+          <span>DANGER ZONE</span>
+        </div>
+
+        <div className="settings-menu-block">
+
+          <div
+            className="menu-item-row stx-danger-row"
+            onClick={() => setShowDeleteModal(true)}
+          >
+            <div className="menu-item-left">
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Delete Account</span>
+                <small>This action cannot be undone</small>
+              </div>
+            </div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">›</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* ADMIN */}
+      {account.isAdmin && (
+        <section className="stx-section">
+          <div className="settings-menu-block">
+
+            <div
+              className="menu-item-row stx-admin-row"
+              onClick={() => goTo("/admin")}
+            >
+              <div className="menu-item-left">
+
+                <div className="stx-menu-copy">
+                  <span className="menu-text">Admin Panel</span>
+                  <small>System administration</small>
+                </div>
+              </div>
+
+              <div className="menu-item-right">
+                <span className="stx-arrow">›</span>
+              </div>
+            </div>
+
           </div>
         </section>
+      )}
 
-        <section className="settings-menu-block">
 
-          <div className="menu-item-row" onClick={() => goTo("/promocode")}>
-            <div className="menu-item-left"><div className="menu-icon-box"></div><span className="menu-text">Promocode</span></div>
-            <div className="menu-item-right"><span>›</span></div>
-          </div>
+      {/* FOOTER */}
+      <footer className="settings-footer">
 
-          <div className="menu-item-row" onClick={() => goTo("/referral")}>
-            <div className="menu-item-left"><div className="menu-icon-box"></div><span className="menu-text">Invite Friends</span></div>
-            <div className="menu-item-right"><span className="menu-badge">bonus</span><span>›</span></div>
-          </div>
+        <div className="footer-links">
+          <div className="footer-link-item">Contact Information</div>
+          <div className="footer-link-item">Privacy Policy</div>
+          <div className="footer-link-item">Terms Of Use</div>
+        </div>
 
-          <div className="menu-item-row" onClick={() => goTo("/bonus")}>
-            <div className="menu-item-left"><div className="menu-icon-box"></div><span className="menu-text">My Vouchers</span></div>
-            <div className="menu-item-right"><span>›</span></div>
-          </div>
+        <div className="app-version-info">
+          <span className="stx-brand">xwallet</span>
+          <span className="version-number">v.1.0.0</span>
+        </div>
 
-          <div className="menu-item-row" onClick={() => goTo("/prime")}>
-            <div className="menu-item-left"><div className="menu-icon-box"></div><span className="menu-text">Prime Membership</span></div>
-            <div className="menu-item-right"><span>›</span></div>
-          </div>
+      </footer>
 
-          <div className="menu-item-row" onClick={() => goTo("/battlepass")}>
-            <div className="menu-item-left"><div className="menu-icon-box"></div><span className="menu-text">Battle Pass</span></div>
-            <div className="menu-item-right"><span>›</span></div>
-          </div>
+    </div>
 
-          <div className="menu-item-row" onClick={() => goTo("/card")}>
-            <div className="menu-item-left"><div className="menu-icon-box"></div><span className="menu-text">Crypto Card</span></div>
-            <div className="menu-item-right"><span>›</span></div>
-          </div>
-        </section>
 
-        {account.isAdmin && (
-          <section className="settings-menu-block">
-            <div className="menu-item-row stx-admin-row" onClick={() => goTo("/admin")}>
-              <div className="menu-item-left"><div className="menu-icon-box"></div><span className="menu-text">Admin Panel</span></div>
-              <div className="menu-item-right"><span>›</span></div>
-            </div>
-          </section>
-        )}
+    {/* DELETE MODAL */}
+    {showDeleteModal && (
+      <div
+        className="stx-modal-overlay"
+        onClick={() => setShowDeleteModal(false)}
+      >
+        <div
+          className="stx-modal"
+          onClick={(e) => e.stopPropagation()}
+        >
 
-        <footer className="settings-footer">
-          <div className="footer-links">
-            <div className="footer-link-item">Contact Information</div>
-            <div className="footer-link-item">Privacy Policy</div>
-            <div className="footer-link-item">Terms Of Use</div>
-          </div>
-          <div className="app-version-info">
-            <span>xwallet</span>
-            <span className="version-number">v.1.0.0</span>
-          </div>
-        </footer>
-      </div>
+          <div className="stx-delete-symbol">!</div>
 
-      {showDeleteModal && (
-        <div className="stx-modal-overlay" onClick={() => setShowDeleteModal(false)}>
-          <div className="stx-modal" onClick={(e) => e.stopPropagation()}>
-            <h3 className="stx-modal-title">Delete Account</h3>
-            <p className="stx-modal-text">
-              This permanently deletes your account, balance, positions, and history. This cannot be undone.
-              Type <strong>{account.username}</strong> to confirm.
-            </p>
-            <input
-              className="stx-input"
-              value={deleteConfirmInput}
-              onChange={(e) => setDeleteConfirmInput(e.target.value)}
-              placeholder="Type your username"
-            />
-            <div className="stx-modal-actions">
-              <button className="stx-modal-cancel" onClick={() => setShowDeleteModal(false)}>Cancel</button>
-              <button className="stx-modal-confirm" disabled={!deleteMatches || deleteBusy} onClick={handleConfirmDelete}>
-                {deleteBusy ? "Deleting..." : "Delete Forever"}
-              </button>
-            </div>
+          <h3 className="stx-modal-title">
+            Delete Account
+          </h3>
+
+          <p className="stx-modal-text">
+            This permanently deletes your account, balance,
+            positions, and history. This cannot be undone.
+          </p>
+
+          <p className="stx-modal-confirm-label">
+            Type <strong>{account.username}</strong> to confirm.
+          </p>
+
+          <input
+            className="stx-input"
+            value={deleteConfirmInput}
+            onChange={(e) => setDeleteConfirmInput(e.target.value)}
+            placeholder="Type your username"
+          />
+
+          <div className="stx-modal-actions">
+
+            <button
+              className="stx-modal-cancel"
+              onClick={() => setShowDeleteModal(false)}
+            >
+              Cancel
+            </button>
+
+            <button
+              className="stx-modal-confirm"
+              disabled={!deleteMatches || deleteBusy}
+              onClick={handleConfirmDelete}
+            >
+              {deleteBusy ? "Deleting..." : "Delete Forever"}
+            </button>
+
           </div>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    )}
+
+  </div>
+);
+
 };
 
 export default Setting;
