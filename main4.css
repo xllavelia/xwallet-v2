@@ -18,7 +18,7 @@
 
 
 .HomeRedesignContent { background: #121212; min-height: 100vh; color: #fff; font-family: 'Inter', sans-serif; }
-.hrd-page { max-width: 460px; margin: 0 auto; padding: 10vh 0px 100px; display: flex; flex-direction: column; gap: 18px; }
+.hrd-page { max-width: 460px; margin: 0 auto; padding: 10vh 16px 100px; display: flex; flex-direction: column; gap: 18px; }
 
 .hrd-top-row { display: flex; align-items: center; justify-content: space-between; }
 .hrd-profile-chip { display: flex; align-items: center; gap: 10px; cursor: pointer; }
@@ -44,8 +44,12 @@
 .tile-c { background: linear-gradient(155deg, hsla(150,70%,45%,0.35), #041a10); }
 .tile-d { background: linear-gradient(155deg, hsla(210,70%,55%,0.35), #04101a); }
 
-.hrd-summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.hrd-summary-card { background: #1a1a1a;  border-radius: 16px; padding: 20px 16px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; }
+.hrd-summary-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.hrd-summary-card { background: #1a1a1a; 
+  box-shadow:
+  0 8px 24px rgba(0, 0, 0, 0.12),
+  0 2px 8px rgba(0, 0, 0, 0.4); 
+   border-radius: 16px; padding: 24px 16px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; }
 .hrd-summary-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); }
 .hrd-summary-value { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 800; color: #fff; }
 .hrd-summary-bar { display: flex; height: 5px; border-radius: 5px; overflow: hidden; }
@@ -54,18 +58,24 @@
 .hrd-accounts-list { display: flex; flex-direction: column; gap: 8px; }
 .hrd-account-row:last-child { margin-top: 5px;}
 
-.hrd-account-row { display: flex; align-items: center; gap: 12px; background: #1a1a1a; border-radius: 16px; padding: 26px 14px; cursor: pointer; }
+.hrd-account-row {box-shadow:
+  0 8px 24px rgba(0, 0, 0, 0.12),
+  0 2px 8px rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 12px; background: #1a1a1a; border-radius: 16px; padding: 30px 16px; cursor: pointer; margin: 6px 0; }
 .hrd-account-row:active { transform: scale(0.98); }
-.hrd-account-icon { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hrd-account-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .hrd-account-icon.wallet { background: hsla(61,85%,78%,0.12); color: var(--xlavelia); }
 .hrd-account-icon.savings { background: rgba(0,212,170,0.12); color: #00d4aa; }
 .hrd-account-icon.card { background: hsla(280,70%,65%,0.12); color: hsl(280,70%,75%); }
 .hrd-account-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
-.hrd-account-balance { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 800; color: #fff; }
+
+.hrd-account-balance { font-family: 'Unbounded', sans-serif; font-size: 16.5px; font-weight: 900; margin-bottom:2px; color: #fff; }
 .hrd-account-name { font-size: 11.5px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
 .hrd-account-chevron { color: rgba(255,255,255,0.2); font-size: 18px; flex-shrink: 0; }
 
-.hrd-recent-section { display: flex; flex-direction: column; gap: 8px; background-color: #1a1a1a; padding: 12px; border-radius: 15px;}
+.hrd-recent-section {  box-shadow:
+  0 8px 24px rgba(0, 0, 0, 0.12),
+  0 2px 8px rgba(0, 0, 0, 0.4); display: flex; flex-direction: column; gap: 8px; background-color: #1a1a1a; padding: 12px; border-radius: 15px;}
 .hrd-recent-header {  display: flex; justify-content: space-between; align-items: baseline; padding: 5px 4px; }
 .hrd-recent-title { font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 800; color: #fff; }
 .hrd-recent-view-all { font-size: 11.5px; color: var(--xlavelia); font-weight: 700; cursor: pointer; }
@@ -81,9 +91,13 @@
 .hqa-card {
   position: relative;
   overflow: hidden;
+  box-shadow:
+  0 8px 24px rgba(0, 0, 0, 0.12),
+  0 2px 8px rgba(0, 0, 0, 0.4);
   background: #1a1a1a;
   border-radius: 18px;
-  padding: 16px 16px 14px;
+  /* padding: 16px 16px 14px; */
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -100,6 +114,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
+    /* padding: 24px 16px; */
 }
 
 .hqa-send .hqa-icon-wrap { background: hsla(61,85%,78%,0.12); color: var(--xlavelia); }
@@ -131,7 +146,7 @@
   margin-top: 4px;
 }
 
-.hqa-send .hqa-sub { color: hsl(120, 70%, 75%); }
+.hqa-send .hqa-sub { color: var(--xlavelia); }
 .hqa-trade .hqa-sub { color: hsl(280,70%,75%); }
 
 .hqa-accent {

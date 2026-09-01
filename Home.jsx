@@ -14,7 +14,7 @@ import history4 from './history4.jpg';
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix story and bottom bar"
+// git commit -m "fix design"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -312,17 +312,6 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
       <div className="stories-scroll">
         {STORIES.map(function (story, index) {
           return (
-            // <button
-              // key={story.id}
-             
-              // onClick={function () {
-              //   openStory(index);
-              // }}
-            // >
-               
-            // </button>
-
-           
           <div className="story-card"  key={story.id}
              
               onClick={function () {
@@ -330,11 +319,6 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
               }} >
             <article className="newsCard newsCardMain">
               <img className="story-image" src={story.image} alt="" />
-
-              {/* <span className="newsTag">UPDATE</span> */}
-              {/* <h4 style={{color: "var(--xlavelia)" }}>{story.title}</h4> */}
-              {/* <p className="text-story-card">{story.text}</p> */}
-              {/* <span className="newsDate">Today · 2 min read</span> */}
             </article>
 
           </div>
@@ -409,6 +393,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
             <span className="hrd-summary-cta">View all</span>
           </div>
         </div>
+   
 
         <div className="hrd-accounts-list">
           <div className="hrd-account-row" onClick={() => navigate("/history")}>
@@ -416,22 +401,12 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
             <div className="hrd-account-info">
               <span className="hrd-account-balance">{"$" + wallet.balance.toFixed(2)}</span>
               <span className="hrd-account-name">Main Wallet</span>
+              
             </div>
+              
             <div className="hrd-account-chevron">›</div>
-          </div>
-           <div className="hqa-row">
-      <div className="hqa-card hqa-send" onClick={() => navigate("/send")}>
-        <span className="hqa-label">Move funds</span>
-        <span className="hqa-title">Send</span>
-        <span className="hqa-sub">Ready in seconds</span>
-      </div>
-
-      <div className="hqa-card hqa-trade" onClick={() => navigate("/trade")}>
-        <span className="hqa-label">BTC · USD</span>
-        <span className="hqa-title">Trade</span>
-        <span className="hqa-sub">{priceLabel}</span>
-      </div>
-    </div>
+          </div> 
+   
           
 
           <div className="hrd-account-row" onClick={() => navigate("/savings")}>
@@ -479,7 +454,20 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
             );
           })}
         </div>
+     <div className="hrd-summary-row">
 
+              <div className="hqa-card hqa-send" onClick={() => navigate("/send")}>
+        <span className="hqa-label">Move funds</span>
+        <span className="hqa-title">Send</span>
+        <span className="hqa-sub">Ready in seconds</span>
+      </div>
+
+      <div className="hqa-card hqa-trade" onClick={() => navigate("/trade")}>
+        <span className="hqa-label">BTC · USD</span>
+        <span className="hqa-title">Trade</span>
+        <span className="hqa-sub">{priceLabel}</span>
+    </div>
+      </div>
       </div>
     </div>
   );
