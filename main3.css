@@ -2456,7 +2456,8 @@ display: flex;
   display: flex; justify-content: center;
   padding: 0 16px calc(14px + env(safe-area-inset-bottom));
   pointer-events: none;
-  animation: bnav-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* opacity: 1; transform: translateY(0);  */
+  /* animation: bnav-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; */
 }
 @keyframes bnav-enter {
   from { opacity: 0; transform: translateY(16px); }

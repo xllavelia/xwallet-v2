@@ -6,11 +6,15 @@ import { useSavings } from "./useSavings";
 import { useCard } from "./useCard";
 import { useTransfersRemote } from "./useTransfers";
 import { Glyph } from "./HistoryShared";
+import history1 from './history1.jpg';
+import history2 from './history2.jpg';
+import history3 from './history3.jpg';
+import history4 from './history4.jpg';
 
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "redesign home!"
+// git commit -m "fix story and bottom bar"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -79,11 +83,11 @@ const Home = () => {
     title: '',
     layout: 'top-left',
         text: '',
-        image:  'history1.jpg',
+        image:  history1,
 
     slides: [
       {
-        image:  'history1.jpg',
+        image:  history1,
         title: '',
         text: '',
       },
@@ -94,15 +98,15 @@ const Home = () => {
     title: '',
     layout: 'bottom-right',
         text: '',
-        image:  'history2.jpg',
+        image:  history2,
     slides: [
       {
-        image: 'history2.jpg',
+        image: history2,
         title: '',
         text: '',
       },
       {
-        image: 'history2.jpg',
+        image: history2,
         title: '',
         text: '',
       },
@@ -113,11 +117,11 @@ const Home = () => {
     title: '',
     layout: 'center-right',
         text: '',
-        image:  'history3.jpg',
+        image:  history3,
 
     slides: [
       {
-        image: 'history3.jpg',
+        image: history3,
         title: '',
         text: '',
       },
@@ -128,11 +132,11 @@ const Home = () => {
     title: '',
     layout: 'top-left',
         text: '',
-        image:  'history4.jpg',
+        image:  history4,
 
     slides: [
       {
-        image: 'history4.jpg',
+        image: history4,
         title: '',
         text: '',
       },
