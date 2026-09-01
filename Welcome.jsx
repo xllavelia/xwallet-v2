@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStatus } from "./AuthStatusContext";
 
 var SESSION_KEY = "xw_session";
 var TOKEN_KEY = "xw_token";
@@ -119,6 +120,7 @@ async function apiGenerateId() {
 
 const Welcome = () => {
   const navigate = useNavigate();
+    var { setStatus } = useAuthStatus();
 
   var [stage, setStage] = useState("onboarding");
   var [slideIndex, setSlideIndex] = useState(0);
@@ -147,11 +149,12 @@ const Welcome = () => {
     setSlideIndex(slideIndex + 1);
   }
 
-  function completeSession(data) {
-    localStorage.setItem(TOKEN_KEY, data.token);
-    localStorage.setItem(SESSION_KEY, "1");
-    navigate("/");
-  }
+function completeSession(data) {
+  localStorage.setItem(TOKEN_KEY, data.token);
+  localStorage.setItem(SESSION_KEY, "1");
+  setStatus("authed");
+  navigate("/");
+}
 
   async function handleGenerateId() {
     setError(null);

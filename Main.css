@@ -200,21 +200,24 @@ font-family:'Unbounded' ; font-weight: 800;}
   gap: 0px;
   cursor: pointer;
 }
+
+
+
 .action-circle .icon {
-  width: 80px;
-  height: 60px;
-  border-radius: 20px;
-  background: var(--card);
+  width: 6rem;
+  height: 40px;
+  border-radius: 10px;
+  background: #1a1a1a;
   display: flex;
   fill: #ececec;
   justify-content: center;
   align-items: center;
   font-size: 1.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  /* border: 1px solid rgba(255, 255, 255, 0.05); */
   transition: 0.3s;
 }
 /* .action-circle.x-primary .icon { background: rgb(255, 255, 255, 0.04); border: none; } */
-.action-circle.primary .icon { background: var(--xlavelia); color: #000; border: none; }
+.action-circle.primary .icon { background: var(--xlavelia); border: none; color:#000;}
 .action-circle span { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
 
 .mc-wrapper {
@@ -1381,7 +1384,7 @@ left: 10%;
 }
 
 .SettingContent{
-  margin-top: 1vh;
+  margin-top: 8vh;
 }
 .HistoryContent{
   width: 100%;

@@ -17,11 +17,9 @@ const Setting = () => {
     window.location.reload();
   }
 
-  function goTo(path) {
-    navigate(-1);
-    setTimeout(function () { navigate(path); }, 10);
-  }
-
+function goTo(path) {
+  navigate(path);
+}
   var [editingName, setEditingName] = useState(false);
   var [nameInput, setNameInput] = useState("");
   var [nameError, setNameError] = useState(null);
@@ -113,9 +111,7 @@ const Setting = () => {
     <div className="SettingContent">
       <div className="settings-layout">
 
-        <header className="settings-header">
-          <h1 className="settings-title">Settings</h1>
-        </header>
+  
 
         <section className="profile-section">
           <div className="profile-card-glass">
