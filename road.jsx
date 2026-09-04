@@ -42,15 +42,16 @@ import LoadingGate from "./LoadingGate";
 import Savings from "./Savings";
 import Services from "./Services";
 import BottomNav from "./BottomNav";
+import BalanceCard from "./BalanceCard";
 
 import PageTransition from "./PageTransition";
 
 const islandRoutes = [
   { path: "send", element: <Send /> },
-  { path: "homelend", element: <HomeLend /> }, //NOT
+  { path: "homelend", element: <HomeLend /> }, 
   { path: "buy", element: <Buy /> },
   { path: "get", element: <Get /> },
-  { path: "setting", element: <Setting /> }, //NOT
+  { path: "setting", element: <Setting /> },  
   { path: "history", element: <History /> },
   { path: "state", element: <State /> },
   { path: "bonus", element: <Bonus /> },
@@ -68,6 +69,7 @@ const islandRoutes = [
   { path: "tradecoin", element: <TradeCoin /> },
   { path: "swap", element: <Swap /> },
   { path: "savings", element: <Savings /> },
+  { path: "balancecard", element: <BalanceCard /> },
 ];
 
 const NavigationBar = () => {

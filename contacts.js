@@ -1,4 +1,4 @@
-import { API_BASE } from "./apiClient";
+import { authFetch, API_BASE } from "./apiClient";
 
 var AVATAR_PALETTE = ["#5B8C7B", "#C97B63", "#6E7FD1", "#B98B4E", "#8B6FA8", "#4F8FA3"];
 var TOKEN_KEY = "xw_token";
@@ -11,99 +11,66 @@ function getInitials(name) {
 }
 
 function colorForId(id) {
-  if (!id) return AVATAR_PALETTE[0];
   var sum = 0;
   for (var i = 0; i < id.length; i++) sum += id.charCodeAt(i);
   return AVATAR_PALETTE[sum % AVATAR_PALETTE.length];
 }
 
 function decorate(item) {
-  var playerId = item.playerId || item.PlayerID || "";
-  var username = item.username || item.Username || "";
-  var isContact = item.isContact !== undefined ? item.isContact : !!item.IsContact;
-
   return {
-    id: playerId,
-    name: username,
-    isContact: isContact,
-    color: colorForId(playerId || "?")
+    id: item.playerId,
+    name: item.username,
+    isContact: !!item.isContact,
+    color: colorForId(item.playerId || "?"),
+    cardNumber: null
   };
 }
 
-async function removeContact(playerId) {
-  var token = localStorage.getItem(TOKEN_KEY);
-  return fetch(API_BASE + "/contacts/remove", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-    body: JSON.stringify({ contactPlayerId: playerId })
-  });
+async function searchUsers(query) {
+  if (!query || query.length === 0) return [];
+  var res = await authFetch("/users/search?q=" + encodeURIComponent(query));
+  if (!Array.isArray(res)) return [];
+  return res.map(decorate);
 }
 
-// Возвращает { results, debug } — debug всегда заполнен, независимо от исхода.
-async function searchUsers(query) {
-  var debug = { url: null, status: null, rawText: null, error: null };
-
-  if (!query || query.length === 0) {
-    return { results: [], debug: debug };
-  }
-
-  var token = localStorage.getItem(TOKEN_KEY);
-  var url = API_BASE + "/users/search?q=" + encodeURIComponent(query);
-  debug.url = url;
-
-  try {
-    var res = await fetch(url, { headers: { "Authorization": "Bearer " + token } });
-    debug.status = res.status;
-
-    var text = await res.text();
-    debug.rawText = text;
-
-    var data = null;
-    try { data = JSON.parse(text); } catch (parseErr) {
-      debug.error = "Response is not valid JSON";
-      return { results: [], debug: debug };
-    }
-
-    if (!res.ok) {
-      debug.error = (data && data.error) ? data.error : ("HTTP " + res.status);
-      return { results: [], debug: debug };
-    }
-
-    if (!data || !Array.isArray(data.results)) {
-      debug.error = "Response missing 'results' array";
-      return { results: [], debug: debug };
-    }
-
-    debug.error = null;
-    return { results: data.results.map(decorate), debug: debug };
-
-  } catch (err) {
-    debug.error = "Network error: " + err.message;
-    return { results: [], debug: debug };
-  }
+async function searchCards(prefix) {
+  if (!prefix || prefix.length === 0) return [];
+  var res = await authFetch("/bankcards/search?q=" + encodeURIComponent(prefix));
+  if (!Array.isArray(res)) return [];
+  return res.map(function (item) {
+    return {
+      id: item.playerId,
+      name: item.username,
+      isContact: false,
+      color: colorForId(item.playerId || "?"),
+      cardNumber: item.cardNumber,
+      tier: item.tier
+    };
+  });
 }
 
 async function listContacts() {
-  var token = localStorage.getItem(TOKEN_KEY);
-  try {
-    var res = await fetch(API_BASE + "/contacts/list", { headers: { "Authorization": "Bearer " + token } });
-    var data = await res.json();
-    if (!Array.isArray(data)) return [];
-    return data.map(function (c) {
-      return decorate({ playerId: c.playerId, username: c.username, isContact: true });
-    });
-  } catch (err) {
-    return [];
-  }
+  var res = await authFetch("/contacts/list");
+  if (!Array.isArray(res)) return [];
+  return res.map(function (c) {
+    return decorate({ playerId: c.playerId, username: c.username, isContact: true });
+  });
 }
 
 async function addContact(playerId) {
-  var token = localStorage.getItem(TOKEN_KEY);
-  return fetch(API_BASE + "/contacts/add", {
+  return authFetch("/contacts/add", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ contactPlayerId: playerId })
   });
 }
 
-export { searchUsers, listContacts, addContact, removeContact, getInitials };
+async function removeContact(playerId) {
+  return authFetch("/contacts/remove", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contactPlayerId: playerId })
+  });
+}
+
+export { searchUsers, searchCards, listContacts, addContact, removeContact, getInitials };

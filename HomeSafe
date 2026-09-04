@@ -148,7 +148,7 @@ padding: 1rem;
  width: 110%;
   height: 60px;
   border-radius: 20px;
-  background: #121212;
+  background: #0D0E10;
   color: hsl(70, 80%, 80%);
   display: flex;
   justify-content: center;
@@ -193,7 +193,7 @@ margin-top: 3vh;
 }
 
 .crypto-mini-card {
-  background-color: #121212; 
+  background-color: #0D0E10; 
   color: #FFFFFF; 
   font-family: 'Unbounded', sans-serif; 
   border-radius: 12px; 
@@ -320,7 +320,7 @@ justify-content: center;
 }
   
 .home-history-wrapper {
-  background-color: #121212;
+  background-color: #0D0E10;
   border-radius: 20px;
   padding: 24px;
   font-family: 'Unbounded', sans-serif;
@@ -443,7 +443,7 @@ border: 1px solid #ffffff ;
 /* Плашка кэшбека */
 .home-history-bonus {
   background-color: hsl(70, 80%, 80%);
-  color: #121212; /* Темный текст для читаемости на салатовом фоне */
+  color: #0D0E10; /* Темный текст для читаемости на салатовом фоне */
   font-size: 0.75rem;
   font-weight: 700;
   padding: 4px 8px;

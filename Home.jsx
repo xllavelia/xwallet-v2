@@ -10,11 +10,14 @@ import history1 from './history1.jpg';
 import history2 from './history2.jpg';
 import history3 from './history3.jpg';
 import history4 from './history4.jpg';
-
+import { useBankCards } from "./useBankCards";
+import { useHomeSummary } from "./useHomeSummary";
+// import { useBankCards } from "./useBankCards";
+import { MiniCardThumb } from "./bankCardVisuals";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix hrd"
+// git commit -m "create balance card, and fix!"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -59,10 +62,12 @@ var PROMO_TILES = [
 
 const Home = () => {
   const navigate = useNavigate();
-
+var { data: cardsData } = useBankCards();
 
   var { account } = useAccount();
   var { wallet } = useWalletBalance();
+  var { data: cardsData } = useBankCards();
+  var summary = useHomeSummary();
   var { savings } = useSavings();
   var { card } = useCard();
   var { transfers } = useTransfersRemote();
@@ -378,15 +383,22 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 
 
         <div className="hrd-summary-row">
-          <div className="hrd-summary-card" onClick={() => navigate("/history")}>
-            <span className="hrd-summary-label">All Operations <br /> main wallet</span>
-            <span className="hrd-summary-value">{"$" + wallet.balance.toFixed(2)}</span>
-            <div className="hrd-summary-bar">
-              <span style={{ width: "60%", background: "hsl(61,85%,78%)" }}></span>
-              <span style={{ width: "25%", background: "hsl(280,70%,65%)" }}></span>
-              <span style={{ width: "15%", background: "rgba(255,255,255,0.15)" }}></span>
-            </div>
-          </div>
+         <div className="hrd-summary-card" onClick={() => navigate("/history")}>
+  <span className="hrd-summary-label">All Operations</span>
+  <span className="hrd-summary-value">
+    {summary ? ("" + (summary.totalIncome - summary.totalExpense >= 0 ? "+" : "") + (summary.totalIncome - summary.totalExpense).toFixed(2)) : "..."}
+  </span>
+  {summary && (
+    <div className="hrd-summary-bar">
+      {summary.categories.map(function (cat, idx) {
+        var total = summary.categories.reduce(function (acc, c) { return acc + c.amount; }, 0) || 1;
+        var pct = (cat.amount / total) * 100;
+        var colors = ["hsl(61,85%,78%)", "hsl(280,70%,65%)", "hsl(150,70%,50%)", "hsl(20,80%,60%)", "hsl(210,70%,60%)"];
+        return <span key={cat.key} style={{ width: pct + "%", background: colors[idx % colors.length] }}></span>;
+      })}
+    </div>
+  )}
+</div>
           <div className="hrd-summary-card" onClick={() => navigate("/bonus")}>
             <span className="hrd-summary-label">Vouchers </span>
             <span className="hrd-summary-value">Rewards and vouchers</span>
@@ -397,47 +409,25 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 
        <div className="hrd-accounts-list">
 
-  {/* Main Wallet */}
-  <div className="hrd-account-row" onClick={() => navigate("/history")}>
-    <div className="hrd-account-icon wallet">
-      <WalletIcon />
-    </div>
 
-    <div className="hrd-account-info">
-      <span className="hrd-account-balance">
-        {"$" + wallet.balance.toFixed(2)}
-      </span>
-
-      <span className="hrd-account-name">
-        Main Wallet
-      </span>
-
-      <div className="hrd-account-actions">
-        <button
-          className="hrd-native-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate("/promocode");
-          }}
-        >
-          Promocodes
-        </button>
-
-        <button
-          className="hrd-native-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate("/ads");
-          }}
-        >
-          ads
-        </button>
+<div className="hrd-account-row" onClick={() => navigate("/balancecard")}>
+  <div className="hrd-account-icon wallet"><WalletIcon /></div>
+  <div className="hrd-account-info">
+    <span className="hrd-account-balance">{"$" + wallet.balance.toFixed(2)}</span>
+    <span className="hrd-account-name">
+      {cardsData && cardsData.cards.length > 0 ? (cardsData.cards.length + " Card" + (cardsData.cards.length > 1 ? "s" : "")) : "Open your first card"}
+    </span>
+    {cardsData && cardsData.cards.length > 0 && (
+      <div className="hrd-mini-thumbs-row">
+        {cardsData.cards.map(function (c) {
+          return <MiniCardThumb key={c.id} tier={c.tier} last4={c.cardNumber.slice(-4)} size="sm" />;
+        })}
       </div>
-    </div>
-
-    <div className="hrd-account-chevron">›</div>
+    )}
+   
   </div>
-
+  <div className="hrd-account-chevron">›</div>
+</div>
 
   {/* Savings */}
   <div className="hrd-account-row" onClick={() => navigate("/savings")}>
@@ -455,15 +445,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
       </span>
 
       <div className="hrd-account-actions">
-        <button
-          className="hrd-native-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate("/prime");
-          }}
-        >
-          Prime subscription
-        </button>
+     
       </div>
     </div>
 
@@ -487,15 +469,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
       </span>
 
       <div className="hrd-account-actions">
-        <button
-          className="hrd-native-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate("/battlepass");
-          }}
-        >
-          Battle pass
-        </button>
+     
       </div>
     </div>
 

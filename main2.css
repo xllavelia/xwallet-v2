@@ -6,8 +6,8 @@
    DESIGN TOKENS
 ═══════════════════════════════════════ */
 :root {
-  --g-bg:        #121212;
-  --g-card:      #1a1a1a;
+  --g-bg:        #0D0E10;
+  --g-card:      #1c1c1e;
   --g-elevated:  #1a1a24;
   --g-border:    rgba(255,255,255,0.06);
   --g-border-hi: rgba(255,255,255,0.11);
@@ -19,7 +19,7 @@
   --g-red:       #ff4466;
   --g-green-dim: rgba(0,212,170,0.12);
   --g-red-dim:   rgba(255,68,102,0.12);
-  --bg-dark: #1a1a1a;
+  --bg-dark: #1c1c1e;
 }
 
 .apple-refresh {
@@ -207,7 +207,7 @@
 
   position: relative;
   overflow: hidden;
-  background: #1a1a1a;
+  background: #1c1c1e;
   border-radius: 16px;
   padding: 18px;
   margin-bottom: 8px;
@@ -269,7 +269,7 @@
 .et-pos-modal {
   z-index: 11;
   width: 100%;
-  background: #121212;
+  background: #0D0E10;
   padding: 8px 20px 15px;
 
   border-top: 1px solid var(--g-border-hi);
@@ -330,7 +330,7 @@ background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color:var(--xlavelia);
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 .et-pma-dup:hover { border: 1px solidvar(--xlavelia); }
@@ -343,7 +343,7 @@ background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color:var(--xlavelia);
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -376,7 +376,7 @@ background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color:var(--xlavelia);
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 14px;
   padding: 18px;
@@ -413,7 +413,7 @@ background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color:white;
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -468,7 +468,7 @@ background: rgba(255, 255, 255, 0.05);
   font-size: 9px; font-weight: 800;
   padding: 2px 5px; border-radius: 10px; line-height: 1; min-width: 16px; text-align: center;
 }
-.ht-trade-row { cursor: pointer; border-radius: 10px; background-color: #1a1a1a; border: none;}
+.ht-trade-row { cursor: pointer; border-radius: 10px; background-color: #1c1c1e; border: none;}
 .ht-active-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .ht-lev-tag    { font-size: 10px; color: var(--g-gold); font-weight: 700; }
 
@@ -536,7 +536,7 @@ background: rgba(255, 255, 255, 0.05);
 ═══════════════════════════════════════ */
 .voucher-activate-btn {
   width: calc(100% - 32px); margin: 12px 16px 0;
-  padding: 13px; background-color: #1a1a1a;
+  padding: 13px; background-color: #1c1c1e;
   border: 1px solid var(--xlavelia); border-radius: 12px;
   color: var(--xlavelia); font-size: 13px; font-weight: 800;
   letter-spacing: 0.1em; cursor: pointer; transition: background 0.2s;
@@ -889,8 +889,8 @@ background: rgba(255, 255, 255, 0.05);
    ══════════════════════════════════ */
 
 :root {
-  --g-bg:       #121212;
-  --g-card:     #1a1a1a;
+  --g-bg:       #0D0E10;
+  --g-card:     #1c1c1e;
   --g-elevated: #222222;
   --g-border:   rgba(255, 255, 255, 0.06);
   --g-border-2: rgba(255, 255, 255, 0.10);
@@ -962,7 +962,7 @@ background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color:white;
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -1124,7 +1124,7 @@ background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color:var(--xlavelia);
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -1169,7 +1169,7 @@ background: rgba(255, 255, 255, 0.05);
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 10px;
   color: var(--g-muted);
@@ -1185,7 +1185,7 @@ background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color:var(--xlavelia);
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 10px;
   color: var(--g-gold);
@@ -1201,7 +1201,7 @@ background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color:var(--xlavelia);
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 10px;
   color: var(--g-red);
@@ -1222,7 +1222,7 @@ background: rgba(255, 255, 255, 0.05);
 background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  /* border: 1px solid #121212;*/
+  /* border: 1px solid #0D0E10;*/
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -1266,7 +1266,7 @@ background: rgba(255, 255, 255, 0.05);
 
 
 .SendContent {
-  background: #121212;
+  background: #0D0E10;
   min-height: 90vh;
   font-family: 'Unbounded', sans-serif;
   color: #ffffff;
@@ -1364,7 +1364,7 @@ background: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #1a1a1a;
+  background: #1c1c1e;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 18px;
   padding: 20px 18px;
@@ -1425,7 +1425,7 @@ background: rgba(255, 255, 255, 0.05);
   gap: 12px;
   padding: 12px;
   border-radius: 16px;
-  background: #1a1a1a;
+  background: #1c1c1e;
   font-family: 'Unbounded', sans-serif;
   border: 1px solid rgba(255,255,255,0.06);
   cursor: pointer;
@@ -1496,7 +1496,7 @@ background: rgba(255, 255, 255, 0.05);
 }
 .snd-next-btn.active:active { transform: scale(0.97); }
 .snd-next-btn.disabled {
-  background: #1a1a1a;
+  background: #1c1c1e;
   color: rgba(255,255,255,0.25);
   cursor: not-allowed;
 }
@@ -1612,7 +1612,7 @@ background: rgba(255, 255, 255, 0.05);
   gap: 12px;
 }
 .snd-numpad-grid button {
-  background: #1a1a1a;
+  background: #1c1c1e;
   border: 1px solid rgba(255,255,255,0.05);
   border-radius: 16px;
   color: #fff;
@@ -1633,7 +1633,7 @@ background: rgba(255, 255, 255, 0.05);
 .snd-swipe-container { margin-top: 2rem; padding-bottom: 1vh; }
 .snd-swipe-track {
   position: relative;
-  background: #1a1a1a;
+  background: #1c1c1e;
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 40px;
   height: 72px;
@@ -2010,7 +2010,7 @@ transition: 0.25s ease;
 }
 
 .is-unlocked .reward-card {
-border: px solid #1a1a1a;
+border: px solid #1c1c1e;
 background-color: #0a0a0a;
 }
 
@@ -2018,7 +2018,7 @@ background-color: #0a0a0a;
 
 
 .reward-card.is-claimed {
-background: #1a1a1a;
+background: #1c1c1e;
 border-color: var(--xlavelia);
 }
 
@@ -2402,7 +2402,7 @@ padding: 0rem 1rem 0rem;
   width: 90%;
   height: 190px;
   border-radius: 16px;
-background-color: #1a1a1a;
+background-color: #1c1c1e;
   overflow: hidden;
   /* color: white; */
   font-family: 'Unbounded', sans-serif;
@@ -2415,7 +2415,7 @@ background-color: #1a1a1a;
   width: 90%;
   height: 90px;
   border-radius: 16px;
-background-color: #1a1a1a;
+background-color: #1c1c1e;
   overflow: hidden;
   /* color: white; */
   font-family: 'Unbounded', sans-serif;
@@ -2563,7 +2563,7 @@ background-color: #1a1a1a;
 
 
 .VaultContent {
-  background: #121212;
+  background: #0D0E10;
   min-height: 100vh;
   color: #fff;
   font-family: 'Unbounded', sans-serif;
@@ -2696,7 +2696,7 @@ background-color: #1a1a1a;
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #1a1a1a;
+  background: #1c1c1e;
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 16px;
   padding: 22px 14px;
@@ -3468,7 +3468,7 @@ background-color: #1a1a1a;
   padding: 5px 17px;
   /* border: 1px solid rgba(255, 255, 255, 0.07); */
   border-radius: 20px;
-  background: #1a1a1a;
+  background: #1c1c1e;
   /* background: rgba(255, 255, 255, 0.035); */
 }
 
@@ -3510,7 +3510,7 @@ background-color: #1a1a1a;
 .signaturePreviewCard {
   min-height: 270px;
   padding: 28px;
- background-color: #121212;
+ background-color: #0D0E10;
 }
 
 .signatureContent {
@@ -3674,7 +3674,7 @@ background-color: #1a1a1a;
   position: relative;
   width: 100%;
   height: 85vh;
-  background-color: #121212;
+  background-color: #0D0E10;
   overflow: hidden;
   font-family: "Unbounded", sans-serif;
   color: var(--text-main);

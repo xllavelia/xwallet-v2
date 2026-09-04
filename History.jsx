@@ -5,19 +5,13 @@ import { useTransfersRemote } from "./useTransfers";
 import { useCardHistory } from "./useCardHistory";
 import { useSavings } from "./useSavings";
 import { Glyph, groupByDate } from "./HistoryShared";
+import { useHomeSummary } from "./useHomeSummary";
 
 function safeNum(val) {
   var n = parseFloat(val);
   return isNaN(n) ? 0 : n;
 }
 
-function coinGlyph(asset) {
-  if (asset === "BTC") return "₿";
-  if (asset === "ETH") return "Ξ";
-  if (asset === "SOL") return "◎";
-  if (asset === "TON") return "◆";
-  return "$";
-}
 function cardEntryLabel(item) {
   if (item.operationType === "buy") return "Bought " + item.toAsset;
   if (item.operationType === "sell") return "Sold " + item.fromAsset;
