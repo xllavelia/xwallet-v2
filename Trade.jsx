@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { createChart, CandlestickSeries, HistogramSeries } from 'lightweight-charts';
 import { useWalletBalance } from './useWallet';
 import { usePositionsRemote, closePosition } from './usePositions';
+import { useCardFunding } from "./useCardFunding";
 
 function safeNum(val) {
   var n = parseFloat(val);
@@ -27,8 +28,9 @@ const Trade = () => {
   const [isMoreOpen,   setIsMoreOpen]   = useState(false);
   const [activePosId,  setActivePosId]  = useState(null);
 
-  const { wallet } = useWalletBalance();
-  const balance = wallet.balance;
+const { wallet } = useWalletBalance();
+const { activeCard } = useCardFunding();
+const balance = activeCard ? activeCard.balance : wallet.balance;
   const { positions, refresh } = usePositionsRemote();
 
   const coinStats = {
@@ -94,19 +96,22 @@ const Trade = () => {
   var modalTypeClass = activePanel ? ('et-pos-badge ' + activePanel.type) : '';
   var modalAcStr     = activePanel && activePanel.autoClose && activePanel.autoCloseTarget
     ? 'TP +' + activePanel.autoCloseTarget + '%' : 'Off';
+
 function handleClose(posId) {
   if (numericPrice <= 0) return;
   closePosition(posId, numericPrice).then(function(result) {
     refresh();
-    if (result && result.xpAwarded > 0) {
-      setXpToast('+' + result.xpAwarded + ' Battle Pass XP');
+    var messages = [];
+    if (result && result.xpAwarded > 0) messages.push('+' + result.xpAwarded + ' XP');
+    if (result && result.cashbackAwarded > 0) messages.push('+$' + result.cashbackAwarded.toFixed(2) + ' cashback');
+    if (messages.length > 0) {
+      setXpToast(messages.join(' · '));
       setTimeout(function() { setXpToast(null); }, 2400);
     }
   });
   setActivePosId(null);
 }
 
-  function roadHome()          { navigate(-1); }
   function handleTimeframe(tf) { setTimeframe(tf); }
 
   function navigateLong() {
@@ -233,7 +238,8 @@ function handleClose(posId) {
           </div>
           <div className="et-balance-chip">
             <span className="et-balance-label">Balance</span>
-            <span className="et-balance-val">{balanceStr}</span>
+            <span className="et-balance-label">{activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card") : "Balance"}</span>
+            {/* <span className="et-balance-val">{balanceStr}</span> */}
           </div>
         </div>
 

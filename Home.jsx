@@ -6,10 +6,10 @@ import { useSavings } from "./useSavings";
 import { useCard } from "./useCard";
 import { useTransfersRemote } from "./useTransfers";
 import { Glyph } from "./HistoryShared";
-import history1 from './history1.jpg';
-import history2 from './history2.jpg';
-import history3 from './history3.jpg';
-import history4 from './history4.jpg';
+// import history1 from './history1.jpg';
+// import history2 from './history2.jpg';
+// import history3 from './history3.jpg';
+// import history4 from './history4.jpg';
 import { useBankCards } from "./useBankCards";
 import { useHomeSummary } from "./useHomeSummary";
 // import { useBankCards } from "./useBankCards";
@@ -17,7 +17,7 @@ import { MiniCardThumb } from "./bankCardVisuals";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create balance card, and fix!"
+// git commit -m "redesign home and card"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -53,16 +53,10 @@ function GiftIcon() {
   return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8l9-4 9 4-9 4-9-4Z"></path><path d="M3 8v9l9 4 9-4V8"></path><line x1="12" y1="12" x2="12" y2="21"></line></svg>);
 }
 
-var PROMO_TILES = [
-  { id: "battlepass", title: "Battle Pass", sub: "Season rewards", path: "/battlepass", cls: "tile-a" },
-  { id: "prime", title: "Prime", sub: "Membership", path: "/prime", cls: "tile-b" },
-  { id: "referral", title: "Referrals", sub: "Earn commission", path: "/referral", cls: "tile-c" },
-  { id: "promo", title: "Promo Code", sub: "Redeem a code", path: "/promocode", cls: "tile-d" }
-];
+
 
 const Home = () => {
   const navigate = useNavigate();
-var { data: cardsData } = useBankCards();
 
   var { account } = useAccount();
   var { wallet } = useWalletBalance();
@@ -88,11 +82,11 @@ var { data: cardsData } = useBankCards();
     title: '',
     layout: 'top-left',
         text: '',
-        image:  history1,
+        // image:  history1,
 
     slides: [
       {
-        image:  history1,
+        // image:  history1,
         title: '',
         text: '',
       },
@@ -103,15 +97,15 @@ var { data: cardsData } = useBankCards();
     title: '',
     layout: 'bottom-right',
         text: '',
-        image:  history2,
+        // image:  history2,
     slides: [
       {
-        image: history2,
+        // image: history2,
         title: '',
         text: '',
       },
       {
-        image: history2,
+        // image: history2,
         title: '',
         text: '',
       },
@@ -122,11 +116,11 @@ var { data: cardsData } = useBankCards();
     title: '',
     layout: 'center-right',
         text: '',
-        image:  history3,
+        // image:  history3,
 
     slides: [
       {
-        image: history3,
+        // image: history3,
         title: '',
         text: '',
       },
@@ -137,11 +131,11 @@ var { data: cardsData } = useBankCards();
     title: '',
     layout: 'top-left',
         text: '',
-        image:  history4,
+        // image:  history4,
 
     slides: [
       {
-        image: history4,
+        // image: history4,
         title: '',
         text: '',
       },
@@ -311,8 +305,40 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
           <span>Search modules and features</span>
         </div>
 
-      
+{cardsData && cardsData.cards.length > 0 && (
+  
+  <div
+    className="hrd-cards-stories"
+    onClick={() => navigate("/balancecard")}
+  >
+     <div
+      className="hrd-story-add"
+      onClick={(e) => {
+        e.stopPropagation();
+        navigate("/balancecard");
+      }}
+    >
+      <span>+</span>
+    </div>
+    {cardsData.cards.map(function (c) {
+      return (
+        <div key={c.id} className="hrd-story-card">
+          <MiniCardThumb
+            tier={c.tier}
+            last4={c.cardNumber.slice(-4)}
+            size="md"
+          />
 
+  
+        </div>
+      );
+    })}
+
+   
+  </div>
+)}
+
+{/* 
  <div className="stories-root">
       <div className="stories-scroll">
         {STORIES.map(function (story, index) {
@@ -378,15 +404,17 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
           </div>
         </div>
       )}
-    </div>
+    </div> */}
 
 
 
         <div className="hrd-summary-row">
          <div className="hrd-summary-card" onClick={() => navigate("/history")}>
-  <span className="hrd-summary-label">All Operations</span>
+  <span className="hrd-summary-value">Activity</span>
+  <span className="hrd-summary-label">View all</span>
+
   <span className="hrd-summary-value">
-    {summary ? ("" + (summary.totalIncome - summary.totalExpense >= 0 ? "+" : "") + (summary.totalIncome - summary.totalExpense).toFixed(2)) : "..."}
+    {summary ? ("" + (summary.totalIncome - summary.totalExpense >= 0 ? "" : "") + (summary.totalIncome - summary.totalExpense).toFixed(2)) : "..."}
   </span>
   {summary && (
     <div className="hrd-summary-bar">
@@ -411,16 +439,18 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 
 
 <div className="hrd-account-row" onClick={() => navigate("/balancecard")}>
-  <div className="hrd-account-icon wallet"><WalletIcon /></div>
+  <div className="hrd-account-icon wallet">
+      <CardIcon />
+  </div>
   <div className="hrd-account-info">
     <span className="hrd-account-balance">{"$" + wallet.balance.toFixed(2)}</span>
     <span className="hrd-account-name">
-      {cardsData && cardsData.cards.length > 0 ? (cardsData.cards.length + " Card" + (cardsData.cards.length > 1 ? "s" : "")) : "Open your first card"}
+      {cardsData && cardsData.cards.length > 0 ? ("opened " + cardsData.cards.length + " Card" + (cardsData.cards.length > 1 ? "s" : "")) : "Open your first card"}
     </span>
     {cardsData && cardsData.cards.length > 0 && (
       <div className="hrd-mini-thumbs-row">
         {cardsData.cards.map(function (c) {
-          return <MiniCardThumb key={c.id} tier={c.tier} last4={c.cardNumber.slice(-4)} size="sm" />;
+          // return <MiniCardThumb key={c.id} tier={c.tier} last4={c.cardNumber.slice(-4)} size="sm" />;
         })}
       </div>
     )}
@@ -431,7 +461,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 
   {/* Savings */}
   <div className="hrd-account-row" onClick={() => navigate("/savings")}>
-    <div className="hrd-account-icon savings">
+    <div className="hrd-account-icon wallet">
       <SavingsIcon />
     </div>
 
@@ -455,7 +485,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 
   {/* Crypto Card */}
   <div className="hrd-account-row" onClick={() => navigate("/card")}>
-    <div className="hrd-account-icon card">
+    <div className="hrd-account-icon wallet">
       <CardIcon />
     </div>
 

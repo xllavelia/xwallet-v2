@@ -2,21 +2,16 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBankCards, openCard, topUpCard, selectActiveCard, closeCard } from "./useBankCards";
 import { useWalletBalance } from "./useWallet";
-import { TIER_COLORS, TIER_NAMES, MiniCardThumb } from "./bankCardVisuals";
+import { TIER_COLORS, TIER_NAMES, MiniCardThumb, CardPattern } from "./bankCardVisuals";
 
 function PlusIcon() {
   return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>);
 }
-function SettingsIcon() {
-  return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>);
-}
-
 function HeroCard(props) {
   var tier = props.tier;
   var color = TIER_COLORS[tier] || "#5a5a5a";
   return (
     <div className={"bcx-hero-card bcx-tier-" + tier}>
-      <div className="bcx-hero-glow" style={{ background: color }}></div>
       <div className="bcx-hero-top">
         <span className="bcx-hero-brand">xwallet</span>
         <span className="bcx-hero-tier">{TIER_NAMES[tier]}</span>
@@ -74,6 +69,19 @@ const BalanceCard = () => {
     return function () { observer.disconnect(); };
   }, [data]);
 
+
+  
+useEffect(function () {
+  if (!data || data.cards.length === 0) return;
+  var container = carouselRef.current;
+  var firstCard = cardRefs.current[0];
+  if (!container || !firstCard) return;
+  requestAnimationFrame(function () {
+    var targetLeft = firstCard.offsetLeft - (container.clientWidth - firstCard.offsetWidth) / 2;
+    container.scrollTo({ left: Math.max(0, targetLeft), behavior: "auto" });
+  });
+}, [data && data.cards.length]);
+
   if (!data) return <div className="BalanceCardContent"></div>;
 
   var cards = data.cards;
@@ -129,7 +137,11 @@ const BalanceCard = () => {
         await selectActiveCard(actionSheetCard.id);
         refresh();
       }
-      navigate("/send");
+      
+     navigate(-1);
+    setTimeout(function () {
+      navigate('/send');
+    }, 20);
     } catch (err) {
       pushStatus(err.message, false);
     } finally {
@@ -175,7 +187,7 @@ const BalanceCard = () => {
 
   return (
     <div className="BalanceCardContent">
-      <div className="Road-Home" onClick={() => navigate(-1)}></div>
+     
       {statusMsg && <div className={"bcx-toast " + (statusOk ? "ok" : "err")}>{statusMsg}</div>}
 
       <div className="bcx-page">
@@ -221,24 +233,9 @@ const BalanceCard = () => {
           </div>
         )}
 
-        <div className="bcx-quick-actions">
-          <div className="bcx-quick-tile" onClick={() => setCatalogOpen(true)}>
-            <div className="bcx-quick-icon"><PlusIcon /></div>
-            <div>
-              <span className="bcx-quick-title">Open New Card</span>
-              <span className="bcx-quick-sub">Up to {data.maxCards} at once</span>
-            </div>
-          </div>
-          <div className="bcx-quick-tile" onClick={openActionsForFocused}>
-            <div className="bcx-quick-icon"><SettingsIcon /></div>
-            <div>
-              <span className="bcx-quick-title">Manage Card</span>
-              <span className="bcx-quick-sub">{focusedCard ? TIER_NAMES[focusedCard.tier] : "Top up, send, close"}</span>
-            </div>
-          </div>
-        </div>
+        
 
-        <div className="bcx-section-title">Overview <span className="bcx-section-sub">This Month</span></div>
+        <div className="bcx-section-title">This Month</div>
         <div className="bcx-stats-grid">
           <div className="bcx-stat-cell">
             <span className="bcx-stat-label">Total Balance</span>
@@ -246,7 +243,7 @@ const BalanceCard = () => {
           </div>
           <div className="bcx-stat-cell">
             <span className="bcx-stat-label">Cashback Earned</span>
-            <span className="bcx-stat-value pos">{"+$" + data.totalCashbackThisMonth}</span>
+            <span className="bcx-stat-value pos">{"$" + data.totalCashbackThisMonth.toFixed(2)}</span>
           </div>
           <div className="bcx-stat-cell">
             <span className="bcx-stat-label">Open Cards</span>
@@ -280,9 +277,7 @@ const BalanceCard = () => {
                   </div>
                 );
               })}
-              <div className="bcx-list-row bcx-list-add" onClick={() => setCatalogOpen(true)}>
-                <PlusIcon /><span>Open New Card</span>
-              </div>
+             
             </div>
           </>
         )}
@@ -329,16 +324,41 @@ const BalanceCard = () => {
               <HeroCard tier={actionSheetCard.tier} number={actionSheetCard.cardNumber} balance={actionSheetCard.balance} active={actionSheetCard.isActiveForTrading} />
             </div>
 
-            {!topUpOpen && !closeConfirm && (
-              <div className="bcx-action-list">
-                <button className="bcx-action-row" onClick={() => setTopUpOpen(true)}>Top Up</button>
-                <button className="bcx-action-row" disabled={isBusy} onClick={handleSendFromCard}>Send</button>
-                <button className="bcx-action-row" disabled={isBusy || actionSheetCard.isActiveForTrading} onClick={handleSelectActive}>
-                  {actionSheetCard.isActiveForTrading ? "Already active for trading" : "Select for Trading"}
-                </button>
-                <button className="bcx-action-row danger" onClick={() => setCloseConfirm(true)}>Close Card</button>
-              </div>
-            )}
+         {!topUpOpen && !closeConfirm && (
+  <div className="bcx-action-list">
+    <button
+      className="bcx-action-row"
+      onClick={() => setTopUpOpen(true)}
+    >
+      Top Up
+    </button>
+
+    <button
+      className="bcx-action-row"
+      disabled={isBusy}
+      onClick={handleSendFromCard}
+    >
+      Send
+    </button>
+
+    <button
+      className="bcx-action-row"
+      disabled={isBusy || actionSheetCard.isActiveForTrading}
+      onClick={handleSelectActive}
+    >
+      {actionSheetCard.isActiveForTrading
+        ? "Already active for trading"
+        : "Select for Trading"}
+    </button>
+
+    <button
+      className="bcx-action-row danger"
+      onClick={() => setCloseConfirm(true)}
+    >
+      Close Card
+    </button>
+  </div>
+)}
 
             {topUpOpen && (
               <div className="bcx-topup-panel">

@@ -467,6 +467,30 @@ return (
       )}
 
 
+  <section className="signaturePreviewCard">
+          <div className="signatureGlow"></div>
+
+          <div className="signatureContent">
+            <span className="ccEyebrow">THE XWALLET SIGNATURE</span>
+
+            <h2>
+              There is more
+              <br />
+              Behind the wallet.
+            </h2>
+
+            <p>Explore the symbol that defines the xwallet universe.</p>
+
+            <button className="signatureButton" onClick={() => navigate("/emblem")}>
+              <span>View the emblem</span>
+              <b></b>
+            </button>
+          </div>
+
+          <div className="signatureOrbital orbitalOne"></div>
+          <div className="signatureOrbital orbitalTwo"></div>
+        </section>
+
       {/* FOOTER */}
       <footer className="settings-footer">
 
@@ -478,6 +502,8 @@ return (
 
         <div className="app-version-info">
           <span className="stx-brand">xwallet</span>
+          <span className="stx-brand">lavx dev</span>
+
           <span className="version-number">v.1.0.0</span>
         </div>
 

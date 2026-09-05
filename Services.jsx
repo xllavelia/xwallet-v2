@@ -12,7 +12,9 @@ var MODULES = [
   { name: "Battle Pass", desc: "Season rewards & XDrop cases", path: "/battlepass" },
   { name: "Prime", desc: "Membership tiers & LAVX", path: "/prime" },
   { name: "Promo Code", desc: "Redeem a code", path: "/promocode" },
-  { name: "Profile", desc: "Account, security, settings", path: "/profile" }
+  { name: "Profile", desc: "Account, security, settings", path: "/profile" },
+  { name: "Card", desc: "Tansfers, perks and bonuses", path: "/balancecard" },
+
 ];
 
 function SearchIcon() {
