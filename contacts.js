@@ -44,7 +44,8 @@ async function searchCards(prefix) {
       isContact: false,
       color: colorForId(item.playerId || "?"),
       cardNumber: item.cardNumber,
-      tier: item.tier
+      tier: item.tier,
+      isOwnCard: item.isOwnCard
     };
   });
 }

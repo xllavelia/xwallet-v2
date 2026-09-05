@@ -1369,7 +1369,7 @@ font-family: 'Unbounded', sans-serif;
 .bcx-hero-chip-row { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.3); }
 .bcx-hero-chip { width: 34px; height: 26px; border-radius: 6px; background: var(--xlavelia); opacity: 0.85; }
 
-.bcx-hero-number { position: relative; z-index: 1; font-family: monospace; font-size: 17px; letter-spacing: 0.15em; color: rgba(255,255,255,0.85); }
+.bcx-hero-number { position: relative; z-index: 1; font-family: monospace; font-size: 15px; letter-spacing: 0.15em; color: rgba(255,255,255,0.85); }
 
 .bcx-hero-bottom { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-end; }
 .bcx-hero-label { display: block; font-size: 9.5px; color: rgba(255,255,255,0.35); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
@@ -1627,3 +1627,4 @@ font-family: 'Unbounded', sans-serif;
 
 .cpat { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .mct-dark { position: relative; overflow: hidden; }
+.snd-own-card-tag { color: rgba(255,255,255,0.3); font-weight: 500; }

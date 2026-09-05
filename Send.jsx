@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authFetch } from "./apiClient";
 import { useWalletBalance } from "./useWallet";
+import { useCardFunding } from "./useCardFunding";
+
 import { searchUsers, searchCards, listContacts, addContact, removeContact, getInitials } from "./contacts";
 
 const Send = () => {
   const navigate = useNavigate();
   const trackRef = useRef(null);
-var { activeCard } = useCardFunding();
+  var { activeCard } = useCardFunding();
   var { wallet, refresh: refreshWallet } = useWalletBalance();
   var balance = wallet.balance;
 
@@ -257,7 +259,11 @@ var { activeCard } = useCardFunding();
                   <div className="snd-contact-avatar" style={{ backgroundColor: contact.color }}>{getInitials(contact.name)}</div>
                   <div className="snd-contact-info">
                     <span className="snd-contact-name">{contact.name}</span>
-                    <span className="snd-contact-id">{contact.cardNumber ? ("···· " + contact.cardNumber.slice(-4)) : contact.id}</span>
+                    {/* <span className="snd-contact-id">{contact.cardNumber ? ("···· " + contact.cardNumber.slice(-4)) : contact.id}</span> */}
+                  <span className="snd-contact-id">
+  {contact.cardNumber ? ("···· " + contact.cardNumber.slice(-4)) : contact.id}
+  {contact.isOwnCard && <span className="snd-own-card-tag"> · Yours</span>}
+</span>
                   </div>
                   {mode === "id" && (
                     <button
@@ -311,7 +317,9 @@ var { activeCard } = useCardFunding();
           </div>
 
           {statusMsg && <div className={statusClass}>{statusMsg}</div>}
+              <div className="snd-balance-chip">
 {activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card · $" + activeCard.balance.toFixed(2)) : ("Wallet · $" + balance.toFixed(2))}
+              </div>
           <div className="snd-numpad-grid-parent">
             <div className="snd-numpad-grid">
               <button onClick={() => handleNumpad("1")}>1</button>

@@ -17,7 +17,7 @@ import { MiniCardThumb } from "./bankCardVisuals";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "redesign home and card"
+// git commit -m "fix send"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -414,6 +414,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 
         <div className="hrd-summary-row">
          <div className="hrd-summary-card" onClick={() => navigate("/history")}>
+
   <span className="hrd-summary-value">Activity</span>
   <span className="hrd-summary-label">View all</span>
 
