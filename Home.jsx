@@ -26,6 +26,10 @@ import { MiniCardThumb } from "./bankCardVisuals";
 // git commit --amend --no-edit
 // git push --force-with-lease
 
+// git reset --soft HEAD~1
+// git add .
+// git commit --amend --no-edit
+
 // git push 
 // rm -rf .git
 // git init
