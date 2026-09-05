@@ -7,7 +7,7 @@ import { searchUsers, searchCards, listContacts, addContact, removeContact, getI
 const Send = () => {
   const navigate = useNavigate();
   const trackRef = useRef(null);
-
+var { activeCard } = useCardFunding();
   var { wallet, refresh: refreshWallet } = useWalletBalance();
   var balance = wallet.balance;
 
@@ -311,8 +311,7 @@ const Send = () => {
           </div>
 
           {statusMsg && <div className={statusClass}>{statusMsg}</div>}
-          <div className="snd-balance-chip">{balanceDisplay}</div>
-
+{activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card · $" + activeCard.balance.toFixed(2)) : ("Wallet · $" + balance.toFixed(2))}
           <div className="snd-numpad-grid-parent">
             <div className="snd-numpad-grid">
               <button onClick={() => handleNumpad("1")}>1</button>

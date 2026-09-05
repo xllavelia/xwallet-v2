@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWalletBalance } from './useWallet';
 import { openPosition } from './usePositions';
+import { useCardFunding } from "./useCardFunding";
 
 const Order = () => {
   const navigate = useNavigate();
@@ -16,10 +17,11 @@ const Order = () => {
   var prefillAmount = stateData.amount ? stateData.amount.toString() : "10";
 
   var currentPrice = parseFloat(rawPrice.toString().replace(/,/g, '')) || 69035;
-
-  var { wallet } = useWalletBalance();
+var { wallet } = useWalletBalance();
+var { activeCard } = useCardFunding();
+var balance = activeCard ? activeCard.balance : wallet.balance;
   var liveFeeRate = wallet.feeRatePercent || 1.0;
-  var balance = wallet.balance;
+  // var balance = wallet.balance;
 
   const [amountInput, setAmountInput] = useState(prefillAmount);
   const [leverage, setLeverage] = useState(prefillLeverage);

@@ -57,13 +57,13 @@ function RootGate() {
   }, [retryTick]);
 
   if (status === "checking") {
-    return <div style={{ background: "#0D0E10", minHeight: "100vh" }}></div>;
+    return <div style={{ background: "#101010", minHeight: "100vh" }}></div>;
   }
   if (status === "authed") {
     return <Home />;
   }
   return (
-    <Suspense fallback={<div style={{ background: "#0D0E10", minHeight: "100vh" }}></div>}>
+    <Suspense fallback={<div style={{ background: "#101010", minHeight: "100vh" }}></div>}>
       <Welcome />
     </Suspense>
   );
