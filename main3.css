@@ -2451,49 +2451,55 @@ display: flex;
 
 
 
+
 .bnav-wrap {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 500;
   display: flex; justify-content: center;
-  padding: 0 16px calc(14px + env(safe-area-inset-bottom));
+  padding: 0 16px calc(10px + env(safe-area-inset-bottom));
   pointer-events: none;
-  /* opacity: 1; transform: translateY(0);  */
-  /* animation: bnav-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; */
+  /* animation: bnav-enter 0.4s cubic-bezier(0.32, 0.72, 0, 1) both; */
 }
-@keyframes bnav-enter {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+
 
 .bnav-pill {
   position: relative; pointer-events: auto; display: flex;
-  background: #1c1c1e; backdrop-filter: blur(7px);
-  border: 1px solid rgba(255,255,255,0.08); border-radius: 22px;
-  padding: 8px; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  max-width: 70%; width: 100%;
+  background: rgba(22,22,26,0.72);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: 26px;
+  padding: 6px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+  max-width: 420px; width: 100%;
 }
 
-.bnav-indicator {
-  position: absolute; top: 8px; bottom: 8px; left: 0;
-  /* background: hsla(61, 85%, 78%, 0.1); */
-  /* border: 1px solid hsla(61, 85%, 78%, 0.18); */
-  border-radius: 14px;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+.bnav-indicator-track {
+  position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px;
   pointer-events: none; z-index: 0;
+}
+.bnav-indicator {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: calc(97% - 0px);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
 }
 
 .bnav-item {
   position: relative; z-index: 1; flex: 1;
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  padding: 6px 4px; border: none; background: transparent; border-radius: 14px;
-  color: rgba(255,255,255,0.4); cursor: pointer;
-  transition: color 0.25s ease;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 9px 4px 8px; border: none; background: transparent; border-radius: 20px;
+  color: rgba(255,255,255,0.42); cursor: pointer;
+  transition: color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
 }
-.bnav-item span { font-family: 'Unbounded', sans-serif; font-size: 9.5px; font-weight: 700; transition: color 0.25s ease; }
-.bnav-item.active { color: var(--xlavelia); }
-.bnav-item svg { transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
-.bnav-item.active svg { transform: translateY(-1px) scale(1.05); }
-.bnav-item:active { transform: scale(0.94); }
-
+.bnav-item span {  font-family: 'Unbounded', sans-serif;  font-size: 10px; font-weight: 600; letter-spacing: 0.01em; transition: color 0.3s ease, opacity 0.3s ease; }
+.bnav-item.active { color: #fff; }
+.bnav-item.active span { color: white; font-weight: 700; }
+.bnav-item svg { transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1); }
+.bnav-item.active svg { transform: translateY(-0.5px); }
+.bnav-item:active { transform: scale(0.9); }
 
 
 /* ── Filter pills ─────────────────────────────────────────── */
@@ -2513,7 +2519,8 @@ display: flex;
 .hsum-value { font-family: 'Unbounded', sans-serif; font-size: 19px; font-weight: 800; color: #fff; }
 .hsum-value-pos { color: #00d4aa; }
 .hsum-label { font-size: 11px; color: rgba(255,255,255,0.4); }
-.hsum-bar { display: flex; height: 5px; border-radius: 5px; overflow: hidden; margin-top: 4px; }
+.hsum-bar { display: flex; height: 12px; border-radius: 20px; overflow: hidden; margin-top: 4px; }
+.hsum-bar span { transition: width 0.4s ease; }
 
 /* ── Grouped date sections ────────────────────────────────── */
 .hgrp { display: flex; flex-direction: column; gap: 8px; margin: 0 4px;}

@@ -58,7 +58,7 @@ function computeMonthTotals(closedPositions, transfers, cardHistory, savingsHist
 
 const History = () => {
   const navigate = useNavigate();
-
+var summary = useHomeSummary();
   const { positions, refresh: refreshOpen } = usePositionsRemote();
   const { closedPositions } = useClosedPositionsRemote();
   const { transfers } = useTransfersRemote();
@@ -304,6 +304,9 @@ const History = () => {
               <div className="ht-detail-row"><span className="ht-dl">Duration</span><span className="ht-dv">{formatDuration(sel.openedAt, sel.closedAt)}</span></div>
               {sel.tradeId && <div className="ht-detail-row"><span className="ht-dl">Trade ID</span><span className="ht-dv et-pmv-id">{sel.tradeId}</span></div>}
               {sel.xpAwarded > 0 && <div className="ht-detail-row"><span className="ht-dl">Battle Pass XP</span><span className="ht-dv" style={{ color: "var(--xlavelia)" }}>{"+" + sel.xpAwarded}</span></div>}
+              {sel.cashbackAwarded > 0 && (
+              <div className="ht-detail-row"><span className="ht-dl">Cashback</span><span className="ht-dv" style={{ color: "#00d4aa" }}>{"+$" + sel.cashbackAwarded.toFixed(2)}</span></div>
+              )}
             </div>
             <div className="ht-detail-divider"></div>
             <div className="ht-detail-dates">
@@ -381,25 +384,31 @@ const History = () => {
 
         <div className="history-content" style={{ display: "flex", flexDirection: "column", gap: 18, padding: "0 4px 100px" }}>
 
-          <div className="hsum-row">
-            <div className="hsum-card">
-              <span className="hsum-value">{"$" + monthTotals.spend.toFixed(2)}</span>
-              <span className="hsum-label">Spent this month</span>
-              <div className="hsum-bar">
-                <span style={{ width: "50%", background: "#ff4466" }}></span>
-                <span style={{ width: "30%", background: "hsl(61,85%,78%)" }}></span>
-                <span style={{ width: "20%", background: "rgba(255,255,255,0.12)" }}></span>
-              </div>
-            </div>
-            <div className="hsum-card">
-              <span className="hsum-value hsum-value-pos">{"$" + monthTotals.income.toFixed(2)}</span>
-              <span className="hsum-label">Earned this month</span>
-              <div className="hsum-bar">
-                <span style={{ width: "75%", background: "#00d4aa" }}></span>
-                <span style={{ width: "25%", background: "rgba(255,255,255,0.12)" }}></span>
-              </div>
-            </div>
-          </div>
+       <div className="hsum-row">
+  <div className="hsum-card">
+    <span className="hsum-value">{summary ? ("$" + summary.totalExpense.toFixed(2)) : "..."}</span>
+    <span className="hsum-label">Spent this month</span>
+    {summary && (
+      <div className="hsum-bar">
+        {summary.categories.map(function (cat, idx) {
+          var totalCat = summary.categories.reduce(function (acc, c) { return acc + c.amount; }, 0) || 1;
+          var pct = (cat.amount / totalCat) * 100;
+          var colors = ["#ff4466", "hsl(61,85%,78%)", "#8a4fe0", "#2f6fed", "rgba(255,255,255,0.15)"];
+          return <span key={cat.key} style={{ width: pct + "%", background: colors[idx % colors.length] }}></span>;
+        })}
+      </div> 
+    )}
+  </div>
+  <div className="hsum-card">
+    <span className="hsum-value hsum-value-pos">{summary ? ("$" + summary.totalIncome.toFixed(2)) : "..."}</span>
+    <span className="hsum-label">Earned this month</span>
+    {summary && summary.totalIncome > 0 && (
+      <div className="hsum-bar">
+        <span style={{ width: "100%", background: "#00d4aa" }}></span>
+      </div>
+    )}
+  </div>
+</div>
 
           <div className="hpill-row">
             <button className={"hpill " + (activePill === "trades" ? "active" : "")} onClick={() => setActivePill("trades")}>Trades</button>

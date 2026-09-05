@@ -17,7 +17,7 @@ import { MiniCardThumb } from "./bankCardVisuals";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create balance card, and fix!"
+// git commit -m "interface improvements"
 // git push -u origin main 
 
 // git commit -m "fix"
@@ -385,6 +385,8 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
         <div className="hrd-summary-row">
          <div className="hrd-summary-card" onClick={() => navigate("/history")}>
   <span className="hrd-summary-label">All Operations</span>
+  <span className="hrd-summary-label">With main wallet</span>
+
   <span className="hrd-summary-value">
     {summary ? ("" + (summary.totalIncome - summary.totalExpense >= 0 ? "+" : "") + (summary.totalIncome - summary.totalExpense).toFixed(2)) : "..."}
   </span>

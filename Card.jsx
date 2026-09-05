@@ -86,8 +86,7 @@ const Card = () => {
         {assets.map(function (a) {
           var meta = COIN_META[a.id] || { glyph: "?", color: "#888" };
           return (
-            <div className="crdx-asset-row" key={a.id} onClick={() => navigate("/tradecoin", { state: { direction: "sell", coin: a.id } })}>
-              <div className="crdx-asset-glyph" style={{ color: meta.color, background: meta.color + "1f", borderColor: meta.color + "44" }}>{meta.glyph}</div>
+            <div className="crdx-asset-row" key={a.id} onClick={roadSell} >
               <div className="crdx-asset-info">
                 <span className="crdx-asset-name">{a.id}</span>
                 <span className="crdx-asset-amount">{formatAmount(a.amount || 0, a.id)}</span>

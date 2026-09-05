@@ -1,11 +1,11 @@
 import React from "react";
 
 var TIER_COLORS = {
-  standard: "#5a5a5a",
-  classico: "#b5793e",
-  cobalt: "#2f6fed",
-  astro: "#8a4fe0",
-  saint: "#f0b90b"
+  standard: "#1c1c1c",
+  classico: "#A7ADB5",
+  cobalt: "#386BFF",
+  astro: "#8B5CF6",
+  saint: "#f5f797"
 };
 
 var TIER_NAMES = {

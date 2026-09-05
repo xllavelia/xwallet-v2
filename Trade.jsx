@@ -94,19 +94,22 @@ const Trade = () => {
   var modalTypeClass = activePanel ? ('et-pos-badge ' + activePanel.type) : '';
   var modalAcStr     = activePanel && activePanel.autoClose && activePanel.autoCloseTarget
     ? 'TP +' + activePanel.autoCloseTarget + '%' : 'Off';
+
 function handleClose(posId) {
   if (numericPrice <= 0) return;
   closePosition(posId, numericPrice).then(function(result) {
     refresh();
-    if (result && result.xpAwarded > 0) {
-      setXpToast('+' + result.xpAwarded + ' Battle Pass XP');
+    var messages = [];
+    if (result && result.xpAwarded > 0) messages.push('+' + result.xpAwarded + ' XP');
+    if (result && result.cashbackAwarded > 0) messages.push('+$' + result.cashbackAwarded.toFixed(2) + ' cashback');
+    if (messages.length > 0) {
+      setXpToast(messages.join(' · '));
       setTimeout(function() { setXpToast(null); }, 2400);
     }
   });
   setActivePosId(null);
 }
 
-  function roadHome()          { navigate(-1); }
   function handleTimeframe(tf) { setTimeframe(tf); }
 
   function navigateLong() {

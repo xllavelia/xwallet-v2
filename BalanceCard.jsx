@@ -16,7 +16,7 @@ function HeroCard(props) {
   var color = TIER_COLORS[tier] || "#5a5a5a";
   return (
     <div className={"bcx-hero-card bcx-tier-" + tier}>
-      <div className="bcx-hero-glow" style={{ background: color }}></div>
+      {/* <div className="bcx-hero-glow" style={{ background: color }}></div> */}
       <div className="bcx-hero-top">
         <span className="bcx-hero-brand">xwallet</span>
         <span className="bcx-hero-tier">{TIER_NAMES[tier]}</span>
@@ -129,7 +129,11 @@ const BalanceCard = () => {
         await selectActiveCard(actionSheetCard.id);
         refresh();
       }
-      navigate("/send");
+      
+     navigate(-1);
+    setTimeout(function () {
+      navigate('/send');
+    }, 20);
     } catch (err) {
       pushStatus(err.message, false);
     } finally {
@@ -175,7 +179,7 @@ const BalanceCard = () => {
 
   return (
     <div className="BalanceCardContent">
-      <div className="Road-Home" onClick={() => navigate(-1)}></div>
+     
       {statusMsg && <div className={"bcx-toast " + (statusOk ? "ok" : "err")}>{statusMsg}</div>}
 
       <div className="bcx-page">
@@ -221,24 +225,9 @@ const BalanceCard = () => {
           </div>
         )}
 
-        <div className="bcx-quick-actions">
-          <div className="bcx-quick-tile" onClick={() => setCatalogOpen(true)}>
-            <div className="bcx-quick-icon"><PlusIcon /></div>
-            <div>
-              <span className="bcx-quick-title">Open New Card</span>
-              <span className="bcx-quick-sub">Up to {data.maxCards} at once</span>
-            </div>
-          </div>
-          <div className="bcx-quick-tile" onClick={openActionsForFocused}>
-            <div className="bcx-quick-icon"><SettingsIcon /></div>
-            <div>
-              <span className="bcx-quick-title">Manage Card</span>
-              <span className="bcx-quick-sub">{focusedCard ? TIER_NAMES[focusedCard.tier] : "Top up, send, close"}</span>
-            </div>
-          </div>
-        </div>
+        
 
-        <div className="bcx-section-title">Overview <span className="bcx-section-sub">This Month</span></div>
+        <div className="bcx-section-title">This Month</div>
         <div className="bcx-stats-grid">
           <div className="bcx-stat-cell">
             <span className="bcx-stat-label">Total Balance</span>
@@ -246,7 +235,7 @@ const BalanceCard = () => {
           </div>
           <div className="bcx-stat-cell">
             <span className="bcx-stat-label">Cashback Earned</span>
-            <span className="bcx-stat-value pos">{"+$" + data.totalCashbackThisMonth}</span>
+            <span className="bcx-stat-value pos">{"$" + data.totalCashbackThisMonth.toFixed(2)}</span>
           </div>
           <div className="bcx-stat-cell">
             <span className="bcx-stat-label">Open Cards</span>
@@ -329,16 +318,41 @@ const BalanceCard = () => {
               <HeroCard tier={actionSheetCard.tier} number={actionSheetCard.cardNumber} balance={actionSheetCard.balance} active={actionSheetCard.isActiveForTrading} />
             </div>
 
-            {!topUpOpen && !closeConfirm && (
-              <div className="bcx-action-list">
-                <button className="bcx-action-row" onClick={() => setTopUpOpen(true)}>Top Up</button>
-                <button className="bcx-action-row" disabled={isBusy} onClick={handleSendFromCard}>Send</button>
-                <button className="bcx-action-row" disabled={isBusy || actionSheetCard.isActiveForTrading} onClick={handleSelectActive}>
-                  {actionSheetCard.isActiveForTrading ? "Already active for trading" : "Select for Trading"}
-                </button>
-                <button className="bcx-action-row danger" onClick={() => setCloseConfirm(true)}>Close Card</button>
-              </div>
-            )}
+         {!topUpOpen && !closeConfirm && (
+  <div className="bcx-action-list">
+    <button
+      className="bcx-action-row"
+      onClick={() => setTopUpOpen(true)}
+    >
+      Top Up
+    </button>
+
+    <button
+      className="bcx-action-row"
+      disabled={isBusy}
+      onClick={handleSendFromCard}
+    >
+      Send
+    </button>
+
+    <button
+      className="bcx-action-row"
+      disabled={isBusy || actionSheetCard.isActiveForTrading}
+      onClick={handleSelectActive}
+    >
+      {actionSheetCard.isActiveForTrading
+        ? "Already active for trading"
+        : "Select for Trading"}
+    </button>
+
+    <button
+      className="bcx-action-row danger"
+      onClick={() => setCloseConfirm(true)}
+    >
+      Close Card
+    </button>
+  </div>
+)}
 
             {topUpOpen && (
               <div className="bcx-topup-panel">
