@@ -12,13 +12,15 @@ import { Glyph } from "./HistoryShared";
 // import history4 from './history4.jpg';
 import { useBankCards } from "./useBankCards";
 import { useHomeSummary } from "./useHomeSummary";
-// import { useBankCards } from "./useBankCards";
 import { MiniCardThumb } from "./bankCardVisuals";
+import { useStockPortfolio } from "./useStocks";
+
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix send"
+// git commit -m "create actions!"
 // git push -u origin main 
+
 
 // git commit -m "fix"
 
@@ -79,6 +81,21 @@ const Home = () => {
 
   var recentTransfers = transfers.slice(0, 3);
 
+    var { portfolio } = useStockPortfolio();
+  
+  // {"$" + (portfolio ? portfolio.totalValue.toFixed(2) : "0.00")}
+  
+    // var isPositive = portfolio.todayChangeAmount >= 0;
+  const [openIndex, setOpenIndex] = useState(null);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [closing, setClosing] = useState(false);
+  const [opening, setOpening] = useState(false);
+ 
+  const rafRef = useRef(null);
+  const startRef = useRef(0);
+  const pausedRef = useRef(false);
+ 
 
   const STORIES = [
   {
@@ -148,16 +165,7 @@ const Home = () => {
 ];
  
 const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
-  const [openIndex, setOpenIndex] = useState(null); // индекс открытой истории
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [closing, setClosing] = useState(false);
-  const [opening, setOpening] = useState(false);
- 
-  const rafRef = useRef(null);
-  const startRef = useRef(0);
-  const pausedRef = useRef(false);
- 
+
   const isOpen = openIndex !== null;
   const activeStory = isOpen ? STORIES[openIndex] : null;
   const totalSlides = activeStory ? activeStory.slides.length : 0;
@@ -486,6 +494,31 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
 
     <div className="hrd-account-chevron">›</div>
   </div>
+
+
+
+ <div className="hrd-account-row" onClick={() => navigate("/stocks")}>
+    <div className="hrd-account-icon wallet">
+      <SavingsIcon />
+    </div>
+
+    <div className="hrd-account-info">
+      <span className="hrd-account-balance">
+{"$" + (portfolio ? portfolio.totalValue.toFixed(2) : "0.00")}
+      </span>
+
+      <span className="hrd-account-name">
+        Buy actions
+      </span>
+
+      <div className="hrd-account-actions">
+     
+      </div>
+    </div>
+
+    <div className="hrd-account-chevron">›</div>
+  </div>
+
 
 
   {/* Crypto Card */}

@@ -43,6 +43,8 @@ import Savings from "./Savings";
 import Services from "./Services";
 import BottomNav from "./BottomNav";
 import BalanceCard from "./BalanceCard";
+import Stocks from "./Stocks";
+import StockDetail from "./StockDetail";
 
 import PageTransition from "./PageTransition";
 
@@ -70,6 +72,8 @@ const islandRoutes = [
   { path: "swap", element: <Swap /> },
   { path: "savings", element: <Savings /> },
   { path: "balancecard", element: <BalanceCard /> },
+  { path: "stocks", element: <Stocks /> },
+{ path: "stockdetail", element: <StockDetail /> },
 ];
 
 const NavigationBar = () => {
