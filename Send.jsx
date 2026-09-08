@@ -10,8 +10,9 @@ const Send = () => {
   const navigate = useNavigate();
   const trackRef = useRef(null);
   var { activeCard } = useCardFunding();
-  var { wallet, refresh: refreshWallet } = useWalletBalance();
-  var balance = wallet.balance;
+var { wallet, refresh: refreshWallet } = useWalletBalance();
+var { activeCard } = useCardFunding();
+var balance = activeCard ? activeCard.balance : wallet.balance;
 
   var [step, setStep] = useState("search");
   var [mode, setMode] = useState("id"); // "id" | "card"

@@ -142,10 +142,10 @@ const SendCheck = () => {
             <span className="sc-label">DATE &amp; TIME</span>
             <span className="sc-value">{dateStr}</span>
           </div>
-          <div className="sc-row">
-            <span className="sc-label">FEE</span>
-            <span className="sc-value">0.00 USDT</span>
-          </div>
+        <div className="sc-row">
+  <span className="sc-label">FEE</span>
+  <span className="sc-value">{(detail.feeAmount || 0).toFixed(2) + " USDT"}</span>
+</div>
           <div className="sc-row">
             <span className="sc-label">STATUS</span>
             <span className="sc-value sc-status-val">{detail.status.toUpperCase()}</span>

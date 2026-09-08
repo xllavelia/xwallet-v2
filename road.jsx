@@ -45,6 +45,7 @@ import BottomNav from "./BottomNav";
 import BalanceCard from "./BalanceCard";
 import Stocks from "./Stocks";
 import StockDetail from "./StockDetail";
+import Rocket from "./Rocket";
 
 import PageTransition from "./PageTransition";
 
@@ -73,7 +74,8 @@ const islandRoutes = [
   { path: "savings", element: <Savings /> },
   { path: "balancecard", element: <BalanceCard /> },
   { path: "stocks", element: <Stocks /> },
-{ path: "stockdetail", element: <StockDetail /> },
+  { path: "stockdetail", element: <StockDetail /> },
+  { path: "rocket", element: <Rocket /> },
 ];
 
 const NavigationBar = () => {

@@ -18,7 +18,7 @@ import { useStockPortfolio } from "./useStocks";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create actions!"
+// git commit -m "create rocket!"
 // git push -u origin main 
 
 
@@ -586,6 +586,11 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
         <span className="hqa-sub">{priceLabel}</span>
     </div>
       </div>
+        <div className="hqa-card hqa-trade" onClick={() => navigate("/rocket")}>
+        <span className="hqa-label">coefficient up to five</span>
+        <span className="hqa-title">Rocket</span>
+        <span className="hqa-sub">Play now!</span>
+    </div>
       </div>
     </div>
   );
