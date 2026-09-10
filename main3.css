@@ -2439,11 +2439,11 @@ display: flex;
 .svc-header { display: flex; flex-direction: column; gap: 4px; }
 .svc-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--xlavelia); opacity: 0.85; }
 .svc-title { font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 800; margin: 0; }
-.svc-search-bar { display: flex; align-items: center; gap: 10px; background: #1c1c1c; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 13px 16px; color: rgba(255,255,255,0.4); }
+.svc-search-bar { display: flex; align-items: center; gap: 10px; background: #1c1c1c; border-radius: 16px; padding: 14px 16px; color: rgba(255,255,255,0.4); }
 .svc-search-input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 14px; }
 .svc-search-input::placeholder { color: rgba(255,255,255,0.3); }
 .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.svc-tile { background: #1c1c1c; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
+.svc-tile { background: #1c1c1c;  border-radius: 16px; padding: 18px 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
 .svc-tile:active { transform: scale(0.97); }
 .svc-tile-name { font-family: 'Unbounded', sans-serif; font-size: 13.5px; font-weight: 800; color: #fff; }
 .svc-tile-desc { font-size: 10.5px; color: rgba(255,255,255,0.4); line-height: 1.4; }

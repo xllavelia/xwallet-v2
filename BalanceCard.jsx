@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useBankCards, openCard, topUpCard, selectActiveCard, closeCard } from "./useBankCards";
+import { useBankCards, openCard, topUpCard, withdrawFromCard, selectActiveCard, closeCard } from "./useBankCards";
 import { useWalletBalance } from "./useWallet";
 import { TIER_COLORS, TIER_NAMES, MiniCardThumb, CardPattern } from "./bankCardVisuals";
 
@@ -49,6 +49,8 @@ const BalanceCard = () => {
   var [actionSheetCard, setActionSheetCard] = useState(null);
   var [topUpOpen, setTopUpOpen] = useState(false);
   var [topUpAmount, setTopUpAmount] = useState("");
+  var [withdrawOpen, setWithdrawOpen] = useState(false);
+var [withdrawAmount, setWithdrawAmount] = useState("");
   var [statusMsg, setStatusMsg] = useState(null);
   var [statusOk, setStatusOk] = useState(true);
   var [isBusy, setIsBusy] = useState(false);
@@ -106,12 +108,12 @@ useEffect(function () {
       setIsBusy(false);
     }
   }
-
-  function openActions(card) {
-    setActionSheetCard(card);
-    setTopUpOpen(false);
-    setCloseConfirm(false);
-  }
+function openActions(card) {
+  setActionSheetCard(card);
+  setTopUpOpen(false);
+  setWithdrawOpen(false);
+  setCloseConfirm(false);
+}
   function openActionsForFocused() {
     if (cards[focusedIndex]) openActions(cards[focusedIndex]);
   }
@@ -167,6 +169,25 @@ useEffect(function () {
       setIsBusy(false);
     }
   }
+
+  async function handleWithdrawSubmit() {
+  var amt = parseFloat(withdrawAmount);
+  if (!amt || amt <= 0) { pushStatus("Enter a valid amount", false); return; }
+  setIsBusy(true);
+  try {
+    await withdrawFromCard(actionSheetCard.id, amt);
+    pushStatus("Withdrew $" + amt.toFixed(2) + " to wallet", true);
+    setWithdrawOpen(false);
+    setWithdrawAmount("");
+    setActionSheetCard(null);
+    refresh();
+    refreshWallet();
+  } catch (err) {
+    pushStatus(err.message, false);
+  } finally {
+    setIsBusy(false);
+  }
+}
 
   async function handleCloseCard() {
     setIsBusy(true);
@@ -333,6 +354,8 @@ useEffect(function () {
       Top Up
     </button>
 
+<button className="bcx-action-row" onClick={() => setWithdrawOpen(true)}>Withdraw</button>
+
     <button
       className="bcx-action-row"
       disabled={isBusy}
@@ -357,6 +380,14 @@ useEffect(function () {
     >
       Close Card
     </button>
+
+  <button
+      className="bcx-action-row"
+      onClick={() => navigate(-1)}
+    >
+      Close
+    </button>
+
   </div>
 )}
 
@@ -373,6 +404,21 @@ useEffect(function () {
                 </div>
               </div>
             )}
+
+{withdrawOpen && (
+  <div className="bcx-topup-panel">
+    <div className="bcx-topup-row">
+      <span className="bcx-topup-currency">$</span>
+      <input type="number" className="bcx-topup-input" placeholder="0.00" value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} autoFocus />
+    </div>
+    <span className="bcx-topup-hint">{"From card · Available $" + actionSheetCard.balance.toFixed(2)}</span>
+    <div className="bcx-sheet-btn-row">
+      <button className="bcx-secondary-btn" onClick={() => setWithdrawOpen(false)}>Cancel</button>
+      <button className="bcx-primary-btn" disabled={isBusy} onClick={handleWithdrawSubmit}>Confirm</button>
+    </div>
+  </div>
+)}
+
 
             {closeConfirm && (
               <div className="bcx-close-confirm">

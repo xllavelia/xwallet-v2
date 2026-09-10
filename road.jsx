@@ -46,6 +46,13 @@ import BalanceCard from "./BalanceCard";
 import Stocks from "./Stocks";
 import StockDetail from "./StockDetail";
 import Rocket from "./Rocket";
+import P2PMarket from "./P2PMarket";
+import P2PBrowse from "./P2PBrowse";
+import P2PListingDetail from "./P2PListingDetail";
+import P2PDealStatus from "./P2PDealStatus";
+import P2PMerchant from "./P2PMerchant";
+import P2PCreateListing from "./P2PCreateListing";
+import P2PDeals from "./P2PDeals";
 
 import PageTransition from "./PageTransition";
 
@@ -76,6 +83,13 @@ const islandRoutes = [
   { path: "stocks", element: <Stocks /> },
   { path: "stockdetail", element: <StockDetail /> },
   { path: "rocket", element: <Rocket /> },
+  { path: "p2p", element: <P2PMarket /> },
+  { path: "p2p/browse", element: <P2PBrowse /> },
+  { path: "p2p/listing", element: <P2PListingDetail /> },
+  { path: "p2p/deal", element: <P2PDealStatus /> },
+  { path: "p2p/merchant", element: <P2PMerchant /> },
+  { path: "p2p/create-listing", element: <P2PCreateListing /> },
+  { path: "p2p/deals", element: <P2PDeals /> },
 ];
 
 const NavigationBar = () => {

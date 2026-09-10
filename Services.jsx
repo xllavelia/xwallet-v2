@@ -14,7 +14,8 @@ var MODULES = [
   { name: "Promo Code", desc: "Redeem a code", path: "/promocode" },
   { name: "Profile", desc: "Account, security, settings", path: "/profile" },
   { name: "Card", desc: "Tansfers, perks and bonuses", path: "/balancecard" },
-
+  { name: "Rocket", desc: "Crash-style multiplier game", path: "/rocket" },
+  { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
 ];
 
 function SearchIcon() {

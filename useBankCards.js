@@ -28,5 +28,7 @@ async function selectActiveCard(cardId) {
 async function closeCard(cardId) {
   return authFetch("/bankcards/close", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cardId: cardId }) });
 }
-
-export { useBankCards, openCard, topUpCard, selectActiveCard, closeCard };
+async function withdrawFromCard(cardId, amount) {
+  return authFetch("/bankcards/withdraw", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cardId: cardId, amount: amount }) });
+}
+export { useBankCards, openCard, topUpCard, selectActiveCard, closeCard, withdrawFromCard };
