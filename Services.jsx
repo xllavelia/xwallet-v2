@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { navigateP2P } from "./p2pNavigate";
 
 var MODULES = [
   { name: "Trade", desc: "Live charts, long & short positions", path: "/trade" },
@@ -48,8 +49,8 @@ const Services = () => {
         <div className="svc-grid">
           {filtered.map(function (m) {
             return (
-              <div className="svc-tile" key={m.path} onClick={() => navigate(m.path)}>
-                <span className="svc-tile-name">{m.name}</span>
+             <div className="svc-tile" key={m.path} onClick={() => (m.path === "/p2p" ? navigateP2P(navigate, m.path) : navigate(m.path))}>
+              <span className="svc-tile-name">{m.name}</span>
                 <span className="svc-tile-desc">{m.desc}</span>
               </div>
             );

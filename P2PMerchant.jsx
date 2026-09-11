@@ -56,6 +56,8 @@ const P2PMerchant = () => {
     return (
       <div className="p2p-page">
         <div className="p2p-topbar">
+        <button className="p2p-icon-btn" onClick={() => navigate(-1)}><ChevronLeft /></button>
+
           <span className="p2p-title">Become a Merchant</span>
         </div>
 

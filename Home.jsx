@@ -14,11 +14,12 @@ import { useBankCards } from "./useBankCards";
 import { useHomeSummary } from "./useHomeSummary";
 import { MiniCardThumb } from "./bankCardVisuals";
 import { useStockPortfolio } from "./useStocks";
+import { navigateP2P } from "./p2pNavigate";
 
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create p2p! beta"
+// git commit -m "fix p2p"
 // git push -u origin main 
 
 
@@ -591,7 +592,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
         <span className="hqa-title">Rocket</span>
         <span className="hqa-sub">Play now!</span>
     </div>
-     <div className="hqa-card hqa-trade" onClick={() => navigate("/p2p")}>
+     <div className="hqa-card hqa-trade" onClick={() => navigateP2P(navigate, "/p2p")}>
         <span className="hqa-label">Trade directly with other users</span>
         <span className="hqa-title">P2P market</span>
         <span className="hqa-sub">sell and buy</span>

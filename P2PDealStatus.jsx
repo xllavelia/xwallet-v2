@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchDealDetail, confirmDeal, cancelDeal } from "./useP2P";
+import { navigateP2P } from "./p2pNavigate";
 
 function ChevronLeft() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>); }
 
@@ -76,8 +77,8 @@ const P2PDealStatus = () => {
   return (
     <div className="p2p-page">
       <div className="p2p-topbar">
-        <button className="p2p-icon-btn" onClick={() => navigate("/p2p/deals")}><ChevronLeft /></button>
-        <span className="p2p-title">Deal #{deal.id}</span>
+      <button className="p2p-icon-btn" onClick={() => navigateP2P(navigate, "/p2p/deals")}><ChevronLeft /></button>
+         <span className="p2p-title">Deal #{deal.id}</span>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center" }}>

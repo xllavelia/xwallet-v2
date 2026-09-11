@@ -15,6 +15,13 @@ const P2PMarket = () => {
   var { status } = useMerchantStatus();
   var { deals: activeDeals } = useMyDeals(true);
 
+// function road(r) {
+//      navigate(-1);
+//     setTimeout(function () {
+//       navigate("/tradecoin")
+//     }, 20);
+// }
+
   return (
     <div className="p2p-page">
       <div className="p2p-topbar">
