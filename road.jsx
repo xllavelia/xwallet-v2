@@ -53,6 +53,7 @@ import P2PDealStatus from "./P2PDealStatus";
 import P2PMerchant from "./P2PMerchant";
 import P2PCreateListing from "./P2PCreateListing";
 import P2PDeals from "./P2PDeals";
+import P2PHomeGuard from "./P2PHomeGuard";
 
 import PageTransition from "./PageTransition";
 
@@ -141,6 +142,7 @@ const App = () => {
         <NavigationBar />
         <AppRoutes />
         <BottomNav />
+        <P2PHomeGuard />
       </AuthStatusProvider>
     </BrowserRouter>
   );

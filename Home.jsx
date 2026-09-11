@@ -14,12 +14,11 @@ import { useBankCards } from "./useBankCards";
 import { useHomeSummary } from "./useHomeSummary";
 import { MiniCardThumb } from "./bankCardVisuals";
 import { useStockPortfolio } from "./useStocks";
-import { navigateP2P } from "./p2pNavigate";
 
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix p2p"
+// git commit -m "create time order! beta"
 // git push -u origin main 
 
 
@@ -280,7 +279,6 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
  
 
 
-    var [btcPrice, setBtcPrice] = useState(null);
 
   useEffect(function () {
     var active = true;
@@ -294,7 +292,6 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
     return function () { active = false; };
   }, []);
 
-  var priceLabel = btcPrice ? "$" + btcPrice.toLocaleString("en-US", { maximumFractionDigits: 0 }) : "Live rates";
 
   return (
     <div className="HomeRedesignContent">
@@ -573,31 +570,7 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
             );
           })}
         </div>
-     <div className="hrd-summary-row">
 
-              <div className="hqa-card hqa-send" onClick={() => navigate("/send")}>
-        <span className="hqa-label">Move funds</span>
-        <span className="hqa-title">Send</span>
-        <span className="hqa-sub">Ready in seconds</span>
-      </div>
-
-      <div className="hqa-card hqa-trade" onClick={() => navigate("/trade")}>
-        <span className="hqa-label">BTC · USD</span>
-        <span className="hqa-title">Trade</span>
-        <span className="hqa-sub">{priceLabel}</span>
-    </div>
-      </div>
-        <div className="hqa-card hqa-trade" onClick={() => navigate("/rocket")}>
-        <span className="hqa-label">coefficient up to five</span>
-        <span className="hqa-title">Rocket</span>
-        <span className="hqa-sub">Play now!</span>
-    </div>
-     <div className="hqa-card hqa-trade" onClick={() => navigateP2P(navigate, "/p2p")}>
-        <span className="hqa-label">Trade directly with other users</span>
-        <span className="hqa-title">P2P market</span>
-        <span className="hqa-sub">sell and buy</span>
-        
-    </div>
       </div>
     </div>
   );

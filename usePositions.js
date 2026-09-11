@@ -40,6 +40,14 @@ async function closePosition(id, closePrice) {
     body: JSON.stringify({ closePrice: closePrice })
   });
 }
+async function openTimeTrade(payload) {
+  return authFetch("/positions/open-time", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+}
+
 function useClosedPositionsRemote() {
   var [closedPositions, setClosedPositions] = useState([]);
   var [isLoading, setIsLoading] = useState(true);
@@ -62,4 +70,4 @@ function useClosedPositionsRemote() {
   return { closedPositions: closedPositions, isLoading: isLoading, refresh: refresh };
 }
 
-export { usePositionsRemote, useClosedPositionsRemote, openPosition, closePosition };
+export { usePositionsRemote, useClosedPositionsRemote, openPosition, closePosition, openTimeTrade };

@@ -30,6 +30,8 @@ const Trade = () => {
 
 const { wallet } = useWalletBalance();
 const { activeCard } = useCardFunding();
+const [activeTimeTradeId, setActiveTimeTradeId] = useState(null);
+const [nowTick, setNowTick] = useState(Date.now());
 const balance = activeCard ? activeCard.balance : wallet.balance;
   const { positions, refresh } = usePositionsRemote();
 
@@ -43,7 +45,8 @@ const balance = activeCard ? activeCard.balance : wallet.balance;
 
   var numericPrice   = safeNum(currentPrice.toString().replace(/,/g, ''));
   var coinPositions  = positions.filter(function(p) { return p.coin === currentCoin; });
-  var balanceStr     = '$' + safeNum(balance).toFixed(2);
+  var timeTrades = positions.filter(function(p) { return p.coin === currentCoin && p.tradeMode === 'time'; });
+  // var balanceStr     = '$' + safeNum(balance).toFixed(2);
   var totalOpenCount = coinPositions.length;
 
   function calcPnl(pos) {
@@ -184,11 +187,56 @@ function handleClose(posId) {
     });
   }, [positions, currentCoin]);
 
+useEffect(function() {
+  var iv = setInterval(function() { setNowTick(Date.now()); }, 1000);
+  return function() { clearInterval(iv); };
+}, []);
+
+function formatCountdown(expiresAt) {
+  var ms = new Date(expiresAt).getTime() - nowTick;
+  if (ms <= 0) return "00:00";
+  var totalSec = Math.floor(ms / 1000);
+  var h = Math.floor(totalSec / 3600);
+  var m = Math.floor((totalSec % 3600) / 60);
+  var s = totalSec % 60;
+  if (h > 0) return h + "h " + (m < 10 ? "0"+m : m) + "m";
+  return (m < 10 ? "0"+m : m) + ":" + (s < 10 ? "0"+s : s);
+}
+function timeTradeLiveResult(t) {
+  if (numericPrice <= 0) return null;
+  var favorable = t.type === "long" ? numericPrice > t.entryPrice : numericPrice < t.entryPrice;
+  return favorable ? "win" : "loss";
+}
+
   return (
     <div className="TradeContent">
 
 {xpToast && <div className="et-xp-toast">{xpToast}</div>}
-
+{activeTimeTradeId && (function() {
+  var t = timeTrades.find(function(x) { return x.id === activeTimeTradeId; });
+  if (!t) return null;
+  var live = timeTradeLiveResult(t);
+  return (
+    <div className="tt-detail-overlay" onClick={() => setActiveTimeTradeId(null)}>
+      <div className="tt-detail-modal" onClick={function(e) { e.stopPropagation(); }}>
+        <div className="tt-detail-handle"></div>
+        <div className="tt-detail-top">
+          <span className="tt-active-direction">{t.type.toUpperCase()}</span>
+          <span className="tt-detail-coin">{t.coin + " Time Trade"}</span>
+          <button className="tt-detail-close" onClick={() => setActiveTimeTradeId(null)}>✕</button>
+        </div>
+        <div className="ht-detail-grid">
+          <div className="ht-detail-row"><span className="ht-dl">Entry Price</span><span className="ht-dv">{"$" + t.entryPrice.toLocaleString("en-US")}</span></div>
+          <div className="ht-detail-row"><span className="ht-dl">Current Price</span><span className="ht-dv">{"$" + currentPrice}</span></div>
+          <div className="ht-detail-row"><span className="ht-dl">Stake</span><span className="ht-dv">{"$" + t.amount.toFixed(2)}</span></div>
+          <div className="ht-detail-row"><span className="ht-dl">Payout Multiplier</span><span className="ht-dv">{t.payoutMultiplier ? t.payoutMultiplier.toFixed(2) + "x" : "-"}</span></div>
+          <div className="ht-detail-row"><span className="ht-dl">Time Left</span><span className="ht-dv">{formatCountdown(t.expiresAt)}</span></div>
+          {live && <div className="ht-detail-row"><span className="ht-dl">If it ended now</span><span className="ht-dv" style={{color: live === "win" ? "#00d4aa" : "#ff4466"}}>{live.toUpperCase()}</span></div>}
+        </div>
+      </div>
+    </div>
+  );
+})()}
       {activePanel && (
         <div className="et-pos-modal-overlay" onClick={() => setActivePosId(null)}>
           <div className="et-pos-modal" onClick={function(e) { e.stopPropagation(); }}>
@@ -296,7 +344,38 @@ function handleClose(posId) {
             })}
           </div>
         )}
-
+{timeTrades.length > 0 && (
+  <div className="et-positions-container">
+    <div className="et-positions-title">
+      <span>Time Trades</span>
+      <span className="et-pos-count">{timeTrades.length}</span>
+    </div>
+    {timeTrades.map(function(t) {
+      var live = timeTradeLiveResult(t);
+      var totalDurationMs = t.expiresAt ? (new Date(t.expiresAt).getTime() - new Date(t.openedAt).getTime()) : 0;
+      var elapsedMs = totalDurationMs > 0 ? (nowTick - new Date(t.openedAt).getTime()) : 0;
+      var progressPct = totalDurationMs > 0 ? Math.min(100, Math.max(0, (elapsedMs / totalDurationMs) * 100)) : 0;
+      return (
+        <div className="tt-active-card" key={t.id} onClick={() => setActiveTimeTradeId(t.id)}>
+          <div className="tt-active-top">
+            <span className="tt-active-direction">{t.type.toUpperCase()}</span>
+            <span className="tt-active-coin">{t.coin}</span>
+            {live && <span className={"tt-active-live-badge " + live}>{live === "win" ? "WIN" : "LOSS"}</span>}
+          </div>
+          <div className="tt-countdown-row">
+            <span className="tt-countdown-label">Time left</span>
+            <span className="tt-countdown-value">{formatCountdown(t.expiresAt)}</span>
+          </div>
+          <div className="tt-progress-bar"><div className="tt-progress-fill" style={{width: progressPct + "%"}}></div></div>
+          <div className="tt-stake-row">
+            <span>Stake <b>{"$" + t.amount.toFixed(2)}</b></span>
+            <span>Payout <b>{t.payoutMultiplier ? t.payoutMultiplier.toFixed(2) + "x" : "-"}</b></span>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+)}
         <div className="et-stats">
           <div className="et-stat-row"><span>Order book</span><span className="arrow">›</span></div>
           <div className="et-stat-row"><span>24h volume</span><span className="val">{stats.vol}</span></div>

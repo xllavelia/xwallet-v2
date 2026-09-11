@@ -169,16 +169,20 @@ var summary = useHomeSummary();
         dateRaw: card.openTime, onClick: function () { setSelectedActivePosId(card.id); }
       });
     });
-    closedPositions.forEach(function (item) {
-      var pnl = safeNum(item.pnl);
-      var sign = pnl >= 0 ? "+" : "";
-      rows.push({
-        key: "c" + item.id, glyphType: item.type === "long" ? "up" : "down",
-        name: item.coin + " " + item.type.toUpperCase(), sub: item.leverage + "x · " + (item.result === "win" ? "Won" : "Lost"),
-        amountStr: sign + "$" + pnl.toFixed(2), amountClass: pnl >= 0 ? "pos" : "neg", amountSigned: pnl,
-        dateRaw: item.closedAt, onClick: function () { setSelectedCompletedTrade(item); }
-      });
-    });
+  closedPositions.forEach(function (item) {
+  var pnl = safeNum(item.pnl);
+  var sign = pnl >= 0 ? "+" : "";
+  var label = item.coin + " " + item.type.toUpperCase();
+  var sub = item.tradeMode === "time"
+    ? (item.result === "win" ? "Time Trade · Won" : "Time Trade · Lost")
+    : (item.leverage + "x · " + (item.result === "win" ? "Won" : "Lost"));
+  rows.push({
+    key: "c" + item.id, glyphType: item.type === "long" ? "up" : "down",
+    name: label, sub: sub,
+    amountStr: sign + "$" + pnl.toFixed(2), amountClass: pnl >= 0 ? "pos" : "neg", amountSigned: pnl,
+    dateRaw: item.closedAt, onClick: function () { setSelectedCompletedTrade(item); }
+  });
+});
   }
 
   if (activePill === "transfers") {
@@ -302,6 +306,9 @@ var summary = useHomeSummary();
               <div className="ht-detail-row"><span className="ht-dl">Fees</span><span className="ht-dv">{sel.feesPaidByVoucher ? "Covered by Voucher" : "$" + sel.fees.toFixed(2)}</span></div>
               <div className="ht-detail-row"><span className="ht-dl">ROI</span><span className="ht-dv">{(selRoi >= 0 ? "+" : "") + selRoi.toFixed(2) + "%"}</span></div>
               <div className="ht-detail-row"><span className="ht-dl">Duration</span><span className="ht-dv">{formatDuration(sel.openedAt, sel.closedAt)}</span></div>
+            {sel.tradeMode === "time" && (
+  <div className="ht-detail-row"><span className="ht-dl">Payout Multiplier</span><span className="ht-dv">{sel.payoutMultiplier ? sel.payoutMultiplier.toFixed(2) + "x" : "-"}</span></div>
+)}
               {sel.tradeId && <div className="ht-detail-row"><span className="ht-dl">Trade ID</span><span className="ht-dv et-pmv-id">{sel.tradeId}</span></div>}
               {sel.xpAwarded > 0 && <div className="ht-detail-row"><span className="ht-dl">Battle Pass XP</span><span className="ht-dv" style={{ color: "var(--xlavelia)" }}>{"+" + sel.xpAwarded}</span></div>}
               {sel.cashbackAwarded > 0 && (
