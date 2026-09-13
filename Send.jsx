@@ -4,6 +4,7 @@ import { authFetch } from "./apiClient";
 import { useWalletBalance } from "./useWallet";
 import { useCardFunding } from "./useCardFunding";
 import { searchUsers, searchCards, listContacts, addContact, removeContact, getInitials } from "./contacts";
+import { getSendSearchState, setSendSearchState } from "./sendSearchState";
 
 const Send = () => {
   const navigate = useNavigate();
@@ -12,12 +13,13 @@ const Send = () => {
   var { wallet, refresh: refreshWallet } = useWalletBalance();
   var { activeCard } = useCardFunding();
   var balance = activeCard ? activeCard.balance : wallet.balance;
+  var mountGuardRef = useRef(true);
+var initialState = getSendSearchState();
+var [step, setStep] = useState("search");
+var [mode, setMode] = useState(initialState.mode);
 
-  var [step, setStep] = useState("search");
-  var [mode, setMode] = useState("id");
-
-  var [query, setQuery] = useState("");
-  var [results, setResults] = useState([]);
+var [query, setQuery] = useState(initialState.query);
+var [results, setResults] = useState(initialState.results);
   var [isLoadingSearch, setIsLoadingSearch] = useState(false);
   var [searchError, setSearchError] = useState(null);
   var [selectedContact, setSelectedContact] = useState(null);
@@ -31,6 +33,12 @@ const Send = () => {
   var [statusOk, setStatusOk] = useState(true);
   var [sent, setSent] = useState(false);
 
+
+useEffect(function () {
+  setSendSearchState({ query: query, mode: mode, results: results });
+}, [query, mode, results]);
+
+
   function switchMode(newMode) {
     setMode(newMode);
     setQuery("");
@@ -38,37 +46,46 @@ const Send = () => {
     setSearchError(null);
   }
 
-  useEffect(function () {
-    var requestId = ++searchRequestIdRef.current;
-    setIsLoadingSearch(true);
-    setSearchError(null);
+useEffect(function () {
+  mountGuardRef.current = true;
+  var requestId = ++searchRequestIdRef.current;
+  setIsLoadingSearch(true);
+  setSearchError(null);
 
-    var delay = query.length === 0 ? 0 : 220;
+  var delay = query.length === 0 ? 0 : 220;
 
-    var handle = setTimeout(function () {
-      var searchPromise;
-      if (mode === "card") {
-        searchPromise = searchCards(query);
-      } else {
-        searchPromise = query.length === 0 ? listContacts() : searchUsers(query);
-      }
+  var handle = setTimeout(function () {
+    if (!mountGuardRef.current) return;
+    var searchPromise;
+    if (mode === "card") {
+      searchPromise = searchCards(query);
+    } else {
+      searchPromise = query.length === 0 ? listContacts() : searchUsers(query);
+    }
 
-      searchPromise
-        .then(function (res) {
-          if (searchRequestIdRef.current !== requestId) return;
-          setResults(res);
-          setIsLoadingSearch(false);
-        })
-        .catch(function (err) {
-          if (searchRequestIdRef.current !== requestId) return;
-          setResults([]);
-          setSearchError(err.message || "Search failed");
-          setIsLoadingSearch(false);
-        });
-    }, delay);
+    searchPromise
+      .then(function (res) {
+        if (searchRequestIdRef.current !== requestId || !mountGuardRef.current) return;
+        setResults(res);
+        setIsLoadingSearch(false);
+      })
+      .catch(function (err) {
+        if (searchRequestIdRef.current !== requestId || !mountGuardRef.current) return;
+        setResults([]);
+        setSearchError(err.message || "Search failed");
+        setIsLoadingSearch(false);
+      });
+  }, delay);
 
-    return function () { clearTimeout(handle); };
-  }, [query, mode]);
+  return function () {
+    clearTimeout(handle);
+  };
+}, [query, mode]);
+
+useEffect(function () {
+  return function () { mountGuardRef.current = false; };
+}, []);
+
 
   function handleSelectContact(contact) { setSelectedContact(contact); }
   function handleClearSelection() { setSelectedContact(null); }

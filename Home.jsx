@@ -3,11 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useAccount } from "./useAccount";
 import { useWalletBalance } from "./useWallet";
 import { useClosedPositionsRemote } from "./usePositions";
-import { enterP2P } from "./p2pNav";
 import { useBankCards } from "./useBankCards";
 import { useHomeSummary } from "./useHomeSummary";
 import { useSavings } from "./useSavings";
-// import HomeNewsCarousel from "./HomeNewsCarousel";
+// import { usePrime} from "./usePrime";
 
 // import history1 from './history1.jpg';
 // import history2 from './history2.jpg';
@@ -16,11 +15,11 @@ import { useSavings } from "./useSavings";
 import { MiniCardThumb } from "./bankCardVisuals";
 import { useStockPortfolio } from "./useStocks";
 import { useCard } from "./useCard";
-
+// import { usePrime} from "./usePrime";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "home redisign!"
+// git commit -m "fix css"
 // git push -u origin main 
 
 
@@ -112,7 +111,7 @@ const Home = () => {
   var { portfolio } = useStockPortfolio();
   var { card } = useCard();
 
-
+// const { status } = usePrime();
 
 
   var avatarInitial = account && account.username ? account.username[0].toUpperCase() : "?";
@@ -263,6 +262,10 @@ var totalWithdrawn = savings
 var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
   var changeIsPositive = change24h.amount >= 0;
 
+
+  
+  
+
   return (
     <div className="hv2-page">
 
@@ -351,6 +354,13 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
     <span className="hv2-nav-tile-label">P2P Market</span>
   </div>
 </div> */}
+
+ {/* <div className="crdx-hero" onClick={() => navigate("/prime")}>
+        <span className="crdx-hero-label">You lavx</span>
+        <span className="crdx-hero-value"> сюда интегрируй баланс lavx что бы нечего не сломалось</span>
+        <span className="hv2-balance-label">Premium value</span>
+      </div> */}
+
 
 
         </div>

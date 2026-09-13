@@ -1,6 +1,6 @@
 :root { --xlavelia: hsl(61, 85%, 78%) ; }
 
-.sav-stats-block {font-family: 'Unbounded', sans-serif; background: #1c1c1c; border: none; border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+.sav-stats-block {margin-bottom: -1rem; font-family: 'Unbounded', sans-serif; background: #1c1c1c; border: none; border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
 .sav-stats-title { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--xlavelia); }
 .sav-stats-list { display: flex; flex-direction: column; gap: 9px; }
 .sav-stats-item { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; }
@@ -8,7 +8,7 @@
 .sav-s-dots { flex: 1; border-bottom: 1px dotted rgba(255,255,255,0.15); transform: translateY(-3px); }
 .sav-s-value { color: #fff; font-weight: 700; white-space: nowrap; }
 
-.sav-doc-box { background: #1c1c1c; border: none; border-radius: 16px; padding: 15px 16px; display: flex; flex-direction: column; gap: 8px; }
+.sav-doc-box { background: #1c1c1c; border: none; border-radius: 16px; padding: 15px 16px; display: flex; flex-direction: column; gap: 8px; margin-top: 0.5rem;}
 .sav-doc-top { display: flex; justify-content: space-between; align-items: center; }
 .sav-doc-title { font-size: 12.5px; font-weight: 700; color: #fff; }
 .sav-doc-tag { font-size: 9.5px; font-weight: 800; color: var(--xlavelia); background: hsla(61,85%,78%,0.1); border: 1px solid hsla(61,85%,78%,0.25); padding: 3px 8px; border-radius: 7px; }
@@ -2388,10 +2388,10 @@ margin-bottom: -22px;
   /* border: 1px solid rgba(255,255,255,0.1); */
   color: #fff; font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700;
   backdrop-filter: blur(10px);
-  margin-bottom: 18px;
+  margin-bottom: 30px;
 }
 .hv2-action-btn.primary { flex: 1; }
-.hv2-action-btn.prime { flex: 0 0 54px; padding: 15px 0; color: var(--xlavelia); }
+.hv2-action-btn.prime { flex: 0 0 54px; padding: 15px 0;  }
 .hv2-action-btn:active { transform: scale(0.95); }
 
 /* ── Lower area: hidden content + force block ────────────── */
@@ -2508,7 +2508,7 @@ font-family: 'Unbounded';
 
 .hv2-force-scroll {
   flex: 1; overflow-y: auto;
-  padding: 4px 20px calc(30px + env(safe-area-inset-bottom));
+  padding: 5px 20px calc(30px + env(safe-area-inset-bottom));
   display: flex; flex-direction: column; gap: 18px;
 }
 
@@ -2523,37 +2523,162 @@ font-family: 'Unbounded';
 
 
 
+.crypto-section {
+  width: 100%;
+  min-height: 500px;
 
-.hnc-wrap { display: flex; flex-direction: column; gap: 10px; }
-
-.hnc-track {
-  display: flex; gap: 10px;
-  overflow-x: auto; scroll-snap-type: x mandatory;
-  scrollbar-width: none; -webkit-overflow-scrolling: touch;
-  margin: 0 -20px; padding: 0 20px;
-}
-.hnc-track::-webkit-scrollbar { display: none; }
-
-.hnc-card {
-  position: relative; overflow: hidden;
-  flex: 0 0 86%; scroll-snap-align: start;
-  background: #131417; border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px; padding: 18px;
-  display: flex; flex-direction: column; gap: 8px;
-  min-height: 128px;
-}
-.hnc-card-glow {
-  position: absolute; top: -40%; right: -20%; width: 60%; height: 90%;
-  border-radius: 50%; filter: blur(50px); opacity: 0.16; pointer-events: none;
-}
-.hnc-card-title { font-family: 'Unbounded', sans-serif; font-size: 15px; font-weight: 800; color: #fff; margin: 0; position: relative; z-index: 1; }
-.hnc-card-text { font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.55); margin: 0; position: relative; z-index: 1; flex: 1; }
-.hnc-card-arrow {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center;
-  align-self: flex-end; position: relative; z-index: 1;
+  display: flex;
+  align-items: center;
+  padding: 20px 0;
 }
 
-.hnc-dots { display: flex; justify-content: center; gap: 6px; }
-.hnc-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: all 0.25s; }
-.hnc-dot.active { width: 18px; border-radius: 4px; background: var(--xlavelia); }
+/* Outer white/black frame */
+.crypto-cards {
+  position: relative;
+
+  width: 100%;
+  max-width: 540px;
+
+  height: 470px;
+
+  display: flex;
+  gap: 10px;
+
+  padding: 10px;
+
+  border-radius: 42px;
+
+}
+
+/* Main card */
+.crypto-card {
+  position: relative;
+  flex: 0 0 335px;
+  height: 420px;
+  background: #1c1c1c;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Text */
+.crypto-card__content {
+  padding: 28px 28px 80px;
+}
+
+.crypto-card h2 {
+  margin: 0;
+
+  color: #fff;
+
+ font-family: 'Unbounded', sans-serif; 
+
+  font-size: 25px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.27;
+
+  letter-spacing: -0.7px;
+}
+
+.crypto-card p {
+  margin: 20px 0 0;
+
+  color: #aaa;
+
+   font-family: 'Unbounded', sans-serif; 
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.38;
+
+  letter-spacing: -0.2px;
+}
+
+/* Arrow button */
+.crypto-card__arrow {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+
+  width: 68px;
+  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: #1c1c1c;
+  /* border-radius: 50%; */
+  color: #fff;
+  cursor: pointer;
+  border: 2px solid #101010;
+}
+
+.crypto-card__arrow span {
+  display: block;
+
+  font-family: Arial, sans-serif;
+  font-size: 31px;
+  font-weight: 200;
+
+  line-height: 1;
+
+  transform: translateY(-2px);
+}
+
+/* Second card visible on the right */
+.crypto-card--second {
+  flex-basis: 335px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .crypto-section {
+    min-height: 350px;
+  }
+
+  .crypto-cards {
+    height: 340px;
+
+    border-width: 6px;
+    border-radius: 30px;
+
+  
+  }
+
+  .crypto-card {
+    flex-basis: 270px;
+    height: 305px;
+
+    border-radius: 14px;
+  }
+
+  .crypto-card__content {
+    padding: 22px 20px 65px;
+  }
+
+  .crypto-card h2 {
+    font-size: 20px;
+    line-height: 1.27;
+  }
+
+  .crypto-card p {
+    margin-top: 14px;
+
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .crypto-card__arrow {
+    width: 59px;
+    height: 59px;
+
+    border-width: 5px;
+    border-radius: 15px;
+  }
+
+  .crypto-card__arrow span {
+    font-size: 25px;
+  }
+}
