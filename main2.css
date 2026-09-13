@@ -1,6 +1,6 @@
 
 :root{
-  --xlavelia: hsl(61, 85%, 78%);
+  --xlavelia: hsl(61, 85%, 78%) ;
 }
 /* ═══════════════════════════════════════
    DESIGN TOKENS
@@ -14,7 +14,7 @@
   --g-text:      #ececec;
   --g-muted:     #777;
   --g-dim:       #444;
-  --g-gold:      #f0b90b;
+  --g-gold:      var(--xlavelia);
   --g-green:     #00d4aa;
   --g-red:       #ff4466;
   --g-green-dim: rgba(0,212,170,0.12);
@@ -301,7 +301,7 @@
 .et-pos-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.78);
+  background: rgba(0, 0, 0, 0.60);
   backdrop-filter: blur(14px);
   z-index: 110;
   display: flex;
@@ -312,7 +312,7 @@
 .et-pos-modal {
   z-index: 11;
   width: 90%;
-  background: #141414;
+  background: #151515;
   padding: 8px 20px 15px;
   margin-bottom: 5%;
   border-radius: 24px;
@@ -957,24 +957,14 @@
 .ht-empty-icon { font-size: 36px; }
 .ht-empty-text { font-size: 13px; color: #555; text-align: center; }
 
-/* ── Detail modal overlay ── */
-.ht-detail-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(6px);
-  z-index: 9;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
 
 .ht-detail-modal {
-  width: 100%;
-  max-width: 100%;
-  background: #151515;
+  width: 90%;
+  max-width: 90%;
+  background-color: #151515;
   padding: 24px 20px 36px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  margin-bottom: 5%;
 }
 
 .ht-detail-top {
@@ -1045,7 +1035,7 @@
 
 .ht-dl { color: #555; }
 .ht-dv { color: #c0c8d8; font-weight: 500; }
-.ht-dv-liq  { color: #f6465d; }
+
 .ht-dv-lev  { color: #f0b90b; font-weight: 700; }
 .ht-dv-fee  { color: #888; }
 .ht-dv-date { font-size: 11px; color: #666; }
@@ -1070,10 +1060,10 @@
   --g-text:     #ececec;
   --g-muted:    #888888;
   --g-dim:      #444444;
-  --g-gold:    var(--xlavelia);
+  --g-gold:    #00d4aa;
   /* --g-gold:   var(--xlavelia); */
-  --g-green:   var(--xlavelia);
-  --g-red:     var(--xlavelia);
+  --g-green:  #00d4aa;
+  --g-red:     #ff4466;
 }
 
 /* Override page backgrounds */
@@ -1258,7 +1248,7 @@
 .ht-detail-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.6);
   backdrop-filter: blur(8px);
   z-index: 9999;
   display: flex;
@@ -1292,14 +1282,6 @@
   border-radius: 6px;
   letter-spacing: 0.08em;
 }
-.ht-result-badge.win, .ht-result-badge.loss  {
-   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color:var(--xlavelia);
-  /* border: 1px solid #101010;*/
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
 
 .ht-active-badge {
   font-size: 9px;
@@ -1307,7 +1289,7 @@
   padding: 2px 7px;
   border-radius: 6px;
   /* background: rgba(46,189,133,0.15); */
-  color:hsl(61, 85%, 78%);
+  color:#fff;
   /* border: 1px solid rgba(46,189,133,0.3); */
   animation: pulse-badge 2s infinite;
 }
@@ -1316,8 +1298,7 @@
   50%       { opacity: 0.5; }
 }
 
-.ht-detail-pnl { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
-.ht-detail-pnl.pos, .ht-detail-pnl.neg { color:var(--xlavelia); }
+
 .ht-detail-pnl-val { font-size: 34px; font-weight: 900; line-height: 1; }
 .ht-detail-pnl-pct { font-size: 14px; opacity: 0.75; }
 
@@ -1326,8 +1307,8 @@
 .ht-detail-row   { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
 .ht-dl     { color: var(--g-dim); }
 .ht-dv     { color: #c0c8d8; font-weight: 500; }
-.ht-dv-liq { color:var(--xlavelia); }
-.ht-dv-lev { color: var(--g-gold); font-weight: 700; }
+.ht-dv-liq { color:#f6465d; }
+.ht-dv-lev { color: #00d4aa; font-weight: 700; }
 .ht-dv-date{ font-size: 11px; color: var(--g-muted); }
 
 .ht-detail-dates { display: flex; flex-direction: column; gap: 6px; }

@@ -53,7 +53,8 @@ import P2PDealStatus from "./P2PDealStatus";
 import P2PMerchant from "./P2PMerchant";
 import P2PCreateListing from "./P2PCreateListing";
 import P2PDeals from "./P2PDeals";
-import P2PHomeGuard from "./P2PHomeGuard";
+
+
 
 import PageTransition from "./PageTransition";
 
@@ -85,12 +86,15 @@ const islandRoutes = [
   { path: "stockdetail", element: <StockDetail /> },
   { path: "rocket", element: <Rocket /> },
   { path: "p2p", element: <P2PMarket /> },
-  { path: "p2p/browse", element: <P2PBrowse /> },
-  { path: "p2p/listing", element: <P2PListingDetail /> },
-  { path: "p2p/deal", element: <P2PDealStatus /> },
-  { path: "p2p/merchant", element: <P2PMerchant /> },
-  { path: "p2p/create-listing", element: <P2PCreateListing /> },
-  { path: "p2p/deals", element: <P2PDeals /> },
+  { path: "p2pbrowse", element: <P2PBrowse /> },
+  { path: "p2plisting", element: <P2PListingDetail /> },
+  { path: "p2pdeal", element: <P2PDealStatus /> },
+  { path: "p2pmerchant", element: <P2PMerchant /> },
+  { path: "p2pcreatelisting", element: <P2PCreateListing /> },
+  { path: "p2pdeals", element: <P2PDeals /> },
+  { path: "services", element: <Services /> },
+
+
 ];
 
 const NavigationBar = () => {
@@ -142,7 +146,6 @@ const App = () => {
         <NavigationBar />
         <AppRoutes />
         <BottomNav />
-        <P2PHomeGuard />
       </AuthStatusProvider>
     </BrowserRouter>
   );

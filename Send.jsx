@@ -3,23 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { authFetch } from "./apiClient";
 import { useWalletBalance } from "./useWallet";
 import { useCardFunding } from "./useCardFunding";
-
 import { searchUsers, searchCards, listContacts, addContact, removeContact, getInitials } from "./contacts";
 
 const Send = () => {
   const navigate = useNavigate();
   const trackRef = useRef(null);
+
+  var { wallet, refresh: refreshWallet } = useWalletBalance();
   var { activeCard } = useCardFunding();
-var { wallet, refresh: refreshWallet } = useWalletBalance();
-var { activeCard } = useCardFunding();
-var balance = activeCard ? activeCard.balance : wallet.balance;
+  var balance = activeCard ? activeCard.balance : wallet.balance;
 
   var [step, setStep] = useState("search");
-  var [mode, setMode] = useState("id"); // "id" | "card"
+  var [mode, setMode] = useState("id");
 
   var [query, setQuery] = useState("");
   var [results, setResults] = useState([]);
   var [isLoadingSearch, setIsLoadingSearch] = useState(false);
+  var [searchError, setSearchError] = useState(null);
   var [selectedContact, setSelectedContact] = useState(null);
   var [addingId, setAddingId] = useState(null);
   var searchRequestIdRef = useRef(0);
@@ -35,13 +35,15 @@ var balance = activeCard ? activeCard.balance : wallet.balance;
     setMode(newMode);
     setQuery("");
     setResults([]);
+    setSearchError(null);
   }
 
   useEffect(function () {
     var requestId = ++searchRequestIdRef.current;
     setIsLoadingSearch(true);
+    setSearchError(null);
 
-    var delay = query.length === 0 ? 0 : 200;
+    var delay = query.length === 0 ? 0 : 220;
 
     var handle = setTimeout(function () {
       var searchPromise;
@@ -57,9 +59,10 @@ var balance = activeCard ? activeCard.balance : wallet.balance;
           setResults(res);
           setIsLoadingSearch(false);
         })
-        .catch(function () {
+        .catch(function (err) {
           if (searchRequestIdRef.current !== requestId) return;
           setResults([]);
+          setSearchError(err.message || "Search failed");
           setIsLoadingSearch(false);
         });
     }, delay);
@@ -67,12 +70,8 @@ var balance = activeCard ? activeCard.balance : wallet.balance;
     return function () { clearTimeout(handle); };
   }, [query, mode]);
 
-  function handleSelectContact(contact) {
-    setSelectedContact(contact);
-  }
-  function handleClearSelection() {
-    setSelectedContact(null);
-  }
+  function handleSelectContact(contact) { setSelectedContact(contact); }
+  function handleClearSelection() { setSelectedContact(null); }
   function handleGoToAmount() {
     if (!selectedContact) return;
     setStatusMsg(null);
@@ -186,7 +185,7 @@ var balance = activeCard ? activeCard.balance : wallet.balance;
 
   var amountDisplay = amount ? formatAmount(amount) : "0.00";
   var amountClass = "snd-fake-input " + (amount ? "has-value" : "is-empty");
-  var balanceDisplay = "Balance $" + balance.toFixed(2);
+  var balanceDisplay = (activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card · $") : "Balance $") + balance.toFixed(2);
 
   var thumbStyle = {
     transform: "translateX(" + swipeX + "px)",
@@ -198,7 +197,7 @@ var balance = activeCard ? activeCard.balance : wallet.balance;
 
   var flowClass = "snd-flow " + (step === "amount" ? "at-amount" : "at-search");
   var nextBtnClass = "snd-next-btn " + (selectedContact ? "active" : "disabled");
-  var showEmpty = !isLoadingSearch && results.length === 0;
+  var showEmpty = !isLoadingSearch && !searchError && results.length === 0;
   var resultsLabel = mode === "card" ? "Card Matches" : (query.length === 0 ? "Contacts" : "Results");
   var recipientInitials = selectedContact ? getInitials(selectedContact.name) : "";
   var swipeThumbClass = sent ? "snd-swipe-thumb sent" : "snd-swipe-thumb";
@@ -260,11 +259,7 @@ var balance = activeCard ? activeCard.balance : wallet.balance;
                   <div className="snd-contact-avatar" style={{ backgroundColor: contact.color }}>{getInitials(contact.name)}</div>
                   <div className="snd-contact-info">
                     <span className="snd-contact-name">{contact.name}</span>
-                    {/* <span className="snd-contact-id">{contact.cardNumber ? ("···· " + contact.cardNumber.slice(-4)) : contact.id}</span> */}
-                  <span className="snd-contact-id">
-  {contact.cardNumber ? ("···· " + contact.cardNumber.slice(-4)) : contact.id}
-  {contact.isOwnCard && <span className="snd-own-card-tag"> · Yours</span>}
-</span>
+                    <span className="snd-contact-id">{contact.cardNumber ? ("···· " + contact.cardNumber.slice(-4)) : contact.id}</span>
                   </div>
                   {mode === "id" && (
                     <button
@@ -283,6 +278,13 @@ var balance = activeCard ? activeCard.balance : wallet.balance;
                 </div>
               );
             })}
+
+            {searchError && (
+              <div className="snd-empty">
+                <span className="snd-empty-text">Search failed</span>
+                <span className="snd-empty-hint">{searchError}</span>
+              </div>
+            )}
 
             {showEmpty && (
               <div className="snd-empty">
@@ -318,9 +320,8 @@ var balance = activeCard ? activeCard.balance : wallet.balance;
           </div>
 
           {statusMsg && <div className={statusClass}>{statusMsg}</div>}
-              <div className="snd-balance-chip">
-{activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card · $" + activeCard.balance.toFixed(2)) : ("Wallet · $" + balance.toFixed(2))}
-              </div>
+          <div className="snd-balance-chip">{balanceDisplay}</div>
+
           <div className="snd-numpad-grid-parent">
             <div className="snd-numpad-grid">
               <button onClick={() => handleNumpad("1")}>1</button>

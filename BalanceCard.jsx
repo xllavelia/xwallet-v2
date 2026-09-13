@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useBankCards, openCard, topUpCard, withdrawFromCard, selectActiveCard, closeCard } from "./useBankCards";
 import { useWalletBalance } from "./useWallet";
 import { TIER_COLORS, TIER_NAMES, MiniCardThumb, CardPattern } from "./bankCardVisuals";
-import { navigateP2P } from "./p2pNavigate";
+// import { navigateP2P } from "./p2pNavigate";
 
 function PlusIcon() {
   return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>);
@@ -13,6 +13,7 @@ function HeroCard(props) {
   var color = TIER_COLORS[tier] || "#5a5a5a";
   return (
     <div className={"bcx-hero-card bcx-tier-" + tier}>
+      
       <div className="bcx-hero-top">
         <span className="bcx-hero-brand">xwallet</span>
         <span className="bcx-hero-tier">{TIER_NAMES[tier]}</span>
@@ -210,33 +211,7 @@ function openActions(card) {
   var totalBalance = cards.reduce(function (acc, c) { return acc + c.balance; }, 0);
   var focusedCard = cards[focusedIndex];
 
-   function roadSend (){
-   navigate(-1);
-    setTimeout(function () {
-      navigate("/send")
-    }, 20);
-  }
-
-    function roadtrade (){
-   navigate(-1);
-    setTimeout(function () {
-      navigate("/trade")
-    }, 20);
-  }
-
-    function roadRocket (){
-   navigate(-1);
-    setTimeout(function () {
-      navigate("/rocket")
-    }, 20);
-  }
-
-    function roadP2P (){
-   navigate(-1);
-    setTimeout(function () {
-    navigateP2P(navigate, "/p2p")
-    }, 20);
-  }
+ 
 
   return (
     <div className="BalanceCardContent">
@@ -307,7 +282,7 @@ function openActions(card) {
 
         {cards.length > 0 && (
           <>
-            <div className="bcx-section-title">Your Cards</div>
+            {/* <div className="bcx-section-title">Your Cards</div> */}
             <div className="bcx-list">
               {cards.map(function (card) {
                 return (
@@ -316,9 +291,9 @@ function openActions(card) {
                     <div className="bcx-list-info">
                       <div className="bcx-list-top">
                         <span className="bcx-list-name">{TIER_NAMES[card.tier]}</span>
-                        {card.isActiveForTrading && <span className="bcx-list-active-pill">Active</span>}
+                        {card.isActiveForTrading && <span className="bcx-list-active-pill">A</span>}
                       </div>
-                      <span className="bcx-list-sub">{"···· " + card.cardNumber.slice(-4)}</span>
+                      <span className="bcx-list-sub">{"**** " + card.cardNumber.slice(-4)}</span>
                     </div>
                     <div className="bcx-list-right">
                       <span className="bcx-list-balance">{"$" + card.balance.toFixed(2)}</span>
@@ -331,35 +306,7 @@ function openActions(card) {
             </div>
           </>
         )}
-    <div className="hrd-summary-row-">
-
-              <div className="hqa-card hqa-send" onClick={roadSend}>
-        <span className="hqa-label">Move funds</span>
-        <span className="hqa-title">Send</span>
-        <span className="hqa-sub">Ready in seconds</span>
-      </div>
-
-      <div className="hqa-card hqa-trade" onClick={roadtrade}>
-        <span className="hqa-label">BTC · USD</span>
-        <span className="hqa-title">Trade</span>
-        <span className="hqa-sub">{priceLabel}</span>
-    </div>
-      </div>
-     <div className="hrd-summary-row-">
-
-        <div className="hqa-card hqa-trade" onClick={roadRocket}>
-        <span className="hqa-label">coefficient up to five</span>
-        <span className="hqa-title">Rocket</span>
-        <span className="hqa-sub">Play now!</span>
-    </div>
-     <div className="hqa-card hqa-send" onClick={roadP2P}>
-        <span className="hqa-label">Trade directly</span>
-        <span className="hqa-title">P2P market</span>
-        <span className="hqa-sub">sell and buy</span>
-      </div>
-        
-    </div>
-        
+    
       </div>
 
       {catalogOpen && (

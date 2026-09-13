@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useMerchantStatus, useMyDeals } from "./useP2P";
+import { backFromP2PHub, goToP2PModule } from "./p2pNav";
+import { backToP2PMarket } from "./p2pNav";
 
 function ChevronLeft() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>); }
 function DownArrowIcon() { return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>); }
@@ -15,17 +17,10 @@ const P2PMarket = () => {
   var { status } = useMerchantStatus();
   var { deals: activeDeals } = useMyDeals(true);
 
-// function road(r) {
-//      navigate(-1);
-//     setTimeout(function () {
-//       navigate("/tradecoin")
-//     }, 20);
-// }
-
   return (
     <div className="p2p-page">
       <div className="p2p-topbar">
-        <button className="p2p-icon-btn" onClick={() => navigate(-1)}><ChevronLeft /></button>
+        <button className="p2p-icon-btn" onClick={() => backFromP2PHub(navigate)}><ChevronLeft /></button>
         <span className="p2p-title">P2P Market</span>
       </div>
 
@@ -37,17 +32,17 @@ const P2PMarket = () => {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        <div className="p2p-card" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => navigate("/p2p/browse", { state: { side: "buy" } })}>
+        <div className="p2p-card" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => goToP2PModule(navigate, "/p2pbrowse", { side: "buy" })}>
           <DownArrowIcon />
           <span style={{ fontFamily: "'Unbounded', sans-serif", fontSize: 13, fontWeight: 800 }}>Buy</span>
         </div>
-        <div className="p2p-card" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => navigate("/p2p/browse", { state: { side: "sell" } })}>
+        <div className="p2p-card" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, cursor: "pointer" }} onClick={() => goToP2PModule(navigate, "/p2pbrowse", { side: "sell" })}>
           <UpArrowIcon />
           <span style={{ fontFamily: "'Unbounded', sans-serif", fontSize: 13, fontWeight: 800 }}>Sell</span>
         </div>
       </div>
 
-      <div className="p2p-card" onClick={() => navigate("/p2p/merchant")} style={{ cursor: "pointer" }}>
+      <div className="p2p-card" onClick={() => goToP2PModule(navigate, "/p2pmerchant")} style={{ cursor: "pointer" }}>
         <div className="p2p-menu-row" style={{ padding: 0 }}>
           <div className="p2p-menu-icon"><StorefrontIcon /></div>
           <div className="p2p-menu-text">
@@ -59,7 +54,7 @@ const P2PMarket = () => {
       </div>
 
       <div className="p2p-card" style={{ display: "flex", flexDirection: "column", gap: 4, padding: 6 }}>
-        <div className="p2p-menu-row" onClick={() => navigate("/p2p/deals")}>
+        <div className="p2p-menu-row" onClick={() => goToP2PModule(navigate, "/p2pdeals")}>
           <div className="p2p-menu-icon"><ListIcon /></div>
           <div className="p2p-menu-text">
             <span className="p2p-menu-title">My Deals</span>

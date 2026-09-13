@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,  useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWalletBalance } from './useWallet';
 import { useCardFunding } from './useCardFunding';
@@ -19,7 +19,8 @@ const Order = () => {
   var change = stateData.change || '+2.33%';
   var prefillLeverage = stateData.leverage || 3;
   var prefillAmount = stateData.amount ? stateData.amount.toString() : "10";
-
+const requestIdRef = useRef(null);
+const isSubmittingRef = useRef(false);
   var currentPrice = parseFloat(rawPrice.toString().replace(/,/g, '')) || 69035;
 
   var { wallet } = useWalletBalance();
@@ -100,42 +101,50 @@ const Order = () => {
     setter(n);
   }
 
-  async function handleOpenPosition() {
-    if (!canSubmit || parsedAmount <= 0 || submitted) return;
-    setErrorMsg(null);
+ async function handleOpenPosition() {
+  if (!canSubmit || parsedAmount <= 0 || submitted || isSubmittingRef.current) return;
+  isSubmittingRef.current = true;
+  setErrorMsg(null);
 
-    if (mode === "time") {
-      try {
-        await openTimeTrade({
-          coin: coin, type: type, entryPrice: currentPrice,
-          amount: parsedAmount, durationSeconds: durationSeconds
-        });
-        setSubmitted(true);
-        setTimeout(function() { navigate(-1, { state: { coin: coin } }); }, 1200);
-      } catch (err) {
-        setErrorMsg(err.message);
-      }
-      return;
-    }
+  if (!requestIdRef.current) {
+    requestIdRef.current = Date.now() + "-" + Math.random().toString(36).slice(2);
+  }
 
+  if (mode === "time") {
     try {
-      var result = await openPosition({
-        coin: coin, type: type, entryPrice: currentPrice, leverage: leverage,
-        amount: parsedAmount, autoClose: autoCloseEnabled,
-        autoCloseTarget: autoCloseEnabled ? autoCloseTarget : null
+      await openTimeTrade({
+        coin: coin, type: type, entryPrice: currentPrice,
+        amount: parsedAmount, durationSeconds: durationSeconds,
+        clientRequestId: requestIdRef.current
       });
       setSubmitted(true);
-      if (result.feesFromVoucher > 0) {
-        setVoucherMsg(result.feesPaidByVoucher
-          ? "Fee fully covered by your voucher!"
-          : ('$' + result.feesFromVoucher.toFixed(2) + ' of your fee was covered by a voucher'));
-      }
       setTimeout(function() { navigate(-1, { state: { coin: coin } }); }, 1200);
     } catch (err) {
       setErrorMsg(err.message);
+      isSubmittingRef.current = false;
     }
+    return;
   }
 
+  try {
+    var result = await openPosition({
+      coin: coin, type: type, entryPrice: currentPrice, leverage: leverage,
+      amount: parsedAmount, autoClose: autoCloseEnabled,
+      autoCloseTarget: autoCloseEnabled ? autoCloseTarget : null,
+      clientRequestId: requestIdRef.current
+    });
+    setSubmitted(true);
+    if (result.feesFromVoucher > 0) {
+      setVoucherMsg(result.feesPaidByVoucher
+        ? "Fee fully covered by your voucher!"
+        : ('$' + result.feesFromVoucher.toFixed(2) + ' of your fee was covered by a voucher'));
+    }
+    setTimeout(function() { navigate(-1, { state: { coin: coin } }); }, 1200);
+  } catch (err) {
+    setErrorMsg(err.message);
+    isSubmittingRef.current = false;
+  }
+}
   return (
     <div className="OrderContent">
       <div className="Road-Home" onClick={roadHome}></div>

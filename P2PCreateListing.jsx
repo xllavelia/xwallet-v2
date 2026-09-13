@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createListing, fetchMarketPrice } from "./useP2P";
 import { CRYPTO_ASSETS, STOCK_ASSETS } from "./p2pAssets";
+import { backToP2PMarket } from "./p2pNav";
 
 function ChevronLeft() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>); }
 
@@ -50,7 +51,7 @@ const P2PCreateListing = () => {
         rateUsd: rateNum, minAmountUsd: minNum, maxAmountUsd: maxNum,
         baseAmount: amountNum, paymentNote: note
       });
-      navigate("/p2p/merchant");
+      navigate("/p2pmerchant");
     } catch (err) {
       setStatusMsg(err.message);
     } finally {
@@ -61,8 +62,8 @@ const P2PCreateListing = () => {
   return (
     <div className="p2p-page">
       <div className="p2p-topbar">
-        <button className="p2p-icon-btn" onClick={() => navigate(-1)}><ChevronLeft /></button>
-        <span className="p2p-title">Create Listing</span>
+<button className="p2p-icon-btn" onClick={() => backToP2PMarket(navigate)}><ChevronLeft /></button>
+     <span className="p2p-title">Create Listing</span>
       </div>
 
       <div className="p2p-toggle">

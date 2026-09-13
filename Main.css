@@ -2,7 +2,7 @@
 
 
 :root {
-  --xlavelia: hsl(61, 80%, 78%);
+  --xlavelia: hsl(61, 85%, 78%) ;
 }
  /* --main-one: hsl(61, 80%, 78%);
   --main-two: hsl(162, 50%, 22%); */
@@ -1367,7 +1367,7 @@ left: 10%;
 }
 
 .SettingContent{
-  margin-top: 8vh;
+  margin-top: 1vh;
 }
 .HistoryContent{
   width: 100%;
@@ -1709,8 +1709,8 @@ color: white;
 
 :root {
   --tkt-dark:#1c1c1c   ;  
-  --tkt-lime: hsl(61, 85%, 78%); 
-   /* --tkt-dark:  hsl(61, 85%, 78%) ;  
+  --tkt-lime: hsl(61, 85%, 78%) ; 
+   /* --tkt-dark:  hsl(61, 85%, 78%)  ;  
  --xlavelia: #1c1c1c;  */
 }
 

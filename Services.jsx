@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { navigateP2P } from "./p2pNavigate";
+import { enterP2P } from "./p2pNav";
 
 var MODULES = [
   { name: "Trade", desc: "Live charts, long & short positions", path: "/trade" },
@@ -13,7 +13,7 @@ var MODULES = [
   { name: "Battle Pass", desc: "Season rewards & XDrop cases", path: "/battlepass" },
   { name: "Prime", desc: "Membership tiers & LAVX", path: "/prime" },
   { name: "Promo Code", desc: "Redeem a code", path: "/promocode" },
-  { name: "Profile", desc: "Account, security, settings", path: "/profile" },
+  { name: "Profile", desc: "Account, security, settings", path: "/setting" },
   { name: "Card", desc: "Tansfers, perks and bonuses", path: "/balancecard" },
   { name: "Rocket", desc: "Crash-style multiplier game", path: "/rocket" },
   { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
@@ -33,6 +33,8 @@ const Services = () => {
     return m.name.toLowerCase().indexOf(q) !== -1 || m.desc.toLowerCase().indexOf(q) !== -1;
   });
 
+function road(path) { navigate(-1); setTimeout(() => { if (path === "/p2p") { enterP2P(navigate); } else { navigate(path); } }, 20); }
+  
   return (
     <div className="ServicesContent">
       <div className="svc-page">
@@ -49,7 +51,7 @@ const Services = () => {
         <div className="svc-grid">
           {filtered.map(function (m) {
             return (
-             <div className="svc-tile" key={m.path} onClick={() => (m.path === "/p2p" ? navigateP2P(navigate, m.path) : navigate(m.path))}>
+          <div className="svc-tile" key={m.path} onClick={() => road(m.path)}>
               <span className="svc-tile-name">{m.name}</span>
                 <span className="svc-tile-desc">{m.desc}</span>
               </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMyDeals } from "./useP2P";
+import { backToP2PMarket } from "./p2pNav";
 
 function ChevronLeft() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>); }
 
@@ -9,11 +10,19 @@ const P2PDeals = () => {
   var [activeTab, setActiveTab] = useState("active");
   var { deals } = useMyDeals(activeTab === "active");
 
+function roadDealState(d) {
+  navigate(-1);
+
+  setTimeout(function () {
+    navigate("/p2pdeal", { state: { dealId: d.id } });
+  }, 100);
+}
+
   return (
     <div className="p2p-page">
       <div className="p2p-topbar">
-        <button className="p2p-icon-btn" onClick={() => navigate(-1)}><ChevronLeft /></button>
-        <span className="p2p-title">My Deals</span>
+<button className="p2p-icon-btn" onClick={() => backToP2PMarket(navigate)}><ChevronLeft /></button>
+      <span className="p2p-title">My Deals</span>
       </div>
 
       <div className="p2p-toggle">
@@ -29,20 +38,32 @@ const P2PDeals = () => {
         </div>
       )}
 
-      {deals.map(function (d) {
-        return (
-          <div className="p2p-listing-row" key={d.id} onClick={() => navigate("/p2p/deal", { state: { dealId: d.id } })}>
-            <div className="p2p-listing-top">
-              <span className="p2p-listing-rate" style={{ fontSize: 16 }}>{d.baseAmount.toFixed(6) + " " + d.baseAsset}</span>
-              <span className={"p2p-badge-pill " + d.status}>{d.status.replace("_", " ").toUpperCase()}</span>
-            </div>
-            <div className="p2p-listing-meta">
-              <span>{"With " + d.counterpartyName}</span>
-              <span>{"$" + d.quoteAmountUsd.toFixed(2)}</span>
-            </div>
-          </div>
-        );
-      })}
+   {deals.map(function (d) {
+  return (
+    <div
+      className="p2p-listing-row"
+      key={d.id}
+      onClick={function () {
+        roadDealState(d);
+      }}
+    >
+      <div className="p2p-listing-top">
+        <span className="p2p-listing-rate" style={{ fontSize: 16 }}>
+          {d.baseAmount.toFixed(6) + " " + d.baseAsset}
+        </span>
+
+        <span className={"p2p-badge-pill " + d.status}>
+          {d.status.replace("_", " ").toUpperCase()}
+        </span>
+      </div>
+
+      <div className="p2p-listing-meta">
+        <span>{"With " + d.counterpartyName}</span>
+        <span>{"$" + d.quoteAmountUsd.toFixed(2)}</span>
+      </div>
+    </div>
+  );
+})}
     </div>
   );
 };

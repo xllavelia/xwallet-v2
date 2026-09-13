@@ -44,7 +44,7 @@ const balance = activeCard ? activeCard.balance : wallet.balance;
   const stats = coinStats[currentCoin] || coinStats['BTC'];
 
   var numericPrice   = safeNum(currentPrice.toString().replace(/,/g, ''));
-  var coinPositions  = positions.filter(function(p) { return p.coin === currentCoin; });
+ var coinPositions = positions.filter(function(p) { return p.coin === currentCoin && p.tradeMode !== 'time'; });
   var timeTrades = positions.filter(function(p) { return p.coin === currentCoin && p.tradeMode === 'time'; });
   // var balanceStr     = '$' + safeNum(balance).toFixed(2);
   var totalOpenCount = coinPositions.length;

@@ -8,9 +8,9 @@ function ServicesIcon(p) { return (<svg width="24" height="24" viewBox="0 0 24 2
 function ProfileIcon(p) { return (<svg width="24" height="24" viewBox="0 0 24 24" fill={p.active ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>); }
 
 var TABS = [
-  { path: "/", label: "Home", Icon: HomeIcon },
-  { path: "/services", label: "Services", Icon: ServicesIcon },
-  { path: "/profile", label: "Profile", Icon: ProfileIcon }
+  // { path: "/", label: "Home", Icon: HomeIcon },
+  // { path: "/services", label: "Services", Icon: ServicesIcon },
+  // { path: "/profile", label: "Profile", Icon: ProfileIcon }
 ];
 
 function BottomNav() {
@@ -32,7 +32,7 @@ function BottomNav() {
 
   return (
     <nav className="bnav-wrap">
-      <div className="bnav-pill">
+      {/* <div className="bnav-pill">
         <div className="bnav-indicator-track" style={{ width: (100 / TABS.length) + "%" }}>
           <div className="bnav-indicator" style={{ transform: indicatorTransform }}></div>
         </div>
@@ -45,7 +45,7 @@ function BottomNav() {
             </button>
           );
         })}
-      </div>
+      </div> */}
     </nav>
   );
 }

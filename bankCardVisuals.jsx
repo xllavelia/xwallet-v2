@@ -74,13 +74,12 @@ function MiniCardThumb(props) {
       <div className="mct-dark">
         <div className="mct-art" />
 
- {/* <span className="mct-brand-plus">X</span> */}
         <span className="mct-brand">
           XW
         </span>
 
         <span className="mct-num">
-          {props.last4 ? "•••• " + props.last4 : ""}
+          {props.last4 ? "**** " + props.last4 : ""}
         </span>
       </div>
     </div>

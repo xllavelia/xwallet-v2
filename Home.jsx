@@ -1,24 +1,26 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "./useAccount";
 import { useWalletBalance } from "./useWallet";
+import { useClosedPositionsRemote } from "./usePositions";
+import { enterP2P } from "./p2pNav";
+import { useBankCards } from "./useBankCards";
+import { useHomeSummary } from "./useHomeSummary";
 import { useSavings } from "./useSavings";
-import { useCard } from "./useCard";
-import { useTransfersRemote } from "./useTransfers";
-import { Glyph } from "./HistoryShared";
+// import HomeNewsCarousel from "./HomeNewsCarousel";
+
 // import history1 from './history1.jpg';
 // import history2 from './history2.jpg';
 // import history3 from './history3.jpg';
 // import history4 from './history4.jpg';
-import { useBankCards } from "./useBankCards";
-import { useHomeSummary } from "./useHomeSummary";
 import { MiniCardThumb } from "./bankCardVisuals";
 import { useStockPortfolio } from "./useStocks";
+import { useCard } from "./useCard";
 
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create time order! beta"
+// git commit -m "home redisign!"
 // git push -u origin main 
 
 
@@ -43,22 +45,59 @@ import { useStockPortfolio } from "./useStocks";
 // git push -f origin main
 
 
+// ── Настраиваемый параметр: сколько px "форс-блока" остаётся видно снизу
+// когда он полностью утянут вниз (это и есть та самая ручка для возврата).
+var PEEK_HEIGHT_PX = 30;
+
 function SearchIcon() {
-  return (<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>);
-}
-function WalletIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path><path d="M16 12h.01"></path><path d="M3 10h18"></path></svg>);
-}
-function SavingsIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path></svg>);
-}
-function CardIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"></rect><line x1="2.5" y1="10" x2="21.5" y2="10"></line></svg>);
+  return (<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>);
 }
 function GiftIcon() {
   return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8l9-4 9 4-9 4-9-4Z"></path><path d="M3 8v9l9 4 9-4V8"></path><line x1="12" y1="12" x2="12" y2="21"></line></svg>);
 }
+function TradeIcon() {
+return (<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="#fff" d="M7 20v-2H5V6h2V4h2v2h2v12H9v2zm0-4h2V8H7zm8 4v-5h-2V8h2V4h2v4h2v7h-2v5zm0-7h2v-3h-2zm1-1.5" /></svg> )
+}
+function SendIcon() {
+return (<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14L21 3m0 0l-6.5 18a.55.55 0 0 1-1 0L10 14l-7-3.5a.55.55 0 0 1 0-1z" /></svg>)  
+}
+function CrownIcon() {
+return (<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M4 20q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zm0-2h16V8H4zm3.5-1l-1.4-1.4L8.675 13l-2.6-2.6L7.5 9l4 4zm4.5 0v-2h6v2z" /></svg>) 
+}
+function RocketIcon() {
+  return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2c3 2 5 6 5 10 0 2-1 4-2 5l-3 3-3-3c-1-1-2-3-2-5 0-4 2-8 5-10Z"></path><circle cx="12" cy="10" r="1.6"></circle><path d="M9 16l-3 3M15 16l3 3"></path></svg>);
+}
+function P2PIcon() {
+  return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>);
+}
+function GridIcon() {
+  return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.8"></rect><rect x="14" y="3" width="7" height="7" rx="1.8"></rect><rect x="3" y="14" width="7" height="7" rx="1.8"></rect><rect x="14" y="14" width="7" height="7" rx="1.8"></rect></svg>);
+}
+function ProfileTileIcon() {
+  return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>);
+}
+function PlaceholderSection(props) {
+  return (
+    <div className="hv2-placeholder-section">
+      <div className="hv2-placeholder-header"><span>{props.title}</span></div>
+      <div className="hv2-placeholder-box"><span className="hv2-placeholder-box-text">{props.hint}</span></div>
+    </div>
+  );
+}
 
+function getGreeting() {
+  var h = new Date().getHours();
+  if (h < 12) return "Welcome";
+  if (h < 18) return "Hello";
+  return "Evening";
+}
+
+
+function formatUsd(n) { return "$" + n.toFixed(2); }
+function formatAmount(n, id) {
+  var decimals = n < 0.01 ? 5 : (n < 1 ? 4 : 2);
+  return n.toFixed(decimals) + " " + id;
+}
 
 
 const Home = () => {
@@ -66,254 +105,308 @@ const Home = () => {
 
   var { account } = useAccount();
   var { wallet } = useWalletBalance();
-  var { data: cardsData } = useBankCards();
+  var { closedPositions } = useClosedPositionsRemote();
+ var { data: cardsData } = useBankCards();
   var summary = useHomeSummary();
-  var { savings } = useSavings();
+
+  var { portfolio } = useStockPortfolio();
   var { card } = useCard();
-  var { transfers } = useTransfersRemote();
+
+
+
 
   var avatarInitial = account && account.username ? account.username[0].toUpperCase() : "?";
   var username = account ? account.username : "";
-  var primeTier = wallet.primeTier;
+var { savings } = useSavings();
 
-  var savingsBalance = savings ? savings.balance : 0;
-  var cardBalance = card ? card.balanceUsd : 0;
+var estDaily = savings
+  ? savings.balance * (savings.interestRate / 100) / 365
+  : 0;
 
-  var recentTransfers = transfers.slice(0, 3);
+var estMonthly = savings
+  ? savings.balance * (savings.interestRate / 100) / 12
+  : 0;
 
-    var { portfolio } = useStockPortfolio();
-  
-  // {"$" + (portfolio ? portfolio.totalValue.toFixed(2) : "0.00")}
-  
-    // var isPositive = portfolio.todayChangeAmount >= 0;
-  const [openIndex, setOpenIndex] = useState(null);
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [closing, setClosing] = useState(false);
-  const [opening, setOpening] = useState(false);
- 
-  const rafRef = useRef(null);
-  const startRef = useRef(0);
-  const pausedRef = useRef(false);
- 
+var estYearly = savings
+  ? savings.balance * (savings.interestRate / 100)
+  : 0;
 
-  const STORIES = [
-  {
-    id: 1,
-    title: '',
-    layout: 'top-left',
-        text: '',
-        // image:  history1,
+var totalDeposited = savings
+  ? savings.history
+      .filter(function (h) { return h.entryType === "deposit"; })
+      .reduce(function (acc, h) { return acc + h.amount; }, 0)
+  : 0;
 
-    slides: [
-      {
-        // image:  history1,
-        title: '',
-        text: '',
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: '',
-    layout: 'bottom-right',
-        text: '',
-        // image:  history2,
-    slides: [
-      {
-        // image: history2,
-        title: '',
-        text: '',
-      },
-      {
-        // image: history2,
-        title: '',
-        text: '',
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: '',
-    layout: 'center-right',
-        text: '',
-        // image:  history3,
+var totalWithdrawn = savings
+  ? savings.history
+      .filter(function (h) { return h.entryType === "withdrawal"; })
+      .reduce(function (acc, h) { return acc + h.amount; }, 0)
+  : 0;
+  var [balanceHidden, setBalanceHidden] = useState(false);
+  var [isOpen, setIsOpen] = useState(false);
+  var [maxDragY, setMaxDragY] = useState(420);
+  var lowerAreaRef = useRef(null);
+  var forceBlockRef = useRef(null);
+  var hiddenContentRef = useRef(null);
 
-    slides: [
-      {
-        // image: history3,
-        title: '',
-        text: '',
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: '',
-    layout: 'top-left',
-        text: '',
-        // image:  history4,
+  var stateRef = useRef({
+    maxDragY: 420,
+    currentY: 0,
+    isDragging: false,
+    startClientY: 0,
+    startValue: 0,
+    lastClientY: 0,
+    lastTime: 0,
+    velocity: 0
+  });
 
-    slides: [
-      {
-        // image: history4,
-        title: '',
-        text: '',
-      },
-    ],
-  },
-];
- 
-const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
+  function applyVisualPosition(y, withTransition) {
+    var s = stateRef.current;
+    var clamped = Math.max(0, Math.min(s.maxDragY, y));
+    s.currentY = clamped;
 
-  const isOpen = openIndex !== null;
-  const activeStory = isOpen ? STORIES[openIndex] : null;
-  const totalSlides = activeStory ? activeStory.slides.length : 0;
- 
-  useEffect(() => {
-    if (!isOpen) return;
- 
-    function tick(now) {
-      if (pausedRef.current) {
-        startRef.current = now - progress * SLIDE_DURATION;
-        rafRef.current = requestAnimationFrame(tick);
-        return;
+    if (forceBlockRef.current) {
+      forceBlockRef.current.style.transition = withTransition
+        ? "transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)"
+        : "none";
+      forceBlockRef.current.style.transform = "translateY(" + clamped + "px)";
+    }
+    if (hiddenContentRef.current) {
+      var progress = s.maxDragY > 0 ? clamped / s.maxDragY : 0;
+      hiddenContentRef.current.style.transition = withTransition
+        ? "opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)"
+        : "none";
+      hiddenContentRef.current.style.opacity = (0.3 + progress * 0.7).toString();
+      hiddenContentRef.current.style.transform = "translateY(" + ((1 - progress) * 16) + "px)";
+    }
+  }
+
+  useLayoutEffect(function () {
+    function measure() {
+      if (lowerAreaRef.current) {
+        var h = lowerAreaRef.current.clientHeight;
+        stateRef.current.maxDragY = Math.max(120, h - PEEK_HEIGHT_PX);
+        if (!stateRef.current.isDragging) {
+          applyVisualPosition(isOpen ? stateRef.current.maxDragY : 0, false);
+        }
       }
-      if (!startRef.current) startRef.current = now;
-      const elapsed = now - startRef.current;
-      const pct = Math.min(elapsed / SLIDE_DURATION, 1);
-      setProgress(pct);
- 
-      if (pct >= 1) {
-        goNextSlide();
-        return;
-      }
-      rafRef.current = requestAnimationFrame(tick);
     }
- 
-    startRef.current = 0;
-    rafRef.current = requestAnimationFrame(tick);
- 
-    return function cleanup() {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [isOpen, openIndex, slideIndex]);
- 
-  function openStory(index) {
-    setOpenIndex(index);
-    setSlideIndex(0);
-    setProgress(0);
-    setOpening(true);
-    window.setTimeout(function () {
-      setOpening(false);
-    }, 260);
-  }
- 
-  function closeStory() {
-    setClosing(true);
-    window.setTimeout(function () {
-      setClosing(false);
-      setOpenIndex(null);
-      setSlideIndex(0);
-      setProgress(0);
-    }, 220);
-  }
- 
-  function goNextSlide() {
-    const isLastSlide = slideIndex >= totalSlides - 1;
-    const isLastStory = openIndex >= STORIES.length - 1;
- 
-    if (!isLastSlide) {
-      setSlideIndex(slideIndex + 1);
-      setProgress(0);
-      return;
-    }
-    if (!isLastStory) {
-      setOpenIndex(openIndex + 1);
-      setSlideIndex(0);
-      setProgress(0);
-      return;
-    }
-    closeStory();
-  }
- 
-  function goPrevSlide() {
-    const isFirstSlide = slideIndex === 0;
-    const isFirstStory = openIndex === 0;
- 
-    if (!isFirstSlide) {
-      setSlideIndex(slideIndex - 1);
-      setProgress(0);
-      return;
-    }
-    if (!isFirstStory) {
-      const prevStory = STORIES[openIndex - 1];
-      setOpenIndex(openIndex - 1);
-      setSlideIndex(prevStory.slides.length - 1);
-      setProgress(0);
-      return;
-    }
-    setProgress(0);
-  }
- 
-  function handleStageClick(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const isRightSide = clickX > rect.width / 2;
-    if (isRightSide) {
-      goNextSlide();
-    } else {
-      goPrevSlide();
-    }
-  }
- 
-  function handlePressStart() {
-    pausedRef.current = true;
-  }
- 
-  function handlePressEnd() {
-    pausedRef.current = false;
-  }
-
-  const currentSlide = activeStory ? activeStory.slides[slideIndex] : null;
- 
-
-
-
-  useEffect(function () {
-    var active = true;
-    fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT")
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (!active) return;
-        setBtcPrice(parseFloat(d.price));
-      })
-      .catch(function () {});
-    return function () { active = false; };
+    measure();
+    window.addEventListener("resize", measure);
+    return function () { window.removeEventListener("resize", measure); };
   }, []);
 
+  useEffect(function () {
+    if (stateRef.current.isDragging) return;
+    applyVisualPosition(isOpen ? stateRef.current.maxDragY : 0, true);
+  }, [isOpen]);
+
+  function handlePointerDown(e) {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    var s = stateRef.current;
+    s.isDragging = true;
+    s.startClientY = e.clientY;
+    s.startValue = s.currentY;
+    s.lastClientY = e.clientY;
+    s.lastTime = performance.now();
+    s.velocity = 0;
+  }
+
+  function handlePointerMove(e) {
+    var s = stateRef.current;
+    if (!s.isDragging) return;
+    var deltaY = e.clientY - s.startClientY;
+    applyVisualPosition(s.startValue + deltaY, false);
+
+    var now = performance.now();
+    var dt = now - s.lastTime;
+    if (dt > 4) {
+      s.velocity = (e.clientY - s.lastClientY) / dt;
+      s.lastClientY = e.clientY;
+      s.lastTime = now;
+    }
+  }
+
+  function handlePointerUp(e) {
+    var s = stateRef.current;
+    if (!s.isDragging) return;
+    s.isDragging = false;
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch (err) {}
+
+    var shouldOpen;
+    if (Math.abs(s.velocity) > 0.45) {
+      shouldOpen = s.velocity > 0;
+    } else {
+      shouldOpen = s.currentY > s.maxDragY / 2;
+    }
+    setIsOpen(shouldOpen);
+    applyVisualPosition(shouldOpen ? s.maxDragY : 0, true);
+  }
+
+  var change24h = { amount: 0, percent: 0 };
+  (function () {
+    var since = Date.now() - 24 * 60 * 60 * 1000;
+    var total = 0;
+    closedPositions.forEach(function (p) {
+      if (new Date(p.closedAt).getTime() >= since) {
+        total += parseFloat(p.pnl) || 0;
+      }
+    });
+    change24h.amount = total;
+    var base = wallet.balance - total;
+    change24h.percent = base > 0 ? (total / base) * 100 : 0;
+  })();
+
+  var avatarInitial = account && account.username ? account.username[0].toUpperCase() : "?";
+  var username = account ? account.username : "";
+  // var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("en-US");
+var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
+  var changeIsPositive = change24h.amount >= 0;
 
   return (
-    <div className="HomeRedesignContent">
-      <div className="hrd-page">
+    <div className="hv2-page">
 
-        <div className="hrd-top-row">
-          <div className="hrd-profile-chip" onClick={() => navigate("/profile")}>
-            <div className="hrd-avatar">{avatarInitial}</div>
-            <div className="hrd-profile-text">
-              <span className="hrd-username">{username}</span>
-              {primeTier && <span className="hrd-prime-badge">{primeTier.toUpperCase()}</span>}
+      <div className="hv2-hero">
+        
+        
+          
+          
+         <div className="hero__glow hero__glow--main" />
+      <div className="hero__glow hero__glow--gold" />
+      <div className="hero__glow hero__glow--soft" />
+      <div className="hero__arc" />
+      
+
+
+        <div className="hv2-top-row">
+          <div className="hv2-identity" onClick={() => navigate("/setting")}>
+            <div className="hv2-avatar">{avatarInitial}</div>
+            <div className="hv2-identity-text">
+              <span className="hv2-greeting">{getGreeting()}</span>
+              <span className="hv2-username">{username}</span>
             </div>
           </div>
-          <button className="hrd-invite-btn" onClick={() => navigate("/referral")}>
-            <GiftIcon /> Frend
-          </button>
+          <div className="hv2-top-actions">
+            <button className="hv2-icon-btn" onClick={() => navigate("/services")}><SearchIcon /></button>
+            <button className="hv2-icon-btn" onClick={() => navigate("/referral")}><GiftIcon /></button>
+          </div>
         </div>
 
-        <div className="hrd-search-bar" onClick={() => navigate("/services")}>
-          <SearchIcon />
-          <span>Search modules and features</span>
+        <div className="hv2-balance-block" onDoubleClick={() => setBalanceHidden(!balanceHidden)}>
+          <span className="hv2-balance-label">Wallet Balance</span>
+          <span className="hv2-balance-value">{balanceHidden ? "******" : ("$" + balanceValue)}</span>
+          <div className="hv2-balance-change-row">
+            <span className={"hv2-change-amount " + (changeIsPositive ? "pos" : "neg")}>
+              {balanceHidden ? "****" : ((changeIsPositive ? "+$" : "-$") + Math.abs(change24h.amount).toFixed(2))}
+            </span>
+            <span className={balanceHidden ? "" :"hv2-change-pill " + (changeIsPositive ? "pos" : "neg")}>
+              {balanceHidden ? "" : ((changeIsPositive ? "+" : "") + change24h.percent.toFixed(2) + "%")}
+            </span>
+          </div>
         </div>
+
+        <div className="hv2-action-row">
+          <button className="hv2-action-btn primary" onClick={() => navigate("/trade")}>
+            <TradeIcon /><span>Trade</span>
+          </button>
+          <button className="hv2-action-btn primary" onClick={() => navigate("/send")}>
+            <SendIcon /><span>Send</span>
+          </button>
+          <button className="hv2-action-btn prime" onClick={() => navigate("/promocode")}>
+            <CrownIcon />
+          </button>
+        </div>
+      </div>
+
+      <div className="hv2-lower-area" ref={lowerAreaRef}>
+
+        <div className="hv2-hidden-content" ref={hiddenContentRef}>
+      
+
+ {portfolio && (
+        <div className="stks-hero" onClick={() => navigate("/stocks")}>
+          <span className="stks-hero-label">Portfolio Value</span>
+          <span className="stks-hero-value">{   balanceHidden ? "****" : "$" + portfolio.totalValue.toFixed(2)}</span>
+          <span className={"stks-hero-change " +  (portfolio.todayChangeAmount >= 0 ? "pos" : "neg")}>
+               {balanceHidden ? "****" : (portfolio.todayChangeAmount >= 0 ? "+$" : "-$") + Math.abs(portfolio.todayChangeAmount).toFixed(2) +
+              " (" + (portfolio.todayChangePercent >= 0 ? "+" : "") + portfolio.todayChangePercent.toFixed(2) + "%) Today"}
+          </span>
+        </div>
+      )}
+
+
+ <div className="crdx-hero" onClick={() => navigate("/card")}>
+        <span className="crdx-hero-label">Total Value</span>
+        <span className="crdx-hero-value">{   balanceHidden ? "****" : formatUsd(card.balanceUsd || 0)}</span>
+        <span className="crdx-hero-sub">{"Card ····" + (card.cardNumber || "").slice(-4)}</span>
+      </div>
+{/* 
+<div className="hv2-nav-tiles-row">
+  <div className="hv2-nav-tile" onClick={() => navigate("/rocket")}>
+    <div className="hv2-nav-tile-icon"><RocketIcon /></div>
+    <span className="hv2-nav-tile-label">Rocket</span>
+  </div>
+  <div className="hv2-nav-tile" onClick={() => enterP2P(navigate)}>
+    <div className="hv2-nav-tile-icon"><P2PIcon /></div>
+    <span className="hv2-nav-tile-label">P2P Market</span>
+  </div>
+</div> */}
+
+
+        </div>
+
+
+
+        <div className="hv2-force-block" ref={forceBlockRef}>
+          <div
+            className="hv2-handle-zone"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+          >
+            <div className="hv2-handle-bar"></div>
+          </div>
+
+          <div className="hv2-force-scroll">
+          
+
+ 
+
+    <div className="hrd-summary-row">
+         <div className="hrd-summary-card" onClick={() => navigate("/history")}>
+
+  <span className="hrd-summary-value">Activity</span>
+  <span className="hrd-summary-label">View all</span>
+
+  <span className="hrd-summary-value">
+    {summary ? balanceHidden ? "****" : ("" + (summary.totalIncome - summary.totalExpense >= 0 ? "" : "") + (summary.totalIncome - summary.totalExpense).toFixed(2)) : "..."}
+  </span>
+  {summary && (
+    <div className="hrd-summary-bar">
+      {summary.categories.map(function (cat, idx) {
+        var total = summary.categories.reduce(function (acc, c) { return acc + c.amount; }, 0) || 1;
+        var pct = (cat.amount / total) * 100;
+        var colors = ["hsl(61,85%,78%)", "hsl(280,70%,65%)", "hsl(150,70%,50%)", "hsl(20,80%,60%)", "hsl(210,70%,60%)"];
+        return <span key={cat.key} style={{ width: pct + "%", background: colors[idx % colors.length] }}></span>;
+      })}
+    </div>
+  )}
+</div>
+          <div className="hrd-summary-card" onClick={() => navigate("/bonus")}>
+            <span className="hrd-summary-label">Vouchers </span>
+            <span className="hrd-summary-value">Rewards and vouchers</span>
+            <span className="hrd-summary-cta">View all</span>
+          </div>
+        </div>
+    
+
+   {cardsData && cardsData.cards.length == 0 && (
+          <div className="bcx-empty-state" onClick={() => navigate("/balancecard")}>
+            <span className="bcx-empty-title">No cards yet</span>
+            <span className="bcx-empty-sub">Open your free Standard card to get started</span>
+          </div>
+        )}
 
 {cardsData && cardsData.cards.length > 0 && (
   
@@ -348,227 +441,58 @@ const SLIDE_DURATION = 5000; // мс, автоплей одного слайда
   </div>
 )}
 
-{/* 
- <div className="stories-root">
-      <div className="stories-scroll">
-        {STORIES.map(function (story, index) {
-          return (
-          <div className="story-card"  key={story.id}
-             
-              onClick={function () {
-                openStory(index);
-              }} >
-            <article className="newsCard newsCardMain">
-              <img className="story-image" src={story.image} alt="" />
-            </article>
 
-          </div>
-      
-          );
-        })}
-      </div>
- 
-      {isOpen && (
-        <div
-          className={
-            'story-viewer' +
-            (opening ? ' story-viewer--opening' : '') +
-            (closing ? ' story-viewer--closing' : '')
-          }
-        >
-          <div className="story-stage">
-            <div className="story-progress-row">
-              {activeStory.slides.map(function (_, i) {
-                const filled = i < slideIndex ? 1 : i === slideIndex ? progress : 0;
-                return (
-                  <div className="story-progress-track" key={i}>
-                    <div
-                      className="story-progress-fill"
-                      style={{ transform: 'scaleX(' + filled + ')' }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
- 
-            <button className="story-close" onClick={closeStory} aria-label="Закрыть">
-              ✕
-            </button>
- 
-            <div
-              className="story-tap-zone"
-              onClick={handleStageClick}
-              onMouseDown={handlePressStart}
-              onMouseUp={handlePressEnd}
-              onMouseLeave={handlePressEnd}
-              onTouchStart={handlePressStart}
-              onTouchEnd={handlePressEnd}
-            >
-              <img className="story-image" src={currentSlide.image} alt="" />
- 
-              <div className={'story-text story-text--' + activeStory.layout}>
-                <h3 className="story-text-title">{currentSlide.title}</h3>
-                <p className="story-text-body">{currentSlide.text}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div> */}
+<div className="sav-stats-block" onClick={() => navigate("/savings")}>
+  <span className="sav-stats-title">Earnings Overview</span>
 
-
-
-        <div className="hrd-summary-row">
-         <div className="hrd-summary-card" onClick={() => navigate("/history")}>
-
-  <span className="hrd-summary-value">Activity</span>
-  <span className="hrd-summary-label">View all</span>
-
-  <span className="hrd-summary-value">
-    {summary ? ("" + (summary.totalIncome - summary.totalExpense >= 0 ? "" : "") + (summary.totalIncome - summary.totalExpense).toFixed(2)) : "..."}
-  </span>
-  {summary && (
-    <div className="hrd-summary-bar">
-      {summary.categories.map(function (cat, idx) {
-        var total = summary.categories.reduce(function (acc, c) { return acc + c.amount; }, 0) || 1;
-        var pct = (cat.amount / total) * 100;
-        var colors = ["hsl(61,85%,78%)", "hsl(280,70%,65%)", "hsl(150,70%,50%)", "hsl(20,80%,60%)", "hsl(210,70%,60%)"];
-        return <span key={cat.key} style={{ width: pct + "%", background: colors[idx % colors.length] }}></span>;
-      })}
+  <div className="sav-stats-list">
+    <div className="sav-stats-item">
+      <span className="sav-s-label">Est. daily earnings</span>
+      <span className="sav-s-dots"></span>
+      <span className="sav-s-value">
+         {balanceHidden ? "****" :  "$" + estDaily.toFixed(2)}
+      </span>
     </div>
-  )}
+
+    <div className="sav-stats-item">
+      <span className="sav-s-label">Est. monthly earnings</span>
+      <span className="sav-s-dots"></span>
+      <span className="sav-s-value">
+           {balanceHidden ? "****" : "$" + estMonthly.toFixed(2)}
+      </span>
+    </div>
+
+    <div className="sav-stats-item">
+      <span className="sav-s-label">Est. yearly earnings</span>
+      <span className="sav-s-dots"></span>
+      <span className="sav-s-value">
+           {balanceHidden ? "****" : "$" + estYearly.toFixed(2)}
+      </span>
+    </div>
+
+    <div className="sav-stats-item">
+      <span className="sav-s-label">Total deposited</span>
+      <span className="sav-s-dots"></span>
+      <span className="sav-s-value">
+           {balanceHidden ? "****" : "$" + totalDeposited.toFixed(2)}
+      </span>
+    </div>
+
+    <div className="sav-stats-item">
+      <span className="sav-s-label">Total withdrawn</span>
+      <span className="sav-s-dots"></span>
+      <span className="sav-s-value">
+           {balanceHidden ? "****" : "$" + totalWithdrawn.toFixed(2)}
+      </span>
+    </div>
+  </div>
 </div>
-          <div className="hrd-summary-card" onClick={() => navigate("/bonus")}>
-            <span className="hrd-summary-label">Vouchers </span>
-            <span className="hrd-summary-value">Rewards and vouchers</span>
-            <span className="hrd-summary-cta">View all</span>
+    
+  
+
+
           </div>
-        </div>
-   
-
-       <div className="hrd-accounts-list">
-
-
-<div className="hrd-account-row" onClick={() => navigate("/balancecard")}>
-  <div className="hrd-account-icon wallet">
-      <CardIcon />
-  </div>
-  <div className="hrd-account-info">
-    <span className="hrd-account-balance">{"$" + wallet.balance.toFixed(2)}</span>
-    <span className="hrd-account-name">
-      {cardsData && cardsData.cards.length > 0 ? ("opened " + cardsData.cards.length + " Card" + (cardsData.cards.length > 1 ? "s" : "")) : "Open your first card"}
-    </span>
-    {cardsData && cardsData.cards.length > 0 && (
-      <div className="hrd-mini-thumbs-row">
-        {cardsData.cards.map(function (c) {
-          // return <MiniCardThumb key={c.id} tier={c.tier} last4={c.cardNumber.slice(-4)} size="sm" />;
-        })}
-      </div>
-    )}
-   
-  </div>
-  <div className="hrd-account-chevron">›</div>
-</div>
-
-  {/* Savings */}
-  <div className="hrd-account-row" onClick={() => navigate("/savings")}>
-    <div className="hrd-account-icon wallet">
-      <SavingsIcon />
-    </div>
-
-    <div className="hrd-account-info">
-      <span className="hrd-account-balance">
-        {"$" + savingsBalance.toFixed(2)}
-      </span>
-
-      <span className="hrd-account-name">
-        Savings Account · 12% APY
-      </span>
-
-      <div className="hrd-account-actions">
-     
-      </div>
-    </div>
-
-    <div className="hrd-account-chevron">›</div>
-  </div>
-
-
-
- <div className="hrd-account-row" onClick={() => navigate("/stocks")}>
-    <div className="hrd-account-icon wallet">
-      <SavingsIcon />
-    </div>
-
-    <div className="hrd-account-info">
-      <span className="hrd-account-balance">
-{"$" + (portfolio ? portfolio.totalValue.toFixed(2) : "0.00")}
-      </span>
-
-      <span className="hrd-account-name">
-        Buy actions
-      </span>
-
-      <div className="hrd-account-actions">
-     
-      </div>
-    </div>
-
-    <div className="hrd-account-chevron">›</div>
-  </div>
-
-
-{/* 
-  {/* Crypto Card */}
-  {/* <div className="hrd-account-row" onClick={() => navigate("/card")}>
-    <div className="hrd-account-icon wallet">
-      <CardIcon />
-    </div>
-
-    <div className="hrd-account-info">
-      <span className="hrd-account-balance">
-        {"$" + cardBalance.toFixed(2)}
-      </span>
-
-      <span className="hrd-account-name">
-        Crypto Card
-      </span>
-
-      <div className="hrd-account-actions">
-     
-      </div>
-    </div>
-
-    <div className="hrd-account-chevron">›</div>
-  </div>  */}
-
-</div>
-
-        <div className="hrd-recent-section">
-          <div className="hrd-recent-header">
-            <span className="hrd-recent-title">Recent Activity</span>
-          </div>
-
-          {recentTransfers.length === 0 && (
-            <div className="hlist-empty">No activity yet — try sending USDT to a friend.</div>
-          )}
-
-          {recentTransfers.map(function (item) {
-            var isSend = item.direction === "send";
-            var amt = parseFloat(item.amount) || 0;
-            return (
-              <div className="hlist-row" key={item.id} onClick={() => navigate("/sendcheck", { state: { transferId: item.id } })}>
-                <div className={"hlist-icon " + (isSend ? "neg" : "pos")}><Glyph type={isSend ? "down" : "up"} /></div>
-                <div className="hlist-info">
-                  <span className="hlist-name">{(isSend ? "To " : "From ") + item.counterparty}</span>
-                  <span className="hlist-sub">Transfer</span>
-                </div>
-                <div className="hlist-right">
-                  <span className={"hlist-amount " + (isSend ? "neg" : "pos")}>{(isSend ? "-$" : "+$") + amt.toFixed(2)}</span>
-                </div>
-              </div>
-            );
-          })}
+          
         </div>
 
       </div>
