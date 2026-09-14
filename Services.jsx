@@ -17,6 +17,7 @@ var MODULES = [
   { name: "Card", desc: "Tansfers, perks and bonuses", path: "/balancecard" },
   { name: "Rocket", desc: "Crash-style multiplier game", path: "/rocket" },
   { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
+  { name: "Commodities", desc: "Gold, silver, oil, gas and more", path: "/commodities" },
 ];
 
 function SearchIcon() {

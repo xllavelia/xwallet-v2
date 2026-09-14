@@ -53,7 +53,8 @@ import P2PDealStatus from "./P2PDealStatus";
 import P2PMerchant from "./P2PMerchant";
 import P2PCreateListing from "./P2PCreateListing";
 import P2PDeals from "./P2PDeals";
-
+import Commodities from "./Commodities";
+import CommodityDetail from "./CommodityDetail";
 
 
 import PageTransition from "./PageTransition";
@@ -93,7 +94,8 @@ const islandRoutes = [
   { path: "p2pcreatelisting", element: <P2PCreateListing /> },
   { path: "p2pdeals", element: <P2PDeals /> },
   { path: "services", element: <Services /> },
-
+  { path: "commodities", element: <Commodities /> },
+  { path: "commoditydetail", element: <CommodityDetail /> },
 
 ];
 

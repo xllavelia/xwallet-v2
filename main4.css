@@ -1230,7 +1230,7 @@ font-family: 'Unbounded', sans-serif;
 .crdx-asset-row {
   display: flex; align-items: center; gap: 16px;
   background: #1c1c1c; border: 1px solid none; border-radius: 16px;
-  padding: 18px 16px; cursor: pointer;
+  padding: 22px 16px; cursor: pointer;
 }
 .crdx-asset-row:active { transform: scale(0.98); }
 .crdx-asset-glyph {
@@ -1798,6 +1798,7 @@ font-family: 'Unbounded', sans-serif;
   background: none; border: none; padding: 12px 0;
   font-size: 13.5px; font-weight: 700; color: var(--sdp-text-dim);
   cursor: pointer; transition: color 0.25s ease;
+  font-family: 'Unbounded';
 }
 .sdp-toggle-btn.active { color: #08090a; }
 
@@ -2282,7 +2283,7 @@ margin-bottom: -22px;
   background: radial-gradient(
     ellipse,
     rgba(255, 239, 179, 0.12) 0%,
-    rgba(255, 239, 179, 0.035) 35%,
+    rgba(255, 239, 179, 0.053) 35%,
     transparent 70%
   );
 
@@ -2298,7 +2299,7 @@ margin-bottom: -22px;
 
   background: radial-gradient(
     ellipse,
-    #ffefb323,
+    #ffefb32d,
     transparent 70%
   );
 
@@ -2317,8 +2318,8 @@ margin-bottom: -22px;
   width: 760px;
   height: 760px;
 
-  right: -330px;
-  top: -390px;
+  right: -350px;
+  top: -410px;
 
   border-radius: 50%;
 

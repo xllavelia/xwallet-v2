@@ -67,7 +67,6 @@ const Card = () => {
         <span className="crdx-hero-value">{formatUsd(card.balanceUsd || 0)}</span>
         <span className="crdx-hero-sub">{"Card ····" + (card.cardNumber || "").slice(-4)}</span>
       </div>
-{formatUsd(card.balanceUsd || 0)}
       <div className="crdx-actions">
         <button className="crdx-action" onClick={roadBuy}>
           <BuyIcon /><span>Buy</span>

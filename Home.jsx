@@ -6,8 +6,6 @@ import { useClosedPositionsRemote } from "./usePositions";
 import { useBankCards } from "./useBankCards";
 import { useHomeSummary } from "./useHomeSummary";
 import { useSavings } from "./useSavings";
-// import { usePrime} from "./usePrime";
-
 // import history1 from './history1.jpg';
 // import history2 from './history2.jpg';
 // import history3 from './history3.jpg';
@@ -15,11 +13,11 @@ import { useSavings } from "./useSavings";
 import { MiniCardThumb } from "./bankCardVisuals";
 import { useStockPortfolio } from "./useStocks";
 import { useCard } from "./useCard";
-// import { usePrime} from "./usePrime";
+import PortfolioComm from "./portfolioComm";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix css"
+// git commit -m "create commodities"
 // git push -u origin main 
 
 
@@ -110,8 +108,6 @@ const Home = () => {
 
   var { portfolio } = useStockPortfolio();
   var { card } = useCard();
-
-// const { status } = usePrime();
 
 
   var avatarInitial = account && account.username ? account.username[0].toUpperCase() : "?";
@@ -336,6 +332,7 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
           </span>
         </div>
       )}
+<PortfolioComm balanceHidden={balanceHidden} />
 
 
  <div className="crdx-hero" onClick={() => navigate("/card")}>
@@ -343,8 +340,9 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
         <span className="crdx-hero-value">{   balanceHidden ? "****" : formatUsd(card.balanceUsd || 0)}</span>
         <span className="crdx-hero-sub">{"Card ····" + (card.cardNumber || "").slice(-4)}</span>
       </div>
-{/* 
-<div className="hv2-nav-tiles-row">
+
+
+{/* <div className="hv2-nav-tiles-row">
   <div className="hv2-nav-tile" onClick={() => navigate("/rocket")}>
     <div className="hv2-nav-tile-icon"><RocketIcon /></div>
     <span className="hv2-nav-tile-label">Rocket</span>
@@ -355,13 +353,21 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
   </div>
 </div> */}
 
- {/* <div className="crdx-hero" onClick={() => navigate("/prime")}>
-        <span className="crdx-hero-label">You lavx</span>
-        <span className="crdx-hero-value"> сюда интегрируй баланс lavx что бы нечего не сломалось</span>
-        <span className="hv2-balance-label">Premium value</span>
-      </div> */}
+{/* <div className="crdx-hero crdx-hero-lavx" onClick={() => navigate("/prime")}>
+  <span className="crdx-hero-label">Your LAVX</span>
+  <span className="crdx-hero-value">{(wallet.lavxBalance || 0).toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+  <span className="hv2-balance-label">Premium value</span>
+</div>
 
+ */}
+{/* 
+<div className="crdx-hero crdx-hero-lavx" onClick={() => navigate("/commodities")}>
+  <span className="crdx-hero-label">Your LAVX</span>
+  <span className="crdx-hero-value">{(wallet.lavxBalance || 0).toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
+  <span className="hv2-balance-label">Premium value</span>
+</div> */}
 
+    
 
         </div>
 
