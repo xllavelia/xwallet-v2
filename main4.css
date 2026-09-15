@@ -1799,7 +1799,7 @@ font-family: 'Unbounded', sans-serif;
   font-size: 13.5px; font-weight: 700; color: var(--sdp-text-dim);
   cursor: pointer; transition: color 0.25s ease;
   font-family: 'Unbounded';
-}
+} 
 .sdp-toggle-btn.active { color: #08090a; }
 
 .sdp-input-row {
