@@ -294,7 +294,7 @@ const isSubmittingRef = useRef(false);
               <section className="px-metrics-card">
                 <div className="px-row"><span className="px-label">Stake</span><span className="px-val">{'$' + formatUsd(requiredMargin)}</span></div>
                 <div className="px-row"><span className="px-label">Payout multiplier</span><span className="px-val accent-val">{payoutMultiplier.toFixed(2) + 'x'}</span></div>
-                <div className="px-row"><span className="px-label">Potential payout</span><span className="px-val px-liq-price" style={{color:'#00d4aa'}}>{'$' + formatUsd(potentialPayout)}</span></div>
+                <div className="px-row"><span className="px-label">Potential payout</span><span className="px-val px-liq-price" style={{color:'#f8f9fb'}}>{'$' + formatUsd(potentialPayout)}</span></div>
                 <div className="px-row"><span className="px-label">Balance Now</span><span className="px-val px-after-trade">{balanceStr}</span></div>
                 <div className="px-row"><span className="px-label">Balance after</span><span className="px-val px-after-trade">{parsedAmount > 0 ? afterTradeStr : balanceStr}</span></div>
               </section>

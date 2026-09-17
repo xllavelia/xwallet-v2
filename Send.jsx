@@ -24,7 +24,6 @@ var [results, setResults] = useState(initialState.results);
   var [searchError, setSearchError] = useState(null);
   var [selectedContact, setSelectedContact] = useState(null);
   var [addingId, setAddingId] = useState(null);
-  var searchRequestIdRef = useRef(0);
 
   var [amount, setAmount] = useState("");
   var [swipeX, setSwipeX] = useState(0);
@@ -33,6 +32,11 @@ var [results, setResults] = useState(initialState.results);
   var [statusOk, setStatusOk] = useState(true);
   var [sent, setSent] = useState(false);
 
+  
+useEffect(function () {
+  console.log("[Send] mounted");
+  return function () { console.log("[Send] UNMOUNTED"); };
+}, []);
 
 useEffect(function () {
   setSendSearchState({ query: query, mode: mode, results: results });
@@ -47,30 +51,30 @@ useEffect(function () {
   }
 
 useEffect(function () {
-  mountGuardRef.current = true;
-  var requestId = ++searchRequestIdRef.current;
+  var cancelled = false;
   setIsLoadingSearch(true);
   setSearchError(null);
 
   var delay = query.length === 0 ? 0 : 220;
+  var capturedQuery = query;
+  var capturedMode = mode;
 
   var handle = setTimeout(function () {
-    if (!mountGuardRef.current) return;
     var searchPromise;
-    if (mode === "card") {
-      searchPromise = searchCards(query);
+    if (capturedMode === "card") {
+      searchPromise = searchCards(capturedQuery);
     } else {
-      searchPromise = query.length === 0 ? listContacts() : searchUsers(query);
+      searchPromise = capturedQuery.length === 0 ? listContacts() : searchUsers(capturedQuery);
     }
 
     searchPromise
       .then(function (res) {
-        if (searchRequestIdRef.current !== requestId || !mountGuardRef.current) return;
-        setResults(res);
+        if (cancelled) return;
+        setResults(res || []);
         setIsLoadingSearch(false);
       })
       .catch(function (err) {
-        if (searchRequestIdRef.current !== requestId || !mountGuardRef.current) return;
+        if (cancelled) return;
         setResults([]);
         setSearchError(err.message || "Search failed");
         setIsLoadingSearch(false);
@@ -78,6 +82,7 @@ useEffect(function () {
   }, delay);
 
   return function () {
+    cancelled = true;
     clearTimeout(handle);
   };
 }, [query, mode]);

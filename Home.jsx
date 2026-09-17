@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "./useAccount";
 import { useWalletBalance } from "./useWallet";
@@ -13,11 +13,12 @@ import { useSavings } from "./useSavings";
 import { MiniCardThumb } from "./bankCardVisuals";
 import { useStockPortfolio } from "./useStocks";
 import { useCard } from "./useCard";
-import PortfolioComm from "./portfolioComm";
+import PortfolioComm from "./PortfolioComm";
+
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create commodities"
+// git commit -m "redisign home and create comm"
 // git push -u origin main 
 
 
@@ -44,7 +45,7 @@ import PortfolioComm from "./portfolioComm";
 
 // ── Настраиваемый параметр: сколько px "форс-блока" остаётся видно снизу
 // когда он полностью утянут вниз (это и есть та самая ручка для возврата).
-var PEEK_HEIGHT_PX = 30;
+var PEEK_HEIGHT_PX = 32;
 
 function SearchIcon() {
   return (<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>);
@@ -196,18 +197,7 @@ var totalWithdrawn = savings
     applyVisualPosition(isOpen ? stateRef.current.maxDragY : 0, true);
   }, [isOpen]);
 
-  function handlePointerDown(e) {
-    e.currentTarget.setPointerCapture(e.pointerId);
-    var s = stateRef.current;
-    s.isDragging = true;
-    s.startClientY = e.clientY;
-    s.startValue = s.currentY;
-    s.lastClientY = e.clientY;
-    s.lastTime = performance.now();
-    s.velocity = 0;
-  }
-
-  function handlePointerMove(e) {
+  var handleWindowPointerMove = useCallback(function (e) {
     var s = stateRef.current;
     if (!s.isDragging) return;
     var deltaY = e.clientY - s.startClientY;
@@ -220,13 +210,16 @@ var totalWithdrawn = savings
       s.lastClientY = e.clientY;
       s.lastTime = now;
     }
-  }
+  }, []);
 
-  function handlePointerUp(e) {
+  var handleWindowPointerUp = useCallback(function () {
     var s = stateRef.current;
     if (!s.isDragging) return;
     s.isDragging = false;
-    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch (err) {}
+
+    window.removeEventListener("pointermove", handleWindowPointerMove);
+    window.removeEventListener("pointerup", handleWindowPointerUp);
+    window.removeEventListener("pointercancel", handleWindowPointerUp);
 
     var shouldOpen;
     if (Math.abs(s.velocity) > 0.45) {
@@ -236,6 +229,22 @@ var totalWithdrawn = savings
     }
     setIsOpen(shouldOpen);
     applyVisualPosition(shouldOpen ? s.maxDragY : 0, true);
+  }, [handleWindowPointerMove]);
+
+  function handlePointerDown(e) {
+    var s = stateRef.current;
+    s.isDragging = true;
+    s.startClientY = e.clientY;
+    s.startValue = s.currentY;
+    s.lastClientY = e.clientY;
+    s.lastTime = performance.now();
+    s.velocity = 0;
+
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+
+    window.addEventListener("pointermove", handleWindowPointerMove, { passive: true });
+    window.addEventListener("pointerup", handleWindowPointerUp, { passive: true });
+    window.addEventListener("pointercancel", handleWindowPointerUp, { passive: true });
   }
 
   var change24h = { amount: 0, percent: 0 };
@@ -254,8 +263,8 @@ var totalWithdrawn = savings
 
   var avatarInitial = account && account.username ? account.username[0].toUpperCase() : "?";
   var username = account ? account.username : "";
-  // var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("en-US");
-var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
+  var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("en-US");
+// var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
   var changeIsPositive = change24h.amount >= 0;
 
 
@@ -267,14 +276,6 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
 
       <div className="hv2-hero">
         
-        
-          
-          
-         <div className="hero__glow hero__glow--main" />
-      <div className="hero__glow hero__glow--gold" />
-      <div className="hero__glow hero__glow--soft" />
-      <div className="hero__arc" />
-      
 
 
         <div className="hv2-top-row">
@@ -299,20 +300,17 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
               {balanceHidden ? "****" : ((changeIsPositive ? "+$" : "-$") + Math.abs(change24h.amount).toFixed(2))}
             </span>
             <span className={balanceHidden ? "" :"hv2-change-pill " + (changeIsPositive ? "pos" : "neg")}>
-              {balanceHidden ? "" : ((changeIsPositive ? "+" : "") + change24h.percent.toFixed(2) + "%")}
+              
             </span>
           </div>
         </div>
 
         <div className="hv2-action-row">
           <button className="hv2-action-btn primary" onClick={() => navigate("/trade")}>
-            <TradeIcon /><span>Trade</span>
+            <span>Trade</span>
           </button>
           <button className="hv2-action-btn primary" onClick={() => navigate("/send")}>
-            <SendIcon /><span>Send</span>
-          </button>
-          <button className="hv2-action-btn prime" onClick={() => navigate("/promocode")}>
-            <CrownIcon />
+            <span>Send</span>
           </button>
         </div>
       </div>
@@ -353,34 +351,16 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
   </div>
 </div> */}
 
-{/* <div className="crdx-hero crdx-hero-lavx" onClick={() => navigate("/prime")}>
-  <span className="crdx-hero-label">Your LAVX</span>
-  <span className="crdx-hero-value">{(wallet.lavxBalance || 0).toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
-  <span className="hv2-balance-label">Premium value</span>
-</div>
-
- */}
-{/* 
-<div className="crdx-hero crdx-hero-lavx" onClick={() => navigate("/commodities")}>
-  <span className="crdx-hero-label">Your LAVX</span>
-  <span className="crdx-hero-value">{(wallet.lavxBalance || 0).toLocaleString("en-US", { maximumFractionDigits: 0 })}</span>
-  <span className="hv2-balance-label">Premium value</span>
-</div> */}
-
-    
 
         </div>
 
 
 
         <div className="hv2-force-block" ref={forceBlockRef}>
-          <div
-            className="hv2-handle-zone"
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-          >
+         <div
+  className="hv2-handle-zone"
+  onPointerDown={handlePointerDown}
+>
             <div className="hv2-handle-bar"></div>
           </div>
 
@@ -393,7 +373,7 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
          <div className="hrd-summary-card" onClick={() => navigate("/history")}>
 
   <span className="hrd-summary-value">Activity</span>
-  <span className="hrd-summary-label">View all</span>
+<span className="hrd-summary-label">View all</span>
 
   <span className="hrd-summary-value">
     {summary ? balanceHidden ? "****" : ("" + (summary.totalIncome - summary.totalExpense >= 0 ? "" : "") + (summary.totalIncome - summary.totalExpense).toFixed(2)) : "..."}
@@ -403,7 +383,7 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
       {summary.categories.map(function (cat, idx) {
         var total = summary.categories.reduce(function (acc, c) { return acc + c.amount; }, 0) || 1;
         var pct = (cat.amount / total) * 100;
-        var colors = ["hsl(61,85%,78%)", "hsl(280,70%,65%)", "hsl(150,70%,50%)", "hsl(20,80%,60%)", "hsl(210,70%,60%)"];
+        var colors = ["#f8f9fbe0", "#404040", "#f8f9fbe0", "#404040", "#f8f9fbe0"];
         return <span key={cat.key} style={{ width: pct + "%", background: colors[idx % colors.length] }}></span>;
       })}
     </div>
@@ -494,13 +474,8 @@ var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
       </span>
     </div>
 
-    <div className="sav-stats-item">
-      <span className="sav-s-label">Total withdrawn</span>
-      <span className="sav-s-dots"></span>
-      <span className="sav-s-value">
-           {balanceHidden ? "****" : "$" + totalWithdrawn.toFixed(2)}
-      </span>
-    </div>
+  
+  
   </div>
 </div>
     

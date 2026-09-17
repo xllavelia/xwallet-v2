@@ -20,7 +20,7 @@ var summary = useHomeSummary();
       <span className="hsum-value hsum-value-pos">{summary ? ("$" + summary.totalIncome.toFixed(2)) : "..."}</span>
          <span className="hsum-label">{"Earned in " + monthLabel}</span>
         <div className="hsum-bar">
-          <span style={{ width: "70%", background: "#00d4aa" }}></span>
+          <span style={{ width: "70%", background: "#f8f9fb" }}></span>
           <span style={{ width: "30%", background: "rgba(255,255,255,0.12)" }}></span>
         </div>
       </div>

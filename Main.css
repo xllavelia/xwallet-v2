@@ -2,18 +2,11 @@
 
 
 :root {
-  --xlavelia: hsl(61, 85%, 78%) ;
+  --xlavelia: #F8F9FB ;
 }
- /* --main-one: hsl(61, 80%, 78%);
+ /* --main-one: hsl(#F8F9FB);
   --main-two: hsl(162, 50%, 22%); */
-
-.page-content{
-margin-top: 8.5vh ;
-}
-
-
-
-
+ /* font-family: 'Doto', sans-serif; */
 
 .app-scroll-container {
   display: flex; 
@@ -1709,8 +1702,8 @@ color: white;
 
 :root {
   --tkt-dark:#1c1c1c   ;  
-  --tkt-lime: hsl(61, 85%, 78%) ; 
-   /* --tkt-dark:  hsl(61, 85%, 78%)  ;  
+  --tkt-lime: #F8F9FB ; 
+   /* --tkt-dark:  #F8F9FB  ;  
  --xlavelia: #1c1c1c;  */
 }
 
@@ -3060,8 +3053,8 @@ border: 1px solid  var(--xlavelia);
 .px-alert-dot { width: 6px; height: 6px; background: var(--xlavelia); border-radius: 50%; }
 
 .glass-card-error {
-  background: hsla(61, 80%, 78%, 0.118);
-  border: 1px solid hsla(61, 80%, 78%, 0.4);
+  background: hsla(#F8F9FB, 0.118);
+  border: 1px solid hsla(#F8F9FB, 0.4);
   border-radius: 16px;
   padding: 16px;
   text-align: center;
@@ -3151,6 +3144,7 @@ background-color: #101010;
 * {
   margin: 0;
   /* font-family: 'Unbounded', sans-serif; */
+  /* font-family: "Yellowtail", "Brush Script MT", cursive; */
   /* "Permanent Marker", "Yellowtail", cursive;  */
     -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none; 
