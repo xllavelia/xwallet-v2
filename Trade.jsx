@@ -141,7 +141,7 @@ function handleClose(posId) {
       autoSize: true
     });
     const cs = chart.addSeries(CandlestickSeries, {
-      upColor: '#f8f9fb', downColor: '#ff4466', borderVisible: false, wickUpColor: '#f8f9fb', wickDownColor: '#ff4466'
+      upColor: '#00d4aa', downColor: '#ff4466', borderVisible: false, wickUpColor: '#00d4aa', wickDownColor: '#ff4466'
     });
     const vs = chart.addSeries(HistogramSeries, {
       priceFormat: { type: 'volume' }, priceScaleId: '', scaleMargins: { top: 0.82, bottom: 0 }
@@ -231,7 +231,7 @@ function timeTradeLiveResult(t) {
           <div className="ht-detail-row"><span className="ht-dl">Stake</span><span className="ht-dv">{"$" + t.amount.toFixed(2)}</span></div>
           <div className="ht-detail-row"><span className="ht-dl">Payout Multiplier</span><span className="ht-dv">{t.payoutMultiplier ? t.payoutMultiplier.toFixed(2) + "x" : "-"}</span></div>
           <div className="ht-detail-row"><span className="ht-dl">Time Left</span><span className="ht-dv">{formatCountdown(t.expiresAt)}</span></div>
-          {live && <div className="ht-detail-row"><span className="ht-dl">If it ended now</span><span className="ht-dv" style={{color: live === "win" ? "#f8f9fb" : "#ff4466"}}>{live.toUpperCase()}</span></div>}
+          {live && <div className="ht-detail-row"><span className="ht-dl">If it ended now</span><span className="ht-dv" style={{color: live === "win" ? "#00d4aa" : "#ff4466"}}>{live.toUpperCase()}</span></div>}
         </div>
       </div>
     </div>

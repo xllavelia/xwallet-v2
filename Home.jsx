@@ -18,7 +18,7 @@ import PortfolioComm from "./PortfolioComm";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "redisign home and create comm"
+// git commit -m "create pixel!"
 // git push -u origin main 
 
 

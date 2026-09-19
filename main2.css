@@ -15,7 +15,7 @@
   --g-muted:     #777;
   --g-dim:       #444;
   --g-gold:      var(--xlavelia);
-  --g-green:     #f8f9fb;
+  --g-green:     #00d4aa;
   --g-red:       #ff4466;
   --g-green-dim: rgba(0,212,170,0.12);
   --g-red-dim:   rgba(255,68,102,0.12);
@@ -1060,9 +1060,9 @@
   --g-text:     #ececec;
   --g-muted:    #888888;
   --g-dim:      #444444;
-  --g-gold:    #f8f9fb;
+  --g-gold:    #00d4aa;
   /* --g-gold:   var(--xlavelia); */
-  --g-green:  #f8f9fb;
+  --g-green:  #00d4aa;
   --g-red:     #ff4466;
 }
 
@@ -1308,7 +1308,7 @@
 .ht-dl     { color: var(--g-dim); }
 .ht-dv     { color: #c0c8d8; font-weight: 500; }
 .ht-dv-liq { color:#f6465d; }
-.ht-dv-lev { color: #f8f9fb; font-weight: 700; }
+.ht-dv-lev { color: #00d4aa; font-weight: 700; }
 .ht-dv-date{ font-size: 11px; color: var(--g-muted); }
 
 .ht-detail-dates { display: flex; flex-direction: column; gap: 6px; }

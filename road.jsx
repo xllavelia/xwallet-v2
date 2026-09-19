@@ -55,7 +55,7 @@ import P2PCreateListing from "./P2PCreateListing";
 import P2PDeals from "./P2PDeals";
 import Commodities from "./Commodities";
 import CommodityDetail from "./CommodityDetail";
-
+import Pixel from "./Pixel";
 
 import PageTransition from "./PageTransition";
 
@@ -96,6 +96,8 @@ const islandRoutes = [
   { path: "services", element: <Services /> },
   { path: "commodities", element: <Commodities /> },
   { path: "commoditydetail", element: <CommodityDetail /> },
+  { path: "pixel", element: <Pixel /> },
+
 
 ];
 

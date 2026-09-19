@@ -312,7 +312,7 @@ var summary = useHomeSummary();
               {sel.tradeId && <div className="ht-detail-row"><span className="ht-dl">Trade ID</span><span className="ht-dv et-pmv-id">{sel.tradeId}</span></div>}
               {sel.xpAwarded > 0 && <div className="ht-detail-row"><span className="ht-dl">Battle Pass XP</span><span className="ht-dv" style={{ color: "var(--xlavelia)" }}>{"+" + sel.xpAwarded}</span></div>}
               {sel.cashbackAwarded > 0 && (
-              <div className="ht-detail-row"><span className="ht-dl">Cashback</span><span className="ht-dv" style={{ color: "#f8f9fb" }}>{"+$" + sel.cashbackAwarded.toFixed(2)}</span></div>
+              <div className="ht-detail-row"><span className="ht-dl">Cashback</span><span className="ht-dv" style={{ color: "#00d4aa" }}>{"+$" + sel.cashbackAwarded.toFixed(2)}</span></div>
               )}
             </div>
             <div className="ht-detail-divider"></div>
@@ -411,7 +411,7 @@ var summary = useHomeSummary();
     <span className="hsum-label">Earned this month</span>
     {summary && summary.totalIncome > 0 && (
       <div className="hsum-bar">
-        <span style={{ width: "100%", background: "#f8f9fb" }}></span>
+        <span style={{ width: "100%", background: "#00d4aa" }}></span>
       </div>
     )}
   </div>

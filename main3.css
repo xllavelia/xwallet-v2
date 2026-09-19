@@ -1442,7 +1442,7 @@ margin-bottom: 20px;
 .crd-action-label { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
 
 /* ── Trade/Swap shared page shell ────────────────────────── */
-.TradeCoinContent, .SwapContent { background: #101010; min-height: 90vh; color: #fff; font-family: 'Inter', sans-serif; }
+.TradeCoinContent, .SwapContent { background: #101010; color: #fff; font-family: 'Inter', sans-serif; }
 .crd-page {margin: 0 auto; padding: 1vh 22px 40px; display: flex; flex-direction: column; gap: 16px; }
 .crd-header { display: flex; flex-direction: column; gap: 4px; margin-bottom: 4px; }
 .crd-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--xlavelia); opacity: 0.85; }
@@ -2396,7 +2396,7 @@ display: flex;
 .sav-title { font-family: 'Unbounded', sans-serif; font-size: 24px; font-weight: 800; margin: 0; }
 
 .sav-balance-block { display: flex; flex-direction: column; gap: 8px; }
-.sav-balance-val { font-family: 'Doto', sans-serif; font-size: 42px; font-weight: 900; letter-spacing: -1.5px; color: #fff; }
+.sav-balance-val { font-family: 'Unbounded', sans-serif; font-size: 42px; font-weight: 900; letter-spacing: -1.5px; color: #fff; }
 .sav-meta-row { display: flex; gap: 16px; font-size: 12px; color: rgba(255,255,255,0.45); }
 
 .sav-actions-pill { display: flex; gap: 4px; background: #131313; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 5px; }
@@ -2427,7 +2427,7 @@ display: flex;
 .sav-entry-name { font-size: 13.5px; font-weight: 700; color: #fff; }
 .sav-entry-sub { font-size: 11px; color: rgba(255,255,255,0.35); }
 .sav-entry-amount { font-family: 'Unbounded', sans-serif; font-size: 13.5px; font-weight: 800; }
-.sav-entry-amount.pos { color: #f8f9fb; }
+.sav-entry-amount.pos { color: #00d4aa; }
 .sav-entry-amount.neg { color: #ff4466; }
 
 .sav-empty { font-size: 12px; color: rgba(255,255,255,0.3); text-align: center; padding: 30px 0; }
