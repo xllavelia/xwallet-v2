@@ -18,7 +18,7 @@ import PortfolioComm from "./PortfolioComm";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create pixel!"
+// git commit -m "fix design"
 // git push -u origin main 
 
 
@@ -383,7 +383,7 @@ var totalWithdrawn = savings
       {summary.categories.map(function (cat, idx) {
         var total = summary.categories.reduce(function (acc, c) { return acc + c.amount; }, 0) || 1;
         var pct = (cat.amount / total) * 100;
-        var colors = ["#f8f9fbe0", "#404040", "#f8f9fbe0", "#404040", "#f8f9fbe0"];
+        var colors = ["#f0dfade0", "#404040", "#f0dfade0", "#404040", "#f0dfade0"];
         return <span key={cat.key} style={{ width: pct + "%", background: colors[idx % colors.length] }}></span>;
       })}
     </div>

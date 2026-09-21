@@ -2,9 +2,9 @@
 
 
 :root {
-  --xlavelia: #F8F9FB ;
+  --xlavelia: #f0dfad ;
 }
- /* --main-one: hsl(#F8F9FB);
+ /* --main-one: hsl(#f0dfad);
   --main-two: hsl(162, 50%, 22%); */
  /* font-family: 'Doto', sans-serif; */
 
@@ -1702,8 +1702,8 @@ color: white;
 
 :root {
   --tkt-dark:#1c1c1c   ;  
-  --tkt-lime: #F8F9FB ; 
-   /* --tkt-dark:  #F8F9FB  ;  
+  --tkt-lime: #f0dfad ; 
+   /* --tkt-dark:  #f0dfad  ;  
  --xlavelia: #1c1c1c;  */
 }
 
@@ -3053,8 +3053,8 @@ border: 1px solid  var(--xlavelia);
 .px-alert-dot { width: 6px; height: 6px; background: var(--xlavelia); border-radius: 50%; }
 
 .glass-card-error {
-  background: hsla(#F8F9FB, 0.118);
-  border: 1px solid hsla(#F8F9FB, 0.4);
+  background: #f0dfad1c ;
+  border: 1px solid #f0dfad17 ;
   border-radius: 16px;
   padding: 16px;
   text-align: center;

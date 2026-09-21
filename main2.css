@@ -1,6 +1,6 @@
 
 :root{
-  --xlavelia: #F8F9FB ;
+  --xlavelia: #f0dfad ;
 }
 /* ═══════════════════════════════════════
    DESIGN TOKENS
@@ -71,7 +71,7 @@
 
   background: radial-gradient(
     circle,
-    hsl(#F8F9FB, 0.3),
+#f0dfad32,
     transparent 65%
   );
 
@@ -105,9 +105,9 @@
 
   border-radius: 50%;
 
-  background: hsl(#F8F9FB);
+  background:#f0dfad;
 
-  box-shadow: 0 0 12px hsl(#F8F9FB);
+  box-shadow: 0 0 12px #f0dfad;
 
   transform-origin: 0 0;
 }
@@ -1484,7 +1484,7 @@ background: rgba(255, 255, 255, 0.05);
   gap: 10px;
   font-family: 'Unbounded', sans-serif;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid hsla(#F8F9FB, 0.35);
+  border: 1px solid #f0dfad25 ;
   border-radius: 16px;
   padding: 16px 12px;
   margin-bottom: 16px;
@@ -1841,8 +1841,8 @@ background: rgba(255, 255, 255, 0.05);
 
 :root {
 
---xlavelia-soft: hsla(#F8F9FB, 0.1);
---xlavelia-border: hsla(#F8F9FB, 0.25);
+--xlavelia-soft: #f0dfad17 ;
+--xlavelia-border: #f0dfad2e ;
 
 --bp-black: #050505;
 --bp-card: #0b0b0b;
@@ -1952,7 +1952,7 @@ stroke-width: 30;
 stroke-linecap: round;
 stroke-linejoin: round;
 filter: drop-shadow(
-0 0 25px hsla(#F8F9FB, 0.2)
+0 0 25px #f0dfad36 
 );
 }
 
@@ -2029,7 +2029,7 @@ background: rgba(255, 255, 255, 0.07);
 height: 100%;
 background: var(--xlavelia);
 transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-box-shadow: 0 0 15px hsla(#F8F9FB, 0.35);
+box-shadow: 0 0 15px #f0dfad35;
 }
 
 .xp-progress-info {
@@ -2125,7 +2125,7 @@ background: var(--bp-border);
 height: 100%;
 background: var(--xlavelia);
 transition: width 0.8s ease;
-box-shadow: 0 0 14px hsla(#F8F9FB, 0.45);
+box-shadow: 0 0 14px #f0dfad45;
 }
 
 .reward-node {
@@ -2465,7 +2465,7 @@ padding: 0rem 1rem 0rem;
 
     margin-bottom: 0px;
 
-    color: hsla(#F8F9FB, 0.55);
+    color: #f0dfad35 ;
 
     font-size: 8px;
     letter-spacing: 0.3em;
@@ -2515,7 +2515,7 @@ padding: 0rem 1rem 0rem;
 }
 
 .battle-pass-info span {
-    color: hsl(#F8F9FB);
+    color: #f0dfad;
 
     font-size: 15px;
     line-height: 1;
@@ -2547,10 +2547,10 @@ padding: 0rem 1rem 0rem;
 
     border-radius: 50%;
 
-    background: hsl(#F8F9FB);
+    background: #f0dfad;
 
     box-shadow:
-        0 0 10px hsla(#F8F9FB, 0.8);
+        0 0 10px #f0dfadc2;
 }
 
 
@@ -2757,7 +2757,7 @@ background-color: #1c1c1c;
   position: relative;
   overflow: hidden;
   background: #141414;
-  border: 1px solid hsla(#F8F9FB, 0.14);
+  border: 1px solid #f0dfad17;
   border-radius: 26px;
   padding: 26px 24px 22px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04);
@@ -2765,7 +2765,7 @@ background-color: #1c1c1c;
 .vlt-card-sweep {
   position: absolute;
   inset: -40%;
-  background: linear-gradient(115deg, transparent 35%, hsla(#F8F9FB 0.07) 48%, transparent 60%);
+  background: linear-gradient(115deg, transparent 35%, #f0dfadcf 48%, transparent 60%);
   animation: vlt-sweep 6s linear infinite;
   pointer-events: none;
 }
@@ -2780,7 +2780,7 @@ background-color: #1c1c1c;
 .vlt-card-label {
   font-size: 12px;
   font-weight: 600;
-  color: hsla(#F8F9FB, 0.6);
+  color: #f0dfade2 ;
   margin-bottom: 6px;
   letter-spacing: 0.02em;
 }
@@ -2791,7 +2791,7 @@ background-color: #1c1c1c;
   letter-spacing: -1px;
   color: var(--xlavelia);
 }
-.vlt-card-contactless { color: hsla(#F8F9FB, 0.5); }
+.vlt-card-contactless { color: #f0dfad80; }
 
 .vlt-card-id {
   position: relative;
@@ -2918,8 +2918,8 @@ background-color: #1c1c1c;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--xlavelia);
-  background: hsla(#F8F9FB, 0.1);
-  border: 1px solid hsla(#F8F9FB, 0.25);
+  background: #f0dfad10;
+  border: 1px solid #f0dfad10;
   padding: 3px 8px;
   border-radius: 6px;
 }
@@ -3709,7 +3709,7 @@ background-color: #1c1c1c;
 
   background: var(--xlavelia);
   box-shadow:
-    0 0px 30px hsl(#F8F9FB, 0.18),
+    0 0px 30px #f0dfad18,
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
   font-size: 11px;
   font-weight: 700;
