@@ -279,7 +279,7 @@ background-color: #1c1c1c;
 
 /* ── Toasts + purchase burst ──────────────────────────────── */
 .prm-toast-stack {
-  position: fixed; top: 14px; left: 0; right: 0;
+  position: fixed; top: 24px; left: 0; right: 0;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   z-index: 99; pointer-events: none; padding: 0 20px;
 }
@@ -1634,7 +1634,7 @@ display: flex;
 
 /* ── Toasts + burst ───────────────────────────────────────── */
 .vch-toast-stack {
-  position: fixed; top: 14px; left: 0; right: 0;
+  position: fixed; top: 24px; left: 0; right: 0;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   z-index: 9999; pointer-events: none; padding: 0 20px;
 }
@@ -2031,7 +2031,7 @@ display: flex;
 
 .et-xp-toast, .ht-xp-toast {
   position: fixed;
-  top: 14px; left: 50%; transform: translateX(-50%);
+  top: 24px; left: 50%; transform: translateX(-50%);
   z-index: 99;
   background: #161616;
   border: 1px solid #f0dfad45;
@@ -2173,7 +2173,7 @@ display: flex;
 }
 
 .adm-toast {
-  position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 9999;
+  position: fixed; top: 18px; left: 50%; transform: translateX(-50%); z-index: 9999;
   background: #161616; border: 1px solid hsla(#f0dfad 0.35); color: var(--xlavelia);
   font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800;
   padding: 10px 18px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
@@ -2449,6 +2449,7 @@ display: flex;
 .svc-empty { grid-column: 1 / -1; text-align: center; padding: 30px 0; font-size: 12px; color: rgba(255,255,255,0.3); }
 
 
+.svc-grid- { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
 
 
 .bnav-wrap {
@@ -2519,7 +2520,7 @@ display: flex;
 .hsum-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 15px;}
 .hsum-card { background: #1c1c1c;  border-radius: 18px; padding: 15px; display: flex; flex-direction: column; gap: 6px; }
 .hsum-value { font-family: 'Unbounded', sans-serif; font-size: 19px; font-weight: 800; color: #fff; }
-.hsum-value-pos { color: #f0dfad; }
+.hsum-value-pos { color: #00d4aa; }
 .hsum-label { font-size: 11px; color: rgba(255,255,255,0.4); }
 .hsum-bar { display: flex; height: 12px; border-radius: 20px; overflow: hidden; margin-top: 4px; }
 .hsum-bar span { transition: width 0.4s ease; }

@@ -1343,9 +1343,9 @@ font-family: 'Unbounded', sans-serif;
 .bcx-empty-sub { font-size: 12px; color: rgba(255,255,255,0.4); }
 
 /* ── Carousel ─────────────────────────────────────────────── */
-.bcx-carousel {background-color: #101010; display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 8px 4px 0; margin: -4px 0 -4px -8px; }
+.bcx-carousel {background-color: #101010; display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;  }
 .bcx-carousel::-webkit-scrollbar { display: none; }
-.bcx-carousel-slide { flex: 0 0 100%; scroll-snap-align: center; margin-left: 20%; }
+.bcx-carousel-slide { flex: 0 0 100%; scroll-snap-align: center; }
 
 .bcx-hero-card {
   position: relative; overflow: hidden; height: 200px; border-radius: 22px;
@@ -1401,13 +1401,13 @@ font-family: 'Unbounded', sans-serif;
 .bcx-list-add { justify-content: center; gap: 8px; color: var(--xlavelia); font-family: 'Unbounded', sans-serif; font-size: 12.5px; font-weight: 700; border: 1px dashed var(--xlavelia); }
 
 /* ── Toast ────────────────────────────────────────────────── */
-.bcx-toast { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 9999; font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 700; padding: 10px 18px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.bcx-toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 700; padding: 10px 18px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
 .bcx-toast.ok { background: #16161a; border: 1px solid #f0dfad35; color: var(--xlavelia); }
 .bcx-toast.err { background: #1a0f0f; border: 1px solid rgba(255,68,102,0.3); color: #ff8080; }
 
 /* ── Sheets ───────────────────────────────────────────────── */
 .bcx-overlay { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,0.82); backdrop-filter: blur(5px); display: flex; align-items: flex-end; justify-content: center; }
-.bcx-sheet { width: 100%; max-width: 480px; overflow-y: auto; background: #121212; border-radius: 24px; padding: 10px 16px 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px;}
+.bcx-sheet { width: 100%; max-width: 480px; overflow-y: auto; background: #121212; border-radius: 24px; padding: 10px 16px 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px;}
 .bcx-sheet-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 8px auto 4px; }
 .bcx-sheet-title { font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 800; color: #fff; text-align: center; }
 .bcx-sheet-preview { pointer-events: none; }
@@ -1465,19 +1465,12 @@ font-family: 'Unbounded', sans-serif;
 
 .snd-mode-toggle { display: flex; gap: 6px; margin-bottom: 4px; }
 .snd-mode-btn {
-  flex: 1; padding: 9px; border-radius: 10px;
+  flex: 1; padding: 10px; border-radius: 12px;
   background: #1c1c1c; border: none;
   color: rgba(255,255,255,0.5); font-size: 11.5px; font-weight: 700;
   font-family: 'Unbounded', sans-serif; cursor: pointer;
 }
-.snd-mode-btn.active { color: var(--xlavelia); }
 .snd-mode-toggle { display: flex; gap: 6px; margin-bottom: 4px; }
-.snd-mode-btn {
-  flex: 1; padding: 9px; border-radius: 10px;
-  background: #1c1c1c; border: none;
-  color: rgba(255,255,255,0.5); font-size: 11.5px; font-weight: 700;
-  font-family: 'Unbounded', sans-serif; cursor: pointer;
-}
 
 .mct-thumb {
   position: relative;
@@ -2217,7 +2210,6 @@ color: #00d4aa;
   position: fixed; inset: 0;
   overflow: hidden;
   background: #101010;
-  color: hs;
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
   display: flex;
   flex-direction: column;
@@ -2232,7 +2224,7 @@ color: #00d4aa;
   overflow: hidden;
   flex-shrink: 0;
   padding: calc(env(safe-area-inset-top) + 14px) 20px 20px;
-  padding-top: 9vh;
+  padding-top: 10.5vh;
 /* background: linear-gradient(135deg, #f0dfad, #0e1e3d ); */
   background-color: #f0dfad;
   /* #f0dfad */
@@ -2394,7 +2386,15 @@ font-family: 'Unbounded';
   width: 60px; height: 5px; border-radius: 3px;
   background: rgba(255,255,255,0.3);
 }
+.hv2-handle-bar {
+  transition:
+ width 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.2s ease;
+}
 
+.hv2-handle-bar--pulse {
+  width: 80px !important;
+}
 
 .hv2-force-scroll {
   flex: 1; overflow-y: auto;

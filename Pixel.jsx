@@ -7,8 +7,8 @@ import { useCardFunding } from "./useCardFunding";
 var PRESETS = [10, 50, 100, 500];
 var HEART_BITMAP = ["01010", "11111", "11111", "01110", "00100"];
 // Зеркало pixel_sql/config.go: RoundDuration / BettingDuration / RevealDuration
-var ROUND_SECONDS = 30;
-var BETTING_SECONDS = 15;
+var ROUND_SECONDS = 20;
+var BETTING_SECONDS = 10;
 var REVEAL_SECONDS = 3;
 
 function ClockIcon() {

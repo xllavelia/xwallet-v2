@@ -31,7 +31,7 @@ function HeroCard(props) {
   {"$" + Number(props.balance || 0).toFixed(2)}
 </span>
      </div>
-        {props.active && <span className="bcx-hero-active-tag">TRADING</span>}
+        {props.active && <span className="bcx-hero-active-tag">ACTIVE</span>}
       </div>
     </div>
   );
@@ -209,7 +209,6 @@ function openActions(card) {
   }
 
   var totalBalance = cards.reduce(function (acc, c) { return acc + c.balance; }, 0);
-  var focusedCard = cards[focusedIndex];
 
  
 
@@ -349,7 +348,7 @@ function openActions(card) {
               <HeroCard tier={actionSheetCard.tier} number={actionSheetCard.cardNumber} balance={actionSheetCard.balance} active={actionSheetCard.isActiveForTrading} />
             </div>
 
-         {!topUpOpen && !closeConfirm && (
+         {!topUpOpen && !closeConfirm && !withdrawOpen && (
   <div className="bcx-action-list">
     <button
       className="bcx-action-row"
@@ -374,8 +373,8 @@ function openActions(card) {
       onClick={handleSelectActive}
     >
       {actionSheetCard.isActiveForTrading
-        ? "Already active for trading"
-        : "Select for Trading"}
+        ? "Active"
+        : "Activate"}
     </button>
 
     <button

@@ -236,10 +236,25 @@ useEffect(function () {
             <h1 className="snd-title">Send USDT</h1>
           </div>
 
-          <div className="snd-mode-toggle">
-            <button className={"snd-mode-btn " + (mode === "id" ? "active" : "")} onClick={() => switchMode("id")}>By ID</button>
-            <button className={"snd-mode-btn " + (mode === "card" ? "active" : "")} onClick={() => switchMode("card")}>By Card Number</button>
-          </div>
+      <div className="snd-mode-toggle">
+  <button
+    className={`snd-mode-btn ${mode === "id" ? "active" : ""}`}
+    onClick={() => {
+      if (mode !== "id") switchMode("id");
+    }}
+  >
+    By ID
+  </button>
+
+  <button
+    className={`snd-mode-btn ${mode === "card" ? "active" : ""}`}
+    onClick={() => {
+      if (mode !== "card") switchMode("card");
+    }}
+  >
+    By Card Number
+  </button>
+</div>
 
           {selectedContact && (
             <div className="snd-selected-chip">
@@ -250,9 +265,11 @@ useEffect(function () {
               </div>
               <button className="snd-chip-clear" onClick={handleClearSelection}>✕</button>
             </div>
+            
           )}
 
           <div className="snd-search-bar">
+            
             <svg className="snd-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="7"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -267,6 +284,7 @@ useEffect(function () {
             />
             {isLoadingSearch && <div className="snd-search-spinner"></div>}
           </div>
+          
 
           <div className="snd-results-label">{resultsLabel}</div>
 

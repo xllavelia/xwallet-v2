@@ -18,7 +18,7 @@ import PortfolioComm from "./PortfolioComm";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "fix design"
+// git commit -m "bug fix"
 // git push -u origin main 
 
 
@@ -74,14 +74,7 @@ function GridIcon() {
 function ProfileTileIcon() {
   return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>);
 }
-function PlaceholderSection(props) {
-  return (
-    <div className="hv2-placeholder-section">
-      <div className="hv2-placeholder-header"><span>{props.title}</span></div>
-      <div className="hv2-placeholder-box"><span className="hv2-placeholder-box-text">{props.hint}</span></div>
-    </div>
-  );
-}
+
 
 function getGreeting() {
   var h = new Date().getHours();
@@ -138,114 +131,225 @@ var totalWithdrawn = savings
       .filter(function (h) { return h.entryType === "withdrawal"; })
       .reduce(function (acc, h) { return acc + h.amount; }, 0)
   : 0;
+const [clickMode, setClickMode] = useState(false);
+const [handlePulse, setHandlePulse] = useState(false);
   var [balanceHidden, setBalanceHidden] = useState(false);
   var [isOpen, setIsOpen] = useState(false);
   var [maxDragY, setMaxDragY] = useState(420);
   var lowerAreaRef = useRef(null);
   var forceBlockRef = useRef(null);
   var hiddenContentRef = useRef(null);
+const stateRef = useRef({
+  maxDragY: 420,
+  currentY: 0,
+  isDragging: false,
+  startClientY: 0,
+  startValue: 0,
+  lastClientY: 0,
+  lastTime: 0,
+  velocity: 0,
+  dragDistance: 0
+});
 
-  var stateRef = useRef({
-    maxDragY: 420,
-    currentY: 0,
-    isDragging: false,
-    startClientY: 0,
-    startValue: 0,
-    lastClientY: 0,
-    lastTime: 0,
-    velocity: 0
-  });
+function applyVisualPosition(y, withTransition) {
+  const s = stateRef.current;
+  const clamped = Math.max(0, Math.min(s.maxDragY, y));
 
-  function applyVisualPosition(y, withTransition) {
-    var s = stateRef.current;
-    var clamped = Math.max(0, Math.min(s.maxDragY, y));
-    s.currentY = clamped;
+  s.currentY = clamped;
 
-    if (forceBlockRef.current) {
-      forceBlockRef.current.style.transition = withTransition
-        ? "transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)"
-        : "none";
-      forceBlockRef.current.style.transform = "translateY(" + clamped + "px)";
-    }
-    if (hiddenContentRef.current) {
-      var progress = s.maxDragY > 0 ? clamped / s.maxDragY : 0;
-      hiddenContentRef.current.style.transition = withTransition
-        ? "opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)"
-        : "none";
-      hiddenContentRef.current.style.opacity = (0.3 + progress * 0.7).toString();
-      hiddenContentRef.current.style.transform = "translateY(" + ((1 - progress) * 16) + "px)";
+  if (forceBlockRef.current) {
+    forceBlockRef.current.style.transition = withTransition
+      ? "transform 850ms cubic-bezier(0.22, 1.15, 0.36, 1)"
+      : "none";
+
+    forceBlockRef.current.style.transform =
+      `translateY(${clamped}px)`;
+  }
+
+  if (hiddenContentRef.current) {
+    const progress =
+      s.maxDragY > 0
+        ? clamped / s.maxDragY
+        : 0;
+
+    hiddenContentRef.current.style.transition = withTransition
+      ? "opacity 700ms ease, transform 850ms cubic-bezier(0.22, 1.15, 0.36, 1)"
+      : "none";
+
+    hiddenContentRef.current.style.opacity =
+      (0.3 + progress * 0.7).toString();
+
+    hiddenContentRef.current.style.transform =
+      `translateY(${(1 - progress) * 16}px)`;
+  }
+}
+
+useLayoutEffect(() => {
+  function measure() {
+    if (!lowerAreaRef.current) return;
+
+    const h = lowerAreaRef.current.clientHeight;
+
+    stateRef.current.maxDragY =
+      Math.max(120, h - PEEK_HEIGHT_PX);
+
+    if (!stateRef.current.isDragging) {
+      applyVisualPosition(
+        isOpen
+          ? stateRef.current.maxDragY
+          : 0,
+        false
+      );
     }
   }
 
-  useLayoutEffect(function () {
-    function measure() {
-      if (lowerAreaRef.current) {
-        var h = lowerAreaRef.current.clientHeight;
-        stateRef.current.maxDragY = Math.max(120, h - PEEK_HEIGHT_PX);
-        if (!stateRef.current.isDragging) {
-          applyVisualPosition(isOpen ? stateRef.current.maxDragY : 0, false);
-        }
-      }
-    }
-    measure();
-    window.addEventListener("resize", measure);
-    return function () { window.removeEventListener("resize", measure); };
-  }, []);
+  measure();
 
-  useEffect(function () {
-    if (stateRef.current.isDragging) return;
-    applyVisualPosition(isOpen ? stateRef.current.maxDragY : 0, true);
-  }, [isOpen]);
+  window.addEventListener("resize", measure);
 
-  var handleWindowPointerMove = useCallback(function (e) {
-    var s = stateRef.current;
-    if (!s.isDragging) return;
-    var deltaY = e.clientY - s.startClientY;
-    applyVisualPosition(s.startValue + deltaY, false);
+  return () => {
+    window.removeEventListener("resize", measure);
+  };
+}, []);
 
-    var now = performance.now();
-    var dt = now - s.lastTime;
-    if (dt > 4) {
-      s.velocity = (e.clientY - s.lastClientY) / dt;
-      s.lastClientY = e.clientY;
-      s.lastTime = now;
-    }
-  }, []);
+useEffect(() => {
+  if (stateRef.current.isDragging) return;
 
-  var handleWindowPointerUp = useCallback(function () {
-    var s = stateRef.current;
-    if (!s.isDragging) return;
-    s.isDragging = false;
+  applyVisualPosition(
+    isOpen
+      ? stateRef.current.maxDragY
+      : 0,
+    true
+  );
+}, [isOpen]);
 
-    window.removeEventListener("pointermove", handleWindowPointerMove);
-    window.removeEventListener("pointerup", handleWindowPointerUp);
-    window.removeEventListener("pointercancel", handleWindowPointerUp);
+const handleWindowPointerMove = useCallback((e) => {
+  const s = stateRef.current;
 
-    var shouldOpen;
-    if (Math.abs(s.velocity) > 0.45) {
-      shouldOpen = s.velocity > 0;
-    } else {
-      shouldOpen = s.currentY > s.maxDragY / 2;
-    }
-    setIsOpen(shouldOpen);
-    applyVisualPosition(shouldOpen ? s.maxDragY : 0, true);
-  }, [handleWindowPointerMove]);
+  if (!s.isDragging) return;
 
-  function handlePointerDown(e) {
-    var s = stateRef.current;
-    s.isDragging = true;
-    s.startClientY = e.clientY;
-    s.startValue = s.currentY;
+  const deltaY =
+    e.clientY - s.startClientY;
+
+  s.dragDistance = Math.abs(deltaY);
+
+  applyVisualPosition(
+    s.startValue + deltaY,
+    false
+  );
+
+  const now = performance.now();
+  const dt = now - s.lastTime;
+
+  if (dt > 4) {
+    s.velocity =
+      (e.clientY - s.lastClientY) / dt;
+
     s.lastClientY = e.clientY;
-    s.lastTime = performance.now();
-    s.velocity = 0;
-
-    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
-
-    window.addEventListener("pointermove", handleWindowPointerMove, { passive: true });
-    window.addEventListener("pointerup", handleWindowPointerUp, { passive: true });
-    window.addEventListener("pointercancel", handleWindowPointerUp, { passive: true });
+    s.lastTime = now;
   }
+}, []);
+
+const handleWindowPointerUp = useCallback(() => {
+  const s = stateRef.current;
+
+  if (!s.isDragging) return;
+
+  s.isDragging = false;
+
+  window.removeEventListener(
+    "pointermove",
+    handleWindowPointerMove
+  );
+
+  window.removeEventListener(
+    "pointerup",
+    handleWindowPointerUp
+  );
+
+  window.removeEventListener(
+    "pointercancel",
+    handleWindowPointerUp
+  );
+
+  let shouldOpen;
+
+  if (Math.abs(s.velocity) > 0.45) {
+    shouldOpen = s.velocity > 0;
+  } else {
+    shouldOpen =
+      s.currentY > s.maxDragY / 2;
+  }
+
+  s.velocity = 0;
+  s.dragDistance = 0;
+
+  setIsOpen(shouldOpen);
+
+  requestAnimationFrame(() => {
+    applyVisualPosition(
+      shouldOpen
+        ? s.maxDragY
+        : 0,
+      true
+    );
+  });
+}, [handleWindowPointerMove]);
+
+
+function handlePointerDown(e) {
+  if (clickMode) return;
+
+  const s = stateRef.current;
+
+  s.isDragging = true;
+  s.startClientY = e.clientY;
+  s.startValue = s.currentY;
+  s.lastClientY = e.clientY;
+  s.lastTime = performance.now();
+  s.velocity = 0;
+
+  window.addEventListener(
+    "pointermove",
+    handleWindowPointerMove,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "pointerup",
+    handleWindowPointerUp,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "pointercancel",
+    handleWindowPointerUp,
+    { passive: true }
+  );
+}
+const handleIslandClick = useCallback(() => {
+  if (!clickMode) return;
+
+  const s = stateRef.current;
+  const nextOpen = !isOpen;
+
+  setIsOpen(nextOpen);
+
+  applyVisualPosition(
+    nextOpen ? s.maxDragY : 0,
+    true
+  );
+}, [clickMode, isOpen]);
+
+function toggleInteractionMode() {
+  setClickMode(v => !v);
+
+  setHandlePulse(true);
+
+  setTimeout(() => {
+    setHandlePulse(false);
+  }, 200);
+}
 
   var change24h = { amount: 0, percent: 0 };
   (function () {
@@ -292,10 +396,10 @@ var totalWithdrawn = savings
           </div>
         </div>
 
-        <div className="hv2-balance-block" onDoubleClick={() => setBalanceHidden(!balanceHidden)}>
-          <span className="hv2-balance-label">Wallet Balance</span>
-          <span className="hv2-balance-value">{balanceHidden ? "******" : ("$" + balanceValue)}</span>
-          <div className="hv2-balance-change-row">
+        <div className="hv2-balance-block" >
+          <span className="hv2-balance-label"  onDoubleClick={toggleInteractionMode}>Wallet Balance</span>
+          <span className="hv2-balance-value"  onClick={() => navigate("/balancecard")}>{balanceHidden ? "******" : ("$" + balanceValue)}</span>
+          <div className="hv2-balance-change-row" onDoubleClick={() => setBalanceHidden(!balanceHidden)}>
             <span className={"hv2-change-amount " + (changeIsPositive ? "pos" : "neg")}>
               {balanceHidden ? "****" : ((changeIsPositive ? "+$" : "-$") + Math.abs(change24h.amount).toFixed(2))}
             </span>
@@ -360,8 +464,10 @@ var totalWithdrawn = savings
          <div
   className="hv2-handle-zone"
   onPointerDown={handlePointerDown}
+   onClick={handleIslandClick}
+  
 >
-            <div className="hv2-handle-bar"></div>
+            <div   className={`hv2-handle-bar ${handlePulse ? "hv2-handle-bar--pulse" : ""}`}></div>
           </div>
 
           <div className="hv2-force-scroll">
@@ -383,7 +489,7 @@ var totalWithdrawn = savings
       {summary.categories.map(function (cat, idx) {
         var total = summary.categories.reduce(function (acc, c) { return acc + c.amount; }, 0) || 1;
         var pct = (cat.amount / total) * 100;
-        var colors = ["#f0dfade0", "#404040", "#f0dfade0", "#404040", "#f0dfade0"];
+        var colors = ["#f0dfade0"];
         return <span key={cat.key} style={{ width: pct + "%", background: colors[idx % colors.length] }}></span>;
       })}
     </div>
@@ -396,7 +502,7 @@ var totalWithdrawn = savings
           </div>
         </div>
     
-
+{/* 
    {cardsData && cardsData.cards.length == 0 && (
           <div className="bcx-empty-state" onClick={() => navigate("/balancecard")}>
             <span className="bcx-empty-title">No cards yet</span>
@@ -435,7 +541,8 @@ var totalWithdrawn = savings
 
    
   </div>
-)}
+)} */}
+
 
 
 <div className="sav-stats-block" onClick={() => navigate("/savings")}>
@@ -473,13 +580,22 @@ var totalWithdrawn = savings
            {balanceHidden ? "****" : "$" + totalDeposited.toFixed(2)}
       </span>
     </div>
-
   
-  
-  </div>
-</div>
+  </div></div>
     
-  
+    <div className="svc-grid-">
+    
+     <div className="svc-tile" onClick={() => navigate("/pixel")}>
+              <span className="svc-tile-name">Pixel</span>
+                <span className="svc-tile-desc">Minefield multiplier game</span>
+              </div>
+    
+     <div className="svc-tile" onClick={() => navigate("/rocket")}>
+              <span className="svc-tile-name">Rocket</span>
+                <span className="svc-tile-desc">Crash-style multiplier game</span>
+              </div>
+
+</div>
 
 
           </div>
@@ -487,8 +603,9 @@ var totalWithdrawn = savings
         </div>
 
       </div>
+      
     </div>
   );
 };
-
+// onclick card
 export default Home;

@@ -1072,7 +1072,7 @@
 .TradeContent,
 .BonusContent, 
 .ReferralContent,
-.CardContent  { background: var(--g-bg); min-height: 90vh;}
+.CardContent  { background: var(--g-bg); min-height: 80vh;}
 
 .history-screen,
 .premium-exchange-wrapper,
@@ -1484,7 +1484,6 @@ background: rgba(255, 255, 255, 0.05);
   gap: 10px;
   font-family: 'Unbounded', sans-serif;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid #f0dfad25 ;
   border-radius: 16px;
   padding: 16px 12px;
   margin-bottom: 16px;
@@ -1523,7 +1522,7 @@ background: rgba(255, 255, 255, 0.05);
   align-items: center;
   gap: 10px;
   background: #1c1c1c;
-  border: 1px solid rgba(255,255,255,0.08);
+ 
   border-radius: 18px;
   padding: 20px 18px;
   margin-bottom: 18px;
@@ -1581,11 +1580,10 @@ background: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
+  padding: 14px;
   border-radius: 16px;
   background: #1c1c1c;
   font-family: 'Unbounded', sans-serif;
-  border: 1px solid rgba(255,255,255,0.06);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s, transform 0.1s;
   animation: snd-card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;

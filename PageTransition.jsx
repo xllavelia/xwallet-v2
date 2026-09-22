@@ -169,8 +169,10 @@ function PageTransition({ children }) {
         className="page-transition__drag-zone"
         ref={dragZoneRef}
         style={{ touchAction: "none" }}
+        onClick={() => navigate(-1)}
+
       >
-        <div className="page-transition__handle" />
+        <div className="page-transition__handle"  />
       </div>
 
       <div className="page-transition__content">{children}</div>
