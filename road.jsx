@@ -56,6 +56,7 @@ import P2PDeals from "./P2PDeals";
 import Commodities from "./Commodities";
 import CommodityDetail from "./CommodityDetail";
 import Pixel from "./Pixel";
+import Flip from "./Flip";
 
 import PageTransition from "./PageTransition";
 
@@ -97,7 +98,7 @@ const islandRoutes = [
   { path: "commodities", element: <Commodities /> },
   { path: "commoditydetail", element: <CommodityDetail /> },
   { path: "pixel", element: <Pixel /> },
-
+  { path: "flip", element: <Flip /> },
 
 ];
 

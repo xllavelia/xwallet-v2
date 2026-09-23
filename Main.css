@@ -1364,7 +1364,7 @@ left: 10%;
 }
 .HistoryContent{
   width: 100%;
-  height: 90vh;
+  height: 88vh;
   padding-top: 1vh;
 
 }
@@ -2631,7 +2631,7 @@ font-family: 'Unbounded';
 
 /* Утилиты цветов */
 .green { color: #2ebd85 !important; }
-.red { color: #f6465d !important; }
+/* .red { color: #f6465d ; } */
 .yellow { color: white !important; }
 
 /* HEADER */
@@ -2932,9 +2932,9 @@ body {
 
 .px-market-btn {
   background: #1c1c1c;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: none;
   color: var(--px-text-main);
-  padding: 8px 14px;
+  padding: 12px 14px;
   border-radius: 12px;
   font-size: 12px; font-weight: 600;
 }
@@ -2993,15 +2993,13 @@ body {
 .px-preset-btn {
   flex: 1;
    background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+
   color: var(--xlavelia);
   /* border: 1px solid #101010;*/
-  border: 1px solid rgba(255, 255, 255, 0.05);
-   
+  /* border: 1px solid rgba(255, 255, 255, 0.05); */
+  border: none;
   /* box-shadow:
     inset 0 0 60px rgba(232, 237, 122, 0.0); */
-   
   padding: 16px 0;
   border-radius: 16px;
   font-family: var(--font-display);
@@ -3021,11 +3019,8 @@ border: 1px solid  var(--xlavelia);
 /* --- Карточки деталей (Стекло) --- */
 .glass-card {
  background-color: #1c1c1c;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 20px;
-  padding: 8px 20px;
+  padding: 10px 20px;
   margin-bottom: 20px;
 }
 
@@ -3070,12 +3065,12 @@ border: 1px solid  var(--xlavelia);
 }
 
 .px-footer { margin-top: auto; }
-/* Базовые стили для главной кнопки */
+
 .px-action-btn {
   width: 100%;
   padding: 20px;
   border-radius: 20px;
-  font-family: 'Unbounded', sans-serif; /* Твой фирменный шрифт */
+  font-family: 'Unbounded', sans-serif; 
   font-size: 16px;
   font-weight: 700;
   text-transform: uppercase;
@@ -3084,14 +3079,11 @@ border: 1px solid  var(--xlavelia);
   transition: all 0.3s ease;
 }
 
-/* Цвет для SHORT (Красный) */
 .btn-short, .btn-long {
 background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   color: var(--xlavelia);
-  /* border: 1px solid #101010;*/
-  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 

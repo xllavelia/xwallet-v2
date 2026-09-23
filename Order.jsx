@@ -239,7 +239,7 @@ const isSubmittingRef = useRef(false);
                     <div className="px-ac-options">
                       {[3, 5, 10, 20, 50].map(function(pct) {
                         return (
-                          <button key={pct} className={'px-lev-btn ' + (autoCloseTarget === pct ? 'active' : '')} onClick={() => setAutoCloseTarget(pct)}>
+                          <button key={pct} className={'px-lev-btn- ' + (autoCloseTarget === pct ? 'active' : '')} onClick={() => setAutoCloseTarget(pct)}>
                             {'+' + pct + '%'}
                           </button>
                         );

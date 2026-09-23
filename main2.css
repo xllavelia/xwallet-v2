@@ -680,9 +680,8 @@
 .px-autoclose-section {
   margin: 12px 0;
   background: var(--g-card);
-  border: 1px solid var(--g-border);
   border-radius: 12px;
-  padding: 12px;
+  padding: 14px 12px;
 }
 .px-autoclose-header { display: flex; justify-content: space-between; align-items: center; }
 .px-autoclose-body   { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -873,7 +872,7 @@
   gap: 8px;
 }
 
-.px-lev-btn {
+.px-lev-btn, .px-lev-btn- {
   flex: 1;
   padding: 7px 0;
   border-radius: 8px;
@@ -959,10 +958,9 @@
 
 
 .ht-detail-modal {
-  width: 90%;
-  max-width: 90%;
+  width: 95%;
   background-color: #151515;
-  padding: 24px 20px 36px;
+  padding: 2px 20px 16px;
   border-radius: 24px;
   margin-bottom: 5%;
 }
@@ -1072,7 +1070,7 @@
 .TradeContent,
 .BonusContent, 
 .ReferralContent,
-.CardContent  { background: var(--g-bg); min-height: 80vh;}
+.CardContent  { background: var(--g-bg); min-height: 88vh;}
 
 .history-screen,
 .premium-exchange-wrapper,
@@ -1206,13 +1204,10 @@
 .px-leverage-section { margin: 12px 0; }
 .px-leverage-title   { font-size: 11px; color: var(--g-dim); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px; }
 .px-leverage-options { display: flex; gap: 6px; flex-wrap: wrap; }
-.px-lev-btn {
-  padding: 6px 10px;
- background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  color:var(--xlavelia);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.px-lev-btn, .px-lev-btn- {
+  padding: 7px 10px;
+  background: #1c1c1c;
+  border: none;
   border-radius: 8px;
   color: var(--g-muted);
   font-size: 12px;
@@ -1221,7 +1216,12 @@
   transition: all 0.15s;
 }
 
-.px-lev-btn.active {
+.px-lev-btn- {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.px-lev-btn.active, .px-lev-btn-.active {
  border: 1px solid var(--xlavelia);
   color:var(--xlavelia);
 }
@@ -1434,7 +1434,7 @@ background: rgba(255, 255, 255, 0.05);
 /* ── Step flow container — handles the slide transition ─────────────── */
 .snd-flow {
   position: relative;
-  min-height: 90vh;
+  min-height: 87vh;
   overflow: hidden;
 }
 
@@ -1761,7 +1761,6 @@ background: rgba(255, 255, 255, 0.05);
 }
 
 /* ── Numpad ───────────────────────────────────────────────────────────── */
-.snd-numpad-grid-parent { margin-top: 0vh; }
 .snd-numpad-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1769,15 +1768,15 @@ background: rgba(255, 255, 255, 0.05);
 }
 .snd-numpad-grid button {
   background: #1c1c1c;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: none;
   border-radius: 16px;
   color: #fff;
   font-family: 'Unbounded', sans-serif;
   font-size: 22px;
   font-weight: 700;
-  padding: 20px 0;
+  padding: 22px 0;
   cursor: pointer;
-  margin-top: 0.5rem;
+  margin-top: 0.15rem;
   transition: background 0.12s, transform 0.08s;
 }
 .snd-numpad-grid button:active {
@@ -1786,11 +1785,10 @@ background: rgba(255, 255, 255, 0.05);
 }
 
 /* ── Swipe to send ────────────────────────────────────────────────────── */
-.snd-swipe-container { margin-top: 2rem; padding-bottom: 1vh; }
+.snd-swipe-container { margin-top: 1.3rem;  }
 .snd-swipe-track {
   position: relative;
   background: #1c1c1c;
-  border: 1px solid rgba(255,255,255,0.07);
   border-radius: 40px;
   height: 72px;
   display: flex;
