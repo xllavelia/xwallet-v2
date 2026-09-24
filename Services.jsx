@@ -18,6 +18,8 @@ var MODULES = [
   { name: "Rocket", desc: "Crash-style multiplier game", path: "/rocket" },
   { name: "Pixel", desc: "Minefield multiplier game", path: "/pixel" },
   { name: "Flip", desc: "Red or black · 1.90x payout", path: "/flip" },
+  { name: "Ticket", desc: "Scratch card and buy for rang", path: "/ticket" },
+
   { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
   { name: "Commodities", desc: "Gold, silver, oil, gas and more", path: "/commodities" },
 ];

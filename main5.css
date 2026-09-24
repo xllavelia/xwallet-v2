@@ -1,0 +1,249 @@
+:root { --xlavelia: #f0dfad ; }
+
+:root {
+  --tk-card: #1c1c1c;
+  --tk-white: #f4f2ec;
+  --tk-dim: rgba(244, 242, 236, 0.45);
+  --tk-faint: rgba(244, 242, 236, 0.16);
+  --tk-accent: #f0dfad;
+  --tk-err: #ff8080;
+}
+.tk-page {
+  color: var(--tk-white);
+  font-family: -apple-system, BlinkMacSystemFont, 'Unbounded', sans-serif;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 14px) 18px 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* ── Topbar ─────────────────────────────────────────────── */
+.tk-topbar { display: flex; align-items: center; gap: 12px; }
+.tk-icon-btn {
+  width: 36px; height: 36px; border-radius: 12px;
+  background: var(--tk-card); border: none; color: var(--tk-white);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+}
+.tk-icon-btn:active { transform: scale(0.92); }
+.tk-title { font-size: 17px; font-weight: 600; flex: 1; letter-spacing: 0.01em; }
+.tk-balance-chip {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--tk-card); border-radius: 12px; padding: 8px 13px;
+  font-size: 13px; font-weight: 600; color: var(--tk-white);
+  font-variant-numeric: tabular-nums;
+}
+.tk-balance-chip svg { color: var(--tk-dim); }
+/* ── Notice ─────────────────────────────────────────────── */
+.tk-notice {
+  font-size: 13px; font-weight: 600; padding: 12px 14px;
+  border-radius: 13px; text-align: center;
+  animation: tk-fade 0.25s ease;
+}
+.tk-notice.ok { color: var(--tk-accent); background: rgba(240, 223, 173, 0.08); }
+.tk-notice.err { color: var(--tk-err); background: rgba(255, 128, 128, 0.08); }
+@keyframes tk-fade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+/* ── Active zone: ticket card ───────────────────────────── */
+.tk-active { display: flex; flex-direction: column; gap: 10px; }
+.tk-card { position: relative; height: 350px; border-radius: 20px; width: 70%; margin: 0 auto;}
+.tk-under {
+  position: absolute; inset: 0;
+  background: var(--tk-card); border-radius: 20px;
+}
+.tk-under-inner { position: absolute; inset: 0; animation: tk-under-in 0.3s ease; }
+@keyframes tk-under-in { from { opacity: 0; transform: scale(0.965); } to { opacity: 1; transform: none; } }
+.tk-under-line { position: absolute; top: 50%; left: 0; right: 0; border-top: 1px dashed var(--tk-faint); }
+.tk-prize {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--tk-card); padding: 0 18px;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 38px; font-weight: 800; color: var(--tk-accent);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.tk-top {
+  position: absolute; inset: 0;
+  background: var(--tk-card); border-radius: 20px;
+  touch-action: none; cursor: grab;
+  user-select: none; -webkit-user-select: none;
+  animation: tk-top-in 0.34s cubic-bezier(0.18, 0.9, 0.24, 1.05);
+}
+.tk-top:active { cursor: grabbing; }
+@keyframes tk-top-in {
+  from { opacity: 0; transform: translateY(26px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+.tk-top-half {
+  position: absolute; left: 0; right: 0; top: 0; height: 50%;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 10px;
+}
+.tk-top-half-b { top: 50%; gap: 13px; }
+.tk-rarity {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--tk-dim);
+}
+.tk-number {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 32px; font-weight: 800; letter-spacing: 0.02em;
+  color: var(--xlavelia);
+}
+.tk-packline { font-size: 11px; color: var(--tk-dim); letter-spacing: 0.08em; }
+.tk-perf { position: absolute; top: 50%; left: 0; right: 0; height: 0; border-top: 1px dashed var(--tk-faint); }
+.tk-perf-x {
+  position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%);
+  background: var(--tk-card); padding: 0 14px;
+  color: var(--xlavelia); font-size: 15px; line-height: 1;
+}
+.tk-barcode { display: flex; align-items: center; gap: 3px; height: 16px; }
+.tk-barcode span { display: block; height: 100%; background: var(--tk-faint); border-radius: 1px; }
+.tk-micro { font-size: 8.5px; letter-spacing: 0.34em; color: var(--tk-faint); text-transform: uppercase; }
+.tk-card.switching .tk-under { animation: tk-lift-out 0.24s ease forwards; }
+@keyframes tk-lift-out { to { opacity: 0; transform: translateY(-16px); } }
+.tk-empty { background: var(--tk-card); display: flex; align-items: center; justify-content: center; }
+.tk-empty-text { font-size: 13.5px; color: var(--tk-dim); text-align: center; max-width: 230px; line-height: 1.55; }
+.tk-hint { text-align: center; font-size: 11.5px; color: var(--tk-dim); }
+/* ── Rarity slots ───────────────────────────────────────── */
+.tk-select { display: flex; flex-direction: column; gap: 10px; }
+.tk-slot {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--tk-card); border-radius: 16px; padding: 14px 16px;
+}
+.tk-slot::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--tk-faint); flex-shrink: 0;
+}
+.tk-slot.active::before { background: var(--tk-accent); }
+.tk-slot-info { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.tk-slot-name { font-size: 15px; font-weight: 600; }
+.tk-slot.active .tk-slot-name { color: var(--tk-accent); }
+.tk-slot-count { font-size: 11.5px; color: var(--tk-dim); }
+.tk-slot-btn {
+  background: #262626; border: none; border-radius: 11px; padding: 9px 18px;
+  color: var(--tk-white); font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+}
+.tk-slot-btn:active { transform: scale(0.96); }
+.tk-slot.active .tk-slot-btn { background: rgba(240, 223, 173, 0.12); color: var(--tk-accent); }
+/* ── Shop button ────────────────────────────────────────── */
+.tk-shop-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--tk-card); border: none; border-radius: 16px;
+  padding: 16px 18px; color: var(--tk-white); cursor: pointer; font-family: inherit;
+}
+.tk-shop-btn:active { transform: scale(0.985); }
+.tk-shop-btn svg { color: var(--tk-dim); }
+.tk-shop-label { font-size: 14px; font-weight: 600; letter-spacing: 0.03em; }
+/* ── Shop screen ────────────────────────────────────────── */
+.tk-shop-list {
+  width: 100%; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 8px 0 24px;
+}
+.tk-pack {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+  background: var(--tk-card); border: none; border-radius: 20px;
+  padding: 22px 22px 24px; min-height: 155px;
+  color: var(--tk-white); cursor: pointer; font-family: inherit;
+}
+.tk-pack:active { transform: scale(0.985); }
+.tk-pack:disabled { opacity: 0.55; }
+.tk-pack-name { font-size: 16px; font-weight: 700; letter-spacing: 0.05em; }
+.tk-pack-count { font-size: 12px; color: var(--tk-dim); }
+.tk-pack-price {
+  margin-top: auto;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 34px; font-weight: 800;
+}
+/* ── Stats ──────────────────────────────────────────────── */
+.tk-stats {
+  background: var(--tk-card); border-radius: 18px; padding: 18px;
+  display: flex; flex-direction: column; gap: 26px;
+}
+.tk-stats-row { display: flex; gap: 12px; }
+.tk-stat { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.tk-stat-label {
+  font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--tk-dim);
+}
+.tk-stat-value {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 17px; font-weight: 800; white-space: nowrap;
+}
+.tk-stat-value.pos { color: var(--tk-accent); }
+.tk-stat-value.neg { color: var(--tk-err); }
+.tk-stats-global { font-size: 11px; color: var(--tk-dim); text-align: center; }
+
+
+.ban-gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #101010;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+}
+.ban-gate-card {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    max-width: 340px; text-align: center;
+}
+.ban-gate-icon { color: #ff4444; opacity: 0.8; }
+.ban-gate-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 20px; font-weight: 800; color: #fff;
+}
+.ban-gate-reason { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+.ban-gate-device { font-size: 12px; color: rgba(255,255,255,0.35); }
+.ban-gate-logout {
+    margin-top: 10px; padding: 14px 28px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px; color: #fff;
+    font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700;
+    cursor: pointer;
+}
+.ban-gate-logout:active { transform: scale(0.97); }
+
+.maint-overlay {
+    position: fixed; inset: 0; z-index: 8;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+}
+.maint-card {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    max-width: 320px; text-align: center;
+}
+.maint-icon { color: hsl(61,85%,78%); opacity: 0.7; }
+.maint-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 18px; font-weight: 800; color: #fff;
+}
+.maint-sub { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+.maint-until {
+    font-size: 12px; color: rgba(255,255,255,0.3);
+    font-family: 'Unbounded', sans-serif; font-weight: 600;
+}
+
+.adm-maint-card {
+    background: #1c1c1c; border-radius: 16px; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+}
+.adm-maint-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.adm-maint-off { background: rgba(255,80,80,0.15); color: #ff6b6b; }
+.adm-maint-status { font-size: 11px; color: rgba(255,255,255,0.35); }
+.adm-ban-btn {
+    padding: 12px 16px; border: none; border-radius: 12px;
+    background: rgba(255,165,0,0.12); color: #ffa500;
+    font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 700;
+    cursor: pointer;
+}
+.adm-ban-btn:active { transform: scale(0.97); }
+.adm-ban-device { background: rgba(255,80,80,0.12); color: #ff6b6b; }
+.adm-unban-btn {
+    padding: 12px 16px; border: none; border-radius: 12px;
+    background: rgba(126,231,135,0.1); color: #7ee787;
+    font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 700;
+    cursor: pointer;
+}
+.adm-unban-btn:active { transform: scale(0.97); }

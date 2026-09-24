@@ -57,6 +57,8 @@ import Commodities from "./Commodities";
 import CommodityDetail from "./CommodityDetail";
 import Pixel from "./Pixel";
 import Flip from "./Flip";
+import Ticket from "./Ticket";
+
 
 import PageTransition from "./PageTransition";
 
@@ -99,6 +101,8 @@ const islandRoutes = [
   { path: "commoditydetail", element: <CommodityDetail /> },
   { path: "pixel", element: <Pixel /> },
   { path: "flip", element: <Flip /> },
+  { path: "ticket", element: <Ticket /> },
+
 
 ];
 

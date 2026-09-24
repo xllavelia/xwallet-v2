@@ -2939,15 +2939,15 @@ font-family: 'Unbounded';
   border: none; cursor: pointer; border-radius: 12px; padding: 13px 0;
   font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.16em;
   background:  #1c1c1c; 
-  color: #fff; 
+  color: #404040; 
   transition: transform 0.08s ease, background 0.15s ease, color 0.15s ease;
 }
 .flp-choice:active { transform: scale(0.98); }
 /* .flp-choice.red.active {border-color: var(--flp-red);   }
 .flp-choice.black.active {border-color: var(--flp-red); } */
+.flp-choice.red.active {  color: #fff;  }
+.flp-choice.black.active {  color: #fff; }
 
-/* .flp-choice.red {border-color: #000; }
-.flp-choice.black {border-color: #000; } */
 
 
 .flp-mult {

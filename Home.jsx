@@ -18,7 +18,7 @@ import PortfolioComm from "./PortfolioComm";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create flip! beta"
+// git commit -m "create ticket!"
 // git push -u origin main 
 
 
@@ -298,7 +298,7 @@ const handleWindowPointerUp = useCallback(() => {
 
 
 function handlePointerDown(e) {
-  if (clickMode) return;
+  if (!clickMode) return;
 
   const s = stateRef.current;
 
@@ -328,7 +328,7 @@ function handlePointerDown(e) {
   );
 }
 const handleIslandClick = useCallback(() => {
-  if (!clickMode) return;
+  if (clickMode) return;
 
   const s = stateRef.current;
   const nextOpen = !isOpen;
