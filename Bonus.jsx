@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   useVouchers,
   activateVoucher,
@@ -7,6 +9,7 @@ import {
   devResetVouchers,
 } from "./useVouchers";
 import { useWalletBalance } from "./useWallet";
+import { div, h1 } from "framer-motion/client";
 
 function GemIcon() {
   return (
@@ -82,6 +85,7 @@ function formatCountdown(totalSeconds) {
 const Bonus = () => {
   var { vouchers, refresh } = useVouchers();
   var { wallet } = useWalletBalance();
+  const navigate = useNavigate();
 
   var TOTAL_SLOTS =
     wallet && Number.isFinite(wallet.maxVoucherSlots)
@@ -302,7 +306,14 @@ const Bonus = () => {
                   Redeem codes for bonus vouchers
                 </span>
               </div>
+                  
+
             </div>
+                 <div className="daily-rewards-card-" onClick={() => navigate("/rewards")}>
+  <div className="daily-rewards-content">
+    <span className="daily-rewards-label">Daily Rewards</span>
+  </div>
+</div>
           </div>
         )}
 
@@ -349,11 +360,14 @@ const Bonus = () => {
                     ? " vch-deleting"
                     : "");
 
+       
                 return (
+                  
                   <div
                     className={slideClass}
                     key={voucher.id}
                   >
+
                     <div className="ticket-wrapper">
                       <div className="ticket-main">
                         {isTimed && (
@@ -608,6 +622,12 @@ const Bonus = () => {
                 );
               })}
             </div>
+                        <div className="daily-rewards-card" onClick={() => navigate("/rewards")}>
+  <div className="daily-rewards-content">
+    <span className="daily-rewards-label">Daily Rewards</span>
+  </div>
+</div>
+  
 
             <div className="vch-info-stack">
               {slots.map(function (voucher, idx) {
@@ -649,6 +669,7 @@ const Bonus = () => {
                     style={panelStyle}
                     key={voucher.id}
                   >
+                    
                     <div className="voucher-container">
                       <div className="details-section">
                         {isTimed && (
@@ -794,7 +815,7 @@ const Bonus = () => {
                             </div>
                           </div>
                         )}
-
+   
                         <div className="details-group">
                           <h3 className="group-title">
                             DOCUMENTATION
@@ -898,6 +919,7 @@ const Bonus = () => {
                                 )}
                           </button>
                         )}
+                        
                       </div>
                     </div>
                   </div>

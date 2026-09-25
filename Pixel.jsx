@@ -64,24 +64,19 @@ const Pixel = () => {
   var [statusOk, setStatusOk] = useState(true);
   var [outcomeMsg, setOutcomeMsg] = useState(null);
   useEffect(() => {
-  if (!statusMsg) return;
-
-  const t = setTimeout(() => {
-    setStatusMsg(null);
-  }, 5000);
-
-  return () => clearTimeout(t);
-}, [statusMsg]);
-
-useEffect(() => {
-  if (!outcomeMsg) return;
-
-  const t = setTimeout(() => {
-    setOutcomeMsg(null);
-  }, 5000);
-
-  return () => clearTimeout(t);
-}, [outcomeMsg]);
+    if (!statusMsg) return;
+    const t = setTimeout(() => {
+      setStatusMsg(null);
+    }, 5000);
+    return () => clearTimeout(t);
+  }, [statusMsg]);
+  useEffect(() => {
+    if (!outcomeMsg) return;
+    const t = setTimeout(() => {
+      setOutcomeMsg(null);
+    }, 5000);
+    return () => clearTimeout(t);
+  }, [outcomeMsg]);
   var [board, setBoard] = useState(null);
   var [pendingCells, setPendingCells] = useState([]);
   var [showDefeat, setShowDefeat] = useState(false);
@@ -184,7 +179,12 @@ useEffect(() => {
     try {
       var result = await authFetch("/pixel/cashout", { method: "POST" });
       setBoard(function (prev) {
-        return prev ? Object.assign({}, prev, { status: "cashed_out", currentPayout: result.payout }) : prev;
+        if (!prev) return prev;
+        return Object.assign({}, prev, {
+          status: "cashed_out",
+          currentPayout: result.payout,
+          minePositions: result.minePositions || prev.minePositions
+        });
       });
       setOutcomeMsg({ ok: true, text: "Exit — +$" + result.payout.toFixed(2) });
       refreshWallet();
@@ -221,7 +221,7 @@ useEffect(() => {
         });
         if (res.gameOver) {
           next.status = "lost";
-          next.minePositions = res.minePositions || [];
+          next.minePositions = res.minePositions || prev.minePositions;
         }
         return next;
       });
@@ -266,6 +266,15 @@ useEffect(() => {
   var revealedSet = board ? board.revealedCells : [];
   var mineHitSet = board ? board.minesHit : [];
   var ghostMineSet = (board && board.status !== "active") ? board.minePositions : [];
+  var preRevealedMineSet = [];
+  if (board && board.minePositions && board.minePositions.length) {
+    for (var _k = 0; _k < revealedSet.length; _k++) {
+      var _c = revealedSet[_k];
+      if (board.minePositions.indexOf(_c) !== -1 && mineHitSet.indexOf(_c) === -1) {
+        preRevealedMineSet.push(_c);
+      }
+    }
+  }
   var timerPercent = isBettingPhase ? (liveRemaining / BETTING_SECONDS) * 100 : (liveRemaining / ROUND_SECONDS) * 100;
   if (timerPercent > 100) timerPercent = 100;
   if (timerPercent < 0) timerPercent = 0;
@@ -311,10 +320,11 @@ useEffect(() => {
         var cls = "pxl-cell";
         var revealed = revealedSet.indexOf(i) !== -1;
         var isMineHit = mineHitSet.indexOf(i) !== -1;
+        var isPreMine = preRevealedMineSet.indexOf(i) !== -1;
         var isGhost = !revealed && ghostMineSet.indexOf(i) !== -1;
         var isPending = pendingCells.indexOf(i) !== -1;
 
-        if (revealed) cls += isMineHit ? " mine" : " safe";
+        if (revealed) cls += isMineHit ? " mine" : (isPreMine ? " pre-mine" : " safe");
         else if (isGhost) cls += " ghost-mine";
         else if (isPending) cls += " pending";
 
