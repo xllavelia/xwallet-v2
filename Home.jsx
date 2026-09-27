@@ -18,7 +18,7 @@ import PortfolioComm from "./PortfolioComm";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create rewards!"
+// git commit -m "Create mining and bun!"
 // git push -u origin main 
 
 
@@ -53,27 +53,7 @@ function SearchIcon() {
 function GiftIcon() {
   return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8l9-4 9 4-9 4-9-4Z"></path><path d="M3 8v9l9 4 9-4V8"></path><line x1="12" y1="12" x2="12" y2="21"></line></svg>);
 }
-function TradeIcon() {
-return (<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="#fff" d="M7 20v-2H5V6h2V4h2v2h2v12H9v2zm0-4h2V8H7zm8 4v-5h-2V8h2V4h2v4h2v7h-2v5zm0-7h2v-3h-2zm1-1.5" /></svg> )
-}
-function SendIcon() {
-return (<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14L21 3m0 0l-6.5 18a.55.55 0 0 1-1 0L10 14l-7-3.5a.55.55 0 0 1 0-1z" /></svg>)  
-}
-function CrownIcon() {
-return (<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M4 20q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zm0-2h16V8H4zm3.5-1l-1.4-1.4L8.675 13l-2.6-2.6L7.5 9l4 4zm4.5 0v-2h6v2z" /></svg>) 
-}
-function RocketIcon() {
-  return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2c3 2 5 6 5 10 0 2-1 4-2 5l-3 3-3-3c-1-1-2-3-2-5 0-4 2-8 5-10Z"></path><circle cx="12" cy="10" r="1.6"></circle><path d="M9 16l-3 3M15 16l3 3"></path></svg>);
-}
-function P2PIcon() {
-  return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>);
-}
-function GridIcon() {
-  return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.8"></rect><rect x="14" y="3" width="7" height="7" rx="1.8"></rect><rect x="3" y="14" width="7" height="7" rx="1.8"></rect><rect x="14" y="14" width="7" height="7" rx="1.8"></rect></svg>);
-}
-function ProfileTileIcon() {
-  return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>);
-}
+
 
 
 function getGreeting() {
@@ -85,10 +65,7 @@ function getGreeting() {
 
 
 function formatUsd(n) { return "$" + n.toFixed(2); }
-function formatAmount(n, id) {
-  var decimals = n < 0.01 ? 5 : (n < 1 ? 4 : 2);
-  return n.toFixed(decimals) + " " + id;
-}
+
 
 
 const Home = () => {
@@ -410,8 +387,8 @@ function toggleInteractionMode() {
         </div>
 
         <div className="hv2-action-row">
-          <button className="hv2-action-btn primary" onClick={() => navigate("/trade")}>
-            <span>Trade</span>
+          <button className="hv2-action-btn primary" onClick={() => navigate("/mining")}>
+            <span>Mine</span>
           </button>
           <button className="hv2-action-btn primary" onClick={() => navigate("/send")}>
             <span>Send</span>
@@ -434,8 +411,34 @@ function toggleInteractionMode() {
           </span>
         </div>
       )}
+        <div className="svc-grid-">
+    
+     <div className="svc-tile" onClick={() => navigate("/pixel")}>
+              <span className="svc-tile-name">Pixel</span>
+                <span className="svc-tile-desc">Minefield multiplier game</span>
+              </div>
+    
+     <div className="svc-tile" onClick={() => navigate("/rocket")}>
+              <span className="svc-tile-name">Rocket</span>
+                <span className="svc-tile-desc">Crash-style multiplier game</span>
+              </div>
+
+</div>
 <PortfolioComm balanceHidden={balanceHidden} />
 
+  <div className="svc-grid-">
+    
+     <div className="svc-tile" onClick={() => navigate("/flip")}>
+              <span className="svc-tile-name">Flip</span>
+                <span className="svc-tile-desc">Red or black · 1.90x payout"</span>
+              </div>
+    
+     <div className="svc-tile" onClick={() => navigate("/ticket")}>
+              <span className="svc-tile-name">Ticket</span>
+                <span className="svc-tile-desc">Scratch card and buy for rang</span>
+              </div>
+
+</div>
 
  <div className="crdx-hero" onClick={() => navigate("/card")}>
         <span className="crdx-hero-label">Total Value</span>
@@ -444,16 +447,6 @@ function toggleInteractionMode() {
       </div>
 
 
-{/* <div className="hv2-nav-tiles-row">
-  <div className="hv2-nav-tile" onClick={() => navigate("/rocket")}>
-    <div className="hv2-nav-tile-icon"><RocketIcon /></div>
-    <span className="hv2-nav-tile-label">Rocket</span>
-  </div>
-  <div className="hv2-nav-tile" onClick={() => enterP2P(navigate)}>
-    <div className="hv2-nav-tile-icon"><P2PIcon /></div>
-    <span className="hv2-nav-tile-label">P2P Market</span>
-  </div>
-</div> */}
 
 
         </div>
@@ -583,7 +576,7 @@ function toggleInteractionMode() {
   
   </div></div>
     
-    <div className="svc-grid-">
+    <div className="svc-grid--">
     
      <div className="svc-tile" onClick={() => navigate("/pixel")}>
               <span className="svc-tile-name">Pixel</span>

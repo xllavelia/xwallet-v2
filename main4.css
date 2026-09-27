@@ -2195,7 +2195,7 @@ color: #00d4aa;
 }
 
 /* ── Time trade detail modal ──────────────────────────────── */
-.tt-detail-overlay { position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.78); backdrop-filter: blur(10px); display: flex; align-items: flex-end; justify-content: center; }
+.tt-detail-overlay { position: fixed; inset: 0; z-index: 101; background: rgba(0,0,0,0.78); backdrop-filter: blur(10px); display: flex; align-items: flex-end; justify-content: center; }
 .tt-detail-modal { width: 100%; max-width: 480px; background: #1c1c1c; border-radius: 24px ; padding: 8px 20px 32px;margin-bottom: 5%; }
 .tt-detail-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 8px auto 16px; }
 .tt-detail-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -2282,7 +2282,7 @@ color: #00d4aa;
   padding: 18px 20px calc(40px + env(safe-area-inset-bottom));
   display: flex; flex-direction: column; gap: 16px;
   opacity: 1; transform: translateY(16px);
-margin-bottom: -22px;
+margin-bottom: 22px;
   flex-shrink: 0;
 background-color: #101010;
   border-radius: 28px 28px 0 0;
@@ -3014,10 +3014,15 @@ font-family: 'Unbounded';
 .flp-waiting-sub { font-size: 11px; letter-spacing: 0.06em; color: var(--flp-dim); font-variant-numeric: tabular-nums; }
 
 /* ── Statistics ── */
-.flp-stats { gap: 14px; }
+.flp-stats { 
+  gap: 14px; 
+}
 .flp-stats-head {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.2em;
-  color: var(--flp-dim); text-transform: uppercase;
+  font-size: 10px; 
+  font-weight: 600; 
+  letter-spacing: 0.2em;
+  color: var(--flp-dim); 
+  text-transform: uppercase;
 }
 .flp-stats-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .flp-stat-col { display: flex; flex-direction: column; gap: 9px; min-width: 0; }

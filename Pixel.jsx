@@ -183,7 +183,6 @@ const Pixel = () => {
         return Object.assign({}, prev, {
           status: "cashed_out",
           currentPayout: result.payout,
-          minePositions: result.minePositions || prev.minePositions
         });
       });
       setOutcomeMsg({ ok: true, text: "Exit — +$" + result.payout.toFixed(2) });
@@ -266,15 +265,7 @@ const Pixel = () => {
   var revealedSet = board ? board.revealedCells : [];
   var mineHitSet = board ? board.minesHit : [];
   var ghostMineSet = (board && board.status !== "active") ? board.minePositions : [];
-  var preRevealedMineSet = [];
-  if (board && board.minePositions && board.minePositions.length) {
-    for (var _k = 0; _k < revealedSet.length; _k++) {
-      var _c = revealedSet[_k];
-      if (board.minePositions.indexOf(_c) !== -1 && mineHitSet.indexOf(_c) === -1) {
-        preRevealedMineSet.push(_c);
-      }
-    }
-  }
+ 
   var timerPercent = isBettingPhase ? (liveRemaining / BETTING_SECONDS) * 100 : (liveRemaining / ROUND_SECONDS) * 100;
   if (timerPercent > 100) timerPercent = 100;
   if (timerPercent < 0) timerPercent = 0;
@@ -320,11 +311,10 @@ const Pixel = () => {
         var cls = "pxl-cell";
         var revealed = revealedSet.indexOf(i) !== -1;
         var isMineHit = mineHitSet.indexOf(i) !== -1;
-        var isPreMine = preRevealedMineSet.indexOf(i) !== -1;
         var isGhost = !revealed && ghostMineSet.indexOf(i) !== -1;
         var isPending = pendingCells.indexOf(i) !== -1;
 
-        if (revealed) cls += isMineHit ? " mine" : (isPreMine ? " pre-mine" : " safe");
+if (revealed) cls += isMineHit ? " mine" : " safe";
         else if (isGhost) cls += " ghost-mine";
         else if (isPending) cls += " pending";
 

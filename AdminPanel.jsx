@@ -21,6 +21,110 @@ function AdminPanel() {
   var [toast, setToast] = useState(null);
   var [isBusy, setIsBusy] = useState(false);
 
+  
+  var [banPlayerId, setBanPlayerId] = useState("");
+  var [banReason, setBanReason] = useState("");
+  var [banMsg, setBanMsg] = useState(null);
+  var [maintActive, setMaintActive] = useState(false);
+  var [maintUntil, setMaintUntil] = useState("");
+  var [maintMinutes, setMaintMinutes] = useState(30);
+  var [maintMsg, setMaintMsg] = useState(null);
+
+  function fetchMaintenance() {
+    authFetch("/admin/maintenance")
+      .then(function (data) {
+        setMaintActive(!!data.maintenance);
+        setMaintUntil(data.until || "");
+      })
+      .catch(function () {});
+  }
+
+  useEffect(function () {
+    fetchMaintenance();
+    var iv = setInterval(fetchMaintenance, 15000);
+    return function () { clearInterval(iv); };
+  }, []);
+
+  function doBan(device) {
+    if (!banPlayerId.trim()) return;
+    setBanMsg(null);
+    authFetch("/admin/users/ban", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ playerId: banPlayerId.trim(), device: device, reason: banReason.trim() })
+    })
+      .then(function () {
+        setBanMsg({ ok: true, text: device ? "Device banned" : "Account banned" });
+        setBanPlayerId("");
+        setBanReason("");
+      })
+      .catch(function (err) {
+        setBanMsg({ ok: false, text: err.message || "Error" });
+      });
+  }
+
+  function doUnban() {
+    if (!banPlayerId.trim()) return;
+    setBanMsg(null);
+    authFetch("/admin/users/unban", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ playerId: banPlayerId.trim() })
+    })
+      .then(function () {
+        setBanMsg({ ok: true, text: "Unbanned" });
+        setBanPlayerId("");
+        setBanReason("");
+      })
+      .catch(function (err) {
+        setBanMsg({ ok: false, text: err.message || "Error" });
+      });
+  }
+
+  function doSetMaintenance() {
+    setMaintMsg(null);
+    authFetch("/admin/maintenance/set", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ minutes: maintMinutes })
+    })
+      .then(function () {
+        setMaintMsg({ ok: true, text: "Maintenance set for " + maintMinutes + " min" });
+        fetchMaintenance();
+      })
+      .catch(function (err) {
+        setMaintMsg({ ok: false, text: err.message || "Error" });
+      });
+  }
+
+  function doSetMaintenanceIndefinite() {
+    setMaintMsg(null);
+    authFetch("/admin/maintenance/set", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({})
+    })
+      .then(function () {
+        setMaintMsg({ ok: true, text: "Maintenance set indefinitely" });
+        fetchMaintenance();
+      })
+      .catch(function (err) {
+        setMaintMsg({ ok: false, text: err.message || "Error" });
+      });
+  }
+
+  function doClearMaintenance() {
+    setMaintMsg(null);
+    authFetch("/admin/maintenance/clear", { method: "POST" })
+      .then(function () {
+        setMaintMsg({ ok: true, text: "Maintenance cleared" });
+        fetchMaintenance();
+      })
+      .catch(function (err) {
+        setMaintMsg({ ok: false, text: err.message || "Error" });
+      });
+  }
+
   var loadStats = useCallback(function () {
     authFetch("/admin/stats").then(setStats).catch(function () {});
   }, []);
@@ -166,6 +270,68 @@ function AdminPanel() {
             <div className="adm-stat-card"><span>ACTIVE SUBS</span><strong>{stats.activeSubs}</strong></div>
           </div>
         )}
+
+      {/* ── Bans ──────────────────────────────────── */}
+      <div className="adm-section">
+        <div className="adm-ban-block">
+          <input
+            className="adm-input"
+            placeholder="Player ID"
+            value={banPlayerId}
+            onChange={function (e) { setBanPlayerId(e.target.value); }}
+          />
+          <input
+            className="adm-input"
+            placeholder="Reason (optional)"
+            value={banReason}
+            onChange={function (e) { setBanReason(e.target.value); }}
+          />
+          <div className="adm-ban-btns">
+            <button className="adm-ban-btn" onClick={function () { doBan(false); }}>Ban Account</button>
+            <button className="adm-ban-btn adm-ban-device" onClick={function () { doBan(true); }}>Ban Device</button>
+            <button className="adm-unban-btn" onClick={doUnban}>Unban</button>
+          </div>
+          {banMsg && (
+            <div className={"adm-msg " + (banMsg.ok ? "ok" : "err")}>{banMsg.text}</div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Maintenance ──────────────────────────── */}
+      <div className="adm-section">
+        <div className="adm-maint-block">
+          <div className="adm-maint-status">
+            <span className={"adm-maint-dot " + (maintActive ? "on" : "off")}></span>
+            <span>{maintActive ? "Active" : "Inactive"}</span>
+            {maintActive && maintUntil && (
+              <span className="adm-maint-until">{"until " + new Date(maintUntil).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</span>
+            )}
+          </div>
+          <div className="adm-maint-controls">
+            <div className="adm-maint-durations">
+              {[15, 30, 60, 120].map(function (m) {
+                return (
+                  <button
+                    key={m}
+                    className={"adm-maint-dur" + (maintMinutes === m ? " active" : "")}
+                    onClick={function () { setMaintMinutes(m); }}
+                  >
+                    {m < 60 ? m + "m" : (m / 60) + "h"}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="adm-maint-actions">
+              <button className="adm-maint-set-btn" onClick={doSetMaintenance}>Set Timer</button>
+              <button className="adm-maint-set-btn adm-maint-indef" onClick={doSetMaintenanceIndefinite}>Indefinite</button>
+              <button className="adm-maint-clear-btn" onClick={doClearMaintenance} disabled={!maintActive}>Clear</button>
+            </div>
+          </div>
+          {maintMsg && (
+            <div className={"adm-msg " + (maintMsg.ok ? "ok" : "err")}>{maintMsg.text}</div>
+          )}
+        </div>
+      </div>
 
         <div className="adm-search-bar">
           <input

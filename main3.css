@@ -279,7 +279,7 @@ background-color: #1c1c1c;
 
 /* ── Toasts + purchase burst ──────────────────────────────── */
 .prm-toast-stack {
-  position: fixed; top: 24px; left: 0; right: 0;
+  position: fixed; top: 28px; left: 0; right: 0;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   z-index: 99; pointer-events: none; padding: 0 20px;
 }
@@ -2031,7 +2031,7 @@ display: flex;
 
 .et-xp-toast, .ht-xp-toast {
   position: fixed;
-  top: 24px; left: 50%; transform: translateX(-50%);
+  top: 28px; left: 50%; transform: translateX(-50%);
   z-index: 99;
   background: #161616;
   border: 1px solid #f0dfad45;
@@ -2235,6 +2235,90 @@ display: flex;
   color: #ff6b6b; font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer;
 }
 
+
+.adm-ban-block, .adm-maint-block {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.adm-input {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 11px; padding: 14px 14px; color: #fff; font-size: 13px;
+  outline: none;
+}
+.adm-input:focus { border-color: var(--xlavelia); }
+.adm-input::placeholder { color: rgba(255,255,255,0.25); }
+.adm-ban-btns {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.adm-ban-btn, .adm-unban-btn, .adm-ban-btn.adm-ban-device  {
+  flex: 1; padding: 14px 0; border-radius: 11px; border: none;
+  background: #1c1c1c; color: var(--xlavelia);
+  font-size: 12.5px; font-weight: 700; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.1);
+  font-family: 'Unbounded', sans-serif;
+  margin-bottom: 0.5rem;
+}
+
+
+.adm-ban-btn:active, .adm-unban-btn:active, .adm-ban-btn.adm-ban-device:active  {
+transform: scale(0.98);
+}
+
+.adm-msg {
+  font-size: 12px; font-weight: 600; padding: 8px 12px; border-radius: 9px;
+  text-align: center;
+}
+.adm-msg.ok { background: rgba(80,200,120,0.1); color: #50c878; }
+.adm-msg.err { background: rgba(255,70,70,0.1); color: #ff6b6b; }
+
+.adm-maint-status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6);
+}
+.adm-maint-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.adm-maint-dot.on { background: #ff6b6b; box-shadow: 0 0 6px rgba(255,70,70,0.5); }
+.adm-maint-dot.off { background: rgba(255,255,255,0.2); }
+.adm-maint-until {
+  font-size: 11px; color: rgba(255,255,255,0.35); margin-left: auto;
+}
+.adm-maint-durations {
+  display: flex; gap: 6px;
+}
+.adm-maint-dur {
+  flex: 1; padding: 10px 0; border-radius: 10px;
+  margin-bottom: 1rem;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.45); font-size: 12px; font-weight: 700;
+  cursor: pointer; text-align: center;
+}
+.adm-maint-dur.active {
+  border-color: var(--xlavelia); color: var(--xlavelia);
+  background: rgba(233,230,169,0.06);
+}
+.adm-maint-actions {
+  display: flex; gap: 8px;
+}
+.adm-maint-set-btn {
+  flex: 1; padding: 11px 0; border-radius: 11px; border: none;
+  background: var(--xlavelia); color: #1a1804;
+  font-size: 12.5px; font-weight: 800; cursor: pointer;
+  font-family: 'Unbounded', sans-serif;
+}
+.adm-maint-set-btn:active { transform: scale(0.97); }
+.adm-maint-set-btn.adm-maint-indef {
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.adm-maint-clear-btn {
+  flex: 1; padding: 11px 0; border-radius: 11px; border: none;
+  background: #1c1c1c; color: var(--xlavelia);
+  font-size: 12.5px; font-weight: 700; cursor: pointer;
+  font-family: 'Unbounded', sans-serif;
+
+}
+.adm-maint-clear-btn:disabled { opacity: 0.3; cursor: default; }
+.adm-maint-clear-btn:active { transform: scale(0.97); }
 
 .welcome-block{
   height: 25vh;
@@ -2442,14 +2526,15 @@ display: flex;
 .svc-search-input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 14px; }
 .svc-search-input::placeholder { color: rgba(255,255,255,0.3); }
 .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.svc-tile { background: #1c1c1c;  border-radius: 16px; padding: 18px 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
+.svc-tile { background: #1c1c1c;  border-radius: 16px; padding: 20px 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
 .svc-tile:active { transform: scale(0.97); }
-.svc-tile-name { font-family: 'Unbounded', sans-serif; font-size: 13.5px; font-weight: 800; color: #fff; }
-.svc-tile-desc { font-size: 10.5px; color: rgba(255,255,255,0.4); line-height: 1.4; }
+.svc-tile-name { font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 800; color: #fff; }
+.svc-tile-desc { font-size: 10.7px; color: rgba(255,255,255,0.4); line-height: 1.4; }
 .svc-empty { grid-column: 1 / -1; text-align: center; padding: 30px 0; font-size: 12px; color: rgba(255,255,255,0.3); }
 
 
-.svc-grid- { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.svc-grid- { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.svc-grid-- { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
 
 
 .bnav-wrap {

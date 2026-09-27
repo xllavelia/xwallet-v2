@@ -5,6 +5,12 @@ import { enterP2P } from "./p2pNav";
 var MODULES = [
   { name: "Trade", desc: "Live charts, long & short positions", path: "/trade" },
   { name: "Send", desc: "Send USDT to another player", path: "/send" },
+  { name: "Rocket", desc: "Crash-style multiplier game", path: "/rocket" },
+  { name: "Pixel", desc: "Minefield multiplier game", path: "/pixel" },
+  { name: "Flip", desc: "Red or black · 1.90x payout", path: "/flip" },
+  { name: "Ticket", desc: "Scratch card and buy for rang", path: "/ticket" },
+  { name: "Rewards", desc: "Get daily rewards and bonuses", path: "/rewards" },
+  { name: "Mining", desc: "Create a mining farm and earn money", path: "/mining" },
   { name: "Crypto Card", desc: "BTC, ETH, SOL, TON balances & swap", path: "/card" },
   { name: "Savings Account", desc: "12% APY, deposit anytime", path: "/savings" },
   { name: "History", desc: "Trades, transfers & card activity", path: "/history" },
@@ -15,12 +21,6 @@ var MODULES = [
   { name: "Promo Code", desc: "Redeem a code", path: "/promocode" },
   { name: "Profile", desc: "Account, security, settings", path: "/setting" },
   { name: "Card", desc: "Tansfers, perks and bonuses", path: "/balancecard" },
-  { name: "Rocket", desc: "Crash-style multiplier game", path: "/rocket" },
-  { name: "Pixel", desc: "Minefield multiplier game", path: "/pixel" },
-  { name: "Flip", desc: "Red or black · 1.90x payout", path: "/flip" },
-  { name: "Ticket", desc: "Scratch card and buy for rang", path: "/ticket" },
-  { name: "Rewards", desc: "Get daily rewards and bonuses", path: "/rewards" },
-
   { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
   { name: "Commodities", desc: "Gold, silver, oil, gas and more", path: "/commodities" },
 ];

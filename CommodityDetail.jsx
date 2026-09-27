@@ -6,8 +6,6 @@ import { useCommodityCatalog, useCommodityPortfolio, fetchCommodityChart, buyCom
 function ChevronLeft() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>); }
 function StarIcon() { return (<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>); }
 function ShareIcon() { return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>); }
-function ReceiveGridIcon() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>); }
-function MoreDotsIcon() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>); }
 function CheckShieldIcon() { return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="8.5 12.5 11 15 15.5 9"></polyline></svg>); }
 
 const CommodityDetail = () => {
@@ -21,7 +19,8 @@ const CommodityDetail = () => {
   var commodity = catalog.find(function (c) { return c.symbol === symbol; }) || { symbol: symbol, name: symbol, unit: "unit", color: "#c6f24e", price: 0, changePercent: 0, changeAmount: 0 };
   var holding = portfolio ? portfolio.holdings.find(function (h) { return h.symbol === symbol; }) : null;
   var isPositive = commodity.changePercent >= 0;
-  var accentColor = isPositive ? commodity.color : "#ff5c5c";
+  var accentColor =  "#f0dfad";
+  
 
   var [view, setView] = useState("panel");
   var [timeframe, setTimeframe] = useState("15m");

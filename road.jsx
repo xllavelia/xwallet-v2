@@ -59,7 +59,10 @@ import Pixel from "./Pixel";
 import Flip from "./Flip";
 import Ticket from "./Ticket";
 import Rewards from "./Rewards";
-
+import Mining from "./Mining";
+import MiningShop from "./MiningShop";
+import BanGate from "./BanGate";
+import MaintenanceOverlay from "./MaintenanceOverlay";
 
 import PageTransition from "./PageTransition";
 
@@ -104,7 +107,9 @@ const islandRoutes = [
   { path: "flip", element: <Flip /> },
   { path: "ticket", element: <Ticket /> },
   { path: "rewards", element: <Rewards /> },
-
+  { path: "mining", element: <Mining /> },
+  { path: "miningshop", element: <MiningShop /> },
+  
 ];
 
 const NavigationBar = () => {
@@ -153,6 +158,8 @@ const App = () => {
   return (
     <BrowserRouter>
       <AuthStatusProvider>
+        <BanGate />
+        <MaintenanceOverlay />
         <NavigationBar />
         <AppRoutes />
         <BottomNav />

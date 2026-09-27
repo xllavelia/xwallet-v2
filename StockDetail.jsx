@@ -35,7 +35,7 @@ const StockDetail = () => {
   var stock = catalog.find(function (s) { return s.symbol === symbol; }) || { symbol: symbol, name: symbol, color: "#a3e635", price: 0, changePercent: 0, changeAmount: 0 };
   var holding = portfolio ? portfolio.holdings.find(function (h) { return h.symbol === symbol; }) : null;
   var isPositive = stock.changePercent >= 0;
-  var accentColor = isPositive ? "var(--xlavelia)" : "#ff5c5c";
+  var accentColor = isPositive ? "#f0dfad" : "#f0dfad";
 
   var [view, setView] = useState("panel"); // "panel" | "info"
   var [timeframe, setTimeframe] = useState("15m");

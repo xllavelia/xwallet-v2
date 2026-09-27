@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStatus } from "./AuthStatusContext";
+import MaintenanceOverlay from "./MaintenanceOverlay";
 
 var SESSION_KEY = "xw_session";
 var TOKEN_KEY = "xw_token";
@@ -404,7 +405,7 @@ function completeSession(data) {
           </div>
         </div>
       )}
-
+<MaintenanceOverlay />
     </div>
   );
 };
