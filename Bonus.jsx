@@ -309,11 +309,7 @@ const Bonus = () => {
                   
 
             </div>
-                 <div className="daily-rewards-card-" onClick={() => navigate("/rewards")}>
-  <div className="daily-rewards-content">
-    <span className="daily-rewards-label">Daily Rewards</span>
-  </div>
-</div>
+         
           </div>
         )}
 
@@ -622,11 +618,7 @@ const Bonus = () => {
                 );
               })}
             </div>
-                        <div className="daily-rewards-card" onClick={() => navigate("/rewards")}>
-  <div className="daily-rewards-content">
-    <span className="daily-rewards-label">Daily Rewards</span>
-  </div>
-</div>
+           
   
 
             <div className="vch-info-stack">

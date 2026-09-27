@@ -5,10 +5,11 @@ import { enterP2P } from "./p2pNav";
 var MODULES = [
   { name: "Trade", desc: "Live charts, long & short positions", path: "/trade" },
   { name: "Send", desc: "Send USDT to another player", path: "/send" },
+  { name: "Empire", desc: "Build your financial empire", path: "/empire" },
   { name: "Rocket", desc: "Crash-style multiplier game", path: "/rocket" },
   { name: "Pixel", desc: "Minefield multiplier game", path: "/pixel" },
   { name: "Flip", desc: "Red or black · 1.90x payout", path: "/flip" },
-  { name: "Ticket", desc: "Scratch card and buy for rang", path: "/ticket" },
+  { name: "Ticket", desc: "Scratch card and buy", path: "/ticket" },
   { name: "Rewards", desc: "Get daily rewards and bonuses", path: "/rewards" },
   { name: "Mining", desc: "Create a mining farm and earn money", path: "/mining" },
   { name: "Crypto Card", desc: "BTC, ETH, SOL, TON balances & swap", path: "/card" },

@@ -63,6 +63,7 @@ import Mining from "./Mining";
 import MiningShop from "./MiningShop";
 import BanGate from "./BanGate";
 import MaintenanceOverlay from "./MaintenanceOverlay";
+import Empire from "./Empire";
 
 import PageTransition from "./PageTransition";
 
@@ -109,6 +110,7 @@ const islandRoutes = [
   { path: "rewards", element: <Rewards /> },
   { path: "mining", element: <Mining /> },
   { path: "miningshop", element: <MiningShop /> },
+  { path: "empire", element: <Empire /> },
   
 ];
 

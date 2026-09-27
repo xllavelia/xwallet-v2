@@ -25,7 +25,7 @@ overflow: hidden;
 
 .page-transition {
   position: fixed;
-  inset: 10.5vh 0 0;
+  inset: 10.8vh 0 0;
 
   z-index: 1000;
 
@@ -2630,9 +2630,9 @@ font-family: 'Unbounded';
 }
 
 /* Утилиты цветов */
-.green { color: #2ebd85 !important; }
+/* .green { color: #2ebd85 ; } */
 /* .red { color: #f6465d ; } */
-.yellow { color: white !important; }
+/* .yellow { color: white ; } */
 
 /* HEADER */
 .et-header {

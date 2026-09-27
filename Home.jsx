@@ -5,7 +5,6 @@ import { useWalletBalance } from "./useWallet";
 import { useClosedPositionsRemote } from "./usePositions";
 import { useBankCards } from "./useBankCards";
 import { useHomeSummary } from "./useHomeSummary";
-import { useSavings } from "./useSavings";
 // import history1 from './history1.jpg';
 // import history2 from './history2.jpg';
 // import history3 from './history3.jpg';
@@ -14,11 +13,13 @@ import { MiniCardThumb } from "./bankCardVisuals";
 import { useStockPortfolio } from "./useStocks";
 import { useCard } from "./useCard";
 import PortfolioComm from "./PortfolioComm";
+import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
+import { useSavings} from "./useSavings";
 
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "Create mining and bun!"
+// git commit -m "Create Empire!"
 // git push -u origin main 
 
 
@@ -74,8 +75,13 @@ const Home = () => {
   var { account } = useAccount();
   var { wallet } = useWalletBalance();
   var { closedPositions } = useClosedPositionsRemote();
- var { data: cardsData } = useBankCards();
+
+//  var { data: cardsData } = useBankCards();
   var summary = useHomeSummary();
+
+var [picker, setPicker] = useState(null); // "rewards" | "games"
+
+  var { savings } = useSavings();
 
   var { portfolio } = useStockPortfolio();
   var { card } = useCard();
@@ -85,29 +91,11 @@ const Home = () => {
   var username = account ? account.username : "";
 var { savings } = useSavings();
 
-var estDaily = savings
-  ? savings.balance * (savings.interestRate / 100) / 365
-  : 0;
 
 var estMonthly = savings
   ? savings.balance * (savings.interestRate / 100) / 12
   : 0;
 
-var estYearly = savings
-  ? savings.balance * (savings.interestRate / 100)
-  : 0;
-
-var totalDeposited = savings
-  ? savings.history
-      .filter(function (h) { return h.entryType === "deposit"; })
-      .reduce(function (acc, h) { return acc + h.amount; }, 0)
-  : 0;
-
-var totalWithdrawn = savings
-  ? savings.history
-      .filter(function (h) { return h.entryType === "withdrawal"; })
-      .reduce(function (acc, h) { return acc + h.amount; }, 0)
-  : 0;
 const [clickMode, setClickMode] = useState(false);
 const [handlePulse, setHandlePulse] = useState(false);
   var [balanceHidden, setBalanceHidden] = useState(false);
@@ -411,43 +399,17 @@ function toggleInteractionMode() {
           </span>
         </div>
       )}
-        <div className="svc-grid-">
+      
     
-     <div className="svc-tile" onClick={() => navigate("/pixel")}>
-              <span className="svc-tile-name">Pixel</span>
-                <span className="svc-tile-desc">Minefield multiplier game</span>
-              </div>
-    
-     <div className="svc-tile" onClick={() => navigate("/rocket")}>
-              <span className="svc-tile-name">Rocket</span>
-                <span className="svc-tile-desc">Crash-style multiplier game</span>
-              </div>
-
-</div>
 <PortfolioComm balanceHidden={balanceHidden} />
 
-  <div className="svc-grid-">
-    
-     <div className="svc-tile" onClick={() => navigate("/flip")}>
-              <span className="svc-tile-name">Flip</span>
-                <span className="svc-tile-desc">Red or black · 1.90x payout"</span>
-              </div>
-    
-     <div className="svc-tile" onClick={() => navigate("/ticket")}>
-              <span className="svc-tile-name">Ticket</span>
-                <span className="svc-tile-desc">Scratch card and buy for rang</span>
-              </div>
-
-</div>
+ 
 
  <div className="crdx-hero" onClick={() => navigate("/card")}>
         <span className="crdx-hero-label">Total Value</span>
         <span className="crdx-hero-value">{   balanceHidden ? "****" : formatUsd(card.balanceUsd || 0)}</span>
         <span className="crdx-hero-sub">{"Card ····" + (card.cardNumber || "").slice(-4)}</span>
       </div>
-
-
-
 
         </div>
 
@@ -488,7 +450,8 @@ function toggleInteractionMode() {
     </div>
   )}
 </div>
-          <div className="hrd-summary-card" onClick={() => navigate("/bonus")}>
+
+<div className="hrd-summary-card" onClick={() => setPicker("rewards")}>
             <span className="hrd-summary-label">Vouchers </span>
             <span className="hrd-summary-value">Rewards and vouchers</span>
             <span className="hrd-summary-cta">View all</span>
@@ -536,69 +499,36 @@ function toggleInteractionMode() {
   </div>
 )} */}
 
+<button className="hmp-games-teaser" onClick={() => setPicker("games")}>
+  <span className="hmp-shine"></span>
+  <div className="hmp-gt-left">
+    <span className="hmp-gt-kicker">Mini Games</span>
+    <span className="hmp-gt-list">Empire · Pixel · Rocket · Flip · Ticket · Trade</span>
+    <span className="hmp-gt-live"><span className="hmp-gt-dot"></span>Empire is live — start your first facility</span>
+  </div>
+  <span className="hmp-gt-cta">Play</span>
+</button>
 
 
-<div className="sav-stats-block" onClick={() => navigate("/savings")}>
-  <span className="sav-stats-title">Earnings Overview</span>
-
-  <div className="sav-stats-list">
-    <div className="sav-stats-item">
-      <span className="sav-s-label">Est. daily earnings</span>
-      <span className="sav-s-dots"></span>
-      <span className="sav-s-value">
-         {balanceHidden ? "****" :  "$" + estDaily.toFixed(2)}
-      </span>
-    </div>
-
-    <div className="sav-stats-item">
-      <span className="sav-s-label">Est. monthly earnings</span>
-      <span className="sav-s-dots"></span>
-      <span className="sav-s-value">
-           {balanceHidden ? "****" : "$" + estMonthly.toFixed(2)}
-      </span>
-    </div>
-
-    <div className="sav-stats-item">
-      <span className="sav-s-label">Est. yearly earnings</span>
-      <span className="sav-s-dots"></span>
-      <span className="sav-s-value">
-           {balanceHidden ? "****" : "$" + estYearly.toFixed(2)}
-      </span>
-    </div>
-
-    <div className="sav-stats-item">
-      <span className="sav-s-label">Total deposited</span>
-      <span className="sav-s-dots"></span>
-      <span className="sav-s-value">
-           {balanceHidden ? "****" : "$" + totalDeposited.toFixed(2)}
-      </span>
-    </div>
-  
-  </div></div>
-    
-    <div className="svc-grid--">
-    
-     <div className="svc-tile" onClick={() => navigate("/pixel")}>
-              <span className="svc-tile-name">Pixel</span>
-                <span className="svc-tile-desc">Minefield multiplier game</span>
-              </div>
-    
-     <div className="svc-tile" onClick={() => navigate("/rocket")}>
-              <span className="svc-tile-name">Rocket</span>
-                <span className="svc-tile-desc">Crash-style multiplier game</span>
-              </div>
-
-</div>
-
+ {portfolio && (
+        <div className="stks-hero" onClick={() => navigate("/savings")}>
+          <span className="stks-hero-label">Portfolio Value</span>
+          <span className="stks-hero-value">{balanceHidden ? "****" : "$" +  (savings?.balance ?? 0)}</span>
+          <span className={"stks-hero-change " +  (portfolio.todayChangeAmount >= 0 ? "pos" : "neg")}>
+               {balanceHidden ? "****" : "$" + estMonthly.toFixed(2) } - Est. monthly earn.
+          </span>
+        </div>
+      )}
+      
 
           </div>
-          
         </div>
 
       </div>
-      
+      {picker === "rewards" && <RewardsPickerModal onClose={() => setPicker(null)} />}
+{picker === "games" && <MiniGamesModal onClose={() => setPicker(null)} />}
     </div>
   );
 };
-// onclick card
+
 export default Home;

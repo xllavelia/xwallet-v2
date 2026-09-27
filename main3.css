@@ -2350,7 +2350,7 @@ transform: scale(0.98);
   z-index: 1;
   background: #0a0a0a;
   overflow: hidden;
-  padding-top: 10.5vh;
+  padding-top: 10.8vh;
 }
 
 .lg-block-touch {
@@ -2494,7 +2494,7 @@ transform: scale(0.98);
 .sav-input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 800; }
 .sav-input-hint { font-size: 11px; color: rgba(255,255,255,0.35); }
 .sav-status { font-size: 12px; font-weight: 600; padding: 8px 10px; border-radius: 8px; }
-.sav-status.ok { background: rgba(0,212,170,0.1); color: #f0dfad; }
+.sav-status.ok { background: rgba(0,212,170,0.1); color: #00d4aa; }
 .sav-status.err { background: rgba(255,68,102,0.1); color: #ff8080; }
 .sav-submit-btn { padding: 13px; border: none; border-radius: 12px; background: var(--xlavelia); color: #000; font-family: 'Unbounded', sans-serif; font-size: 12.5px; font-weight: 800; cursor: pointer; }
 .sav-submit-btn:disabled { opacity: 0.4; }
@@ -2505,7 +2505,7 @@ transform: scale(0.98);
 .sav-entry { display: flex; align-items: center; gap: 12px; padding: 4px 0; }
 .sav-entry-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); }
 .sav-entry-icon.interest { background: hsla(#f0dfad 0.12); color: var(--xlavelia); }
-.sav-entry-icon.deposit { background: rgba(0,212,170,0.1); color: #f0dfad; }
+.sav-entry-icon.deposit { background: rgba(0,212,170,0.1); color: #00d4aa; }
 .sav-entry-icon.withdrawal { background: rgba(255,68,102,0.1); color: #ff4466; }
 .sav-entry-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .sav-entry-name { font-size: 13.5px; font-weight: 700; color: #fff; }
