@@ -19,7 +19,7 @@ import { useSavings} from "./useSavings";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "Create Empire!"
+// git commit -m "create slots!"
 // git push -u origin main 
 
 
@@ -503,8 +503,8 @@ function toggleInteractionMode() {
   <span className="hmp-shine"></span>
   <div className="hmp-gt-left">
     <span className="hmp-gt-kicker">Mini Games</span>
-    <span className="hmp-gt-list">Empire · Pixel · Rocket · Flip · Ticket · Trade</span>
-    <span className="hmp-gt-live"><span className="hmp-gt-dot"></span>Empire is live — start your first facility</span>
+    <span className="hmp-gt-list">Empire · Pixel and more</span>
+    <span className="hmp-gt-live"><span className="hmp-gt-dot"></span>Empire is live</span>
   </div>
   <span className="hmp-gt-cta">Play</span>
 </button>

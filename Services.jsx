@@ -6,6 +6,7 @@ var MODULES = [
   { name: "Trade", desc: "Live charts, long & short positions", path: "/trade" },
   { name: "Send", desc: "Send USDT to another player", path: "/send" },
   { name: "Empire", desc: "Build your financial empire", path: "/empire" },
+  { name: "Slots", desc: "Three reels, one pull", path: "/slots" },
   { name: "Rocket", desc: "Crash-style multiplier game", path: "/rocket" },
   { name: "Pixel", desc: "Minefield multiplier game", path: "/pixel" },
   { name: "Flip", desc: "Red or black · 1.90x payout", path: "/flip" },

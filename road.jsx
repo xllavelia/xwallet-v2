@@ -64,6 +64,7 @@ import MiningShop from "./MiningShop";
 import BanGate from "./BanGate";
 import MaintenanceOverlay from "./MaintenanceOverlay";
 import Empire from "./Empire";
+import Slots from "./Slots";
 
 import PageTransition from "./PageTransition";
 
@@ -111,7 +112,7 @@ const islandRoutes = [
   { path: "mining", element: <Mining /> },
   { path: "miningshop", element: <MiningShop /> },
   { path: "empire", element: <Empire /> },
-  
+  { path: "slots", element: <Slots /> }
 ];
 
 const NavigationBar = () => {

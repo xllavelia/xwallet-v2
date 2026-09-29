@@ -12,7 +12,9 @@ var GAMES_ROUTES = {
   rocket: "/rocket",
   flip: "/flip",
   ticket: "/ticket",
-  trade: "/trade"
+  trade: "/trade",
+  slots: "/slots"
+
 };
 
 // ===================== ИКОНКИ =====================
@@ -126,7 +128,7 @@ export function MiniGamesModal(props) {
       onClose={props.onClose}
     >
       {/* Empire — флагман: широкий hero-тайл с бегущим бликом, без кричащих бейджей */}
-      <Tile
+      {/* <Tile
         hero
         tone="empire"
         icon={<EmpireIcon />}
@@ -134,7 +136,12 @@ export function MiniGamesModal(props) {
         desc="Build a financial empire — facilities, market, prestige"
         cta="Enter command"
         onGo={() => go(GAMES_ROUTES.empire)}
-      />
+      /> */}
+       <div className="hmp-grid two">
+        <Tile tone="pink"   icon={<EmpireIcon />}name="Empire" desc="Build empire" onGo={() => go(GAMES_ROUTES.ticket)} />
+        <Tile tone="cyan" icon={<TradeIcon />} name="Slots" desc="risk and money" onGo={() => go(GAMES_ROUTES.slots)} />
+      </div>
+      
       <div className="hmp-grid three">
         <Tile tone="violet" icon={<PixelIcon />} name="Pixel" desc="Tap & collect" onGo={() => go(GAMES_ROUTES.pixel)} />
         <Tile tone="orange" icon={<RocketIcon />} name="Rocket" desc="Fly & multiply" onGo={() => go(GAMES_ROUTES.rocket)} />
@@ -144,6 +151,7 @@ export function MiniGamesModal(props) {
         <Tile tone="pink" icon={<TicketIcon />} name="Ticket" desc="Draw & win" onGo={() => go(GAMES_ROUTES.ticket)} />
         <Tile tone="cyan" icon={<TradeIcon />} name="Trade" desc="Charts & orders" onGo={() => go(GAMES_ROUTES.trade)} />
       </div>
+      
     </PickerShell>
   );
 }

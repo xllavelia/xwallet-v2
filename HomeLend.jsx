@@ -25,6 +25,7 @@ const NAV_TARGETS = {
   about: "/about",
   prime: "/prime",
   promocode: "/promocode",
+  
 };
 
 const NAV_STEP_DELAY_MS = 20;

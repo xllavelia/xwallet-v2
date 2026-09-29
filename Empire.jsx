@@ -459,7 +459,6 @@ function BuildTab(props) {
         return (
           <div key={s.ID} className="emp-build-group">
             <div className="emp-build-group-title">
-              <span className="emp-sector-dot" style={{ background: s.Color }}></span>
               <span>{s.Name}</span>
             </div>
             {list.map(function (d) {

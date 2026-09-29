@@ -1859,7 +1859,7 @@ border: none;
   overflow: hidden;
   border: none;
   border-radius: 18px;
-  padding: 16px 14px;
+  padding: 14px 14px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1919,7 +1919,7 @@ border: none;
 .hmp-tile.hero {
   width: 100%;
   border-radius: 20px;
-  padding: 20px 18px;
+  padding: 14px 18px;
 }
 .hmp-tile.hero .hmp-tile-icon {
   width: 44px;
@@ -1999,3 +1999,837 @@ border: none;
   padding: 9px 14px;
   border-radius: 12px;
 }
+
+
+:root {
+  --slt-surface: #1c1c1c;
+  --slt-surface-2: #202020;
+  --slt-text: #f5f5f7;
+  --slt-dim: #8e8e96;
+  --slt-danger: #ff6b6b;
+}
+
+.slt-page {
+  color: var(--slt-text);
+  max-width: 480px;
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top, 0px) + 16px) 16px calc(env(safe-area-inset-bottom, 0px) + 44px);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.slt-loading {
+  padding: 80px 0;
+  text-align: center;
+  color: var(--slt-dim);
+}
+
+/* ---------- топбар ---------- */
+
+.slt-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slt-back {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: none;
+  background: var(--slt-surface);
+  color: var(--slt-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.slt-back:active { transform: scale(0.96); }
+
+.slt-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.slt-spins-chip {
+  font-size: 13px;
+  color: var(--slt-dim);
+  background: var(--slt-surface);
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.slt-spins-chip b {
+  color: var(--slt-text);
+  font-weight: 700;
+}
+
+.slt-subhint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--slt-dim);
+  text-align: center;
+}
+
+/* ---------- автомат ---------- */
+
+.slt-machine {
+  margin-top: 16px;
+  padding: 18px 14px 16px;
+  border-radius: 24px;
+  background-color: #1c1c1c;
+}
+
+.slt-windows {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.slt-window {
+  position: relative;
+  height: 84px;
+  overflow: hidden;
+  border-radius: 14px;
+  perspective: 640px;
+  background-color: #141414;
+}
+
+
+.slt-reel {
+  height: 100%;
+}
+
+.slt-strip {
+  will-change: transform;
+}
+
+/* размытие во время вращения */
+.slt-reel.spinning .slt-strip {
+  filter: blur(2.4px);
+}
+
+.slt-cell {
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cfcfd6;
+}
+
+.slt-cell.hot {
+  color: var(--xlavelia);
+}
+
+/* «посадка» барабана */
+.slt-reel.landed .slt-cell:last-child {
+  animation: slt-pop 0.38s ease;
+}
+
+@keyframes slt-pop {
+  0% { transform: scale(0.92); }
+  55% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* подсветка выигрышной ячейки */
+.slt-cell.slt-cell-win {
+  border-radius: 12px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--xlavelia) 26%, transparent), transparent 72%);
+  animation: slt-glow 0.6s ease forwards;
+}
+
+@keyframes slt-glow {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 transparent; }
+  60% { transform: scale(1.14); }
+  100% {
+    transform: scale(1.05);
+    box-shadow: 0 0 22px 4px color-mix(in srgb, var(--xlavelia) 45%, transparent);
+  }
+}
+
+/* центральная линия окна */
+.slt-winline {
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  right: 6px;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--xlavelia) 22%, transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ---------- панель результата ---------- */
+
+.slt-result {
+  margin-top: 14px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.slt-result-idle,
+.slt-result-spinning {
+  font-size: 13px;
+  color: var(--slt-dim);
+}
+
+.slt-result-win {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--xlavelia);
+  text-shadow: 0 0 24px color-mix(in srgb, var(--xlavelia) 55%, transparent);
+}
+
+.slt-result-lose {
+  font-size: 14px;
+  color: var(--slt-dim);
+}
+
+.slt-event-chip {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--xlavelia);
+  color: #0b0b0c;
+}
+
+/* ---------- уровни + кнопки ---------- */
+
+.slt-levels {
+  display: flex;
+  
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.slt-pill {
+  flex: 1 1 28%;
+  min-width: 92px;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 6px;
+  background: #1c1c1c;
+  color: var(--slt-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.slt-pill:active { transform: scale(0.97); }
+
+.slt-pill.active {
+  background:  #252525;
+}
+
+.slt-pill-name {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-family: 'Unbounded', sans-serif;
+
+}
+
+.slt-pill-cost {
+  font-size: 11px;
+  color: var(--slt-dim);
+  font-family: 'Inter', sans-serif;
+
+}
+
+.slt-iconbtn {
+  min-width: 47%;
+  margin: 0 auto;
+  border: none;
+  border-radius: 14px;
+  padding: 8px 10px;
+  background: var(--slt-surface);
+  color: var(--slt-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 10px;
+  cursor: pointer;
+  font-family: 'Unbounded', sans-serif;
+
+}
+
+.slt-iconbtn:active { transform: scale(0.96); }
+
+.slt-nospins {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--slt-danger);
+}
+
+/* ---------- рычаг ---------- */
+
+.slt-lever {
+  position: relative;
+  margin-top: 14px;
+  height: 65px;
+  border-radius: 70px;
+  background: #1c1c1c;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+
+.slt-lever.off {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.slt-lever-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.slt-lever-main {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--slt-dim);
+}
+
+.slt-lever-hint {
+  font-size: 11px;
+  color: var(--slt-dim); 
+  opacity: 0.7;
+}
+
+.slt-lever-knob {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 52.5px;
+  height: 52.5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background-color: var(--xlavelia);
+  transition: transform 0.5s cubic-bezier(0.3, 1.4, 0.4, 1);
+  will-change: transform;
+  
+}
+
+.slt-lever.drag .slt-lever-knob {
+  transition: none;
+  cursor: grabbing;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* ---------- история ---------- */
+
+.slt-section {
+  margin-top: 22px;
+}
+
+.slt-section-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slt-dim);
+  margin-bottom: 10px;
+}
+
+.slt-empty {
+  font-size: 13px;
+  color: var(--slt-dim);
+  padding: 10px 2px;
+}
+
+.slt-hrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: var(--slt-surface);
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.slt-hrow.win {
+  background: color-mix(in srgb, var(--xlavelia) 9%, var(--slt-surface));
+}
+
+.slt-h-syms {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.slt-h-syms i {
+  font-style: normal;
+  color: var(--slt-text);
+}
+
+.slt-hrow.win .slt-h-syms i {
+  color: var(--xlavelia);
+}
+
+.slt-h-meta {
+  color: var(--slt-dim);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.slt-h-win {
+  font-weight: 700;
+  color: var(--slt-text);
+  white-space: nowrap;
+}
+
+.slt-hrow.win .slt-h-win {
+  color: var(--xlavelia);
+}
+
+/* ---------- статистика ---------- */
+
+.slt-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.slt-stat {
+  background: var(--slt-surface);
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.slt-stat-v {
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.slt-stat-l {
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--slt-dim);
+  letter-spacing: 0.04em;
+}
+
+/* ---------- модалки ---------- */
+
+.slt-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  padding: 20px;
+}
+
+.slt-modal {
+  width: 100%;
+  max-width: 400px;
+  max-height: 82vh;
+  overflow-y: auto;
+  background: var(--slt-surface-2);
+  border-radius: 20px;
+  padding: 18px 16px 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.slt-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.slt-modal-head h3 {
+  margin: 0;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.slt-x {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 10px;
+  background: var(--slt-surface);
+  color: var(--slt-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.slt-modal-sub {
+  font-size: 12px;
+  color: var(--slt-dim);
+  margin: 4px 0 12px;
+  line-height: 1.5;
+}
+
+.slt-pack-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slt-pack {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--slt-surface);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.slt-pack-name {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.slt-pack-spins {
+  font-size: 12px;
+  color: var(--slt-dim);
+  margin-top: 2px;
+}
+
+.slt-pack-buy {
+  border: none;
+  border-radius: 70px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--xlavelia);
+  font-family: 'Unbounded', sans-serif;
+  color: #0b0b0c;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.slt-pack-buy:disabled {
+  opacity: 0.6;
+}
+
+/* таблица выплат */
+.slt-pt-group {
+  margin-top: 14px;
+}
+
+.slt-pt-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slt-dim);
+  margin-bottom: 6px;
+}
+
+.slt-pt-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: var(--slt-surface);
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.slt-pt-row.hot .slt-pt-name,
+.slt-pt-row.hot .slt-pt-mult {
+  color: var(--xlavelia);
+}
+
+.slt-pt-icon {
+  display: inline-flex;
+  width: 30px;
+  justify-content: center;
+  color: var(--slt-dim);
+}
+
+.slt-pt-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.slt-pt-row.hot .slt-pt-icon {
+  color: var(--xlavelia);
+}
+
+.slt-pt-triple {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.slt-pt-triple svg {
+  width: 22px;
+  height: 22px;
+  color: var(--slt-dim);
+}
+
+.slt-wild {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--slt-dim);
+  border-radius: 6px;
+  padding: 2px 5px;
+  background: var(--slt-surface-2);
+}
+
+.slt-pt-name {
+  flex: 1;
+  color: var(--slt-text);
+}
+
+.slt-pt-note {
+  color: var(--slt-dim);
+  font-size: 11px;
+  text-align: right;
+}
+
+.slt-pt-mult {
+  font-weight: 700;
+  color: var(--slt-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- тост ---------- */
+
+.slt-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--slt-surface-2);
+  color: var(--slt-text);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 80;
+  animation: slt-toast-in 0.25s ease;
+}
+
+.slt-toast.ok {
+  color: var(--xlavelia);
+}
+
+.slt-toast.err {
+  color: var(--slt-danger);
+}
+
+@keyframes slt-toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ============================================================
+   МУЛЬТИЛИНЕЙНОСТЬ: строки машины, высота окон, селектор линий
+   ============================================================ */
+
+.slt-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slt-machine.lines-3 .slt-rows { gap: 7px; }
+.slt-machine.lines-5 .slt-rows { gap: 6px; }
+
+/* высоты окон/ячеек под каждое число строк (совпадают с cellHeight в JSX) */
+.slt-machine.lines-3 .slt-window,
+.slt-machine.lines-3 .slt-cell { height: 62px; }
+
+.slt-machine.lines-5 .slt-window,
+.slt-machine.lines-5 .slt-cell { height: 46px; }
+
+/* иконки уменьшаются вместе с окном */
+.slt-machine.lines-3 .slt-cell svg { width: 28px; height: 28px; }
+.slt-machine.lines-5 .slt-cell svg { width: 22px; height: 22px; }
+
+/* меньше затенения сверху/снизу, чтобы в мелком окне символ не тонул */
+.slt-machine.lines-3 .slt-window::before,
+.slt-machine.lines-3 .slt-window::after { height: 14px; }
+
+.slt-machine.lines-5 .slt-window::before,
+.slt-machine.lines-5 .slt-window::after { height: 9px; }
+
+/* выигрышная строка целиком */
+.slt-windows.rowwin .slt-window {
+  box-shadow:
+    inset 0 8px 16px rgba(0, 0, 0, 0.6),
+    inset 0 -8px 16px rgba(0, 0, 0, 0.6),
+    0 0 0 1px color-mix(in srgb, var(--slt-accent) 45%, transparent),
+    0 0 18px color-mix(in srgb, var(--slt-accent) 22%, transparent);
+}
+
+/* ---------- селектор линий ---------- */
+
+.slt-lines {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.slt-lines-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--slt-dim);
+  margin-right: 2px;
+}
+
+.slt-linebtn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 4px;
+  background: var(--slt-surface);
+  color: var(--slt-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.slt-linebtn b {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.slt-linebtn span {
+  font-size: 10px;
+  color: var(--slt-dim);
+}
+
+.slt-linebtn:active { transform: scale(0.96); }
+
+.slt-linebtn:disabled { opacity: 0.5; }
+
+.slt-linebtn.active {
+  background: #252525;
+}
+
+.slt-linebtn.active b,
+.slt-linebtn.active span { color: var(--slt-accent); }
+
+.slt-pill:disabled { opacity: 0.6; }
+
+/* ---------- панель результата: сколько строк сыграло ---------- */
+
+.slt-result-lines {
+  font-size: 11px;
+  color: var(--slt-dim);
+}
+
+.slt-machine.lines-5 .slt-result-win { font-size: 19px; }
+.slt-machine.lines-5 .slt-result { margin-top: 10px; }
+.slt-machine.lines-3 .slt-result { margin-top: 12px; }
+
+/* ============================================================
+   МУЛЬТИЛИНЕЙНОСТЬ: строки машины, высоты окон, селектор линий
+   ============================================================ */
+
+.slt-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slt-machine.lines-3 .slt-rows { gap: 7px; }
+.slt-machine.lines-5 .slt-rows { gap: 6px; }
+
+.slt-row { position: relative; }
+
+/* высоты окон и ячеек под каждое число строк (совпадают с cellHeight в JSX) */
+.slt-machine.lines-3 .slt-window,
+.slt-machine.lines-3 .slt-cell { height: 62px; }
+
+.slt-machine.lines-5 .slt-window,
+.slt-machine.lines-5 .slt-cell { height: 46px; }
+
+/* иконки уменьшаются вместе с окном */
+.slt-machine.lines-3 .slt-cell svg { width: 28px; height: 28px; }
+.slt-machine.lines-5 .slt-cell svg { width: 22px; height: 22px; }
+
+/* меньше затенение сверху/снизу, чтобы в мелком окне символ не тонул */
+.slt-machine.lines-3 .slt-window::before,
+.slt-machine.lines-3 .slt-window::after { height: 14px; }
+
+.slt-machine.lines-5 .slt-window::before,
+.slt-machine.lines-5 .slt-window::after { height: 9px; }
+
+/* выигрышная строка целиком */
+.slt-windows.rowwin .slt-window {
+  box-shadow:
+    inset 0 8px 16px rgba(0, 0, 0, 0.6),
+    inset 0 -8px 16px rgba(0, 0, 0, 0.6),
+    0 0 0 1px color-mix(in srgb, var(--slt-accent) 45%, transparent),
+    0 0 18px color-mix(in srgb, var(--slt-accent) 22%, transparent);
+}
+
+/* бейдж приза напротив выигрышной строки */
+.slt-rowtag {
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--slt-accent);
+  color: var(--xlavelia);
+  pointer-events: none;
+}
+
+.slt-machine.lines-5 .slt-rowtag { font-size: 9px; padding: 2px 5px; }
