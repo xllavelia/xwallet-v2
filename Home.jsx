@@ -9,7 +9,7 @@ import { useHomeSummary } from "./useHomeSummary";
 // import history2 from './history2.jpg';
 // import history3 from './history3.jpg';
 // import history4 from './history4.jpg';
-import { MiniCardThumb } from "./bankCardVisuals";
+// import { MiniCardThumb } from "./bankCardVisuals";
 import { useStockPortfolio } from "./useStocks";
 import { useCard } from "./useCard";
 import PortfolioComm from "./PortfolioComm";
@@ -19,7 +19,7 @@ import { useSavings} from "./useSavings";
 
 //npx vite --host 0.0.0.0 --port 5173 --force
 // git add .
-// git commit -m "create slots!"
+// git commit -m "fix lever"
 // git push -u origin main 
 
 

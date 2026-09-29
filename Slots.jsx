@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWalletBalance } from "./useWallet";
 import { useSlots } from "./useSlots";
@@ -236,72 +236,228 @@ function eventDesc(id) {
 function spinWord(n) {
   return n === 1 ? " spin" : " spins";
 }
+// ============================================================
+// РЫЧАГ — физика одинакового rAF-интегратора пружины.
+// Палец задаёт только цель движения; дальше рукоятка живёт сама:
+//   перешагнул порог -> сама добивает до упора, бьёт (спин),
+//   короткая пауза на упоре -> пружиной возвращается домой с перелётом.
+// До порога отпущенная -> так же сама возвращается.
+// Промежуточных состояний нет, поэтому застрять на середине невозможно.
+// ============================================================
 
-// ============================================================
-// РЫЧАГ: тянется вправо с сопротивлением, на 84% хода запускает
-// спин, отпущенный — пружиной возвращается назад.
-// ============================================================
+
+var LEVER = {
+  fireAt: 0.5,      // доля хода, после которой рычаг «берёт доводку на себя»
+  dragK: 290,       // жёсткость следования за пальцем
+  dragC: 26,        // демпфирование на ведении
+  commitK: 250,     // добивка до упора: быстро, почти без перелёта
+  commitC: 26,
+  homeK: 130,       // возврат домой: мягко, с лёгким перелётом
+  homeC: 11,
+  holdMs: 120,      // пауза на упоре перед возвратом
+  overshoot: 16     // px, на которые рукоятку может пустить за ноль на возврате
+};
 
 function Lever(props) {
   var trackRef = useRef(null);
   var knobRef = useRef(null);
-  var dragRef = useRef({ on: false, x0: 0, max: 200, fired: false });
-  var [dragging, setDragging] = useState(false);
+  var fillRef = useRef(null);
+  var gateRef = useRef(null);
+  var rafRef = useRef(0);
+  var lastTsRef = useRef(0);
+  var fireRef = useRef(null);
+  var [phase, setPhase] = useState("idle"); // idle | drag | commit | hold | home
 
-  function setX(x) {
+  var simRef = useRef({
+    mode: "idle", x: 0, v: 0, target: 0, max: 0,
+    pointerX: 0, startX: 0, fired: false, holdUntil: 0
+  });
+
+  fireRef.current = props.onFire;
+
+  // ---------- отрисовка ----------
+
+  function draw(s) {
     if (knobRef.current) {
-      knobRef.current.style.transform = "translate3d(" + x + "px,0,0)";
+      knobRef.current.style.transform = "translate3d(" + s.x + "px,0,0)";
+      knobRef.current.classList.toggle("armed", s.mode === "drag" && s.x >= s.max * LEVER.fireAt);
     }
+    if (fillRef.current) {
+      var p = s.max > 0 ? Math.max(0, Math.min(1, s.x / s.max)) : 0;
+      fillRef.current.style.width = (p * 100) + "%";
+    }
+  }
+
+  // ---------- физика ----------
+
+  function integrate(s, h, now) {
+    var k = LEVER.homeK, c = LEVER.homeC, target = 0;
+    if (s.mode === "drag") { k = LEVER.dragK; c = LEVER.dragC; target = s.target; }
+    else if (s.mode === "commit") { k = LEVER.commitK; c = LEVER.commitC; target = s.max; }
+
+    // явная интеграция пружины: a = k*(цель - x) - c*v
+    s.v += (k * (target - s.x) - c * s.v) * h;
+    s.x += s.v * h;
+
+    if (s.mode === "drag" || s.mode === "commit") {
+      if (s.x > s.max) { s.x = s.max; if (s.v > 0) s.v = 0; }
+      if (s.x < 0) { s.x = 0; if (s.v < 0) s.v = 0; }
+    } else {
+      if (s.x > 0) { s.x = 0; if (s.v < 0) s.v = 0; }
+      if (s.x < -LEVER.overshoot) { s.x = -LEVER.overshoot; if (s.v < 0) s.v = 0; }
+    }
+
+    // упор достигнут — фиксируем, бьём и уходим домой
+    if (s.mode === "commit" && s.x >= s.max - 0.8 && Math.abs(s.v) < 60) {
+      s.x = s.max;
+      s.v = 0;
+      s.mode = "hold";
+      s.holdUntil = now + LEVER.holdMs;
+      setPhase("hold");
+      if (!s.fired) {
+        s.fired = true;
+        if (fireRef.current) fireRef.current();
+      }
+    }
+  }
+
+  function step(ts) {
+    var s = simRef.current;
+    var dt = (ts - lastTsRef.current) / 1000;
+    lastTsRef.current = ts;
+    if (dt > 0.05) dt = 0.05; // защита от прыжка после фоновой вкладки
+    var now = performance.now();
+    for (var i = 0; i < 4; i++) integrate(s, dt / 4, now); // подшаги: пружина устойчива на любом FPS
+    draw(s);
+
+    if (s.mode === "hold" && now >= s.holdUntil) goHome();
+
+    var settled = s.mode === "home" && Math.abs(s.x) < 0.3 && Math.abs(s.v) < 3;
+    if (settled) {
+      s.mode = "idle";
+      s.x = 0;
+      s.v = 0;
+      draw(s);
+      setPhase("idle");
+      rafRef.current = 0;
+      return;
+    }
+    rafRef.current = requestAnimationFrame(step);
+  }
+
+  function ensureLoop() {
+    if (rafRef.current) return;
+    lastTsRef.current = performance.now();
+    rafRef.current = requestAnimationFrame(step);
+  }
+
+  // ---------- переходы ----------
+
+  function commit() {
+    var s = simRef.current;
+    if (s.mode === "commit" || s.mode === "hold") return;
+    s.mode = "commit";
+    setPhase("commit");
+    ensureLoop();
+  }
+
+  function goHome() {
+    var s = simRef.current;
+    s.mode = "home";
+    setPhase("home");
+    ensureLoop();
+  }
+
+  // ---------- указатель ----------
+
+  function measure() {
+    var track = trackRef.current;
+    var knob = knobRef.current;
+    if (!track) return 0;
+    var rect = track.getBoundingClientRect();
+    var knobW = knob ? knob.offsetWidth : 48;
+    return Math.max(40, rect.width - knobW - 12);
   }
 
   function onDown(e) {
-    if (props.disabled) return;
-    var rect = trackRef.current.getBoundingClientRect();
-    dragRef.current = { on: true, x0: e.clientX, max: rect.width - 60, fired: false };
-    setDragging(true);
-    knobRef.current.setPointerCapture(e.pointerId);
+    var s = simRef.current;
+    if (props.disabled || s.mode === "commit" || s.mode === "hold") return;
+    s.max = measure();
+    s.pointerX = e.clientX;
+    s.startX = s.x;
+    s.target = s.x;
+    s.fired = false;
+    s.mode = "drag";
+    setPhase("drag");
+    if (gateRef.current) {
+      gateRef.current.style.left = (6 + s.max * LEVER.fireAt + 24) + "px";
+    }
+    if (trackRef.current && trackRef.current.setPointerCapture) {
+      try { trackRef.current.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    ensureLoop();
   }
 
   function onMove(e) {
-    var d = dragRef.current;
-    if (!d.on) return;
-    var dx = Math.max(0, e.clientX - d.x0);
-    // сопротивление: с насыщением — к концу тянуть заметно тяжелее
-    var x = dx * (1 - 0.12 * dx / d.max);
-    if (x > d.max) x = d.max;
-    setX(x);
-    if (!d.fired && x >= d.max * 0.84) {
-      d.fired = true;
-      setX(d.max);
-      props.onFire();
-    }
+    var s = simRef.current;
+    if (s.mode !== "drag") return;
+    var dx = e.clientX - s.pointerX;
+    if (dx < 0) dx = 0;
+    // сопротивление с насыщением: к концу хода рукоятку ведёт всё тяжелее
+    var t = dx / s.max;
+    var raw = s.startX + dx * (1 - 0.3 * Math.min(t, 1));
+    s.target = Math.min(raw, s.max);
+    // порог пройден — дальше рычаг едет сам, палец больше не указатель
+    if (s.target >= s.max * LEVER.fireAt) commit();
   }
 
   function onUp() {
-    if (!dragRef.current.on) return;
-    dragRef.current.on = false;
-    setDragging(false); // CSS-переход возвращает рукоятку к нулю
+    var s = simRef.current;
+    if (s.mode !== "drag") return;
+    if (s.target >= s.max * (LEVER.fireAt - 0.05) || s.x >= s.max * (LEVER.fireAt - 0.05)) commit();
+    else goHome();
   }
+
+  // Если рычаг заблокировали прямо во время захвата — аккуратно уходит домой.
+  useEffect(function () {
+    if (props.disabled && simRef.current.mode === "drag") goHome();
+  }, [props.disabled]);
+
+  useEffect(function () {
+    return function () {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+    };
+  }, []);
+
+  var label = "PULL TO SPIN";
+  if (phase === "commit" || phase === "hold") label = "SPIN";
+  var hint = "drag right";
+  if (phase === "idle" && props.cost) hint = props.cost + " spins";
+  if (phase === "drag") hint = "pull to fire";
+  if (phase === "commit" || phase === "hold") hint = "firing";
 
   return (
     <div
       ref={trackRef}
-      className={"slt-lever" + (dragging ? " drag" : "") + (props.disabled ? " off" : "")}
+      className={"slt-lever" + (phase === "drag" ? " drag" : "") + (props.disabled ? " off" : "")}
       onPointerDown={onDown}
       onPointerMove={onMove}
       onPointerUp={onUp}
       onPointerCancel={onUp}
+      onLostPointerCapture={onUp}
     >
+      <div ref={fillRef} className="slt-lever-fill"></div>
+      <div ref={gateRef} className="slt-lever-gate"></div>
       <div className="slt-lever-label">
-        <span className="slt-lever-main">PULL TO SPIN</span>
-        {/* <span className="slt-lever-hint">{props.cost ? props.cost + " spins" : "drag right"}</span> */}
+        <span className="slt-lever-main">{label}</span>
+        {/* <span className="slt-lever-hint">{hint}</span> */}
       </div>
       <div ref={knobRef} className="slt-lever-knob">
       </div>
     </div>
   );
 }
-
 // ============================================================
 // МОДАЛКА МАГАЗИНА
 // ============================================================

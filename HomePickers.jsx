@@ -28,6 +28,9 @@ function TicketIcon() {
 function EmpireIcon() {
   return (<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="9" y1="6" x2="9.01" y2="6"></line><line x1="15" y1="6" x2="15.01" y2="6"></line><line x1="9" y1="10" x2="9.01" y2="10"></line><line x1="15" y1="10" x2="15.01" y2="10"></line><path d="M10 22v-4h4v4"></path></svg>);
 }
+function SlotsIcon() {
+  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v14"></path><path d="M16 5v14"></path><path d="M8 12h.01"></path><path d="M12 12h.01"></path><path d="M16 12h.01"></path></svg>);
+}
 function PixelIcon() {
   return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>);
 }
@@ -138,8 +141,8 @@ export function MiniGamesModal(props) {
         onGo={() => go(GAMES_ROUTES.empire)}
       /> */}
        <div className="hmp-grid two">
-        <Tile tone="pink"   icon={<EmpireIcon />}name="Empire" desc="Build empire" onGo={() => go(GAMES_ROUTES.ticket)} />
-        <Tile tone="cyan" icon={<TradeIcon />} name="Slots" desc="risk and money" onGo={() => go(GAMES_ROUTES.slots)} />
+        <Tile tone="pink"   icon={<EmpireIcon />}name="Empire" desc="Build empire" onGo={() => go(GAMES_ROUTES.empire)} />
+        <Tile tone="cyan" icon={<SlotsIcon />} name="Slots" desc="risk and money" onGo={() => go(GAMES_ROUTES.slots)} />
       </div>
       
       <div className="hmp-grid three">
