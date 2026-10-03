@@ -66,6 +66,8 @@ import MaintenanceOverlay from "./MaintenanceOverlay";
 import Empire from "./Empire";
 import Slots from "./Slots";
 
+import OpenCity from "./OpenCity";
+
 import PageTransition from "./PageTransition";
 
 const islandRoutes = [
@@ -112,7 +114,8 @@ const islandRoutes = [
   { path: "mining", element: <Mining /> },
   { path: "miningshop", element: <MiningShop /> },
   { path: "empire", element: <Empire /> },
-  { path: "slots", element: <Slots /> }
+  { path: "slots", element: <Slots /> },
+  { path: "opencity", element: <OpenCity /> }, 
 ];
 
 const NavigationBar = () => {

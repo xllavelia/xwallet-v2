@@ -2883,3 +2883,820 @@ border: none;
 }
 
 .slt-machine.lines-5 .slt-rowtag { font-size: 9px; padding: 2px 5px; }
+
+.oc-page {
+  height: 85dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  color: #f5f5f7;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Unbounded', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ---------- верх ---------- */
+
+.oc-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 8px;
+}
+
+.oc-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: none;
+  background: #1c1c1c;
+  color: #f5f5f7;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.oc-back:active { transform: scale(0.96); }
+
+.oc-title {
+  flex: 1;
+  margin: 0;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* кнопка профиля героя: уровень внутри, акцент только на цифре */
+.oc-hero-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #1c1c1c;
+  color: var(--xlavelia );
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.oc-hero-btn:active { transform: scale(0.94); }
+
+.oc-chip {
+  font-size: 12px;
+  color: #8e8e96;
+  background: #1c1c1c;
+  padding: 7px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.oc-chip b { color: #f5f5f7; font-weight: 700; }
+.oc-chip-doc b { color: var(--xlavelia ); }
+
+/* ---------- HP HUD ---------- */
+
+.oc-hpbar {
+  height: 4px;
+  margin: 0 12px 8px;
+  border-radius: 2px;
+  background: #1c1c1c;
+  overflow: hidden;
+}
+
+.oc-hpbar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--xlavelia );
+  transition: width 0.15s ease;
+}
+
+.oc-hpbar-fill.low { background: #ff5a5a; }
+
+.oc-quickbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 12px 8px;
+}
+
+.oc-iconbtn {
+  border: none;
+  border-radius: 12px;
+  background: #1c1c1c;
+  color: #f5f5f7;
+  font-size: 11px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.oc-iconbtn:active { transform: scale(0.96); }
+
+/* ---------- сцена ---------- */
+
+.oc-stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  background: #0b0b0c;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.oc-stage canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  touch-action: none;
+}
+
+.oc-joy-zone {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 58%;
+  height: 66%;
+  touch-action: none;
+  z-index: 5;
+}
+
+.oc-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff6b6b;
+  font-size: 13px;
+}
+
+/* ---------- ACTION / FIRE (нижняя левая, поверх поля) ---------- */
+
+.oc-action-fab {
+  position: absolute;
+  left: 16px;
+  bottom: 18px;
+  z-index: 6;
+  min-width: 92px;
+  border: none;
+  border-radius: 18px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: #1c1c1c;
+  color: #8e8e96;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.oc-action-fab:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.oc-action-fab.active {
+  background: var(--xlavelia );
+  color: #0b0b0c;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* боевой режим — красная, чтобы не путать с ACTION */
+.oc-action-fab.fire { background: #ff5a5a; }
+
+.oc-action-fab.active:active { transform: scale(0.96); }
+
+.oc-fab-verb {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.oc-fab-name {
+  font-size: 11px;
+  opacity: 0.85;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- тост ---------- */
+
+.oc-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%);
+  z-index: 8;
+  background: #1c1c1c;
+  color: #f5f5f7;
+  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  pointer-events: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+/* ---------- низ: оружие в руке + патроны ---------- */
+
+.oc-bottombar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px calc(env(safe-area-inset-bottom, 0px) + 12px);
+  background: #101010;
+}
+
+.oc-weapon-btn {
+  border: none;
+  border-radius: 14px;
+  background: #1c1c1c;
+  color: #f5f5f7;
+  min-width: 110px;
+  padding: 9px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.oc-weapon-btn:active { transform: scale(0.97); }
+
+.oc-weapon-btn.active {
+  background: var(--xlavelia );
+  color: #0b0b0c;
+}
+
+.oc-weapon-name {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.oc-weapon-ammo {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+/* якорь под будущий joystick-запас: держит ширину правой колонки */
+.oc-joy-anchor {
+  width: 96px;
+}
+
+/* ---------- оверлей: общий каркас ---------- */
+
+.oc-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  touch-action: none;
+}
+
+/* ---------- меню героя ---------- */
+
+.oc-hero-overlay {
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* полупрозрачная тёмная панель поверх мира; скроллится только тело */
+.oc-hero {
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  background: rgba(16, 16, 18, 0.94);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.oc-hero-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 10px;
+}
+
+.oc-hero-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1c1c1c;
+  color: var(--xlavelia );
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.oc-hero-id {
+  flex: 1;
+  min-width: 0;
+}
+
+.oc-hero-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.oc-hero-lvline {
+  font-size: 11px;
+  color: #8e8e96;
+  margin: 2px 0 5px;
+}
+
+.oc-hero-xpbar { margin: 0 0 4px; }
+
+.oc-hero-xp {
+  font-size: 10px;
+  color: #8e8e96;
+}
+
+.oc-bp-close {
+  border: none;
+  border-radius: 12px;
+  background: #1c1c1c;
+  color: #8e8e96;
+  font-size: 12px;
+  padding: 8px 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.oc-bp-close:active { transform: scale(0.96); }
+
+
+
+.oc-hero-stat {
+  background: #1c1c1c;
+  border-radius: 12px;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.oc-hero-tab {
+  flex: 1;
+  white-space: nowrap;
+  border: none;
+  border-radius: 12px;
+  background: #1c1c1c;
+  color: #8e8e96;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 9px 4px;
+  cursor: pointer;
+}
+
+.oc-hero-tab.active {
+  background: var(--xlavelia );
+  color: #0b0b0c;
+}
+
+/* тело меню: единственный скролл-контейнер, страница не скроллится */
+.oc-hero-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* слот экипированного оружия в инвентаре */
+.oc-hero-eq {
+  background: #1c1c1c;
+  border-radius: 14px;
+  padding: 11px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.oc-hero-eq-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8e8e96;
+}
+
+.oc-hero-eq-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oc-hero-eq-ammo {
+  font-size: 11px;
+  color: #8e8e96;
+  flex-shrink: 0;
+}
+
+/* категории инвентаря */
+.oc-bp-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.oc-bp-tab {
+  flex: 1;
+  white-space: nowrap;
+  border: none;
+  border-radius: 12px;
+  background: #1c1c1c;
+  color: #8e8e96;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 9px 10px;
+  cursor: pointer;
+}
+
+.oc-bp-tab.active {
+  background: var(--xlavelia );
+  color: #0b0b0c;
+}
+
+.oc-hero-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.oc-bp-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: none;
+  border-radius: 14px;
+  background: #1c1c1c;
+  color: #f5f5f7;
+  font-size: 13px;
+  padding: 13px 14px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.oc-bp-row.selected {
+  background: var(--xlavelia );
+  color: #0b0b0c;
+}
+
+.oc-bp-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oc-bp-qty {
+  font-size: 12px;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+/* явный маркер экипированного предмета в строке */
+.oc-hero-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--xlavelia );
+  color: #0b0b0c;
+  border-radius: 999px;
+  padding: 3px 8px;
+  flex-shrink: 0;
+}
+
+.oc-bp-empty {
+  color: #8e8e96;
+  font-size: 13px;
+  text-align: center;
+  padding: 28px 0;
+}
+
+.oc-bp-detail {
+  background: #1c1c1c;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.oc-bp-detailname {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.oc-bp-stats {
+  font-size: 12px;
+  color: #8e8e96;
+  margin-bottom: 10px;
+}
+
+.oc-bp-btn {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  background: #2a2a2e;
+  color: #f5f5f7;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.oc-bp-btn.accent {
+  background: var(--xlavelia );
+  color: #0b0b0c;
+}
+
+.oc-bp-btn:active { transform: scale(0.98); }
+
+/* ---------- Progression / Skills / Achievements ---------- */
+
+.oc-sk-level {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 2px 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.oc-sk-points {
+  color: var(--xlavelia);
+  font-size: 13px;
+}
+
+.oc-sk-xpbar { margin: 0 0 6px; }
+
+.oc-sk-xp {
+  font-size: 11px;
+  color: #8e8e96;
+  padding: 0 0 10px;
+}
+
+.oc-sk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.oc-sk-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1c1c1c;
+  border-radius: 14px;
+  padding: 11px 14px;
+}
+
+.oc-sk-name {
+  flex: 1;
+  font-size: 13px;
+}
+
+.oc-sk-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--xlavelia);
+  min-width: 44px;
+  text-align: right;
+}
+
+.oc-sk-pts {
+  font-size: 11px;
+  color: #8e8e96;
+  min-width: 26px;
+  text-align: right;
+}
+
+.oc-sk-plus {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--xlavelia);
+  color: #0b0b0c;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.oc-sk-plus:disabled {
+  background: #2a2a2e;
+  color: #8e8e96;
+  cursor: not-allowed;
+}
+
+.oc-sk-plus:active:not(:disabled) { transform: scale(0.94); }
+
+/* ---------- модалки (диалог/здание) ---------- */
+
+.oc-sheet {
+  width: 100%;
+  background: #1c1c1c;
+  border-radius: 20px 20px 0 0;
+  padding: 18px 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+}
+
+.oc-sheet-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--xlavelia);
+  margin-bottom: 10px;
+}
+
+.oc-sheet-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #e8e8ec;
+  min-height: 44px;
+  white-space: pre-wrap;
+}
+
+.oc-sheet-btn {
+  margin-top: 14px;
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  background: var(--xlavelia);
+  color: #0b0b0c;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.oc-sheet-btn:active { transform: scale(0.98); }
+
+/* ---------- смерть игрока ---------- */
+
+.oc-death {
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.oc-death-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ff5a5a;
+  letter-spacing: 0.04em;
+}
+
+.oc-death-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 13px 34px;
+  background: var(--xlavelia);
+  color: #0b0b0c;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.oc-death-btn:active { transform: scale(0.97); }
+
+/* ---------- joystick (визуал создаёт input.js) ---------- */
+
+.oc-joy-base {
+  position: absolute;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.oc-joy-knob {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--xlavelia);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  z-index: 7;
+}
+
+/* ---------- overlay-карта города ---------- */
+.oc-map-overlay { z-index: 60; }
+.oc-map-panel {
+  width: min(92vw, 720px);
+  height: min(80vh, 560px);
+  background: #1c1c1c;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.oc-map-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+.oc-map-title { font-weight: 700; color: #e8e8ec; }
+.oc-map-loc { color: #8e8e96; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.oc-map-top .oc-bp-close { margin-left: auto; }
+.oc-map-svg { flex: 1; width: 100%; background: #101012; }
+.oc-map-d { fill: #141416; stroke: #2a2a2e; stroke-width: 3; }
+.oc-map-d.disc { fill: #1c1c1f; }
+.oc-map-dlabel { fill: #8e8e96; font-size: 40px; font-weight: 600; }
+.oc-map-b { fill: #26262b; }
+.oc-map-poi { fill: var(--xlavelia); opacity: .9; }
+.oc-map-poilabel { fill: #cfcfd6; font-size: 28px; }
+.oc-map-player { fill: #ff4d4d; }
+
+/* ---------- карта: реальная геометрия ---------- */
+.oc-map-d { fill: #17181b; stroke: #2a2a2e; stroke-width: 4; }
+.oc-map-d.disc { fill: #202226; }
+.oc-map-dlabel { fill: #8e8e96; font-size: 64px; font-weight: 600; }
+.oc-map-water { fill: #1d4e73; }
+.oc-map-park { fill: #2c4a2a; }
+.oc-map-road { fill: #3a3d42; }
+.oc-map-road.ave { fill: #4a4d54; }
+.oc-map-plaza { fill: #6b665a; }
+.oc-map-b { fill: #26262b; stroke: #34343a; stroke-width: 2; }
+.oc-map-poi { fill: var(--xlavelia); opacity: .9; }
+.oc-map-poilabel { fill: #cfcfd6; font-size: 44px; }
+.oc-map-player { fill: #ff4d4d; }
+
+/* ---------- компактный hero-профиль (HUD-карточка) ---------- */
+.oc-hero-overlay { align-items: flex-start; justify-content: flex-end; padding: 12px; }
+.oc-hero {
+  width: min(340px, 92vw);
+  max-height: 78vh;
+  background: #1c1c1c;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.oc-hero-top { display: flex; align-items: center; gap: 10px; padding: 12px; }
+.oc-hero-avatar {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: #26262b;
+  image-rendering: pixelated;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--xlavelia);
+}
+.oc-hero-id { flex: 1; min-width: 0; }
+.oc-hero-name { font-weight: 700; color: #e8e8ec; font-size: 14px; }
+.oc-hero-lvline { color: #8e8e96; font-size: 12px; }
+.oc-hero-xpbar { height: 6px; margin: 4px 0 2px; }
+.oc-hero-xp { color: #8e8e96; font-size: 11px; }
+.oc-hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 12px 10px; }
+.oc-hero-stat { background: #272727; border-radius: 8px; padding: 6px 8px; display: flex; flex-direction: column; }
+.oc-hero-stat-label { color: #8e8e96; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+.oc-hero-stat-value { color: #e8e8ec; font-size: 13px; font-weight: 600; }
+.oc-hero-tabs { display: flex; gap: 4px; padding: 0 12px 8px; }
+.oc-hero-tab { flex: 1; background: #272727; color: #8e8e96; border: 0; border-radius: 8px; padding: 8px 4px; font-size: 12px; }
+.oc-hero-tab.active { background: #303030; color: var(--xlavelia); }
+.oc-hero-body { flex: 1; overflow-y: auto; padding: 0 12px 12px; }

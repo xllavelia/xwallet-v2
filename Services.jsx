@@ -25,6 +25,7 @@ var MODULES = [
   { name: "Card", desc: "Tansfers, perks and bonuses", path: "/balancecard" },
   { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
   { name: "Commodities", desc: "Gold, silver, oil, gas and more", path: "/commodities" },
+  // { name: "Open City", desc: "2D pixel city sandbox", path: "/opencity" }, 
 ];
 
 function SearchIcon() {

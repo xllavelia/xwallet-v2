@@ -259,7 +259,7 @@ function AdminPanel() {
         {stats && (
           <div className="adm-stats-grid">
             <div className="adm-stat-card"><span>USERS</span><strong>{stats.totalUsers}</strong></div>
-            <div className="adm-stat-card"><span>TOTAL USDT</span><strong>{"$" + stats.totalBalance.toFixed(2)}</strong></div>
+            <div className="adm-stat-card" onClick={() => navigate("/opencity")}><span>TOTAL USDT</span><strong>{"$" + stats.totalBalance.toFixed(2)}</strong></div>
             <div className="adm-stat-card"><span>TOTAL LAVX</span><strong>{stats.totalLavx.toFixed(0)}</strong></div>
             <div className="adm-stat-card"><span>OPEN TRADES</span><strong>{stats.openPositions}</strong></div>
             <div className="adm-stat-card"><span>CLOSED TRADES</span><strong>{stats.closedPositions}</strong></div>
