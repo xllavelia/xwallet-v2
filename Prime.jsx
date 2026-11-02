@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { usePrime, purchasePrime } from "./usePrime";
 import { useBattlePass } from "./useBattlePass";
-import XDrop from "./XDrop";
 
 function ArrowIcon() {
   return (
@@ -272,12 +271,6 @@ var { data: bpData, refresh: refreshBp } = useBattlePass();
           <span>Instant activation</span>
         </div>
 
-        {bpData && (
-  <XDrop
-    counts={{ classicoCases: bpData.classicoCases, elysiumCases: bpData.elysiumCases, legendaryCases: bpData.legendaryCases }}
-    onOpened={refreshBp}
-  />
-)}
       </div>
 
       <div className="prm-sticky-bar">

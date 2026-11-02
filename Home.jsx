@@ -18,8 +18,9 @@ import { useSavings} from "./useSavings";
 
 
 //npx vite --host 0.0.0.0 --port 5173 --force
+
 // git add .
-// git commit -m "create open city. beta. test V1 frontend"
+// git commit -m "remaster batle pass"
 // git push -u origin main 
 
 

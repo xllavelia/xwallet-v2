@@ -1,207 +1,282 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useBattlePass, claimLevel, devAddXp } from "./useBattlePass";
+import { useBattlePass } from "./useBattlePass";
+import { bpNumber, bpRewardText, bpSeasonText, bpXpText } from "./battlepassConfig";
+import PassOfferSheet from "./PassOfferSheet";
+import CaseRevealSheet from "./CaseRevealSheet";
 
-function describeComponent(c) {
-  switch (c.kind) {
-    case "usdt": return "+$" + c.value + " USDT";
-    case "ref_xp": return "+" + c.value + " Referral XP";
-    case "lavx": return "+" + c.value + " LAVX";
-    case "voucher_fee": return "$" + c.value + " fee-free (" + c.days + "d)";
-    case "fee_boost": return "-" + (c.value / 10).toFixed(1) + "% fee (" + c.days + "d)";
-    case "xp_boost": return "+" + c.value + "% BP XP (" + c.days + "d)";
-    case "case": return c.label.charAt(0).toUpperCase() + c.label.slice(1) + " Case";
-    case "status": return "Status: " + c.label.toUpperCase();
-    default: return "";
-  }
-}
+export default function BattlePass() {
+    const navigate = useNavigate();
+    const { data, loading, error, refresh, purchasePass, claimReward, openCase } = useBattlePass();
+    const [passOpen, setPassOpen] = useState(false);
+    const [caseItem, setCaseItem] = useState(null);
+    const [toast, setToast] = useState("");
+    const [busyCell, setBusyCell] = useState("");
+    const toastTimer = useRef(0);
+    const scrollRef = useRef(null);
+    const scrolledFor = useRef(0);
 
-var TRACK_INFO = {
-  pro: { name: "Pro Pass", levels: 10, tagline: "5 USDT, fee vouchers, and an classico Case along the way." },
-  prime: { name: "Prime Pass", levels: 14, tagline: "Bigger drops, XP boosters, and a elysium Case finale." },
-  star: { name: "Star Pass", levels: 15, tagline: "The full track — Legendary case, max boosters, elite statuses." }
-};
+    useEffect(function () {
+        return function () { window.clearTimeout(toastTimer.current); };
+    }, []);
 
-function BattlePass() {
-  const navigate = useNavigate();
-  
-  function roadPrime() {
-    navigate(-1);
-    setTimeout(function () {
-      navigate( "/prime" );
-    }, 10);
-  }
-  
-  var { data, refresh } = useBattlePass();
-  var [notification, setNotification] = useState(null);
-  var [claimingLevel, setClaimingLevel] = useState(null);
-
-  useEffect(function () {
-    function handleKeyDown(event) {
-      if (event.key.toLowerCase() === "b") { devAddXp(250).then(refresh); }
+    function showToast(message) {
+        setToast(message);
+        window.clearTimeout(toastTimer.current);
+        toastTimer.current = window.setTimeout(function () { setToast(""); }, 2600);
     }
-    window.addEventListener("keydown", handleKeyDown);
-    return function () { window.removeEventListener("keydown", handleKeyDown); };
-  }, [refresh]);
 
-  if (!data) {
-    return <main className="battle-pass-page"></main>;
-  }
+    useEffect(function () {
+        if (!data || !scrollRef.current) return undefined;
+        if (scrolledFor.current === data.level) return undefined;
+        scrolledFor.current = data.level;
+        const id = window.setTimeout(function () {
+            const container = scrollRef.current;
+            const el = document.getElementById("bp-level-" + data.level);
+            if (!container || !el) return;
+            container.scrollTo({
+                top: Math.max(0, el.offsetTop - container.clientHeight / 2 + el.offsetHeight / 2),
+                behavior: "smooth"
+            });
+        }, 80);
+        return function () { window.clearTimeout(id); };
+    }, [data]);
 
-  async function handleClaim(level, unlocked, claimed) {
-    if (!unlocked || claimed || claimingLevel) return;
-    setClaimingLevel(level);
-    try {
-      var result = await claimLevel(level);
-      var lines = result.components.map(describeComponent);
-      setNotification({ title: "REWARD CLAIMED", reward: lines.join(" · ") });
-      setTimeout(function () { setNotification(null); }, 2600);
-      await refresh();
-    } catch (err) {
-      setNotification({ title: "ERROR", reward: err.message });
-      setTimeout(function () { setNotification(null); }, 2200);
-    } finally {
-      setClaimingLevel(null);
+    if (loading && !data) {
+        return (
+            <div className="bp-page bp-center">
+                <div className="bp-spinner" />
+                <div className="bp-loading-text">Loading Battle Pass…</div>
+            </div>
+        );
     }
-  }
 
-  if (!data.hasActiveTrack) {
-    return (
-      <main className="battle-pass-page">
-        <section className="battle-pass-shell">
-          <div className="section-heading"><div><h3>CHOOSE YOUR PASS</h3></div></div>
+    if (error && !data) {
+        return (
+            <div className="bp-page bp-center">
+                <div className="bp-error-title">Could not load Battle Pass</div>
+                <div className="bp-error-text">{error}</div>
+                <button className="bp-retry" type="button" onClick={function () { refresh(false).catch(function () {}); }}>
+                    Try again
+                </button>
+            </div>
+        );
+    }
 
-          <div className="bp-landing-grid">
-            {["pro", "prime", "star"].map(function (id) {
-              var info = TRACK_INFO[id];
-              return (
-                <div className={"bp-landing-card bp-landing-" + id} key={id}>
-                  <span className="bp-landing-name">{info.name}</span>
-                  <span className="bp-landing-levels">{info.levels + " LEVELS"}</span>
-                  <p className="bp-landing-tagline">{info.tagline}</p>
-                  <button className="bp-landing-cta" onClick={roadPrime}>Unlock in Prime</button>
+    if (!data) return null;
+
+    const pct = data.level >= data.maxLevel ? 100 : Math.min(100, (data.levelXp / data.xpPerLevel) * 100);
+
+    function rowClass(levelState) {
+        let cls = "bp-row";
+        cls += levelState.unlocked ? " is-open" : " is-locked";
+        if (levelState.level === data.level) cls += " is-current";
+        return cls;
+    }
+
+    function cellClass(levelState, track) {
+        const cell = track === "free" ? levelState.free : levelState.pass;
+        const passLocked = levelState.unlocked && track === "pass" && !data.passOwned && !cell.claimed;
+        let cls = "bp-cell";
+        if (!levelState.unlocked) cls += " is-locked";
+        if (cell.claimed) cls += " is-claimed";
+        if (passLocked) cls += " is-pass-locked";
+        if (levelState.unlocked && !cell.claimed && !passLocked) cls += " is-available";
+        if (cell.pendingCaseId) cls += " is-pending";
+        if (busyCell === levelState.level + ":" + track) cls += " is-busy";
+        return cls;
+    }
+
+    function renderCell(levelState, track) {
+        const cell = track === "free" ? levelState.free : levelState.pass;
+        const rewards = cell.rewards || [];
+        const locked = !levelState.unlocked;
+        const passLocked = !locked && track === "pass" && !data.passOwned && !cell.claimed;
+        return (
+            <>
+                <div className="bp-cell-rewards">
+                    {rewards.map(function (reward, index) {
+                        return <span className="bp-reward" key={index}>{bpRewardText(reward)}</span>;
+                    })}
                 </div>
-              );
-            })}
-          </div>
+                {cell.claimed && <span className="bp-cell-check">✓</span>}
+                {!cell.claimed && cell.pendingCaseId > 0 && <span className="bp-cell-tag is-accent">OPEN</span>}
+                {!cell.claimed && !cell.pendingCaseId && !locked && !passLocked && levelState.level === data.level && (
+                    <span className="bp-cell-tag is-accent">CLAIM</span>
+                )}
+                {!cell.claimed && !locked && passLocked && levelState.level === data.level && (
+                    <span className="bp-cell-tag">PASS</span>
+                )}
+            </>
+        );
+    }
 
-          <p className="bp-landing-hint">Subscribe to Pro, Prime, or Star to start earning levels.</p>
-        </section>
-      </main>
-    );
-  }
+    function handleCell(levelState, track) {
+        if (busyCell) return;
+        const cell = track === "free" ? levelState.free : levelState.pass;
 
-  var xpPerLevel = data.xpPerLevel;
-  var currentLevel = Math.floor(data.xp / xpPerLevel) + 1;
-  var currentLevelXp = data.xp % xpPerLevel;
-  var progress = (currentLevelXp / xpPerLevel) * 100;
-  var unlockedCount = data.levels.filter(function (l) { return l.unlocked; }).length;
+        if (!levelState.unlocked) {
+            const needed = Math.max(0, (levelState.level - 1) * data.xpPerLevel - data.xp);
+            showToast("Need " + bpNumber(needed) + " XP to unlock this level");
+            return;
+        }
+        if (cell.claimed) {
+            showToast("Already claimed");
+            return;
+        }
+        if (cell.pendingCaseId) {
+            const pending = (data.pendingCases || []).find(function (p) { return p.id === cell.pendingCaseId; });
+            if (pending) {
+                setCaseItem(pending);
+            } else {
+                const caseReward = (cell.rewards || []).find(function (r) { return r.kind === "case"; });
+                setCaseItem({
+                    id: cell.pendingCaseId,
+                    rarity: caseReward ? caseReward.case : "common",
+                    title: "Case",
+                    source: "level",
+                    level: levelState.level,
+                    track: track
+                });
+            }
+            return;
+        }
+        if (track === "pass" && !data.passOwned) {
+            setPassOpen(true);
+            return;
+        }
 
-  return (
-    <main className="battle-pass-page">
+        const key = levelState.level + ":" + track;
+        setBusyCell(key);
+        claimReward(levelState.level, track)
+            .then(function (result) {
+                const names = (result.rewards || []).map(bpRewardText).join(" · ");
+                showToast(names ? "Claimed: " + names : "Reward claimed");
+                if (result.caseTokenId) {
+                    setCaseItem({
+                        id: result.caseTokenId,
+                        rarity: result.caseRarity || "common",
+                        title: "Case",
+                        source: "level",
+                        level: levelState.level,
+                        track: track
+                    });
+                }
+            })
+            .catch(function (e) {
+                showToast(e && e.message ? e.message : "Could not claim the reward");
+            })
+            .finally(function () { setBusyCell(""); });
+    }
 
-      <section className="battle-pass-shell">
-        <section className="battle-pass-road-section">
-          <div className="section-heading">
-            <div><h3><span>{TRACK_INFO[data.track].name.toUpperCase()} — ROAD OF REWARDS</span></h3></div>
-            <span className="road-count">{unlockedCount} / {data.levels.length}</span>
-          </div>
+    function handleBuy() {
+        return purchasePass().then(function (result) {
+            showToast("Battle Pass unlocked — premium track is live");
+            return result;
+        });
+    }
 
-          <div className="battle-pass-road">
-            <div className="reward-list">
-              {data.levels.map(function (lvl) {
-                var isUnlocked = lvl.unlocked;
-                var isClaimed = lvl.claimed;
-                var lines = lvl.components.map(describeComponent);
-                var isBundle = lvl.components.length > 1;
+    function closeCase() {
+        setCaseItem(null);
+        refresh(true).catch(function () {});
+    }
 
-                return (
-                  <div className={"reward-node " + (isUnlocked ? "is-unlocked" : "is-locked")} key={lvl.level}>
-                    <div className="reward-node-top">
-                      <span>LVL {String(lvl.level).padStart(2, "0")}</span>
-                      <span>{isClaimed ? "CLAIMED" : "REWARD"}</span>
+    return (
+        <div className="bp-page">
+            <header className="bp-head">
+                <div className="bp-head-main">
+                    <h1>Battle Pass</h1>
+                    <div className="bp-season-row">
+                        <span className="bp-season">{bpSeasonText(data.season)}</span>
+                        <button
+                            className={"bp-pass-chip" + (data.passOwned ? " is-active" : "")}
+                            type="button"
+                            onClick={function () { setPassOpen(true); }}
+                        >
+                            {data.passOwned ? "PASS ACTIVE" : "GET PASS"}
+                        </button>
                     </div>
+                </div>
+            </header>
 
-                    <div
-                      className={"reward-card " + (isClaimed ? "is-claimed" : "") + (isBundle ? " is-bundle" : "")}
-                      onClick={() => handleClaim(lvl.level, isUnlocked, isClaimed)}
-                    >
-                      <span className="reward-type">{isBundle ? "BUNDLE" : lvl.components[0].kind.toUpperCase()}</span>
-                      <h4>{isBundle ? "FINAL BUNDLE" : describeComponent(lvl.components[0]).split(" ").slice(1).join(" ")}</h4>
-                      {lines.map(function (line, i) { return <p key={i}>{line}</p>; })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+            <p className="bp-goal">Earn XP in every game. Claim rewards on both tracks.</p>
 
-        <section className="battle-pass-status">
-          <div className="status-main">
-            <div className="status-top">
-              <div>
-                <span className="status-label">CURRENT LEVEL</span>
-                <strong className="status-level">{String(currentLevel).padStart(2, "0")}</strong>
-              </div>
-              <div className="status-xp">{currentLevelXp} XP<small> / {xpPerLevel} XP</small></div>
+            <div className="bp-level-card">
+                <div className="bp-level-main">
+                    <span className="bp-level-label">LEVEL</span>
+                    <strong className="bp-level-value">{data.level}</strong>
+                    <span className="bp-level-max">/ {data.maxLevel}</span>
+                </div>
+                <div className="bp-level-bar"><span style={{ width: pct + "%" }} /></div>
+                <div className="bp-level-meta">
+                    <span>{bpXpText(data.level, data.levelXp, data.xpPerLevel, data.maxLevel)}</span>
+                    <span>{bpNumber(data.xp)} total XP</span>
+                </div>
             </div>
-            <div className="xp-progress-wrapper">
-              <div className="xp-progress-line"><div className="xp-progress-fill" style={{ width: progress + "%" }} /></div>
-              <div className="xp-progress-info">
-                <span>LEVEL {String(currentLevel).padStart(2, "0")}</span>
-                <span>{xpPerLevel - currentLevelXp} XP TO NEXT</span>
-              </div>
-            </div>
-          </div>
-          <div className="status-side">
-            <span className="status-label">TOTAL XP</span>
-            <strong>{data.xp.toLocaleString()}</strong>
-            <span className="status-side-caption">SEASON PROGRESS</span>
-          </div>
-        </section>
 
-        <section className="battle-pass-stats">
-          <div className="section-heading">
-            <div><span className="section-kicker">01 / SEASON</span><h3>PASS STATISTICS</h3></div>
-          </div>
-          <div className="stats-grid">
-            <div className="stat-card"><span>LEVEL</span><strong>{String(currentLevel).padStart(2, "0")}</strong><small>CURRENT POSITION</small></div>
-            <div className="stat-card"><span>XP</span><strong>{data.xp.toLocaleString()}</strong><small>TOTAL EARNED</small></div>
-            <div className="stat-card"><span>REWARDS</span><strong>{String(unlockedCount).padStart(2, "0")}</strong><small>UNLOCKED</small></div>
-            <div className="stat-card"><span>CASES</span><strong>{data.classicoCases + data.elysiumCases + data.legendaryCases}</strong><small>IN INVENTORY</small></div>
-          </div>
-          {data.statuses.length > 0 && (
-            <div className="bp-status-badges">
-              {data.statuses.map(function (s) { return <span className={"bp-status-badge bp-status-" + s} key={s}>{s.toUpperCase()}</span>; })}
+            <div className="bp-road-head">
+                <span />
+                <span>FREE</span>
+                <span>PASS</span>
             </div>
-          )}
-        </section>
 
-        <footer className="battle-pass-footer">
-          <div className="details-group">
-            <h3 className="group-title">DOCUMENTATION</h3>
-            <div className="doc-links">
-              <div className="doc-item">
-                <span className="d-id">{"TRACK: " + data.track.toUpperCase()}</span>
-                <span className="d-tag">OFFICIAL</span>
-              </div>
-              <p className="doc-text">
-                Earn XP by trading, sending USDT, and buying or selling crypto. Cases you earn along the
-                way can be opened from the Prime page's XDrop section.
-              </p>
+            <div className="bp-road-scroll" ref={scrollRef}>
+                <div className="bp-road">
+                    {data.levels.map(function (levelState) {
+                        return (
+                            <div id={"bp-level-" + levelState.level} className={rowClass(levelState)} key={levelState.level}>
+                                <div className="bp-level-index">
+                                    <small>{String(levelState.level).padStart(2, "0")}</small>
+                                    {!levelState.unlocked && <span className="bp-lockdot" />}
+                                </div>
+                                <button
+                                    className={cellClass(levelState, "free")}
+                                    type="button"
+                                    onClick={function () { handleCell(levelState, "free"); }}
+                                    aria-label={"Level " + levelState.level + " free reward"}
+                                >
+                                    {renderCell(levelState, "free")}
+                                </button>
+                                <button
+                                    className={cellClass(levelState, "pass")}
+                                    type="button"
+                                    onClick={function () { handleCell(levelState, "pass"); }}
+                                    aria-label={"Level " + levelState.level + " pass reward"}
+                                >
+                                    {renderCell(levelState, "pass")}
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
-          </div>
-        </footer>
-      </section>
 
-      {notification && (
-        <div className="battle-pass-toast">
-          <div><strong>{notification.title}</strong><span>{notification.reward}</span></div>
+            <div className="bp-bottom">
+                <button className="bp-quests-cta" type="button" onClick={function () { navigate("/quests"); }}>
+                    <span>Quests</span>
+                    <small>Daily · Weekly · Monthly</small>
+                </button>
+            </div>
+
+            {toast && <div className="bp-toast">{toast}</div>}
+
+            <PassOfferSheet
+                open={passOpen}
+                onClose={function () { setPassOpen(false); }}
+                season={data.season}
+                price={data.passPrice}
+                balance={data.lavxBalance}
+                owned={data.passOwned}
+                onBuy={handleBuy}
+            />
+
+            <CaseRevealSheet
+                open={!!caseItem}
+                item={caseItem}
+                catalog={data.caseCatalog}
+                onClose={closeCase}
+                onOpen={openCase}
+            />
         </div>
-      )}
-    </main>
-  );
+    );
 }
-
-export default BattlePass;

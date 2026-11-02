@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 // Пути — сверь с App.jsx. Если роут называется иначе, поправь только здесь.
 var REWARDS_ROUTES = {
   vouchers: "/bonus",
-  daily: "/rewards"
+  daily: "/rewards",
+  pass: "/battlepass"
+
 };
 var GAMES_ROUTES = {
   empire: "/empire",
@@ -13,8 +15,7 @@ var GAMES_ROUTES = {
   flip: "/flip",
   ticket: "/ticket",
   trade: "/trade",
-  slots: "/slots"
-
+  slots: "/slots",
 };
 
 // ===================== ИКОНКИ =====================
@@ -94,6 +95,9 @@ export function RewardsPickerModal(props) {
       subtitle="Pick what to check"
       onClose={props.onClose}
     >
+
+    
+
       <div className="hmp-grid two">
         <Tile
           tone="gold"
@@ -110,6 +114,17 @@ export function RewardsPickerModal(props) {
           onGo={() => go(REWARDS_ROUTES.daily)}
         />
       </div>
+      
+        <div className="hmp-grid q">
+          <Tile
+          tone="gold"
+          icon={<TicketIcon />}
+          name="Battle pass"
+          desc="levels, reward and pass"
+          onGo={() => go(REWARDS_ROUTES.pass)}
+        />
+       </div>
+
     </PickerShell>
   );
 }

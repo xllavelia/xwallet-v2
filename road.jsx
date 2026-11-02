@@ -65,8 +65,8 @@ import BanGate from "./BanGate";
 import MaintenanceOverlay from "./MaintenanceOverlay";
 import Empire from "./Empire";
 import Slots from "./Slots";
+import Quests from "./Quests";
 
-import OpenCity from "./OpenCity";
 
 import PageTransition from "./PageTransition";
 
@@ -115,7 +115,7 @@ const islandRoutes = [
   { path: "miningshop", element: <MiningShop /> },
   { path: "empire", element: <Empire /> },
   { path: "slots", element: <Slots /> },
-  { path: "opencity", element: <OpenCity /> }, 
+  { path: "quests", element: <Quests /> },
 ];
 
 const NavigationBar = () => {
