@@ -207,7 +207,7 @@ useEffect(function () {
 
   var amountDisplay = amount ? formatAmount(amount) : "0.00";
   var amountClass = "snd-fake-input " + (amount ? "has-value" : "is-empty");
-  var balanceDisplay = (activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card · $") : "Balance $") + balance.toFixed(2);
+  var balanceDisplay = (activeCard ? (activeCard.name + " · $") : "Balance $") + balance.toFixed(2);
 
   var thumbStyle = {
     transform: "translateX(" + swipeX + "px)",
@@ -220,7 +220,7 @@ useEffect(function () {
   var flowClass = "snd-flow " + (step === "amount" ? "at-amount" : "at-search");
   var nextBtnClass = "snd-next-btn " + (selectedContact ? "active" : "disabled");
   var showEmpty = !isLoadingSearch && !searchError && results.length === 0;
-  var resultsLabel = mode === "card" ? "Card Matches" : (query.length === 0 ? "Contacts" : "Results");
+  var resultsLabel = mode === "card" ? "Account Matches" : (query.length === 0 ? "Contacts" : "Results");
   var recipientInitials = selectedContact ? getInitials(selectedContact.name) : "";
   var swipeThumbClass = sent ? "snd-swipe-thumb sent" : "snd-swipe-thumb";
 
@@ -252,7 +252,7 @@ useEffect(function () {
       if (mode !== "card") switchMode("card");
     }}
   >
-    By Card Number
+    By Account Number
   </button>
 </div>
 
@@ -277,7 +277,7 @@ useEffect(function () {
             <input
               type="text"
               className="snd-search-input"
-              placeholder={mode === "card" ? "Start typing card number..." : "Search by name or ID"}
+              placeholder={mode === "card" ? "Start typing account number..." : "Search by name or ID"}
               inputMode={mode === "card" ? "numeric" : "text"}
               value={query}
               onChange={(e) => setQuery(mode === "card" ? e.target.value.replace(/\D/g, "").slice(0, 16) : e.target.value)}
@@ -330,7 +330,7 @@ useEffect(function () {
               <div className="snd-empty">
                 <span className="snd-empty-text">
                   {mode === "card"
-                    ? (query.length === 0 ? "Type any digits of a card number" : ("No cards starting with \u201C" + query + "\u201D"))
+                    ? (query.length === 0 ? "Type any digits of an account number" : ("No accounts starting with \u201C" + query + "\u201D"))
                     : (query.length === 0 ? "No contacts yet" : ("No matches for \u201C" + query + "\u201D"))}
                 </span>
               </div>

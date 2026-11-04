@@ -18,7 +18,7 @@ const PortfolioComm = ({ balanceHidden }) => {
               ? "****"
               : "$" + portfolio.totalValue.toFixed(2)}
           </span>
-
+ 
           <span
             className={
               "stks-hero-change " +

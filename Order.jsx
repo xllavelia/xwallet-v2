@@ -251,7 +251,7 @@ const isSubmittingRef = useRef(false);
 
               <section className="px-details-card glass-card">
                 <div className="px-row"><span className="px-label">Leverage</span><span className="px-val accent-val">{leverage + 'x'}</span></div>
-                <div className="px-row"><span className="px-label">Pay with</span><span className="px-val flex-val">{activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card") : "Wallet"}</span></div>
+                <div className="px-row"><span className="px-label">Pay with</span><span className="px-val flex-val">{activeCard ? activeCard.name : "Wallet"}</span></div>
               </section>
 
               <section className="px-metrics-card">
@@ -288,7 +288,7 @@ const isSubmittingRef = useRef(false);
               )}
 
               <section className="px-details-card glass-card">
-                <div className="px-row"><span className="px-label">Pay with</span><span className="px-val flex-val">{activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card") : "Wallet"}</span></div>
+                <div className="px-row"><span className="px-label">Pay with</span><span className="px-val flex-val">{activeCard ? activeCard.name : "Wallet"}</span></div>
               </section>
 
               <section className="px-metrics-card">

@@ -1,26 +1,13 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "./useAccount";
-import { useWalletBalance } from "./useWallet";
-import { useClosedPositionsRemote } from "./usePositions";
-import { useBankCards } from "./useBankCards";
 import { useHomeSummary } from "./useHomeSummary";
-// import history1 from './history1.jpg';
-// import history2 from './history2.jpg';
-// import history3 from './history3.jpg';
-// import history4 from './history4.jpg';
-// import { MiniCardThumb } from "./bankCardVisuals";
-import { useStockPortfolio } from "./useStocks";
-import { useCard } from "./useCard";
-import PortfolioComm from "./PortfolioComm";
+import { useHomeAccounts, accountUsd } from "./useHomeAccounts";
+import { HomeAccountPager } from "./HomeAccounts";
 import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
-import { useSavings} from "./useSavings";
-
-
-//npx vite --host 0.0.0.0 --port 5173 --force
 
 // git add .
-// git commit -m "remaster batle pass"
+// git commit -m "major update to the smooth page interface!"
 // git push -u origin main 
 
 
@@ -34,502 +21,124 @@ import { useSavings} from "./useSavings";
 // git add .
 // git commit --amend --no-edit
 
-// git push 
-// rm -rf .git
-// git init
-// git checkout -b main
-// git add .
-// git commit -m "initial clean state"
-// git branch -M main
-// git remote add origin  https://github.com/xllavelia/xwallet-GO.git
-// git push -f origin main
-
-
-// ── Настраиваемый параметр: сколько px "форс-блока" остаётся видно снизу
-// когда он полностью утянут вниз (это и есть та самая ручка для возврата).
-var PEEK_HEIGHT_PX = 32;
-
-function SearchIcon() {
-  return (<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>);
-}
-function GiftIcon() {
-  return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8l9-4 9 4-9 4-9-4Z"></path><path d="M3 8v9l9 4 9-4V8"></path><line x1="12" y1="12" x2="12" y2="21"></line></svg>);
+function HomeIcon({ kind }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {kind === "search" && <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></>}
+      {kind === "gift" && <><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M5 12v9h14v-9M12 8v13" /><path d="M12 8H8a3 3 0 1 1 3-3l1 3Zm0 0h4a3 3 0 1 0-3-3l-1 3Z" /></>}
+      {kind === "create" && <><path d="M12 4v16M4 12h16" /></>}
+      {kind === "history" && <><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3" /><path d="M9 9h6M9 13h6M9 17h3" /></>}
+      {kind === "send" && <><path d="M4 12h16m-7-7 7 7-7 7" /></>}
+      {kind === "single" && <><path d="m5 16-1 4 4-1L20 7l-3-3L5 16Z" /><path d="m14 7 3 3" /></>}
+      {kind === "grid" && <><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></>}
+      {kind === "games" && <><path d="M7 7h10c2 0 3 2 3.5 4l1 5c.5 3-2 4-4 2l-2-2h-7l-2 2c-2 2-4.5 1-4-2l1-5C4 9 5 7 7 7Z" /><path d="M7 10v5m-2.5-2.5h5" /><circle cx="16" cy="11" r=".7" fill="currentColor" /><circle cx="18" cy="14" r=".7" fill="currentColor" /></>}
+      {kind === "referral" && <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6m3-3h-6"/></>}
+    </svg>
+  );
 }
 
-
-
-function getGreeting() {
-  var h = new Date().getHours();
-  if (h < 12) return "Welcome";
-  if (h < 18) return "Hello";
-  return "Evening";
+function ActivityArt() {
+  return (
+    <svg className="hxr-activity-art" viewBox="0 0 104 70" fill="none" aria-hidden="true">
+      <rect x="1" y="35" width="28" height="34" rx="9" fill="#e4f2ff" />
+      <path d="M10 46h8v14h-8zM18 48h3l2 3v6h-3" stroke="#429ce3" strokeWidth="2" strokeLinejoin="round" />
+      <rect x="37" y="18" width="28" height="51" rx="9" fill="#def5e9" />
+      <path d="m46 49 9-9 7 7-9 9a3 3 0 0 1-4 0l-3-3a3 3 0 0 1 0-4Z" fill="#43b994" /><circle cx="55" cy="46" r="1.5" fill="#def5e9" />
+      <rect x="73" y="1" width="28" height="68" rx="9" fill="#ffecd9" />
+      <path d="M81 43v8m3-8v8m3-8v8m-6-4h6m-3 4v10m10-18v18m0-18c-4 4-4 9 0 9" stroke="#dc963c" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
 }
 
-
-function formatUsd(n) { return "$" + n.toFixed(2); }
-
-
-
-const Home = () => {
+function Home() {
   const navigate = useNavigate();
+  const { account } = useAccount();
+  const summary = useHomeSummary();
+  const [picker, setPicker] = useState(null);
+  const [viewMode, setViewMode] = useState(() => localStorage.getItem("xw-home-view") === "single" ? "single" : "grid");
+  const [balanceHidden, setBalanceHidden] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(() => localStorage.getItem("xw-home-account") || "wallet");
+  const { accounts, canOpen } = useHomeAccounts(balanceHidden);
+  const hide = value => balanceHidden ? "••••" : value;
 
-  var { account } = useAccount();
-  var { wallet } = useWalletBalance();
-  var { closedPositions } = useClosedPositionsRemote();
-
-//  var { data: cardsData } = useBankCards();
-  var summary = useHomeSummary();
-
-var [picker, setPicker] = useState(null); // "rewards" | "games"
-
-  var { savings } = useSavings();
-
-  var { portfolio } = useStockPortfolio();
-  var { card } = useCard();
-
-
-  var avatarInitial = account && account.username ? account.username[0].toUpperCase() : "?";
-  var username = account ? account.username : "";
-var { savings } = useSavings();
-
-
-var estMonthly = savings
-  ? savings.balance * (savings.interestRate / 100) / 12
-  : 0;
-
-const [clickMode, setClickMode] = useState(false);
-const [handlePulse, setHandlePulse] = useState(false);
-  var [balanceHidden, setBalanceHidden] = useState(false);
-  var [isOpen, setIsOpen] = useState(false);
-  var [maxDragY, setMaxDragY] = useState(420);
-  var lowerAreaRef = useRef(null);
-  var forceBlockRef = useRef(null);
-  var hiddenContentRef = useRef(null);
-const stateRef = useRef({
-  maxDragY: 420,
-  currentY: 0,
-  isDragging: false,
-  startClientY: 0,
-  startValue: 0,
-  lastClientY: 0,
-  lastTime: 0,
-  velocity: 0,
-  dragDistance: 0
-});
-
-function applyVisualPosition(y, withTransition) {
-  const s = stateRef.current;
-  const clamped = Math.max(0, Math.min(s.maxDragY, y));
-
-  s.currentY = clamped;
-
-  if (forceBlockRef.current) {
-    forceBlockRef.current.style.transition = withTransition
-      ? "transform 850ms cubic-bezier(0.22, 1.15, 0.36, 1)"
-      : "none";
-
-    forceBlockRef.current.style.transform =
-      `translateY(${clamped}px)`;
+  function toggleView() {
+    const next = viewMode === "grid" ? "single" : "grid";
+    localStorage.setItem("xw-home-view", next);
+    localStorage.setItem("xw-home-account", selectedAccount);
+    setViewMode(next);
   }
 
-  if (hiddenContentRef.current) {
-    const progress =
-      s.maxDragY > 0
-        ? clamped / s.maxDragY
-        : 0;
-
-    hiddenContentRef.current.style.transition = withTransition
-      ? "opacity 700ms ease, transform 850ms cubic-bezier(0.22, 1.15, 0.36, 1)"
-      : "none";
-
-    hiddenContentRef.current.style.opacity =
-      (0.3 + progress * 0.7).toString();
-
-    hiddenContentRef.current.style.transform =
-      `translateY(${(1 - progress) * 16}px)`;
+  function selectAccount(key) {
+    localStorage.setItem("xw-home-account", key);
+    setSelectedAccount(key);
   }
-}
-
-useLayoutEffect(() => {
-  function measure() {
-    if (!lowerAreaRef.current) return;
-
-    const h = lowerAreaRef.current.clientHeight;
-
-    stateRef.current.maxDragY =
-      Math.max(120, h - PEEK_HEIGHT_PX);
-
-    if (!stateRef.current.isDragging) {
-      applyVisualPosition(
-        isOpen
-          ? stateRef.current.maxDragY
-          : 0,
-        false
-      );
-    }
-  }
-
-  measure();
-
-  window.addEventListener("resize", measure);
-
-  return () => {
-    window.removeEventListener("resize", measure);
-  };
-}, []);
-
-useEffect(() => {
-  if (stateRef.current.isDragging) return;
-
-  applyVisualPosition(
-    isOpen
-      ? stateRef.current.maxDragY
-      : 0,
-    true
-  );
-}, [isOpen]);
-
-const handleWindowPointerMove = useCallback((e) => {
-  const s = stateRef.current;
-
-  if (!s.isDragging) return;
-
-  const deltaY =
-    e.clientY - s.startClientY;
-
-  s.dragDistance = Math.abs(deltaY);
-
-  applyVisualPosition(
-    s.startValue + deltaY,
-    false
-  );
-
-  const now = performance.now();
-  const dt = now - s.lastTime;
-
-  if (dt > 4) {
-    s.velocity =
-      (e.clientY - s.lastClientY) / dt;
-
-    s.lastClientY = e.clientY;
-    s.lastTime = now;
-  }
-}, []);
-
-const handleWindowPointerUp = useCallback(() => {
-  const s = stateRef.current;
-
-  if (!s.isDragging) return;
-
-  s.isDragging = false;
-
-  window.removeEventListener(
-    "pointermove",
-    handleWindowPointerMove
-  );
-
-  window.removeEventListener(
-    "pointerup",
-    handleWindowPointerUp
-  );
-
-  window.removeEventListener(
-    "pointercancel",
-    handleWindowPointerUp
-  );
-
-  let shouldOpen;
-
-  if (Math.abs(s.velocity) > 0.45) {
-    shouldOpen = s.velocity > 0;
-  } else {
-    shouldOpen =
-      s.currentY > s.maxDragY / 2;
-  }
-
-  s.velocity = 0;
-  s.dragDistance = 0;
-
-  setIsOpen(shouldOpen);
-
-  requestAnimationFrame(() => {
-    applyVisualPosition(
-      shouldOpen
-        ? s.maxDragY
-        : 0,
-      true
-    );
-  });
-}, [handleWindowPointerMove]);
-
-
-function handlePointerDown(e) {
-  if (!clickMode) return;
-
-  const s = stateRef.current;
-
-  s.isDragging = true;
-  s.startClientY = e.clientY;
-  s.startValue = s.currentY;
-  s.lastClientY = e.clientY;
-  s.lastTime = performance.now();
-  s.velocity = 0;
-
-  window.addEventListener(
-    "pointermove",
-    handleWindowPointerMove,
-    { passive: true }
-  );
-
-  window.addEventListener(
-    "pointerup",
-    handleWindowPointerUp,
-    { passive: true }
-  );
-
-  window.addEventListener(
-    "pointercancel",
-    handleWindowPointerUp,
-    { passive: true }
-  );
-}
-const handleIslandClick = useCallback(() => {
-  if (clickMode) return;
-
-  const s = stateRef.current;
-  const nextOpen = !isOpen;
-
-  setIsOpen(nextOpen);
-
-  applyVisualPosition(
-    nextOpen ? s.maxDragY : 0,
-    true
-  );
-}, [clickMode, isOpen]);
-
-function toggleInteractionMode() {
-  setClickMode(v => !v);
-
-  setHandlePulse(true);
-
-  setTimeout(() => {
-    setHandlePulse(false);
-  }, 200);
-}
-
-  var change24h = { amount: 0, percent: 0 };
-  (function () {
-    var since = Date.now() - 24 * 60 * 60 * 1000;
-    var total = 0;
-    closedPositions.forEach(function (p) {
-      if (new Date(p.closedAt).getTime() >= since) {
-        total += parseFloat(p.pnl) || 0;
-      }
-    });
-    change24h.amount = total;
-    var base = wallet.balance - total;
-    change24h.percent = base > 0 ? (total / base) * 100 : 0;
-  })();
-
-  var avatarInitial = account && account.username ? account.username[0].toUpperCase() : "?";
-  var username = account ? account.username : "";
-  var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("en-US");
-// var balanceValue = Math.floor(wallet.balance || 0).toLocaleString("de-DE");
-  var changeIsPositive = change24h.amount >= 0;
-
-
-  
-  
+  const month = new Date().toLocaleDateString("en-US", { month: "long" });
+  const actions = [
+    { kind: "create", label: "Create", onClick: () => navigate("/balancecard?open=1") },
+    { kind: "referral", label: "Referral", onClick: () => navigate("/referral") },
+    { kind: "send", label: "Send", onClick: () => navigate("/send") },
+    { kind: viewMode === "grid" ? "single" : "grid", label: "View", onClick: toggleView },
+  ];
 
   return (
-    <div className="hv2-page">
-
+    <main className={"hv2-page hxr-home hxr-home--" + viewMode}>
       <div className="hv2-hero">
-        
-
-
-        <div className="hv2-top-row">
-          <div className="hv2-identity" onClick={() => navigate("/setting")}>
-            <div className="hv2-avatar">{avatarInitial}</div>
-            <div className="hv2-identity-text">
-              <span className="hv2-greeting">{getGreeting()}</span>
-              <span className="hv2-username">{username}</span>
-            </div>
-          </div>
-          <div className="hv2-top-actions">
-            <button className="hv2-icon-btn" onClick={() => navigate("/services")}><SearchIcon /></button>
-            <button className="hv2-icon-btn" onClick={() => navigate("/referral")}><GiftIcon /></button>
-          </div>
-        </div>
-
-        <div className="hv2-balance-block" >
-          <span className="hv2-balance-label"  onDoubleClick={toggleInteractionMode}>Wallet Balance</span>
-          <span className="hv2-balance-value"  onClick={() => navigate("/balancecard")}>{balanceHidden ? "******" : ("$" + balanceValue)}</span>
-          <div className="hv2-balance-change-row" onDoubleClick={() => setBalanceHidden(!balanceHidden)}>
-            <span className={"hv2-change-amount " + (changeIsPositive ? "pos" : "neg")}>
-              {balanceHidden ? "****" : ((changeIsPositive ? "+$" : "-$") + Math.abs(change24h.amount).toFixed(2))}
-            </span>
-            <span className={balanceHidden ? "" :"hv2-change-pill " + (changeIsPositive ? "pos" : "neg")}>
-              
-            </span>
-          </div>
-        </div>
-
-        <div className="hv2-action-row">
-          <button className="hv2-action-btn primary" onClick={() => navigate("/mining")}>
-            <span>Mine</span>
+        <header className="hxr-header">
+          <button type="button" className="hxr-avatar" onClick={() => navigate("/setting")} aria-label="Account settings">
+            {account && account.username ? account.username[0].toUpperCase() : "X"}
+            <span className="hxr-avatar-mark">x</span>
           </button>
-          <button className="hv2-action-btn primary" onClick={() => navigate("/send")}>
-            <span>Send</span>
+          <button type="button" className="hxr-search" onClick={() => navigate("/services")}>
+            <HomeIcon kind="search" /><span>Search</span>
           </button>
-        </div>
-      </div>
+          <button type="button" className="hxr-gift" onClick={() => setPicker("rewards")} aria-label="Rewards and vouchers">
+            <HomeIcon kind="gift" />
+          </button>
+        </header>
 
-      <div className="hv2-lower-area" ref={lowerAreaRef}>
+        <HomeAccountPager
+          key={viewMode}
+          accounts={accounts}
+          mode={viewMode}
+          initialAccount={selectedAccount}
+          onSelectAccount={selectAccount}
+          balanceHidden={balanceHidden}
+          onToggleHidden={() => setBalanceHidden(hidden => !hidden)}
+          canOpen={canOpen}
+          onOpenAccount={() => navigate("/balancecard?open=1")}
+        />
 
-        <div className="hv2-hidden-content" ref={hiddenContentRef}>
-      
-
- {portfolio && (
-        <div className="stks-hero" onClick={() => navigate("/stocks")}>
-          <span className="stks-hero-label">Portfolio Value</span>
-          <span className="stks-hero-value">{   balanceHidden ? "****" : "$" + portfolio.totalValue.toFixed(2)}</span>
-          <span className={"stks-hero-change " +  (portfolio.todayChangeAmount >= 0 ? "pos" : "neg")}>
-               {balanceHidden ? "****" : (portfolio.todayChangeAmount >= 0 ? "+$" : "-$") + Math.abs(portfolio.todayChangeAmount).toFixed(2) +
-              " (" + (portfolio.todayChangePercent >= 0 ? "+" : "") + portfolio.todayChangePercent.toFixed(2) + "%) Today"}
-          </span>
-        </div>
-      )}
-      
-    
-<PortfolioComm balanceHidden={balanceHidden} />
-
- 
-
- <div className="crdx-hero" onClick={() => navigate("/card")}>
-        <span className="crdx-hero-label">Total Value</span>
-        <span className="crdx-hero-value">{   balanceHidden ? "****" : formatUsd(card.balanceUsd || 0)}</span>
-        <span className="crdx-hero-sub">{"Card ····" + (card.cardNumber || "").slice(-4)}</span>
-      </div>
-
+        <div className="hxr-actions">
+          {actions.map(action => (
+            <button type="button" className="hxr-action" key={action.label} onClick={action.onClick}
+              aria-label={action.label === "View" ? (viewMode === "grid" ? "Show single account" : "Show grouped accounts") : action.label}>
+              <span className="hxr-action-circle"><HomeIcon kind={action.kind} /></span>
+              <span>{action.label}</span>
+            </button>
+          ))}
         </div>
 
-
-
-        <div className="hv2-force-block" ref={forceBlockRef}>
-         <div
-  className="hv2-handle-zone"
-  onPointerDown={handlePointerDown}
-   onClick={handleIslandClick}
-  
->
-            <div   className={`hv2-handle-bar ${handlePulse ? "hv2-handle-bar--pulse" : ""}`}></div>
-          </div>
-
-          <div className="hv2-force-scroll">
-          
-
- 
-
-    <div className="hrd-summary-row">
-         <div className="hrd-summary-card" onClick={() => navigate("/history")}>
-
-  <span className="hrd-summary-value">Activity</span>
-<span className="hrd-summary-label">View all</span>
-
-  <span className="hrd-summary-value">
-    {summary ? balanceHidden ? "****" : ("" + (summary.totalIncome - summary.totalExpense >= 0 ? "" : "") + (summary.totalIncome - summary.totalExpense).toFixed(2)) : "..."}
-  </span>
-  {summary && (
-    <div className="hrd-summary-bar">
-      {summary.categories.map(function (cat, idx) {
-        var total = summary.categories.reduce(function (acc, c) { return acc + c.amount; }, 0) || 1;
-        var pct = (cat.amount / total) * 100;
-        var colors = ["#f0dfade0"];
-        return <span key={cat.key} style={{ width: pct + "%", background: colors[idx % colors.length] }}></span>;
-      })}
-    </div>
-  )}
-</div>
-
-<div className="hrd-summary-card" onClick={() => setPicker("rewards")}>
-            <span className="hrd-summary-label">Vouchers </span>
-            <span className="hrd-summary-value">Rewards and vouchers</span>
-            <span className="hrd-summary-cta">View all</span>
-          </div>
-        </div>
-    
-{/* 
-   {cardsData && cardsData.cards.length == 0 && (
-          <div className="bcx-empty-state" onClick={() => navigate("/balancecard")}>
-            <span className="bcx-empty-title">No cards yet</span>
-            <span className="bcx-empty-sub">Open your free Standard card to get started</span>
-          </div>
-        )}
-
-{cardsData && cardsData.cards.length > 0 && (
-  
-  <div
-    className="hrd-cards-stories"
-    onClick={() => navigate("/balancecard")}
-  >
-     <div
-      className="hrd-story-add"
-      onClick={(e) => {
-        e.stopPropagation();
-        navigate("/balancecard");
-      }}
-    >
-      <span>+</span>
-    </div>
-    {cardsData.cards.map(function (c) {
-      return (
-        <div key={c.id} className="hrd-story-card">
-          <MiniCardThumb
-            tier={c.tier}
-            last4={c.cardNumber.slice(-4)}
-            size="md"
-          />
-
-  
-        </div>
-      );
-    })}
-
-   
-  </div>
-)} */}
-
-<button className="hmp-games-teaser" onClick={() => setPicker("games")}>
-  <span className="hmp-shine"></span>
-  <div className="hmp-gt-left">
-    <span className="hmp-gt-kicker">Mini Games</span>
-    <span className="hmp-gt-list">Empire · Pixel and more</span>
-    <span className="hmp-gt-live"><span className="hmp-gt-dot"></span>Empire is live</span>
-  </div>
-  <span className="hmp-gt-cta">Play</span>
-</button>
-
-
- {portfolio && (
-        <div className="stks-hero" onClick={() => navigate("/savings")}>
-          <span className="stks-hero-label">Portfolio Value</span>
-          <span className="stks-hero-value">{balanceHidden ? "****" : "$" +  (savings?.balance ?? 0)}</span>
-          <span className={"stks-hero-change " +  (portfolio.todayChangeAmount >= 0 ? "pos" : "neg")}>
-               {balanceHidden ? "****" : "$" + estMonthly.toFixed(2) } - Est. monthly earn.
-          </span>
-        </div>
-      )}
-      
-
-          </div>
-        </div>
-
+        <section className="hxr-feed" aria-label="Activity and games">
+          <button type="button" className="hxr-activity" onClick={() => navigate("/history")}>
+            <span className="hxr-feed-copy">
+              <span className="hxr-feed-title">All transactions</span>
+              <span className="hxr-feed-caption">Spent in {month} {summary ? hide(accountUsd(summary.totalExpense)) : "…"}</span>
+            </span>
+            <ActivityArt />
+          </button>
+          <button type="button" className="hxr-games" onClick={() => setPicker("games")}>
+            <span className="hxr-feed-copy">
+              <span className="hxr-feed-title">Mini games</span>
+              <span className="hxr-feed-caption">Empire, Pixel and more</span>
+            </span>
+            <span className="hxr-games-art"><HomeIcon kind="games" /></span>
+          </button>
+        </section>
       </div>
       {picker === "rewards" && <RewardsPickerModal onClose={() => setPicker(null)} />}
-{picker === "games" && <MiniGamesModal onClose={() => setPicker(null)} />}
-    </div>
+      {picker === "games" && <MiniGamesModal onClose={() => setPicker(null)} />}
+    </main>
   );
-};
+}
 
 export default Home;

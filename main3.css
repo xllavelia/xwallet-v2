@@ -2732,7 +2732,7 @@ display: flex;
 
 .bp-case-result-value {
     margin-top: 4px;
-    font-family: "Unbounded", -apple-system, sans-serif;
+    font-family: "Unbounded", sans-serif;
     font-size: 17px;
     color: var(--bp-accent);
 }

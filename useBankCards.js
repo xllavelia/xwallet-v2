@@ -1,34 +1,47 @@
 import { useState, useEffect, useCallback } from "react";
 import { authFetch } from "./apiClient";
 
-function useBankCards() {
-  var [data, setData] = useState(null);
-  var [isLoading, setIsLoading] = useState(true);
+const ACCOUNTS_CHANGED = "xw-accounts-changed";
 
-  var refresh = useCallback(function () {
-    return authFetch("/bankcards")
-      .then(function (res) { setData(res); setIsLoading(false); })
-      .catch(function () { setIsLoading(false); });
+function useBankCards() {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const refresh = useCallback(async () => {
+    try {
+      const response = await authFetch("/bankcards");
+      setData(response);
+      setError("");
+      return response;
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  useEffect(function () { refresh(); }, [refresh]);
-
-  return { data: data, isLoading: isLoading, refresh: refresh };
+  useEffect(() => {
+    refresh();
+    const timer = setInterval(refresh, 20000);
+    window.addEventListener(ACCOUNTS_CHANGED, refresh);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener(ACCOUNTS_CHANGED, refresh);
+    };
+  }, [refresh]);
+  return { data, isLoading, error, refresh };
 }
 
-async function openCard(tier) {
-  return authFetch("/bankcards/open", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tier: tier }) });
+async function mutateAccount(path, body) {
+  const result = await authFetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  window.dispatchEvent(new Event(ACCOUNTS_CHANGED));
+  return result;
 }
-async function topUpCard(cardId, amount) {
-  return authFetch("/bankcards/topup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cardId: cardId, amount: amount }) });
-}
-async function selectActiveCard(cardId) {
-  return authFetch("/bankcards/select-active", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cardId: cardId }) });
-}
-async function closeCard(cardId) {
-  return authFetch("/bankcards/close", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cardId: cardId }) });
-}
-async function withdrawFromCard(cardId, amount) {
-  return authFetch("/bankcards/withdraw", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cardId: cardId, amount: amount }) });
-}
-export { useBankCards, openCard, topUpCard, selectActiveCard, closeCard, withdrawFromCard };
+
+function openAccount(name, designId) { return mutateAccount("/bankcards/open", { name, designId }); }
+function topUpCard(cardId, amount) { return mutateAccount("/bankcards/topup", { cardId, amount }); }
+function selectActiveCard(cardId) { return mutateAccount("/bankcards/select-active", { cardId }); }
+function withdrawFromCard(cardId, amount) { return mutateAccount("/bankcards/withdraw", { cardId, amount }); }
+function closeAccount(cardId) { return mutateAccount("/bankcards/close", { cardId }); }
+
+export { useBankCards, openAccount, topUpCard, selectActiveCard, withdrawFromCard, closeAccount, ACCOUNTS_CHANGED };

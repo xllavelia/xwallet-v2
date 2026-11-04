@@ -1,0 +1,79 @@
+import { useLayoutEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AccountArt } from "./bankCardVisuals";
+
+function HomeAccountPager({ accounts, mode, initialAccount, onSelectAccount, balanceHidden, onToggleHidden, canOpen, onOpenAccount }) {
+  const navigate = useNavigate();
+  const trackRef = useRef(null);
+  const single = mode === "single";
+  const entries = [...accounts, ...(canOpen ? [{ key: "add", label: "Open account" }] : [])];
+  const pages = single ? entries.map(account => [account]) : Array.from({ length: Math.ceil(entries.length / 4) }, (_, i) => entries.slice(i * 4, i * 4 + 4));
+  const initialIndex = single ? Math.max(0, entries.findIndex(account => account.key === initialAccount)) : 0;
+  const [index, setIndex] = useState(initialIndex);
+  const indexRef = useRef(initialIndex);
+
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    indexRef.current = initialIndex;
+    setIndex(initialIndex);
+    track.scrollLeft = initialIndex * track.clientWidth;
+    const observer = new ResizeObserver(() => { track.scrollLeft = indexRef.current * track.clientWidth; });
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [entries.length]);
+
+  function handleScroll() {
+    const track = trackRef.current;
+    if (!track.clientWidth) return;
+    const next = Math.max(0, Math.min(pages.length - 1, Math.round(track.scrollLeft / track.clientWidth)));
+    indexRef.current = next;
+    setIndex(next);
+    if (single && entries[next].key !== "add") onSelectAccount(entries[next].key);
+  }
+
+  const pagination = (
+    <div className="hxr-pagination">
+      <button type="button" className="hxr-visibility" onClick={onToggleHidden} aria-label={balanceHidden ? "Show balances" : "Hide balances"}>
+        {balanceHidden ? "Show" : "Hide"}
+      </button>
+      <div className="hxr-dots" aria-label={single ? "Accounts" : "Account pages"}>
+        {pages.map((_, i) => <button type="button" key={i} className={"hxr-dot" + (index === i ? " is-active" : "")} aria-label={"Account page " + (i + 1)} aria-current={index === i ? "true" : undefined}
+          onClick={() => trackRef.current.scrollTo({ left: i * trackRef.current.clientWidth, behavior: "smooth" })} />)}
+      </div>
+      <span />
+    </div>
+  );
+
+  return (
+    <section className={"hxr-accounts hxr-accounts--" + mode} aria-label="Accounts">
+      {single && pagination}
+      <div className="hxr-track" ref={trackRef} onScroll={handleScroll}>
+        {pages.map((page, pageIndex) => (
+          <div key={pageIndex} className={single ? "hxr-single-page" : "hxr-group-page"}>
+            {page.map(account => account.key === "add" ? (
+              <button type="button" key="add" className={single ? "hxr-feature hxr-feature--add" : "hxr-account hxr-account--add"} onClick={onOpenAccount}>
+                <span className="hxr-add-symbol">+</span><span className="hxr-account-label">Open account</span><span className="hxr-add-caption">Make room for a new goal</span>
+              </button>
+            ) : single ? (
+              <button type="button" key={account.key} className="hxr-feature" onClick={() => navigate(account.path)}>
+                <span className="hxr-feature-balance">
+                  {account.badge && <span className="hxr-feature-badge">{account.badge}</span>}
+                  <span className="hxr-feature-value">{account.value}</span><span className="hxr-feature-label">{account.label} · {account.sub}</span>
+                </span>
+                <span className="hxr-feature-card"><AccountArt designId={account.designId} /></span>
+              </button>
+            ) : (
+              <button type="button" key={account.key} className="hxr-account" onClick={() => navigate(account.path)}>
+                <span className="hxr-account-top"><AccountArt designId={account.designId} />{account.badge && <span className="hxr-account-badge">{account.badge}</span>}</span>
+                <span className="hxr-account-value">{account.value}</span><span className="hxr-account-label">{account.label}</span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+      {!single && pagination}
+    </section>
+  );
+}
+
+export { HomeAccountPager };

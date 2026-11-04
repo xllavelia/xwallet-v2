@@ -93,7 +93,6 @@ const islandRoutes = [
   { path: "tradecoin", element: <TradeCoin /> },
   { path: "swap", element: <Swap /> },
   { path: "savings", element: <Savings /> },
-  { path: "balancecard", element: <BalanceCard /> },
   { path: "stocks", element: <Stocks /> },
   { path: "stockdetail", element: <StockDetail /> },
   { path: "rocket", element: <Rocket /> },
@@ -136,6 +135,7 @@ const AppRoutes = () => {
           </>
         }
       >
+        <Route path="balancecard" element={<RequireAuth><BalanceCard /></RequireAuth>} />
         {islandRoutes.map((route) => (
           <Route
             key={route.path}

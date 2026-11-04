@@ -41,10 +41,12 @@ var [wallet, setWallet] = useState({
       }
     }
     document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("xw-accounts-changed", refresh);
 
     return function () {
       clearInterval(iv);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("xw-accounts-changed", refresh);
     };
   }, [refresh]);
 

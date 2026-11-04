@@ -22,7 +22,7 @@ var MODULES = [
   { name: "Prime", desc: "Membership tiers & LAVX", path: "/prime" },
   { name: "Promo Code", desc: "Redeem a code", path: "/promocode" },
   { name: "Profile", desc: "Account, security, settings", path: "/setting" },
-  { name: "Card", desc: "Tansfers, perks and bonuses", path: "/balancecard" },
+  { name: "Accounts", desc: "Open accounts and manage your money", path: "/balancecard" },
   { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
   { name: "Commodities", desc: "Gold, silver, oil, gas and more", path: "/commodities" },
   // { name: "Open City", desc: "2D pixel city sandbox", path: "/opencity" }, 

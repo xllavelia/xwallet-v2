@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Пути — сверь с App.jsx. Если роут называется иначе, поправь только здесь.
@@ -16,6 +16,7 @@ var GAMES_ROUTES = {
   ticket: "/ticket",
   trade: "/trade",
   slots: "/slots",
+  mine: "/mine",
 };
 
 // ===================== ИКОНКИ =====================
@@ -44,6 +45,9 @@ function FlipIcon() {
 function TradeIcon() {
   return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>);
 }
+function MineIcon() {
+  return (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32"><path fill="#fff" d="M16.001 26.473H16L4.284 12.955L9.5 6h13l5.216 6.955l-3.24 3.737l1.513 1.31l4.295-4.957L23.5 4h-15l-6.784 9.045l12.772 14.737z" /><path fill="#fff" d="m20 19l7 5l-7 5z" /></svg>);
+}
 function CloseIcon() {
   return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>);
 }
@@ -51,15 +55,79 @@ function CloseIcon() {
 // ===================== ОБЩАЯ КОРЗИНА МОДАЛКИ =====================
 
 function PickerShell(props) {
+  const dialogRef = useRef(null);
+  const closeRef = useRef(null);
+  const onCloseRef = useRef(props.onClose);
+  const titleId = useId();
+  const subtitleId = useId();
+
+  useLayoutEffect(() => {
+    onCloseRef.current = props.onClose;
+  }, [props.onClose]);
+
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    const previousFocus = document.activeElement;
+    const focusable = () => Array.from(dialog.querySelectorAll(
+      'button, a[href], input, select, textarea, [tabindex]'
+    )).filter((element) => element.tabIndex >= 0 && !element.disabled &&
+      !element.closest('[inert], [aria-hidden="true"]') && element.getClientRects().length);
+
+    closeRef.current.focus({ preventScroll: true });
+
+    function trapFocus(event) {
+      if (!dialog.contains(event.target)) {
+        (focusable()[0] || dialog).focus({ preventScroll: true });
+      }
+    }
+
+    function handleKeyDown(event) {
+      if (event.defaultPrevented) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        onCloseRef.current?.();
+      } else if (event.key === "Tab") {
+        const elements = focusable();
+        const first = elements[0] || dialog;
+        const last = elements[elements.length - 1] || dialog;
+        const current = document.activeElement;
+        if (!elements.includes(current) || (event.shiftKey ? current === first : current === last)) {
+          event.preventDefault();
+          (event.shiftKey ? last : first).focus({ preventScroll: true });
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("focusin", trapFocus);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("focusin", trapFocus);
+      if (previousFocus?.isConnected && typeof previousFocus.focus === "function") {
+        previousFocus.focus({ preventScroll: true });
+      }
+    };
+  }, []);
+
   return (
-    <div className="hmp-overlay" onClick={props.onClose}>
-      <div className="hmp-card" onClick={(e) => e.stopPropagation()}>
+    <div className={"hmp-overlay" + (props.games ? " hmp-overlay--games" : "")} onClick={props.onClose}>
+      <div
+        ref={dialogRef}
+        className={"hmp-card" + (props.games ? " hmp-card--games" : "")}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={subtitleId}
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="hmp-head">
           <div className="hmp-head-text">
-            <span className="hmp-title">{props.title}</span>
-            <span className="hmp-sub">{props.subtitle}</span>
+            <span className="hmp-title" id={titleId}>{props.title}</span>
+            <span className="hmp-sub" id={subtitleId}>{props.subtitle}</span>
           </div>
-          <button className="hmp-close" onClick={props.onClose}><CloseIcon /></button>
+          <button ref={closeRef} type="button" className="hmp-close" aria-label="Close dialog" onClick={props.onClose}><CloseIcon /></button>
         </div>
         {props.children}
       </div>
@@ -69,7 +137,7 @@ function PickerShell(props) {
 
 function Tile(props) {
   return (
-    <button className={"hmp-tile" + (props.hero ? " hero" : "") + (props.tone ? " " + props.tone : "")} onClick={props.onGo}>
+    <button type="button" className={"hmp-tile" + (props.hero ? " hero" : "") + (props.tone ? " " + props.tone : "")} onClick={props.onGo}>
       {props.hero && <span className="hmp-shine"></span>}
       <span className="hmp-tile-icon">{props.icon}</span>
       <span className="hmp-tile-name">{props.name}</span>
@@ -133,43 +201,132 @@ export function RewardsPickerModal(props) {
 
 export function MiniGamesModal(props) {
   const navigate = useNavigate();
+  const viewportRef = useRef(null);
+  const firstSlideRef = useRef(null);
+  const controlsRef = useRef(null);
+  const activePageRef = useRef(0);
+  const [activePage, setActivePage] = useState(0);
+  const [firstSlideHeight, setFirstSlideHeight] = useState(null);
+  const carouselId = useId();
+
+  useLayoutEffect(() => {
+    const firstSlide = firstSlideRef.current;
+    const viewport = viewportRef.current;
+    function measure(entries) {
+      // Высоту задаёт только первый слайд вместе с его отступами.
+      const boxes = entries?.[0]?.borderBoxSize;
+      const box = boxes && (boxes[0] || boxes);
+      const height = Math.ceil(box?.blockSize || firstSlide.offsetHeight);
+      setFirstSlideHeight((previous) => previous === height ? previous : height);
+      viewport.scrollTo({ left: activePageRef.current * viewport.clientWidth, behavior: "instant" });
+    }
+    measure();
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    observer?.observe(firstSlide, { box: "border-box" });
+    window.addEventListener("resize", measure);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
 
   function go(path) {
     props.onClose();
     navigate(path);
   }
 
+  function syncPage() {
+    const viewport = viewportRef.current;
+    if (!viewport.clientWidth) return;
+    const page = Math.max(0, Math.min(1, Math.round(viewport.scrollLeft / viewport.clientWidth)));
+    if (page === activePageRef.current) return;
+    // Фокус не должен оставаться на слайде, который становится недоступным.
+    if (viewport.children[activePageRef.current]?.contains(document.activeElement)) {
+      controlsRef.current.querySelector(`[data-page="${page}"]`).focus({ preventScroll: true });
+    }
+    activePageRef.current = page;
+    setActivePage(page);
+  }
+
+  function showPage(page) {
+    const viewport = viewportRef.current;
+    const next = Math.max(0, Math.min(1, page));
+    viewport.scrollTo({
+      left: next * viewport.clientWidth,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth"
+    });
+  }
+
+  function handleCarouselKeyDown(event) {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault();
+      event.stopPropagation();
+      showPage(activePageRef.current + (event.key === "ArrowRight" ? 1 : -1));
+    }
+  }
+
   return (
     <PickerShell
       title="Mini Games"
-      subtitle="Six ways to grow the balance"
+      subtitle="Seven ways to grow the balance"
       onClose={props.onClose}
+      games
     >
-      {/* Empire — флагман: широкий hero-тайл с бегущим бликом, без кричащих бейджей */}
-      {/* <Tile
-        hero
-        tone="empire"
-        icon={<EmpireIcon />}
-        name="Empire"
-        desc="Build a financial empire — facilities, market, prestige"
-        cta="Enter command"
-        onGo={() => go(GAMES_ROUTES.empire)}
-      /> */}
-       <div className="hmp-grid two">
-        <Tile tone="pink"   icon={<EmpireIcon />}name="Empire" desc="Build empire" onGo={() => go(GAMES_ROUTES.empire)} />
-        <Tile tone="cyan" icon={<SlotsIcon />} name="Slots" desc="risk and money" onGo={() => go(GAMES_ROUTES.slots)} />
+      <div
+        className="hmp-games-carousel"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Mini games"
+        onKeyDown={handleCarouselKeyDown}
+        style={{ "--hmp-first-slide-height": firstSlideHeight === null ? undefined : `${firstSlideHeight}px` }}
+      >
+        <div className="hmp-games-viewport" id={carouselId} ref={viewportRef} onScroll={syncPage}>
+          <div
+            className="hmp-games-slide"
+            id={`${carouselId}-0`}
+            role="group"
+            aria-roledescription="slide"
+            aria-label="1 of 2"
+            aria-hidden={activePage !== 0}
+            inert={activePage !== 0}
+          >
+            <div className="hmp-grid hmp-games-grid" ref={firstSlideRef}>
+              <Tile tone="violet" icon={<PixelIcon />} name="Pixel" desc="Tap & collect" onGo={() => go(GAMES_ROUTES.pixel)} />
+              <Tile tone="orange" icon={<RocketIcon />} name="Rocket" desc="Fly & multiply" onGo={() => go(GAMES_ROUTES.rocket)} />
+              <Tile tone="blue" icon={<FlipIcon />} name="Flip" desc="Coin decision" onGo={() => go(GAMES_ROUTES.flip)} />
+              <Tile tone="pink" icon={<TicketIcon />} name="Ticket" desc="Draw & win" onGo={() => go(GAMES_ROUTES.ticket)} />
+            </div>
+          </div>
+          <div
+            className="hmp-games-slide"
+            id={`${carouselId}-1`}
+            role="group"
+            aria-roledescription="slide"
+            aria-label="2 of 2"
+            aria-hidden={activePage !== 1}
+            inert={activePage !== 1}
+          >
+            <div className="hmp-grid hmp-games-grid">
+              <Tile tone="pink" icon={<EmpireIcon />} name="Empire" desc="Build empire" onGo={() => go(GAMES_ROUTES.empire)} />
+              <Tile tone="cyan" icon={<SlotsIcon />} name="Slots" desc="Risk and money" onGo={() => go(GAMES_ROUTES.slots)} />
+              <Tile tone="cyan" icon={<TradeIcon />} name="Trade" desc="Charts & orders" onGo={() => go(GAMES_ROUTES.trade)} />
+              <Tile tone="cyan" icon={<MineIcon />} name="Mine" desc="Server and power" onGo={() => go(GAMES_ROUTES.mine)} />
+            
+            </div>
+          </div>
+        </div>
+        <div className="hmp-games-controls" ref={controlsRef}>
+        
+          <div className="hmp-games-dots">
+            {[0, 1].map((page) => (
+              <button key={page} type="button" className="hmp-games-dot" data-page={page} aria-label={`Show games page ${page + 1} of 2`} aria-controls={`${carouselId}-${page}`} aria-current={activePage === page ? "true" : undefined} onClick={() => showPage(page)} />
+            ))}
+          </div>
+        
+          <span className="hmp-games-status" role="status" aria-live="polite" aria-atomic="true">Page {activePage + 1} of 2</span>
+        </div>
       </div>
-      
-      <div className="hmp-grid three">
-        <Tile tone="violet" icon={<PixelIcon />} name="Pixel" desc="Tap & collect" onGo={() => go(GAMES_ROUTES.pixel)} />
-        <Tile tone="orange" icon={<RocketIcon />} name="Rocket" desc="Fly & multiply" onGo={() => go(GAMES_ROUTES.rocket)} />
-        <Tile tone="blue" icon={<FlipIcon />} name="Flip" desc="Coin decision" onGo={() => go(GAMES_ROUTES.flip)} />
-      </div>
-      <div className="hmp-grid two">
-        <Tile tone="pink" icon={<TicketIcon />} name="Ticket" desc="Draw & win" onGo={() => go(GAMES_ROUTES.ticket)} />
-        <Tile tone="cyan" icon={<TradeIcon />} name="Trade" desc="Charts & orders" onGo={() => go(GAMES_ROUTES.trade)} />
-      </div>
-      
     </PickerShell>
   );
 }

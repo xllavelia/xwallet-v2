@@ -286,7 +286,7 @@ function timeTradeLiveResult(t) {
           </div>
           <div className="et-balance-chip">
             <span className="et-balance-label">Balance</span>
-            <span className="et-balance-label">{activeCard ? (activeCard.tier.charAt(0).toUpperCase() + activeCard.tier.slice(1) + " Card") : "Balance"}</span>
+            <span className="et-balance-label">{activeCard ? activeCard.name : "Balance"}</span>
             {/* <span className="et-balance-val">{balanceStr}</span> */}
           </div>
         </div>
