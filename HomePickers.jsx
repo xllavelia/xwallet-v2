@@ -16,7 +16,7 @@ var GAMES_ROUTES = {
   ticket: "/ticket",
   trade: "/trade",
   slots: "/slots",
-  mine: "/mine",
+  mine: "/mining",
 };
 
 // ===================== ИКОНКИ =====================

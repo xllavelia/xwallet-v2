@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useHomeAccounts, accountUsd } from "./useHomeAccounts";
+import { useHomeAccounts, accountUsd, getWalletDesign, setWalletDesign } from "./useHomeAccounts";
 import { openAccount, topUpCard, withdrawFromCard, selectActiveCard, closeAccount } from "./useBankCards";
 import { AccountArt, ACCOUNT_DESIGNS } from "./bankCardVisuals";
 
@@ -18,11 +18,13 @@ function BalanceCard() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [confirmClose, setConfirmClose] = useState(false);
+  const [walletDesign, setWalletDesignState] = useState(getWalletDesign);
   const dialogRef = useRef(null);
   const busyRef = useRef(false);
-  const availableDesigns = ACCOUNT_DESIGNS.slice(5).filter(design => !extras.some(account => account.designId === design.id));
+  const availableDesigns = ACCOUNT_DESIGNS;
   const chosenDesign = availableDesigns.find(design => design.id === designId) || availableDesigns[0];
   const selected = accounts.find(account => account.key === selectedKey);
+  const detailDesign = ACCOUNT_DESIGNS[selected && selected.key === "wallet" ? walletDesign : selected?.designId] || ACCOUNT_DESIGNS[0];
   const cashBalance = Number(wallet.balance || 0) + extras.reduce((sum, account) => sum + account.balance, 0);
 
   function close() { if (!busyRef.current) navigate("/", { replace: true }); }
@@ -99,6 +101,11 @@ function BalanceCard() {
     });
   }
 
+  function chooseWalletDesign(designId) {
+    setWalletDesignState(designId);
+    setWalletDesign(designId);
+  }
+
   function submitClose() {
     run(async () => {
       await closeAccount(selected.id);
@@ -142,10 +149,12 @@ function BalanceCard() {
 
         {!bank.isLoading && panel === "open" && <>
           {canOpen && chosenDesign ? <form className="xac-form" onSubmit={submitOpening}>
-            <div className="xac-preview"><AccountArt designId={chosenDesign.id} className="xac-art" /><div className="xac-preview-copy"><span>{name.trim() || "Your next account"}</span><strong>$0.00</strong></div></div>
+            <div className="xac-preview" style={{ "--xac-accent": chosenDesign.accent }}><AccountArt designId={chosenDesign.id} className="xac-art" /><div className="xac-preview-copy"><span>{name.trim() || "Your next account"}</span><strong>$0.00</strong></div></div>
             <label className="xac-field">Account name<input name="accountName" value={name} onChange={event => setName(event.target.value)} placeholder="Travel, Everyday, Future…" maxLength={64} required autoComplete="off" disabled={busy} /></label>
-            <fieldset className="xac-designs" disabled={busy}><legend>Choose your design</legend><div>{availableDesigns.map(design => <label className={"xac-design" + (chosenDesign.id === design.id ? " is-selected" : "")} key={design.id}>
-              <input type="radio" name="design" value={design.id} checked={chosenDesign.id === design.id} onChange={() => setDesignId(design.id)} /><AccountArt designId={design.id} className="xac-design-thumb" /><span>{design.name}</span>
+            <fieldset className="xac-designs" disabled={busy}><legend>Choose your design<span className="xac-designs-note">Any design, any number of accounts</span></legend><div>{availableDesigns.map(design => <label className={"xac-design" + (chosenDesign.id === design.id ? " is-selected" : "")} key={design.id} style={{ "--xac-accent": design.accent }}>
+              <input type="radio" name="design" value={design.id} checked={chosenDesign.id === design.id} onChange={() => setDesignId(design.id)} />
+              <span className="xac-design-art"><AccountArt designId={design.id} className="xac-design-thumb" />{chosenDesign.id === design.id}</span>
+              <span className="xac-design-name">{design.name}</span>
             </label>)}</div></fieldset>
             <div className="xac-form-note"><span>USD account · No opening charge</span><span>Starts at $0.00. Move money from Wallet whenever you need.</span></div>
             <button className="xac-primary" type="submit" disabled={busy || !name.trim()}>{busy ? "Opening…" : "Open account"}<span></span></button>
@@ -153,9 +162,17 @@ function BalanceCard() {
         </>}
 
         {!bank.isLoading && ["detail", "deposit", "withdraw"].includes(panel) && selected && <>
-          <div className="xac-preview"><AccountArt designId={selected.designId} className="xac-art" /><div className="xac-preview-copy"><span>{selected.label}</span><strong>{selected.value}</strong></div></div>
+          <div className="xac-preview" style={{ "--xac-accent": detailDesign.accent }}><AccountArt designId={detailDesign.id} className="xac-art" /><div className="xac-preview-copy"><span>{selected.label}</span><strong>{selected.value}</strong></div></div>
           <div className="xac-detail-meta"><span>{selected.primary ? "Main account" : "USD account"}</span>{selected.number && <span>{selected.number.replace(/(.{4})/g, "$1 ").trim()}</span>}{selected.isActive && <span className="xac-active">Payment account</span>}</div>
           {panel === "detail" ? <>
+            {selected.key === "wallet" && <div className="xac-card-designs">
+              <span className="xac-card-designs-label">Card design</span>
+              <div className="xac-card-designs-row">{ACCOUNT_DESIGNS.map(design => (
+                <button type="button" key={design.id} className={"xac-card-design" + (walletDesign === design.id ? " is-selected" : "")} style={{ "--xac-accent": design.accent }} disabled={busy} aria-pressed={walletDesign === design.id} aria-label={design.name + " design"} onClick={() => chooseWalletDesign(design.id)}>
+                  <AccountArt designId={design.id} className="xac-card-design-thumb" />
+                </button>
+              ))}</div>
+            </div>}
             {!selected.primary && <div className="xac-actions"><button type="button" disabled={busy} onClick={() => show("deposit")}> Add money</button><button type="button" disabled={busy} onClick={() => show("withdraw")}> To Wallet</button></div>}
             <button type="button" className="xac-primary" disabled={busy} onClick={() => run(async () => { await selectActiveCard(selected.primary ? 0 : selected.id); navigate("/send", { replace: true }); })}>Send money<span></span></button>
             <button type="button" className="xac-secondary" disabled={busy || selected.isActive} onClick={() => activate(selected)}>{selected.isActive ? "Selected for payments" : "Use for payments"}</button>

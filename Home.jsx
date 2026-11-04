@@ -7,7 +7,7 @@ import { HomeAccountPager } from "./HomeAccounts";
 import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
 
 // git add .
-// git commit -m "major update to the smooth page interface!"
+// git commit -m "update card"
 // git push -u origin main 
 
 
