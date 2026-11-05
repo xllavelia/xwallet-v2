@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AccountArt } from "./bankCardVisuals";
 
-function HomeAccountPager({ accounts, mode, initialAccount, onSelectAccount, balanceHidden, onToggleHidden, canOpen, onOpenAccount }) {
+function HomeAccountPager({ accounts, mode, initialAccount, onSelectAccount, balanceHidden, onToggleHidden, canOpen, onOpenAccount, focused, sourceHidden, onFocusCard }) {
   const navigate = useNavigate();
   const trackRef = useRef(null);
   const single = mode === "single";
@@ -55,16 +55,20 @@ function HomeAccountPager({ accounts, mode, initialAccount, onSelectAccount, bal
                 <span className="hxr-add-symbol">+</span><span className="hxr-account-label">Open account</span><span className="hxr-add-caption">Make room for a new goal</span>
               </button>
             ) : single ? (
-              <button type="button" key={account.key} className="hxr-feature" onClick={() => navigate(account.path)}>
-                <span className="hxr-feature-balance">
-                  {account.badge && <span className="hxr-feature-badge">{account.badge}</span>}
-                  <span className="hxr-feature-value">{account.value}</span><span className="hxr-feature-label">{account.label} · {account.sub}</span>
-                </span>
-                <span className="hxr-feature-card"><AccountArt designId={account.designId} /></span>
-              </button>
+              <div key={account.key} className="hxr-feature">
+                <button type="button" className="hxr-feature-balance" onClick={() => navigate(account.path)}>
+                  <span className="hxr-feature-balance-inner">
+                    {account.badge && <span className="hxr-feature-badge">{account.badge}</span>}
+                    <span className="hxr-feature-value">{account.value}</span><span className="hxr-feature-label">{account.label} · {account.sub}</span>
+                  </span>
+                </button>
+                <button type="button" className={"hxr-feature-card" + (sourceHidden ? " is-source-hidden" : "")} onClick={event => onFocusCard(account, event.currentTarget.getBoundingClientRect())} aria-pressed={!!focused} aria-label="Focus card">
+                  <AccountArt designId={account.designId} />
+                </button>
+              </div>
             ) : (
               <button type="button" key={account.key} className="hxr-account" onClick={() => navigate(account.path)}>
-                <span className="hxr-account-top"><AccountArt designId={account.designId} />{account.badge && <span className="hxr-account-badge">{account.badge}</span>}</span>
+                <span className="hxr-account-top"><AccountArt designId={account.designId} compact />{account.badge && <span className="hxr-account-badge">{account.badge}</span>}</span>
                 <span className="hxr-account-value">{account.value}</span><span className="hxr-account-label">{account.label}</span>
               </button>
             ))}

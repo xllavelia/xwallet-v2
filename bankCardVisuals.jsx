@@ -9,10 +9,13 @@ const ACCOUNT_DESIGNS = [
   { id: 4, name: "Dark", ink: "#ffffff", accent: "#5b5f68", gradient: { from: "#4a4f59", to: "#101114", glow: "#6d7480", deep: "#050506" } },
 ];
 
-function AccountArt({ designId = 0, className = "hxr-account-art" }) {
+const SCRIPT_FONT = '"Permanent Marker", "Yellowtail", cursive';
+
+function AccountArt({ designId = 0, className = "hxr-account-art", compact = false }) {
   const uid = "xac" + useId().replace(/[^a-zA-Z0-9]/g, "");
   const design = ACCOUNT_DESIGNS[designId] || ACCOUNT_DESIGNS[0];
   const g = design.gradient;
+
   return (
     <svg className={className} viewBox="0 0 320 200" fill="none" aria-hidden="true" data-design={design.id}>
       <defs>
@@ -27,11 +30,12 @@ function AccountArt({ designId = 0, className = "hxr-account-art" }) {
         <rect width="320" height="200" fill={"url(#" + uid + "a)"} />
         <rect width="320" height="200" fill={"url(#" + uid + "b)"} />
         <rect width="320" height="200" fill={"url(#" + uid + "s)"} />
-        <text x="22" y="31" fill={design.ink} fillOpacity=".85" fontSize="12" fontFamily="sans-serif" letterSpacing="1.5">xwallet</text>
-        <rect x="275" y="18" width="25" height="29" rx="8" fill={design.ink} fillOpacity=".18" />
-        <path d="m282 26 11 13m0-13-11 13" stroke={design.ink} strokeOpacity=".85" strokeWidth="2.5" strokeLinecap="round" />
-        <text x="22" y="177" fill={design.ink} fillOpacity=".62" fontSize="10" fontFamily="sans-serif" letterSpacing="2">{design.name.toUpperCase()}</text>
-        <text x="276" y="177" fill={design.ink} fillOpacity=".5" fontSize="10" fontFamily="sans-serif">{String(design.id + 1).padStart(2, "0")}</text>
+        <g fill="#fff" opacity=".2">
+          <text x="160" y={compact ? 110 : 104} textAnchor="middle" fontFamily={SCRIPT_FONT} fontSize={compact ? 66 : 56}>xavero</text>
+          {!compact && (
+            <text x="160" y="130" textAnchor="middle" fontFamily="Unbounded" fontWeight="800" fontSize="9.5" letterSpacing="2.4">Hello xlavelia!</text>
+          )}
+        </g>
       </g>
     </svg>
   );

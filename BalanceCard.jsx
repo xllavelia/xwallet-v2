@@ -134,13 +134,13 @@ function BalanceCard() {
           <div className="xac-section-heading"><h2>Main accounts</h2><span>Always with you</span></div>
           <div className="xac-list">
             {accounts.slice(0, 5).map(account => <button type="button" className="xac-row" key={account.key} onClick={() => account.primary ? show("detail", account) : navigate(account.path, { replace: true })}>
-              <AccountArt designId={account.designId} className="xac-thumb" /><span className="xac-row-info"><b>{account.label}</b><small>{account.sub}</small></span><span className="xac-row-end"><b>{account.value}</b>{account.isActive && <small>Payment account</small>}</span><span className="xac-chevron">›</span>
+              <AccountArt designId={account.designId} className="xac-thumb" compact /><span className="xac-row-info"><b>{account.label}</b><small>{account.sub}</small></span><span className="xac-row-end"><b>{account.value}</b>{account.isActive && <small>Payment account</small>}</span><span className="xac-chevron">›</span>
             </button>)}
           </div>
           <div className="xac-section-heading"><h2>Your spaces</h2><span>{extras.length} / 5</span></div>
           <div className="xac-list">
             {accounts.slice(5).map(account => <button type="button" className="xac-row" key={account.key} onClick={() => show("detail", account)}>
-              <AccountArt designId={account.designId} className="xac-thumb" /><span className="xac-row-info"><b>{account.label}</b><small>{account.sub}</small></span><span className="xac-row-end"><b>{account.value}</b>{account.isActive && <small>Payment account</small>}</span><span className="xac-chevron">›</span>
+              <AccountArt designId={account.designId} className="xac-thumb" compact /><span className="xac-row-info"><b>{account.label}</b><small>{account.sub}</small></span><span className="xac-row-end"><b>{account.value}</b>{account.isActive && <small>Payment account</small>}</span><span className="xac-chevron">›</span>
             </button>)}
             {!extras.length && <p className="xac-empty">A separate space for travel, plans or everyday spending.</p>}
           </div>
@@ -149,11 +149,11 @@ function BalanceCard() {
 
         {!bank.isLoading && panel === "open" && <>
           {canOpen && chosenDesign ? <form className="xac-form" onSubmit={submitOpening}>
-            <div className="xac-preview" style={{ "--xac-accent": chosenDesign.accent }}><AccountArt designId={chosenDesign.id} className="xac-art" /><div className="xac-preview-copy"><span>{name.trim() || "Your next account"}</span><strong>$0.00</strong></div></div>
+            <div className="xac-preview" style={{ "--xac-accent": chosenDesign.accent }}><AccountArt designId={chosenDesign.id} className="xac-art" compact /><div className="xac-preview-copy"><span>{name.trim() || "Your next account"}</span><strong>$0.00</strong></div></div>
             <label className="xac-field">Account name<input name="accountName" value={name} onChange={event => setName(event.target.value)} placeholder="Travel, Everyday, Future…" maxLength={64} required autoComplete="off" disabled={busy} /></label>
             <fieldset className="xac-designs" disabled={busy}><legend>Choose your design<span className="xac-designs-note">Any design, any number of accounts</span></legend><div>{availableDesigns.map(design => <label className={"xac-design" + (chosenDesign.id === design.id ? " is-selected" : "")} key={design.id} style={{ "--xac-accent": design.accent }}>
               <input type="radio" name="design" value={design.id} checked={chosenDesign.id === design.id} onChange={() => setDesignId(design.id)} />
-              <span className="xac-design-art"><AccountArt designId={design.id} className="xac-design-thumb" />{chosenDesign.id === design.id}</span>
+              <span className="xac-design-art"><AccountArt designId={design.id} className="xac-design-thumb" compact />{chosenDesign.id === design.id}</span>
               <span className="xac-design-name">{design.name}</span>
             </label>)}</div></fieldset>
             <div className="xac-form-note"><span>USD account · No opening charge</span><span>Starts at $0.00. Move money from Wallet whenever you need.</span></div>
@@ -162,14 +162,14 @@ function BalanceCard() {
         </>}
 
         {!bank.isLoading && ["detail", "deposit", "withdraw"].includes(panel) && selected && <>
-          <div className="xac-preview" style={{ "--xac-accent": detailDesign.accent }}><AccountArt designId={detailDesign.id} className="xac-art" /><div className="xac-preview-copy"><span>{selected.label}</span><strong>{selected.value}</strong></div></div>
+          <div className="xac-preview" style={{ "--xac-accent": detailDesign.accent }}><AccountArt designId={detailDesign.id} className="xac-art" compact /><div className="xac-preview-copy"><span>{selected.label}</span><strong>{selected.value}</strong></div></div>
           <div className="xac-detail-meta"><span>{selected.primary ? "Main account" : "USD account"}</span>{selected.number && <span>{selected.number.replace(/(.{4})/g, "$1 ").trim()}</span>}{selected.isActive && <span className="xac-active">Payment account</span>}</div>
           {panel === "detail" ? <>
             {selected.key === "wallet" && <div className="xac-card-designs">
               <span className="xac-card-designs-label">Card design</span>
               <div className="xac-card-designs-row">{ACCOUNT_DESIGNS.map(design => (
                 <button type="button" key={design.id} className={"xac-card-design" + (walletDesign === design.id ? " is-selected" : "")} style={{ "--xac-accent": design.accent }} disabled={busy} aria-pressed={walletDesign === design.id} aria-label={design.name + " design"} onClick={() => chooseWalletDesign(design.id)}>
-                  <AccountArt designId={design.id} className="xac-card-design-thumb" />
+                  <AccountArt designId={design.id} className="xac-card-design-thumb" compact />
                 </button>
               ))}</div>
             </div>}

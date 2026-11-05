@@ -9,8 +9,8 @@ var API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
 
 var SLIDES = [
   {
-    eyebrow: "Welcome to xwallet",
-    title: "xwallet own your flow",
+    eyebrow: "Welcome to xavero",
+    title: "xavero own your flow",
     text: "Real-time markets, deep charts, and leverage up to 200x — all in one focused wallet."
   },
   {

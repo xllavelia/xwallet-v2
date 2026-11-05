@@ -4,10 +4,11 @@ import { useAccount } from "./useAccount";
 import { useHomeSummary } from "./useHomeSummary";
 import { useHomeAccounts, accountUsd } from "./useHomeAccounts";
 import { HomeAccountPager } from "./HomeAccounts";
+import { HomeCardFocus } from "./HomeCardFocus";
 import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
 
 // git add .
-// git commit -m "update card"
+// git commit -m "update card v2"
 // git push -u origin main 
 
 
@@ -33,6 +34,8 @@ function HomeIcon({ kind }) {
       {kind === "grid" && <><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></>}
       {kind === "games" && <><path d="M7 7h10c2 0 3 2 3.5 4l1 5c.5 3-2 4-4 2l-2-2h-7l-2 2c-2 2-4.5 1-4-2l1-5C4 9 5 7 7 7Z" /><path d="M7 10v5m-2.5-2.5h5" /><circle cx="16" cy="11" r=".7" fill="currentColor" /><circle cx="18" cy="14" r=".7" fill="currentColor" /></>}
       {kind === "referral" && <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6m3-3h-6"/></>}
+
+
     </svg>
   );
 }
@@ -58,14 +61,24 @@ function Home() {
   const [viewMode, setViewMode] = useState(() => localStorage.getItem("xw-home-view") === "single" ? "single" : "grid");
   const [balanceHidden, setBalanceHidden] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(() => localStorage.getItem("xw-home-account") || "wallet");
+  const [focused, setFocused] = useState(false);
+  const [focusCard, setFocusCard] = useState(null);
   const { accounts, canOpen } = useHomeAccounts(balanceHidden);
   const hide = value => balanceHidden ? "••••" : value;
+  const cardFocused = viewMode === "single" && focused;
 
   function toggleView() {
     const next = viewMode === "grid" ? "single" : "grid";
     localStorage.setItem("xw-home-view", next);
     localStorage.setItem("xw-home-account", selectedAccount);
+    setFocused(false);
+    setFocusCard(null);
     setViewMode(next);
+  }
+
+  function openCardFocus(account, rect) {
+    setFocused(true);
+    setFocusCard({ account, rect });
   }
 
   function selectAccount(key) {
@@ -81,7 +94,7 @@ function Home() {
   ];
 
   return (
-    <main className={"hv2-page hxr-home hxr-home--" + viewMode}>
+    <main className={"hv2-page hxr-home hxr-home--" + viewMode + (cardFocused ? " is-focused" : "") + (focusCard ? " has-focus-layer" : "")}>
       <div className="hv2-hero">
         <header className="hxr-header">
           <button type="button" className="hxr-avatar" onClick={() => navigate("/setting")} aria-label="Account settings">
@@ -106,6 +119,9 @@ function Home() {
           onToggleHidden={() => setBalanceHidden(hidden => !hidden)}
           canOpen={canOpen}
           onOpenAccount={() => navigate("/balancecard?open=1")}
+          focused={cardFocused}
+          sourceHidden={!!focusCard}
+          onFocusCard={openCardFocus}
         />
 
         <div className="hxr-actions">
@@ -135,6 +151,7 @@ function Home() {
           </button>
         </section>
       </div>
+      {focusCard && <HomeCardFocus account={focusCard.account} rect={focusCard.rect} onExitStart={() => setFocused(false)} onDone={() => setFocusCard(null)} />}
       {picker === "rewards" && <RewardsPickerModal onClose={() => setPicker(null)} />}
       {picker === "games" && <MiniGamesModal onClose={() => setPicker(null)} />}
     </main>
