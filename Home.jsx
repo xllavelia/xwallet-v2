@@ -8,7 +8,7 @@ import { HomeCardFocus } from "./HomeCardFocus";
 import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
 
 // git add .
-// git commit -m "update card v2"
+// git commit -m "remaster crypto, action, comm."
 // git push -u origin main 
 
 
@@ -76,9 +76,9 @@ function Home() {
     setViewMode(next);
   }
 
-  function openCardFocus(account, rect) {
+  function openCardFocus(account, rect, clipBottom) {
     setFocused(true);
-    setFocusCard({ account, rect });
+    setFocusCard({ account, rect, clipBottom: clipBottom || 0 });
   }
 
   function selectAccount(key) {
@@ -95,7 +95,7 @@ function Home() {
 
   return (
     <main className={"hv2-page hxr-home hxr-home--" + viewMode + (cardFocused ? " is-focused" : "") + (focusCard ? " has-focus-layer" : "")}>
-      <div className="hv2-hero">
+     <div className="hv2-hero">
         <header className="hxr-header">
           <button type="button" className="hxr-avatar" onClick={() => navigate("/setting")} aria-label="Account settings">
             {account && account.username ? account.username[0].toUpperCase() : "X"}
@@ -151,9 +151,10 @@ function Home() {
           </button>
         </section>
       </div>
-      {focusCard && <HomeCardFocus account={focusCard.account} rect={focusCard.rect} onExitStart={() => setFocused(false)} onDone={() => setFocusCard(null)} />}
+      {focusCard && <HomeCardFocus account={focusCard.account} rect={focusCard.rect} clipBottom={focusCard.clipBottom} onExitStart={() => setFocused(false)} onDone={() => setFocusCard(null)} />}
       {picker === "rewards" && <RewardsPickerModal onClose={() => setPicker(null)} />}
       {picker === "games" && <MiniGamesModal onClose={() => setPicker(null)} />}
+    
     </main>
   );
 }

@@ -13,7 +13,8 @@ var MODULES = [
   { name: "Ticket", desc: "Scratch card and buy", path: "/ticket" },
   { name: "Rewards", desc: "Get daily rewards and bonuses", path: "/rewards" },
   { name: "Mining", desc: "Create a mining farm and earn money", path: "/mining" },
-  { name: "Crypto Card", desc: "BTC, ETH, SOL, TON balances & swap", path: "/card" },
+  { name: "Crypto", desc: "Swap, buy and sell four coins", path: "/crypto" },
+  { name: "Markets", desc: "Stocks & resources trading", path: "/markets" },
   { name: "Savings Account", desc: "12% APY, deposit anytime", path: "/savings" },
   { name: "History", desc: "Trades, transfers & card activity", path: "/history" },
   { name: "Vouchers", desc: "Fee discounts, USDT & LAVX credits", path: "/bonus" },
@@ -24,7 +25,6 @@ var MODULES = [
   { name: "Profile", desc: "Account, security, settings", path: "/setting" },
   { name: "Accounts", desc: "Open accounts and manage your money", path: "/balancecard" },
   { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
-  { name: "Commodities", desc: "Gold, silver, oil, gas and more", path: "/commodities" },
   // { name: "Open City", desc: "2D pixel city sandbox", path: "/opencity" }, 
 ];
 

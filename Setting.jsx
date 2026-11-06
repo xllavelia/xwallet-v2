@@ -392,13 +392,31 @@ return (
 
           <div
             className="menu-item-row stx-feature-row"
-            onClick={() => goTo("/card")}
+            onClick={() => goTo("/crypto")}
           >
             <div className="menu-item-left">
 
               <div className="stx-menu-copy">
-                <span className="menu-text">Crypto Card</span>
-                <small>Manage your virtual card</small>
+                <span className="menu-text">Crypto</span>
+                <small>Swap, buy and sell coins</small>
+              </div>
+            </div>
+
+            <div className="menu-item-right">
+              <span className="stx-arrow">›</span>
+            </div>
+          </div>
+
+
+          <div
+            className="menu-item-row stx-feature-row"
+            onClick={() => goTo("/markets")}
+          >
+            <div className="menu-item-left">
+
+              <div className="stx-menu-copy">
+                <span className="menu-text">Markets</span>
+                <small>Stocks &amp; resources</small>
               </div>
             </div>
 

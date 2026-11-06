@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWalletBalance } from "./useWallet";
 import { useCard, executeTrade } from "./useCard";
+import { AssetLogo } from "./AssetLogos";
 
 var COINS = [
   { id: "BTC", glyph: "₿", color: "#f7931a" },
@@ -54,16 +55,23 @@ const TradeCoin = () => {
   var coinMeta = COINS.find(function (c) { return c.id === coin; }) || COINS[0];
   var isBuy = direction === "buy";
   var usdAmount = parseFloat(amount) || 0;
-  var coinAmount = livePrice > 0 ? usdAmount / livePrice : 0;
 
   var assetMatch = card.assets ? card.assets.find(function (a) { return a.id === coin; }) : null;
-  var coinHeldAmount = assetMatch ? assetMatch.amount : 0;
+  var coinHeldAmount = assetMatch ? Number(assetMatch.amount) || 0 : 0;
   var maxUsdForSell = coinHeldAmount * livePrice;
-  var insufficient = isBuy ? usdAmount > wallet.balance : usdAmount > maxUsdForSell;
+  var availableUsd = isBuy
+    ? (card.usdtBalance != null ? Number(card.usdtBalance) || 0 : Number(wallet.balance) || 0)
+    : maxUsdForSell;
+  var insufficient = usdAmount > availableUsd;
 
   function handlePreset(pct) {
-    var available = isBuy ? wallet.balance : maxUsdForSell;
-    setAmount((available * pct).toFixed(2));
+    setAmount((availableUsd * pct).toFixed(2));
+  }
+
+  function switchDirection(next) {
+    setDirection(next);
+    setAmount("");
+    setStatusMsg(null);
   }
 
   async function handleSubmit() {
@@ -72,7 +80,7 @@ const TradeCoin = () => {
     setStatusMsg(null);
     try {
       var result = await executeTrade(coin, usdAmount, direction);
-      setStatusMsg((isBuy ? "Bought " : "Sold ") + result.coinAmount.toFixed(6) + " " + coin);
+      setStatusMsg((isBuy ? "Bought " : "Sold ") + Number(result.coinAmount).toFixed(6) + " " + coin);
       setStatusOk(true);
       setAmount("");
       refreshWallet();
@@ -92,7 +100,7 @@ const TradeCoin = () => {
       <div className="Road-Home" onClick={() => navigate(-1)}></div>
 
       <div className="txn-top-badge">
-        <span className="txn-coin-dot" style={{ background: coinMeta.color + "22", color: coinMeta.color }}>{coinMeta.glyph}</span>
+        <span className="txn-coin-dot"><AssetLogo code={coin} label={coin} /></span>
         <span>{(isBuy ? "Buying " : "Selling ") + coin}</span>
       </div>
 
@@ -107,7 +115,7 @@ const TradeCoin = () => {
           <span>{rateStr}</span>
         </div>
 
-        <button className="txn-topup-link" onClick={() => setAmount(wallet.balance.toFixed(2))}>
+        <button className="txn-topup-link" onClick={() => setAmount(availableUsd.toFixed(2))}>
           <PlusIcon /> Use max available
         </button>
       </div>
@@ -132,13 +140,13 @@ const TradeCoin = () => {
 
         {pickerOpen && (
           <div className="txn-picker">
-            <button className={"txn-picker-toggle " + (isBuy ? "active" : "")} onClick={() => setDirection("buy")}>Buy</button>
-            <button className={"txn-picker-toggle " + (!isBuy ? "active" : "")} onClick={() => setDirection("sell")}>Sell</button>
+            <button className={"txn-picker-toggle " + (isBuy ? "active" : "")} onClick={() => switchDirection("buy")}>Buy</button>
+            <button className={"txn-picker-toggle " + (!isBuy ? "active" : "")} onClick={() => switchDirection("sell")}>Sell</button>
             <div className="txn-picker-coins">
               {COINS.map(function (c) {
                 return (
-                  <button key={c.id} className={"txn-picker-coin " + (coin === c.id ? "active" : "")} onClick={() => { setCoin(c.id); setPickerOpen(false); }}>
-                    <span style={{ color: c.color }}>{c.glyph}</span> {c.id}
+                  <button key={c.id} className={"txn-picker-coin " + (coin === c.id ? "active" : "")} onClick={() => { setCoin(c.id); setAmount(""); setPickerOpen(false); }}>
+                    <span style={{ width: 18, height: 18, display: "inline-flex", verticalAlign: "middle", marginRight: 6 }}><AssetLogo code={c.id} label={c.id} /></span>{c.id}
                   </button>
                 );
               })}

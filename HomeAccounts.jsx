@@ -62,7 +62,12 @@ function HomeAccountPager({ accounts, mode, initialAccount, onSelectAccount, bal
                     <span className="hxr-feature-value">{account.value}</span><span className="hxr-feature-label">{account.label} · {account.sub}</span>
                   </span>
                 </button>
-                <button type="button" className={"hxr-feature-card" + (sourceHidden ? " is-source-hidden" : "")} onClick={event => onFocusCard(account, event.currentTarget.getBoundingClientRect())} aria-pressed={!!focused} aria-label="Focus card">
+                <button type="button" className={"hxr-feature-card" + (sourceHidden ? " is-source-hidden" : "")} onClick={event => {
+                  const card = event.currentTarget.getBoundingClientRect();
+                  const feature = event.currentTarget.closest(".hxr-feature");
+                  const clip = feature ? Math.max(0, card.bottom - feature.getBoundingClientRect().bottom) : 0;
+                  onFocusCard(account, card, clip);
+                }} aria-pressed={!!focused} aria-label="Focus card">
                   <AccountArt designId={account.designId} />
                 </button>
               </div>

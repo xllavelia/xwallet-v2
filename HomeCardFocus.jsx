@@ -1,10 +1,20 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AccountArt, ACCOUNT_DESIGNS } from "./bankCardVisuals";
 
+const FLIGHT_MS = 1300;
+const LEVITATE_MS = 7000;
+
+function prefersReducedMotion() {
+  return typeof window !== "undefined" && window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 // Полноэкранный фокус карты: клон стартует ровно на месте карты и плавно перелетает в центр.
-function HomeCardFocus({ account, rect, onExitStart, onDone }) {
+// Слой тумана повторяет подрезанный низ карты на Home, поэтому старт и приземление идут без рывка.
+function HomeCardFocus({ account, rect, clipBottom = 0, onExitStart, onDone }) {
   const design = ACCOUNT_DESIGNS[account.designId] || ACCOUNT_DESIGNS[0];
   const cardRef = useRef(null);
+  const artRef = useRef(null);
   const doneRef = useRef(false);
   const [centered, setCentered] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -15,10 +25,36 @@ function HomeCardFocus({ account, rect, onExitStart, onDone }) {
   const dy = (window.innerHeight - targetHeight) / 2 - rect.top;
   const scale = targetWidth / rect.width;
 
+  // Туман: 14px под картой (перекрывает тень) + подрезанная часть + 72px полосы как на Home
+  const clip = Math.max(0, Math.round(clipBottom));
+  const fogHeight = clip + 86;
+  const fogSolid = ((14 + clip) / fogHeight) * 100;
+  const fogMid = ((14 + clip + 31.7) / fogHeight) * 100;
+
   useLayoutEffect(() => {
     const frame = requestAnimationFrame(() => setCentered(true));
     return () => cancelAnimationFrame(frame);
   }, []);
+
+  // Левитация через WAAPI: на закрытии гасим её с текущей фазы, чтобы не было щелчка
+  useEffect(() => {
+    const el = artRef.current;
+    if (!el || !centered || prefersReducedMotion()) return undefined;
+    const motion = el.animate([
+      { transform: "translate3d(0px, 0px, 0px)" },
+      { transform: "translate3d(0px, 9px, 0px)" },
+      { transform: "translate3d(0px, -4px, 0px)" },
+      { transform: "translate3d(0px, 0px, 0px)" },
+    ], { duration: LEVITATE_MS, iterations: Infinity, easing: "ease-in-out", delay: FLIGHT_MS });
+    return () => {
+      const from = getComputedStyle(el).transform;
+      motion.cancel();
+      if (from && from !== "none") {
+        el.animate([{ transform: from }, { transform: "translate3d(0px, 0px, 0px)" }],
+          { duration: 340, easing: "cubic-bezier(.33, 0, .2, 1)", fill: "forwards" });
+      }
+    };
+  }, [centered]);
 
   function finish() {
     if (doneRef.current) return;
@@ -34,12 +70,12 @@ function HomeCardFocus({ account, rect, onExitStart, onDone }) {
     const el = cardRef.current;
     if (!el) { finish(); return; }
     const onEnd = event => {
-      if (event.propertyName !== "transform") return;
+      if (event.target !== el || event.propertyName !== "transform") return;
       el.removeEventListener("transitionend", onEnd);
       finish();
     };
     el.addEventListener("transitionend", onEnd);
-    setTimeout(finish, 1100);
+    setTimeout(finish, FLIGHT_MS + 300);
   }
 
   useEffect(() => {
@@ -50,7 +86,7 @@ function HomeCardFocus({ account, rect, onExitStart, onDone }) {
 
   return (
     <div
-      className="hxr-focus-layer"
+      className={"hxr-focus-layer" + (closing ? " is-closing" : "")}
       style={{
         "--focus-from": design.gradient.from,
         "--focus-to": design.gradient.to,
@@ -79,7 +115,16 @@ function HomeCardFocus({ account, rect, onExitStart, onDone }) {
         aria-label="Return to Home"
       >
         <span className="hxr-focus-floor" aria-hidden="true" />
-        <span className="hxr-focus-art"><AccountArt designId={account.designId} /></span>
+        <span className="hxr-focus-art" ref={artRef}><AccountArt designId={account.designId} /></span>
+        <span
+          className="hxr-focus-fog"
+          aria-hidden="true"
+          style={{
+            height: fogHeight + "px",
+            background: "linear-gradient(0deg, var(--hxr-bg) 0%, var(--hxr-bg) " + fogSolid.toFixed(1)
+              + "%, color-mix(in srgb, var(--hxr-bg) 64%, transparent) " + fogMid.toFixed(1) + "%, transparent 100%)",
+          }}
+        />
       </button>
     </div>
   );

@@ -2010,7 +2010,11 @@ color: #00d4aa;
 /* ── Фокус карты: элементы уезжают, карта перелетает в центр поверх всего экрана ── */
 .hxr-home.is-focused { overflow: hidden; }
 .hxr-header, .hxr-accounts--single .hxr-pagination, .hxr-feature-balance, .hxr-actions, .hxr-feed {
-  transition: transform .7s cubic-bezier(.22, 1, .36, 1), opacity .4s ease;
+  /* возврат: контент выезжает вместе с садящейся картой, а не раньше неё */
+  transition: transform .6s cubic-bezier(.3, 0, .18, 1) .68s, opacity .45s ease .62s;
+}
+.is-focused .hxr-header, .is-focused .hxr-accounts--single .hxr-pagination, .is-focused .hxr-feature-balance, .is-focused .hxr-actions, .is-focused .hxr-feed {
+  transition: transform .7s cubic-bezier(.42, 0, .18, 1), opacity .45s ease;
 }
 .is-focused .hxr-header { transform: translateY(-150px); opacity: 0; pointer-events: none; }
 .is-focused .hxr-accounts--single .hxr-pagination { transform: translateY(-120px); opacity: 0; pointer-events: none; transition-delay: .04s; }
@@ -2021,20 +2025,21 @@ color: #00d4aa;
 .hxr-home.has-focus-layer .hxr-track { pointer-events: none; }
 
 .hxr-focus-layer {
-  position: fixed; inset: 0; z-index: 600; overflow: hidden;
+  position: fixed; inset: 0; z-index: 600; overflow: hidden; contain: layout paint;
   touch-action: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
 .hxr-focus-veil {
-  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  position: absolute; inset: 0; pointer-events: none; opacity: 0; will-change: opacity;
   background:
     radial-gradient(130% 90% at 14% -6%, color-mix(in srgb, var(--focus-from) 22%, #060608) 0%, transparent 62%),
     radial-gradient(130% 92% at 86% 106%, color-mix(in srgb, var(--focus-to) 26%, #060608) 0%, transparent 64%),
     radial-gradient(90% 66% at 50% 48%, color-mix(in srgb, var(--focus-glow) 13%, #07070a) 0%, transparent 74%),
     #060608;
-  transition: opacity .9s cubic-bezier(.4, 0, .2, 1);
+  transition: opacity 1s cubic-bezier(.4, 0, .2, 1);
 }
 .hxr-focus-veil.is-visible { opacity: 1; }
-.hxr-focus-veil::before, .hxr-focus-veil::after { content: ""; position: absolute; inset: -22%; pointer-events: none; }
+.hxr-focus-layer.is-closing .hxr-focus-veil { transition: opacity 1.15s cubic-bezier(.45, 0, .25, 1); }
+.hxr-focus-veil::before, .hxr-focus-veil::after { content: ""; position: absolute; inset: -22%; pointer-events: none; will-change: transform, opacity; }
 .hxr-focus-veil::before {
   background: radial-gradient(34% 30% at 32% 28%, color-mix(in srgb, var(--focus-glow) 26%, transparent) 0%, transparent 70%);
   animation: hxr-aurora 13s ease-in-out infinite alternate;
@@ -2052,43 +2057,42 @@ color: #00d4aa;
   position: absolute; z-index: 2; margin: 0; padding: 0;
   border: 0; background: none; color: inherit; cursor: pointer; outline: none;
   transform-origin: 0 0; transform: translate3d(0, 0, 0) scale(1);
-  transition: transform 1.05s cubic-bezier(.16, 1, .3, 1);
+  transition: transform 1.3s cubic-bezier(.36, 0, .12, 1);
   will-change: transform; -webkit-tap-highlight-color: transparent;
 }
 .hxr-focus-card.is-centered { transform: translate3d(var(--focus-dx), var(--focus-dy), 0) scale(var(--focus-scale)); }
-.hxr-focus-art { position: relative; z-index: 1; display: block; width: 100%; filter: drop-shadow(0 16px 18px rgba(0, 0, 0, .22)); transition: filter .7s ease; }
+.hxr-focus-art { position: relative; z-index: 1; display: block; width: 100%; filter: drop-shadow(0 12px 14px rgba(0, 0, 0, .09)); }
 .hxr-focus-art .hxr-account-art { display: block; width: 100%; height: auto; }
-.hxr-focus-card.is-centered .hxr-focus-art {
-  animation: hxr-levitate 7s ease-in-out 1.2s infinite;
-}
 .hxr-focus-floor {
-  position: absolute; left: 3%; right: 3%; top: 98%; height: 20%; z-index: 0;
-  border-radius: 50%; pointer-events: none; filter: blur(20px); opacity: 0;
-  background: radial-gradient(50% 50% at 50% 42%, rgba(0, 0, 0, .9) 0%, color-mix(in srgb, var(--focus-glow) 22%, rgba(0, 0, 0, .55)) 46%, transparent 76%);
-  transform: scale(.7);
-  transition: opacity 1s ease .3s, transform 1.1s cubic-bezier(.16, 1, .3, 1) .3s;
+  position: absolute; left: 2%; right: 2%; top: 96%; height: 22%; z-index: 0;
+  border-radius: 50%; pointer-events: none; filter: blur(22px); opacity: 0;
+  background: radial-gradient(50% 50% at 50% 42%, rgba(0, 0, 0, .85) 0%, color-mix(in srgb, var(--focus-glow) 20%, rgba(0, 0, 0, .5)) 46%, transparent 76%);
+  transform: translate3d(0, -6%, 0) scale(.72);
+  transition: opacity .4s ease, transform .55s cubic-bezier(.33, 0, .2, 1);
+  will-change: transform, opacity;
 }
 .hxr-focus-card.is-centered .hxr-focus-floor {
-  opacity: .95; transform: scale(1);
-  animation: hxr-floor 7s ease-in-out 1.2s infinite;
+  opacity: .9; transform: translate3d(0, 0, 0) scale(1);
+  transition: opacity .9s ease 1.05s, transform 1.2s cubic-bezier(.2, .8, .2, 1) 1.05s;
 }
-@keyframes hxr-levitate {
-  0% { transform: translate3d(0, 0, 0); }
-  35% { transform: translate3d(0, 9px, 0); }
-  70% { transform: translate3d(0, -4px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+/* Слой тумана повторяет подрезанный низ карты на Home: старт и приземление без рывка */
+.hxr-focus-fog {
+  position: absolute; left: -3%; right: -3%; bottom: -14px; z-index: 3;
+  pointer-events: none; opacity: 1;
+  transition: opacity .42s ease .86s;
+  will-change: opacity;
 }
-@keyframes hxr-floor {
-  0% { opacity: .95; transform: scale(1); }
-  35% { opacity: .58; transform: scale(.9); }
-  70% { opacity: .78; transform: scale(1.02); }
-  100% { opacity: .95; transform: scale(1); }
-}
+.hxr-focus-card.is-centered .hxr-focus-fog { opacity: 0; transition: opacity .52s ease .06s; }
+/* На возврате туман проявляется лишь когда полог уже сошёл: иначе светлая полоса
+   ложится поверх тёмного полога (#060608) и даёт заметный шов + подрезает тень карты. */
+.hxr-focus-layer.is-closing .hxr-focus-fog { transition: opacity .2s ease 1.1s; }
 @media (prefers-reduced-motion: reduce) {
-  .hxr-focus-veil::before, .hxr-focus-veil::after,
-  .hxr-focus-card.is-centered .hxr-focus-art, .hxr-focus-card.is-centered .hxr-focus-floor { animation: none; }
+  .hxr-focus-veil::before, .hxr-focus-veil::after { animation: none; }
   .hxr-focus-card { transition-duration: .01s; }
-  .hxr-focus-card.is-centered .hxr-focus-art { filter: drop-shadow(0 26px 34px rgba(0, 0, 0, .5)); }
+  .hxr-focus-fog { transition-duration: .01s; transition-delay: 0s; }
+  .hxr-focus-layer.is-closing .hxr-focus-fog { transition-duration: .01s; transition-delay: 0s; }
+  .hxr-focus-floor { transition-duration: .01s; }
+  .hxr-focus-card.is-centered .hxr-focus-floor { transition-duration: .01s; transition-delay: 0s; }
 }
 .hxr-actions { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 14px 0 28px; }
 .hxr-action { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: #5d5e61; font-size: 14px; cursor: pointer; }
@@ -2598,4 +2602,3 @@ color: #00d4aa;
   font-size: 12px; font-weight: 400; color: rgba(255, 255, 255, 0.85);
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-

@@ -23,7 +23,6 @@ import History from "./History";
 import State from "./State";
 import Bonus from "./Bonus";
 import Referral from "./Referral";
-import Card from "./Card";
 import Trade from "./Trade";
 import Order from "./Order";
 import BattlePass from "./BattlePass";
@@ -43,8 +42,10 @@ import Savings from "./Savings";
 import Services from "./Services";
 import BottomNav from "./BottomNav";
 import BalanceCard from "./BalanceCard";
-import Stocks from "./Stocks";
-import StockDetail from "./StockDetail";
+import Crypto from "./Crypto";
+import Markets from "./Markets";
+import MarketsTrade from "./MarketsTrade";
+import MarketAsset from "./MarketAsset";
 import Rocket from "./Rocket";
 import P2PMarket from "./P2PMarket";
 import P2PBrowse from "./P2PBrowse";
@@ -53,8 +54,6 @@ import P2PDealStatus from "./P2PDealStatus";
 import P2PMerchant from "./P2PMerchant";
 import P2PCreateListing from "./P2PCreateListing";
 import P2PDeals from "./P2PDeals";
-import Commodities from "./Commodities";
-import CommodityDetail from "./CommodityDetail";
 import Pixel from "./Pixel";
 import Flip from "./Flip";
 import Ticket from "./Ticket";
@@ -80,7 +79,10 @@ const islandRoutes = [
   { path: "state", element: <State /> },
   { path: "bonus", element: <Bonus /> },
   { path: "referral", element: <Referral /> },
-  { path: "card", element: <Card /> },
+  { path: "crypto", element: <Crypto /> },
+  { path: "markets", element: <Markets /> },
+  { path: "markets/trade", element: <MarketsTrade /> },
+  { path: "markets/asset", element: <MarketAsset /> },
   { path: "trade", element: <Trade /> },
   { path: "order", element: <Order /> },
   { path: "battlepass", element: <BattlePass /> },
@@ -93,8 +95,6 @@ const islandRoutes = [
   { path: "tradecoin", element: <TradeCoin /> },
   { path: "swap", element: <Swap /> },
   { path: "savings", element: <Savings /> },
-  { path: "stocks", element: <Stocks /> },
-  { path: "stockdetail", element: <StockDetail /> },
   { path: "rocket", element: <Rocket /> },
   { path: "p2p", element: <P2PMarket /> },
   { path: "p2pbrowse", element: <P2PBrowse /> },
@@ -104,8 +104,6 @@ const islandRoutes = [
   { path: "p2pcreatelisting", element: <P2PCreateListing /> },
   { path: "p2pdeals", element: <P2PDeals /> },
   { path: "services", element: <Services /> },
-  { path: "commodities", element: <Commodities /> },
-  { path: "commoditydetail", element: <CommodityDetail /> },
   { path: "pixel", element: <Pixel /> },
   { path: "flip", element: <Flip /> },
   { path: "ticket", element: <Ticket /> },

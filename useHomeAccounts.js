@@ -38,12 +38,15 @@ function useHomeAccounts(balanceHidden = false) {
   const since = Date.now() - 86400000;
   const change = closedPositions.reduce((total, position) => new Date(position.closedAt).getTime() >= since ? total + (parseFloat(position.pnl) || 0) : total, 0);
   const extras = bank.data ? bank.data.cards : [];
+  // Крипта и акции/ресурсы — два отдельных счёта
+  const cryptoValue = Number(card && card.balanceUsd) || 0;
+  const marketsValue = (Number(stocks && stocks.totalValue) || 0) + (Number(commodities && commodities.totalValue) || 0);
+  const marketsToday = (Number(stocks && stocks.todayChangeAmount) || 0) + (Number(commodities && commodities.todayChangeAmount) || 0);
   const base = [
     { key: "wallet", designId: getWalletDesign(), label: "Wallet", sub: "Main account", path: "/balancecard?account=wallet", value: hide(accountUsd(wallet.balance)), badge: signed(change), balance: wallet.balance, primary: true, isActive: !extras.some(item => item.isActiveForTrading) },
-    { key: "stocks", designId: 3, label: "Stocks", sub: "Investment account", path: "/stocks", value: stocks ? hide(accountUsd(stocks.totalValue)) : "—", badge: stocks ? signed(stocks.todayChangeAmount) : "" },
-    { key: "commodities", designId: 1, label: "Commodities", sub: "Commodity account", path: "/commodities", value: commodities ? hide(accountUsd(commodities.totalValue)) : "—", badge: commodities ? signed(commodities.todayChangeAmount) : "" },
+    { key: "crypto", designId: 4, label: "Crypto", sub: "BTC · ETH · SOL · TON", path: "/crypto", value: card ? hide(accountUsd(cryptoValue)) : "—" },
+    { key: "markets", designId: 3, label: "Markets", sub: "Stocks & resources", path: "/markets", value: (stocks || commodities) ? hide(accountUsd(marketsValue)) : "—", badge: marketsToday !== 0 ? signed(marketsToday) : "" },
     { key: "savings", designId: 0, label: "Savings", sub: savings ? savings.interestRate + "% APR" : "Savings account", path: "/savings", value: savings ? hide(accountUsd(savings.balance)) : "—", badge: savings ? signed((savings.balance || 0) * (savings.interestRate || 0) / 1200) : "" },
-    { key: "card", designId: 4, label: "Resources", sub: "Resource account", path: "/card", value: card ? hide(accountUsd(card.balanceUsd)) : "—", badge: "" },
   ];
   const accounts = [...base, ...extras.map(item => ({
     key: "account-" + item.id, id: item.id, designId: item.designId, label: item.name, sub: "Account · " + item.cardNumber.slice(-4),

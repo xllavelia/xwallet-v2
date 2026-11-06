@@ -17,7 +17,7 @@ const NAV_TARGETS = {
   history: "/history",
   bonus: "/bonus",
   referral: "/referral",
-  card: "/card",
+  card: "/crypto",
   battlepass: "/battlepass",
   ads: "/ads",
   trade: { path: "/trade", state: "BTC" },

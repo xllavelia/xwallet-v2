@@ -8,7 +8,7 @@ const PortfolioComm = ({ balanceHidden }) => {
   return (
     <div>
       {portfolio && (
-        <div className="stks-hero" onClick={() => navigate("/commodities")}>
+        <div className="stks-hero" onClick={() => navigate("/markets/trade")}>
           <span className="stks-hero-label">
             Portfolio Value
           </span>
