@@ -43,7 +43,7 @@ function useHomeAccounts(balanceHidden = false) {
   const marketsValue = (Number(stocks && stocks.totalValue) || 0) + (Number(commodities && commodities.totalValue) || 0);
   const marketsToday = (Number(stocks && stocks.todayChangeAmount) || 0) + (Number(commodities && commodities.todayChangeAmount) || 0);
   const base = [
-    { key: "wallet", designId: getWalletDesign(), label: "Wallet", sub: "Main account", path: "/balancecard?account=wallet", value: hide(accountUsd(wallet.balance)), badge: signed(change), balance: wallet.balance, primary: true, isActive: !extras.some(item => item.isActiveForTrading) },
+    { key: "wallet", designId: getWalletDesign(), label: "Wallet", sub: "Main account", path: "/balancecard?account=wallet", value: hide(accountUsd(wallet.balance)), badge: signed(change), balance: wallet.balance, primary: true, isActive: !extras.some(item => item.isActiveForTrading), glass: true },
     { key: "crypto", designId: 4, label: "Crypto", sub: "BTC · ETH · SOL · TON", path: "/crypto", value: card ? hide(accountUsd(cryptoValue)) : "—" },
     { key: "markets", designId: 3, label: "Markets", sub: "Stocks & resources", path: "/markets", value: (stocks || commodities) ? hide(accountUsd(marketsValue)) : "—", badge: marketsToday !== 0 ? signed(marketsToday) : "" },
     { key: "savings", designId: 0, label: "Savings", sub: savings ? savings.interestRate + "% APR" : "Savings account", path: "/savings", value: savings ? hide(accountUsd(savings.balance)) : "—", badge: savings ? signed((savings.balance || 0) * (savings.interestRate || 0) / 1200) : "" },
@@ -51,7 +51,7 @@ function useHomeAccounts(balanceHidden = false) {
   const accounts = [...base, ...extras.map(item => ({
     key: "account-" + item.id, id: item.id, designId: item.designId, label: item.name, sub: "Account · " + item.cardNumber.slice(-4),
     path: "/balancecard?account=" + item.id, value: hide(accountUsd(item.balance)), balance: item.balance,
-    number: item.cardNumber, isActive: item.isActiveForTrading, openedAt: item.openedAt,
+    number: item.cardNumber, isActive: item.isActiveForTrading, openedAt: item.openedAt, glass: true,
   }))];
   return { accounts, extras, bank, wallet, refreshWallet, canOpen: !!bank.data && extras.length < bank.data.maxCards };
 }

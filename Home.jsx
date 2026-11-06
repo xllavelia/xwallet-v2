@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
+import { accountPose, animateAccountView } from "./HomeCardFocus";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAccount } from "./useAccount";
 import { useHomeSummary } from "./useHomeSummary";
 import { useHomeAccounts, accountUsd } from "./useHomeAccounts";
 import { HomeAccountPager } from "./HomeAccounts";
-import { HomeCardFocus } from "./HomeCardFocus";
 import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
 
 // git add .
-// git commit -m "remaster crypto, action, comm."
+// git commit -m "3d animation at home and card overlay"
 // git push -u origin main 
 
 
@@ -55,30 +56,60 @@ function ActivityArt() {
 
 function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { account } = useAccount();
   const summary = useHomeSummary();
   const [picker, setPicker] = useState(null);
   const [viewMode, setViewMode] = useState(() => localStorage.getItem("xw-home-view") === "single" ? "single" : "grid");
   const [balanceHidden, setBalanceHidden] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(() => localStorage.getItem("xw-home-account") || "wallet");
-  const [focused, setFocused] = useState(false);
-  const [focusCard, setFocusCard] = useState(null);
+  const [returning, setReturning] = useState(false);
+  const accountOpen = location.pathname === "/balancecard";
   const { accounts, canOpen } = useHomeAccounts(balanceHidden);
   const hide = value => balanceHidden ? "••••" : value;
-  const cardFocused = viewMode === "single" && focused;
 
-  function toggleView() {
+  useEffect(() => {
+    const restore = () => setReturning(true);
+    window.addEventListener("xw-account-return", restore);
+    return () => window.removeEventListener("xw-account-return", restore);
+  }, []);
+
+  useEffect(() => { setReturning(false); }, [location.key]);
+
+  const homeRef = useRef(null);
+  const viewBusy = useRef(false);
+
+  async function toggleView() {
+    if (viewBusy.current || accountOpen) return;
+    viewBusy.current = true;
     const next = viewMode === "grid" ? "single" : "grid";
+    const track = homeRef.current.querySelector(".hxr-track");
+    const bounds = track.getBoundingClientRect();
+    const visible = [...track.querySelectorAll("[data-account-key]")].filter(element => {
+      const rect = element.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      return center >= bounds.left && center <= bounds.right;
+    });
+    const key = visible.find(element => element.dataset.accountKey === selectedAccount)?.dataset.accountKey || visible[0]?.dataset.accountKey || "wallet";
     localStorage.setItem("xw-home-view", next);
-    localStorage.setItem("xw-home-account", selectedAccount);
-    setFocused(false);
-    setFocusCard(null);
-    setViewMode(next);
+    localStorage.setItem("xw-home-account", key);
+    try {
+      await animateAccountView(homeRef.current, key, () => flushSync(() => {
+        setSelectedAccount(key);
+        setViewMode(next);
+      }));
+    } finally { viewBusy.current = false; }
   }
 
-  function openCardFocus(account, rect, clipBottom) {
-    setFocused(true);
-    setFocusCard({ account, rect, clipBottom: clipBottom || 0 });
+  function openAccountDetail(account, element) {
+    if (accountOpen || viewBusy.current) return;
+    navigate(account.path, { state: { accountOrigin: {
+      key: account.key, account, accounts, compact: viewMode === "grid", ...accountPose(element),
+    } } });
+  }
+
+  function openNewAccount() {
+    navigate("/balancecard?open=1");
   }
 
   function selectAccount(key) {
@@ -87,14 +118,14 @@ function Home() {
   }
   const month = new Date().toLocaleDateString("en-US", { month: "long" });
   const actions = [
-    { kind: "create", label: "Create", onClick: () => navigate("/balancecard?open=1") },
+    { kind: "create", label: "Create", onClick: openNewAccount },
     { kind: "referral", label: "Referral", onClick: () => navigate("/referral") },
     { kind: "send", label: "Send", onClick: () => navigate("/send") },
     { kind: viewMode === "grid" ? "single" : "grid", label: "View", onClick: toggleView },
   ];
 
   return (
-    <main className={"hv2-page hxr-home hxr-home--" + viewMode + (cardFocused ? " is-focused" : "") + (focusCard ? " has-focus-layer" : "")}>
+    <main ref={homeRef} className={"hv2-page hxr-home hxr-home--" + viewMode + (accountOpen && !returning ? " is-account-open" : "")} inert={accountOpen} aria-hidden={accountOpen || undefined}>
      <div className="hv2-hero">
         <header className="hxr-header">
           <button type="button" className="hxr-avatar" onClick={() => navigate("/setting")} aria-label="Account settings">
@@ -118,10 +149,10 @@ function Home() {
           balanceHidden={balanceHidden}
           onToggleHidden={() => setBalanceHidden(hidden => !hidden)}
           canOpen={canOpen}
-          onOpenAccount={() => navigate("/balancecard?open=1")}
-          focused={cardFocused}
-          sourceHidden={!!focusCard}
-          onFocusCard={openCardFocus}
+          onOpenAccount={openNewAccount}
+          onOpenDetail={openAccountDetail}
+          leaving={accountOpen}
+          hiddenCardKey={accountOpen ? location.state?.accountOrigin?.key : null}
         />
 
         <div className="hxr-actions">
@@ -151,7 +182,6 @@ function Home() {
           </button>
         </section>
       </div>
-      {focusCard && <HomeCardFocus account={focusCard.account} rect={focusCard.rect} clipBottom={focusCard.clipBottom} onExitStart={() => setFocused(false)} onDone={() => setFocusCard(null)} />}
       {picker === "rewards" && <RewardsPickerModal onClose={() => setPicker(null)} />}
       {picker === "games" && <MiniGamesModal onClose={() => setPicker(null)} />}
     
