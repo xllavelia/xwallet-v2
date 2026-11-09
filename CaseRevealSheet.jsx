@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { bpCaseTitle, bpNumber } from "./battlepassConfig";
+import { bpCaseTitle, bpCosmeticId, bpRewardText } from "./battlepassConfig";
+import { CosmeticRewardArt } from "./ProfileShared";
 
 const ITEM_W = 86;
 const GAP = 10;
@@ -54,7 +55,10 @@ export default function CaseRevealSheet({ open, item, catalog, onClose, onOpen }
                     setError("Could not open this case");
                     return;
                 }
-                if (result.alreadyOpened || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                window.dispatchEvent(new Event("xw-profile-changed"));
+                window.dispatchEvent(new Event("xw-accounts-changed"));
+                if (result.alreadyOpened || document.documentElement.classList.contains("xw-reduce-motion") || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                    setShift(TARGET_SHIFT);
                     setPhase("done");
                     return;
                 }
@@ -124,8 +128,9 @@ export default function CaseRevealSheet({ open, item, catalog, onClose, onOpen }
                                     className={"bp-reel-item" + (done && index === WINNER ? " is-winner" : "")}
                                     key={index}
                                 >
-                                    <span className="bp-reel-kind">{entry.kind === "status" ? "STATUS" : entry.kind.toUpperCase()}</span>
-                                    <b>{entry.display}</b>
+                                    <span className="bp-reel-kind">{bpCosmeticId(entry) ? (entry.cosmeticKind || bpCosmeticId(entry).split("-")[0]).toUpperCase() : entry.kind.toUpperCase()}</span>
+                                    <CosmeticRewardArt reward={entry} />
+                                    <b>{bpRewardText(entry)}</b>
                                 </div>
                             );
                         })}
@@ -137,7 +142,8 @@ export default function CaseRevealSheet({ open, item, catalog, onClose, onOpen }
                 {done && roll && (
                     <div className="bp-case-result">
                         <div className="bp-case-result-kicker">{roll.note ? "CONVERTED" : "YOU GOT"}</div>
-                        <div className="bp-case-result-value">{roll.entry ? roll.entry.display : "—"}</div>
+                        <CosmeticRewardArt reward={roll.entry} />
+                        <div className="bp-case-result-value">{roll.entry ? bpRewardText(roll.entry) : "—"}</div>
                         {roll.note && <div className="bp-case-result-note">{roll.note}</div>}
                     </div>
                 )}
@@ -148,7 +154,7 @@ export default function CaseRevealSheet({ open, item, catalog, onClose, onOpen }
                         {odds.map(function (entry) {
                             return (
                                 <div className="bp-case-odd" key={entry.index}>
-                                    <span>{entry.display}</span>
+                                    <span><CosmeticRewardArt reward={entry} />{bpRewardText(entry)}</span>
                                     <b>{entry.chance}%</b>
                                 </div>
                             );

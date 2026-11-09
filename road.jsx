@@ -18,7 +18,8 @@ import HomeLend from "./HomeLend";
 import Send from "./Send";
 import Buy from "./Buy";
 import Get from "./Get";
-import Setting from "./Setting";
+import Profile from "./Profile";
+import Community from "./Community";
 import History from "./History";
 import State from "./State";
 import Bonus from "./Bonus";
@@ -74,7 +75,9 @@ const islandRoutes = [
   { path: "homelend", element: <HomeLend /> }, 
   { path: "buy", element: <Buy /> },
   { path: "get", element: <Get /> },
-  { path: "setting", element: <Setting /> },  
+  { path: "setting", element: <Profile /> },
+  { path: "profile", element: <Profile /> },
+  { path: "community", element: <Community /> },
   { path: "history", element: <History /> },
   { path: "state", element: <State /> },
   { path: "bonus", element: <Bonus /> },
@@ -150,7 +153,6 @@ const AppRoutes = () => {
       </Route>
 
       <Route path="/services" element={<RequireAuth><Services /></RequireAuth>} />
-      <Route path="/profile" element={<RequireAuth><Setting /></RequireAuth>} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
       <Route path="/admin" element={<RequireAuth><RequireAdmin><AdminPanel /></RequireAdmin></RequireAuth>} />

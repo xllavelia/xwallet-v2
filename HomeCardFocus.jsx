@@ -92,10 +92,12 @@ async function animateAccountView(home, key, change) {
     layer.style.maskImage = `linear-gradient(to bottom,#000 ${edge - 72}px,rgba(0,0,0,calc(1 - .64 * var(--xac-mask-strength))) ${edge - 31.68}px,rgba(0,0,0,calc(1 - var(--xac-mask-strength))) ${edge}px)`;
     animations.push(layer.animate([
       { "--xac-mask-strength": from.angle ? "1" : "0" },
-      { "--xac-mask-strength": "0", offset: .3 },
-      { "--xac-mask-strength": "0", offset: .65 },
-      { "--xac-mask-strength": to.angle ? "1" : "0" },
-    ], options));
+      { "--xac-mask-strength": "0" },
+    ], { duration: options.duration * .3, easing: EASE, fill: "both" }));
+    if (to.angle) animations.push(layer.animate([
+      { "--xac-mask-strength": "0" },
+      { "--xac-mask-strength": "1" },
+    ], { delay: options.duration * .65, duration: options.duration * .35, easing: EASE, fill: "forwards" }));
   }
   if (departure) animations.push(departure.animate([
     { transform: "translate3d(0,0,0)" },
@@ -151,7 +153,9 @@ function useAccountMotion(pageRef, cardRef, origin) {
     const angle = origin?.angle || 0;
     const scale = source ? (angle ? source.height : source.width) / target.width : .96;
     const tasks = [
-      animate(page.querySelector(".xac-page-bg"), [{ opacity: 0 }, { opacity: 1 }], { duration }),
+      // Стартовая прозрачность выше нуля: Home уже уходит влево, и при opacity:0 на первые
+      // кадры проступал бы чёрный фон — на мобильных это и давало вспышку.
+      animate(page.querySelector(".xac-page-bg"), [{ opacity: .5 }, { opacity: 1 }], { duration: reduced ? 1 : 560 }),
       animate(card, reduced ? [{ opacity: 0 }, { opacity: 1 }] : [
         { transform: `translate3d(${dx}px, ${dy}px, 0) rotate(${angle}deg) scale(${scale})` },
         { transform: "translate3d(0, 0, 0) rotate(0deg) scale(1)" },
@@ -163,11 +167,11 @@ function useAccountMotion(pageRef, cardRef, origin) {
         { transform: "perspective(1100px) rotateY(180deg) rotateX(0deg)" },
       ], { duration }));
       applySourceMask(card, origin?.clip, scale, angle);
+      // Маска пересчитывается каждый кадр, поэтому держим её активной только первые кадры.
       tasks.push(animate(card, [
         { "--xac-mask-strength": "1" },
-        { "--xac-mask-strength": "0", offset: .25 },
         { "--xac-mask-strength": "0" },
-      ], { duration }));
+      ], { duration: reduced ? 1 : 340 }));
     }
     page.querySelectorAll(".xac-body > :not(.xac-detail), .xac-detail > *").forEach((element, index) => {
       tasks.push(animate(element, [
@@ -239,9 +243,8 @@ function useAccountMotion(pageRef, cardRef, origin) {
       applySourceMask(card, clip, scale, angle);
       tasks.push(animate(card, [
         { "--xac-mask-strength": maskStrength },
-        { "--xac-mask-strength": "0", offset: .65 },
         { "--xac-mask-strength": "1" },
-      ], { duration }));
+      ], { delay: duration * .65, duration: duration * .35 }));
     }
     await Promise.all(tasks);
     return mounted.current;

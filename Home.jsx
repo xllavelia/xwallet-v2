@@ -3,13 +3,15 @@ import { flushSync } from "react-dom";
 import { accountPose, animateAccountView } from "./HomeCardFocus";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAccount } from "./useAccount";
+import { usePlayerProfile } from "./usePlayerProfile";
+import { ProfileAvatar } from "./ProfileShared";
 import { useHomeSummary } from "./useHomeSummary";
 import { useHomeAccounts, accountUsd } from "./useHomeAccounts";
 import { HomeAccountPager } from "./HomeAccounts";
 import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
 
 // git add .
-// git commit -m "3d animation at home and card overlay"
+// git commit -m "remaster profile"
 // git push -u origin main 
 
 
@@ -34,7 +36,7 @@ function HomeIcon({ kind }) {
       {kind === "single" && <><path d="m5 16-1 4 4-1L20 7l-3-3L5 16Z" /><path d="m14 7 3 3" /></>}
       {kind === "grid" && <><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></>}
       {kind === "games" && <><path d="M7 7h10c2 0 3 2 3.5 4l1 5c.5 3-2 4-4 2l-2-2h-7l-2 2c-2 2-4.5 1-4-2l1-5C4 9 5 7 7 7Z" /><path d="M7 10v5m-2.5-2.5h5" /><circle cx="16" cy="11" r=".7" fill="currentColor" /><circle cx="18" cy="14" r=".7" fill="currentColor" /></>}
-      {kind === "referral" && <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6m3-3h-6"/></>}
+      {kind === "community" && <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6m3-3h-6"/></>}
 
 
     </svg>
@@ -58,10 +60,11 @@ function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   const { account } = useAccount();
+  const { data: player } = usePlayerProfile();
   const summary = useHomeSummary();
   const [picker, setPicker] = useState(null);
   const [viewMode, setViewMode] = useState(() => localStorage.getItem("xw-home-view") === "single" ? "single" : "grid");
-  const [balanceHidden, setBalanceHidden] = useState(false);
+  const [balanceHidden, setBalanceHidden] = useState(() => localStorage.getItem("xw-hide-balances") === "1");
   const [selectedAccount, setSelectedAccount] = useState(() => localStorage.getItem("xw-home-account") || "wallet");
   const [returning, setReturning] = useState(false);
   const accountOpen = location.pathname === "/balancecard";
@@ -75,6 +78,16 @@ function Home() {
   }, []);
 
   useEffect(() => { setReturning(false); }, [location.key]);
+
+  useEffect(() => {
+    const update = () => {
+      setBalanceHidden(localStorage.getItem("xw-hide-balances") === "1");
+      document.documentElement.classList.toggle("xw-reduce-motion", localStorage.getItem("xw-reduce-motion") === "1");
+    };
+    update();
+    window.addEventListener("xw-preferences-changed", update);
+    return () => window.removeEventListener("xw-preferences-changed", update);
+  }, []);
 
   const homeRef = useRef(null);
   const viewBusy = useRef(false);
@@ -119,7 +132,7 @@ function Home() {
   const month = new Date().toLocaleDateString("en-US", { month: "long" });
   const actions = [
     { kind: "create", label: "Create", onClick: openNewAccount },
-    { kind: "referral", label: "Referral", onClick: () => navigate("/referral") },
+    { kind: "community", label: "Community", onClick: () => navigate("/community") },
     { kind: "send", label: "Send", onClick: () => navigate("/send") },
     { kind: viewMode === "grid" ? "single" : "grid", label: "View", onClick: toggleView },
   ];
@@ -128,9 +141,9 @@ function Home() {
     <main ref={homeRef} className={"hv2-page hxr-home hxr-home--" + viewMode + (accountOpen && !returning ? " is-account-open" : "")} inert={accountOpen} aria-hidden={accountOpen || undefined}>
      <div className="hv2-hero">
         <header className="hxr-header">
-          <button type="button" className="hxr-avatar" onClick={() => navigate("/setting")} aria-label="Account settings">
-            {account && account.username ? account.username[0].toUpperCase() : "X"}
-            <span className="hxr-avatar-mark">x</span>
+          <button type="button" className="hxr-avatar" onClick={() => navigate("/profile")} aria-label="My profile">
+            <ProfileAvatar profile={player?.profile || account} />
+            {/* <span className="hxr-avatar-mark">x</span> */}
           </button>
           <button type="button" className="hxr-search" onClick={() => navigate("/services")}>
             <HomeIcon kind="search" /><span>Search</span>

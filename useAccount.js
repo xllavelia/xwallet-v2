@@ -11,7 +11,11 @@ function useAccount() {
       .catch(function () { setIsLoading(false); });
   }, []);
 
-  useEffect(function () { refresh(); }, [refresh]);
+  useEffect(function () {
+    refresh();
+    window.addEventListener("xw-profile-changed", refresh);
+    return () => window.removeEventListener("xw-profile-changed", refresh);
+  }, [refresh]);
 
   return { account: account, isLoading: isLoading, refresh: refresh };
 }

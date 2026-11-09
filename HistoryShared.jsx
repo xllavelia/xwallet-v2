@@ -1,9 +1,13 @@
 import React from "react";
 
+// Общие примитивы истории: иконки строк и группировка по датам.
+
 function Glyph(props) {
   var type = props.type;
-  var c = { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" };
-
+  var c = {
+    width: "16", height: "16", viewBox: "0 0 24 24", fill: "none",
+    stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round"
+  };
   if (type === "up") {
     return (<svg {...c}><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>);
   }
@@ -29,19 +33,20 @@ function formatGroupLabel(date) {
 }
 
 function groupByDate(rows) {
-  var groups = [];
-  var map = {};
+  var groups = [], map = {};
   rows.forEach(function (row) {
-    var d = new Date(row.dateRaw);
-    var label = formatGroupLabel(d);
+    var d = row.dateRaw ? new Date(row.dateRaw) : null;
+    var valid = d && !isNaN(d.getTime());
+    var label = valid ? formatGroupLabel(d) : "All time";
     if (!map[label]) {
-      map[label] = { label: label, rows: [], sortTime: d.getTime() };
+      map[label] = { label: label, rows: [], sortTime: valid ? d.getTime() : -1 };
       groups.push(map[label]);
     }
     map[label].rows.push(row);
   });
   groups.forEach(function (g) {
     g.total = g.rows.reduce(function (acc, r) { return acc + (r.amountSigned || 0); }, 0);
+    g.hasMoney = g.rows.some(function (r) { return (r.amountSigned || 0) !== 0; });
   });
   groups.sort(function (a, b) { return b.sortTime - a.sortTime; });
   return groups;

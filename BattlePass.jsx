@@ -4,6 +4,7 @@ import { useBattlePass } from "./useBattlePass";
 import { bpNumber, bpRewardText, bpSeasonText, bpXpText } from "./battlepassConfig";
 import PassOfferSheet from "./PassOfferSheet";
 import CaseRevealSheet from "./CaseRevealSheet";
+import { CosmeticRewardArt } from "./ProfileShared";
 
 export default function BattlePass() {
     const navigate = useNavigate();
@@ -96,7 +97,7 @@ export default function BattlePass() {
             <>
                 <div className="bp-cell-rewards">
                     {rewards.map(function (reward, index) {
-                        return <span className="bp-reward" key={index}>{bpRewardText(reward)}</span>;
+                        return <span className="bp-reward" key={index}><CosmeticRewardArt reward={reward} />{bpRewardText(reward)}</span>;
                     })}
                 </div>
                 {cell.claimed && <span className="bp-cell-check">✓</span>}
@@ -150,6 +151,8 @@ export default function BattlePass() {
         setBusyCell(key);
         claimReward(levelState.level, track)
             .then(function (result) {
+                window.dispatchEvent(new Event("xw-profile-changed"));
+                window.dispatchEvent(new Event("xw-accounts-changed"));
                 const names = (result.rewards || []).map(bpRewardText).join(" · ");
                 showToast(names ? "Claimed: " + names : "Reward claimed");
                 if (result.caseTokenId) {

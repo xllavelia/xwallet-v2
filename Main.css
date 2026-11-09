@@ -1502,7 +1502,7 @@ border-radius: 15px;
 .pc-tier { color: #1c1c1c; font-size: 14px; font-weight: 900; }
 
 .pc-rate-box { text-align: right; }
-.pc-rate-val { font-size: 24px; font-weight: 900; display: block; line-height: 1; }
+.pc-rate-val { font-size: 24px; font-weight: 900; display: block; line-height: 1; color: black; }
 .pc-rate-label { font-size: 9px; color: #1c1c1c; opacity: 0;}
 .pc-center { margin-bottom: -10px; }
 .pc-code-display {

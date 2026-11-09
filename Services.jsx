@@ -18,14 +18,13 @@ var MODULES = [
   { name: "Savings Account", desc: "12% APY, deposit anytime", path: "/savings" },
   { name: "History", desc: "Trades, transfers & card activity", path: "/history" },
   { name: "Vouchers", desc: "Fee discounts, USDT & LAVX credits", path: "/bonus" },
-  { name: "Referrals", desc: "Invite friends, earn commission", path: "/referral" },
-  { name: "Battle Pass", desc: "Season rewards & XDrop cases", path: "/battlepass" },
+  { name: "Community", desc: "News, friends, leaders & referrals", path: "/community" },
+  { name: "Battle Pass", desc: "Season rewards, looks & cases", path: "/battlepass" },
   { name: "Prime", desc: "Membership tiers & LAVX", path: "/prime" },
   { name: "Promo Code", desc: "Redeem a code", path: "/promocode" },
-  { name: "Profile", desc: "Account, security, settings", path: "/setting" },
+  { name: "Profile", desc: "Your identity, appearance & settings", path: "/profile" },
   { name: "Accounts", desc: "Open accounts and manage your money", path: "/balancecard" },
   { name: "P2P Market", desc: "Trade directly with other users", path: "/p2p" },
-  // { name: "Open City", desc: "2D pixel city sandbox", path: "/opencity" }, 
 ];
 
 function SearchIcon() {

@@ -185,7 +185,7 @@ function BalanceCard() {
               <span className="xac-design-art"><AccountArt designId={design.id} className="xac-design-thumb" compact />{chosenDesign.id === design.id}</span>
               <span className="xac-design-name">{design.name}</span>
             </label>)}</div></fieldset>
-            <button className="xac-primary" type="submit" disabled={busy || leaving || !name.trim()}>{busy ? "Opening…" : "Open account"}<span>→</span></button>
+            <button className="xac-primary" type="submit" disabled={busy || leaving || !name.trim()}>{busy ? "Opening…" : "Open account"}<span></span></button>
           </form> : <div className="xac-surface xac-empty">You can open up to five additional accounts.</div>}
         </>}
 
@@ -241,7 +241,7 @@ function BalanceCard() {
           <form className="xac-form" onSubmit={submitAmount}>
             <label className="xac-field">{panel === "deposit" ? "Move from Wallet" : "Move to Wallet"}<input type="text" inputMode="decimal" name="amount" placeholder="0.00" value={amount} onChange={event => setAmount(event.target.value)} required disabled={busy} autoFocus /></label>
             <p className="xac-form-note">Available {accountUsd(panel === "deposit" ? wallet.balance : selected.balance)}</p>
-            <button className="xac-primary" type="submit" disabled={busy || leaving || !amount}>{busy ? "Moving…" : "Move money"}<span>→</span></button>
+            <button className="xac-primary" type="submit" disabled={busy || leaving || !amount}>{busy ? "Moving…" : "Move money"}<span></span></button>
             <button className="xac-secondary" type="button" disabled={busy} onClick={() => show("detail")}>Cancel</button>
           </form>
         </>}

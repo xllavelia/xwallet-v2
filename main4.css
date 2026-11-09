@@ -1177,6 +1177,10 @@ font-family: 'Unbounded', sans-serif;
 .xac-card-face { position: absolute; inset: 0; -webkit-backface-visibility: hidden; backface-visibility: hidden; transform: translateZ(1px); }
 .xac-card-face.xac-card-back { transform: rotateY(180deg) translateZ(1px); }
 .xac-art { display: block; width: 100%; height: auto; filter: drop-shadow(0 12px 14px rgba(0, 0, 0, .12)); }
+/* На мобильных пересчёт drop-shadow и дрейфа фона каждый кадр стоил части fps: на время полёта отключаем. */
+.xac-page:not(.is-idle) .xac-art { filter: none; }
+.xac-page:not(.is-idle) .xac-page-bg::before, .xac-page:not(.is-idle) .xac-page-bg::after { animation-play-state: paused; }
+.xac-page:not(.is-idle) .xac-hero-card, .xac-page:not(.is-idle) .xac-card-turn { will-change: transform; }
 .xac-body { position: relative; min-width: 0; }
 
 .xac-surface {
@@ -1257,7 +1261,7 @@ button.xac-row:not(:disabled):active { transform: scale(.985); }
   width: 100%; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 12px;
   padding: 14px 17px; background: #1c1c1c; border: 0; border-radius: 16px; font-size: 11px !important; font-weight: 500 !important;
 }
-.xac-primary { color: var(--xlavelia); justify-content: space-between; }
+.xac-primary { color: #b3b4b8;; justify-content: space-between; }
 .xac-primary > span { font-size: 18px; }
 .xac-secondary { margin-top: 9px; color: #b3b4b8; }
 .xac-form .xac-secondary { margin-top: -8px; }
@@ -1928,14 +1932,14 @@ color: #00d4aa;
 .hxr-avatar {
   position: relative; flex: 0 0 44px; height: 44px;
   display: grid; place-items: center;
-  border: 0; border-radius: 50%; background: var(--xlavelia);
-  color: #35302a; font-size: 20px; font-weight: 600; cursor: pointer;
+  border: 0; border-radius: 50%; background: transparent;
+font-size: 20px; font-weight: 600; cursor: pointer;
 }
 .hxr-avatar-mark {
   position: absolute; right: -2px; bottom: -2px; width: 16px; height: 18px;
   display: grid; place-items: center;
   border: 2px solid var(--hxr-bg); border-radius: 5px 5px 7px 7px;
-  background: #319bdf; color: #fff; font-size: 10px; line-height: 1;
+  background: var(--xlavelia); color: black; font-size: 10px; line-height: 1;
 }
 .hxr-search {
   min-width: 0; flex: 1; height: 44px; padding: 0 14px;
