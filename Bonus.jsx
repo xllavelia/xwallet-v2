@@ -41,6 +41,18 @@ function isTimedVoucher(voucher) {
   );
 }
 
+// Ваучеры на кастомный дизайн карты: бесплатно или скидка на покупку.
+function isCustomVoucher(voucher) {
+  return Boolean(voucher && /^custom_/.test(voucher.voucherType || ""));
+}
+
+function customVoucherLabel(voucher) {
+  if (voucher.voucherType === "custom_free") return "FREE";
+  if (voucher.voucherType === "custom_20") return "−20%";
+  if (voucher.voucherType === "custom_50") return "−50%";
+  return "CARD";
+}
+
 function computeFeeTiming(voucher, nowTick) {
   if (
     !voucher ||
@@ -343,7 +355,8 @@ const Bonus = () => {
                 }
 
                 var isTimed = isTimedVoucher(voucher);
-                var isCredit = !isTimed;
+                var isCustom = isCustomVoucher(voucher);
+                var isCredit = !isTimed && !isCustom;
 
                 var timing = computeFeeTiming(
                   voucher,
@@ -406,7 +419,7 @@ const Bonus = () => {
                           </div>
                         )}
 
-                        {isCredit && (
+                        {(isCredit || isCustom) && (
                           <div className="tm-header">
                             <div className="tm-block border-left">
                               <span className="tm-label">
@@ -414,13 +427,15 @@ const Bonus = () => {
                               </span>
 
                               <span className="tm-value">
-                                {voucher.voucherType ===
-                                "lavx_credit"
-                                  ? "LAVX"
+                                {isCustom
+                                  ? "CARD"
                                   : voucher.voucherType ===
-                                      "ref_xp_credit"
-                                    ? "REF XP"
-                                    : "CREDIT"}
+                                      "lavx_credit"
+                                    ? "LAVX"
+                                    : voucher.voucherType ===
+                                        "ref_xp_credit"
+                                      ? "REF XP"
+                                      : "CREDIT"}
                               </span>
                             </div>
 
@@ -487,29 +502,38 @@ const Bonus = () => {
                                 <h2>XP BOOST</h2>
                               </>
                             )}
+
+                            {isCustom && (
+                              <>
+                                <h2>CARD</h2>
+                                <h2>CUSTOMIZATION</h2>
+                              </>
+                            )}
                           </div>
 
                           <div className="tm-amount">
                             <span className="digits">
-                              {isTimed
-                                ? "$" +
-                                  Number(
-                                    voucher.limitAmount || 0
-                                  ).toFixed(2)
-                                : voucher.voucherType ===
-                                  "usdt_credit"
+                              {isCustom
+                                ? customVoucherLabel(voucher)
+                                : isTimed
                                   ? "$" +
                                     Number(
-                                      voucher.creditAmount || 0
+                                      voucher.limitAmount || 0
                                     ).toFixed(2)
                                   : voucher.voucherType ===
-                                    "lavx_credit"
-                                    ? Number(
+                                      "usdt_credit"
+                                    ? "$" +
+                                      Number(
                                         voucher.creditAmount || 0
-                                      ) + "#"
-                                    : Number(
-                                        voucher.creditAmount || 0
-                                      ) + " XP"}
+                                      ).toFixed(2)
+                                    : voucher.voucherType ===
+                                        "lavx_credit"
+                                      ? Number(
+                                          voucher.creditAmount || 0
+                                        ) + "#"
+                                      : Number(
+                                          voucher.creditAmount || 0
+                                        ) + " XP"}
                             </span>
                           </div>
                         </div>
@@ -551,7 +575,7 @@ const Bonus = () => {
                           </div>
                         )}
 
-                        {isCredit && (
+                        {(isCredit || isCustom) && (
                           <div className="tm-stats-section">
                             <div className="tm-stats-row">
                               <div className="stat-box">
@@ -629,7 +653,8 @@ const Bonus = () => {
                 // isTimed must be calculated for every voucher
                 // before timing/panel logic is used.
                 var isTimed = isTimedVoucher(voucher);
-                var isCredit = !isTimed;
+                var isCustom = isCustomVoucher(voucher);
+                var isCredit = !isTimed && !isCustom;
 
                 var timing = isTimed
                   ? computeFeeTiming(voucher, nowTick)
@@ -756,7 +781,7 @@ const Bonus = () => {
                           </>
                         )}
 
-                        {isCredit && (
+                        {(isCredit || isCustom) && (
                           <div className="details-group">
                             <h3 className="group-title">
                               VOUCHER DETAILS
@@ -765,29 +790,33 @@ const Bonus = () => {
                             <div className="stats-list">
                               <div className="stats-item">
                                 <span className="s-label">
-                                  Credit amount
+                                  {isCustom
+                                    ? "Card discount"
+                                    : "Credit amount"}
                                 </span>
 
                                 <span className="s-dots"></span>
 
                                 <span className="s-value">
-                                  {voucher.voucherType ===
-                                  "usdt_credit"
-                                    ? "$" +
-                                      Number(
-                                        voucher.creditAmount ||
-                                          0
-                                      ).toFixed(2)
+                                  {isCustom
+                                    ? customVoucherLabel(voucher)
                                     : voucher.voucherType ===
-                                        "ref_xp_credit"
-                                      ? Number(
+                                        "usdt_credit"
+                                      ? "$" +
+                                        Number(
                                           voucher.creditAmount ||
                                             0
-                                        ) + " Referral XP"
-                                      : Number(
-                                          voucher.creditAmount ||
-                                            0
-                                        ) + " LAVX"}
+                                        ).toFixed(2)
+                                      : voucher.voucherType ===
+                                          "ref_xp_credit"
+                                        ? Number(
+                                            voucher.creditAmount ||
+                                              0
+                                          ) + " Referral XP"
+                                        : Number(
+                                            voucher.creditAmount ||
+                                              0
+                                          ) + " LAVX"}
                                 </span>
                               </div>
 
@@ -820,16 +849,20 @@ const Bonus = () => {
                               </span>
 
                               <span className="d-tag">
-                                {String(
-                                  voucher.voucherType || ""
-                                ).toUpperCase()}
+                                {isCustom
+                                  ? "CARD VOUCHER"
+                                  : String(
+                                      voucher.voucherType || ""
+                                    ).toUpperCase()}
                               </span>
                             </div>
 
                             <p className="doc-text">
-                              {isTimed
-                                ? "This voucher reduces trading commission. Applied automatically to all pairs while active."
-                                : "One-time credit voucher. Claiming it instantly adds the amount to your balance and removes this ticket."}
+                              {isCustom
+                                ? "One-time card voucher. Applied automatically when you buy or create a custom card design."
+                                : isTimed
+                                  ? "This voucher reduces trading commission. Applied automatically to all pairs while active."
+                                  : "One-time credit voucher. Claiming it instantly adds the amount to your balance and removes this ticket."}
                             </p>
                           </div>
                         </div>

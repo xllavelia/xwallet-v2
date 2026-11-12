@@ -2,38 +2,22 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { authFetch } from "./apiClient";
 import { changePassword, deleteAccount } from "./useAccount";
-import { prepareAvatar, usePlayerProfile } from "./usePlayerProfile";
-import { MenuRow, ProfileAvatar, ProfileHero, ProfileIcon, ProfileModal, QRSheet, StatusEmblem, themeStyle, usd } from "./ProfileShared";
+import { prepareAvatar, prepareBanner, usePlayerProfile } from "./usePlayerProfile";
+import { MenuRow, ProfileAvatar, ProfileHero, ProfileIcon, ProfileModal, QRSheet, usd } from "./ProfileShared";
 import { IconBack } from "./marketsShared";
 
-const KEY_BY_KIND = { theme: "themeId", emblem: "emblemId", pattern: "patternId" };
 const FRIEND_LABELS = { none: "Add friend", incoming: "Accept request", outgoing: "Request sent", friend: "Friends" };
-const DEFAULT_LOOK = { themeId: "theme-graphite", emblemId: "emblem-none", patternId: "pattern-orbit" };
-const VIEW_TITLES = { edit: "Edit profile", appearance: "Appearance", security: "Password & security", settings: "Settings" };
-const MODAL_TITLES = { photo: "Your new photo", delete: "Delete account", logout: "Log out?", friend: "Manage friendship", "remove-photo": "Remove photo?" };
+const VIEW_TITLES = { edit: "Edit profile", security: "Password & security", settings: "Settings" };
+const MODAL_TITLES = { photo: "Your new photo", banner: "Your new banner", delete: "Delete account", logout: "Log out?", friend: "Manage friendship", "remove-photo": "Remove photo?", "remove-banner": "Remove banner?" };
 
 function Toggle({ checked }) {
-  return (
-    <span
-      role="switch"
-      aria-checked={checked}
-      className={"pf-switch" + (checked ? " on" : "")}
-    />
-  );
+  return <span role="switch" aria-checked={checked} className={"pf-switch" + (checked ? " on" : "")} />;
 }
 
 function joinedLabel(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "—";
   return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-}
-
-// Откуда игрок получил косметику: цена, уровень Pass или источник.
-function sourceLabel(item) {
-  if (item.price) return item.price + " LAVX";
-  if (item.track === "pass") return "Premium Pass · Level " + item.level;
-  if (item.level) return "Free Pass · Level " + item.level;
-  return item.source || "";
 }
 
 export default function Profile() {
@@ -52,10 +36,8 @@ export default function Profile() {
   const [failure, setFailure] = useState("");
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
-  const [appearance, setAppearance] = useState(DEFAULT_LOOK);
-  const [tab, setTab] = useState("theme");
   const [photo, setPhoto] = useState("");
-  const [preview, setPreview] = useState(null);
+  const [bannerPhoto, setBannerPhoto] = useState("");
   const [passwords, setPasswords] = useState({ current: "", next: "", confirm: "" });
   const [deleteName, setDeleteName] = useState("");
   const [preferences, setPreferences] = useState(() => ({
@@ -64,6 +46,7 @@ export default function Profile() {
   }));
 
   const fileInput = useRef(null);
+  const bannerInput = useRef(null);
   const own = !target || target === data?.profile?.playerId;
 
   useEffect(() => {
@@ -133,17 +116,6 @@ export default function Profile() {
     setView("edit");
   };
 
-  const customize = () => {
-    setAppearance({
-      themeId: profile.themeId,
-      emblemId: profile.emblemId,
-      patternId: profile.patternId,
-    });
-    setFailure("");
-    setMessage("");
-    setView("appearance");
-  };
-
   const openModal = (value) => {
     setModal(value);
     setFailure("");
@@ -155,6 +127,7 @@ export default function Profile() {
     setModal(null);
     setFailure("");
     setPhoto("");
+    setBannerPhoto("");
   };
 
   const selectPhoto = (event) => {
@@ -164,6 +137,16 @@ export default function Profile() {
     run(async () => {
       setPhoto(await prepareAvatar(file));
       setModal("photo");
+    });
+  };
+
+  const selectBanner = (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    run(async () => {
+      setBannerPhoto(await prepareBanner(file));
+      setModal("banner");
     });
   };
 
@@ -187,23 +170,6 @@ export default function Profile() {
       await mutate("/profile/update", { username, bio: description, showBalance: profile.showBalance });
       setView("profile");
       setMessage("Profile updated");
-    });
-
-  const chooseCosmetic = (item) => {
-    if (item.owned) {
-      setAppearance((value) => ({ ...value, [KEY_BY_KIND[item.kind]]: item.id }));
-      return;
-    }
-    setPreview(item);
-    openModal("cosmetic");
-  };
-
-  const buy = () =>
-    run(async () => {
-      await mutate("/profile/purchase", { cosmeticId: preview.id });
-      setAppearance((value) => ({ ...value, [KEY_BY_KIND[preview.kind]]: preview.id }));
-      setModal(null);
-      setMessage("Unlocked. Save to wear your new look.");
     });
 
   const setPreference = (key) => {
@@ -281,9 +247,6 @@ export default function Profile() {
     );
   }
 
-  const catalog = data?.catalog || [];
-  const look = { ...profile, ...appearance };
-  const ownedCount = catalog.filter((item) => item.owned && !item.id.endsWith("-none")).length;
   const notice = (
     <>
       {failure && !modal ? (
@@ -309,94 +272,45 @@ export default function Profile() {
         onChange={selectPhoto}
         aria-label="Upload avatar"
       />
+      <input
+        ref={bannerInput}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="pf-hidden-input"
+        onChange={selectBanner}
+        aria-label="Upload banner"
+      />
 
       <header className="pf-topbar">
         <button type="button" className="pf-round" onClick={back} aria-label="Go back">
           <IconBack />
         </button>
         <span className="pf-topbar-title">{view === "profile" ? "Profile" : VIEW_TITLES[view]}</span>
-        {view === "profile" ? (
-          <button
-            type="button"
-            className="pf-round"
-            onClick={() => openModal("qr")}
-            aria-label="Player QR code"
-          >
-            <ProfileIcon name="qr" />
-          </button>
-        ) : (
-          <span className="pf-round pf-round-ghost" />
-        )}
+        <span className="pf-round pf-round-ghost" />
       </header>
 
       {view === "profile" ? (
         <>
-          <ProfileHero profile={profile}>
-            <div className="pf-hero-actions">
-              {own ? (
-                <>
-                  <button type="button"  onClick={() => {
-                      setFailure("");
-                      setMessage("");
-                      setView("settings");
-                    }}>
-                    <ProfileIcon name="settings" />
-                    <span>{busy ? "Preparing…" : "Setting"}</span>
-                  </button>
-                  <button type="button" onClick={edit}>
-                    <ProfileIcon name="edit" />
-                    <span>Edit</span>
-                  </button>
-                  <button type="button" onClick={customize}>
-                    <ProfileIcon name="palette" />
-                    <span>Looks</span>
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button type="button" disabled={busy} onClick={friendAction}>
-                    <ProfileIcon name={profile.friendState === "friend" ? "check" : "add"} />
-                    <span>{FRIEND_LABELS[profile.friendState] || "Add friend"}</span>
-                  </button>
-                  <button type="button" onClick={copyId}>
-                    <ProfileIcon name="copy" />
-                    <span>Copy ID</span>
-                  </button>
-                </>
-              )}
-            </div>
+          <ProfileHero
+            profile={profile}
+            actions={own ? (
+              <>
+                <button type="button" className="pf-hero-action" onClick={edit} aria-label="Edit photo and banner">
+                  <ProfileIcon name="edit" />
+                </button>
+                <button type="button" className="pf-hero-action" onClick={() => openModal("qr")} aria-label="Your player code">
+                  <ProfileIcon name="person-plus" />
+                </button>
+              </>
+            ) : null}
+          >
+            <button type="button" className="pf-hero-bio" onClick={own ? edit : undefined} disabled={!own}>
+              {profile.bio || (own ? "Add a description" : "No description yet")}
+            </button>
           </ProfileHero>
 
           <div className="pf-body">
             {notice}
-
-            <section className="pf-card pf-about">
-              <span className="pf-label">About</span>
-              <strong>{profile.bio || (own ? "A little about you" : "No description yet")}</strong>
-              {own && !profile.bio ? (
-                <button type="button" className="pf-text-link" onClick={edit}>
-                  Add a description
-                </button>
-              ) : null}
-            </section>
-
-            <section className="pf-card pf-facts">
-              <button type="button" className="pf-fact" onClick={copyId}>
-                <span>Player ID</span>
-                <strong>{profile.playerId}</strong>
-                <ProfileIcon name="copy" />
-              </button>
-              <div className="pf-fact">
-                <span>Joined</span>
-                <strong>{joinedLabel(profile.createdAt)}</strong>
-              </div>
-              {!own && profile.showBalance && profile.balance !== undefined ? (
-                <div className="pf-fact">
-                  <span>Main balance</span>
-                  <strong>{usd(profile.balance)}</strong>
-                </div>
-              ) : null}
-            </section>
 
             {own ? (
               <>
@@ -404,14 +318,14 @@ export default function Profile() {
                   <MenuRow
                     icon="edit"
                     title="Edit profile"
-                    subtitle="Name, photo and description"
+                    subtitle="Name, photo, banner and description"
                     onClick={edit}
                   />
                   <MenuRow
                     icon="palette"
-                    title="Appearance"
-                    subtitle="Colors, emblems and background"
-                    onClick={customize}
+                    title="Card designs"
+                    subtitle="Basic, Battle Pass, cases and custom cards"
+                    onClick={() => navigate("/balancecard?account=wallet")}
                   />
                   <MenuRow
                     icon="settings"
@@ -434,17 +348,30 @@ export default function Profile() {
                   </span>
                   <ProfileIcon name="chevron" className="pf-chevron" />
                 </button>
+                <p className="pf-joined">Joined {joinedLabel(profile.createdAt)}</p>
               </>
-            ) : profile.friendState === "incoming" ? (
-              <button
-                type="button"
-                className="pf-secondary"
-                disabled={busy}
-                onClick={() => friendship("decline")}
-              >
-                Decline request
-              </button>
-            ) : null}
+            ) : (
+              <>
+                <section className="pf-menu">
+                  <MenuRow icon="copy" title="Player ID" subtitle={"@" + profile.playerId} onClick={copyId} />
+                  {profile.showBalance && profile.balance !== undefined ? (
+                    <MenuRow icon="wallet" title="Main balance" subtitle={usd(profile.balance)} />
+                  ) : null}
+                  <MenuRow icon="people" title={FRIEND_LABELS[profile.friendState] || "Add friend"} onClick={friendAction} />
+                </section>
+                {profile.friendState === "incoming" ? (
+                  <button
+                    type="button"
+                    className="pf-secondary"
+                    disabled={busy}
+                    onClick={() => friendship("decline")}
+                  >
+                    Decline request
+                  </button>
+                ) : null}
+                <p className="pf-joined">Joined {joinedLabel(profile.createdAt)}</p>
+              </>
+            )}
           </div>
         </>
       ) : null}
@@ -452,6 +379,27 @@ export default function Profile() {
       {view === "edit" ? (
         <div className="pf-body pf-subpage">
           {notice}
+
+          <div className="pf-banner-edit">
+            {profile.bannerUrl?.startsWith("data:image/jpeg;base64,") ? (
+              <img src={profile.bannerUrl} alt="" />
+            ) : (
+              <span className="pf-banner-edit-empty">No banner</span>
+            )}
+            <button type="button" className="pf-banner-edit-btn" onClick={() => bannerInput.current.click()} disabled={busy}>
+              <ProfileIcon name="camera" />
+              Change banner
+            </button>
+          </div>
+          {profile.bannerUrl ? (
+            <button
+              type="button"
+              className="pf-text-link pf-text-link-center"
+              onClick={() => openModal("remove-banner")}
+            >
+              Remove banner
+            </button>
+          ) : null}
 
           <button
             type="button"
@@ -513,7 +461,7 @@ export default function Profile() {
               </div>
             </section>
             <p className="pf-helper">
-              Your name, photo and description are visible to other players. Your name also works when
+              Your name, photo, banner and description are visible to other players. Your name also works when
               signing in. The player ID never changes.
             </p>
             <button type="submit" className="pf-primary" disabled={busy}>
@@ -521,99 +469,6 @@ export default function Profile() {
             </button>
           </form>
         </div>
-      ) : null}
-
-      {view === "appearance" ? (
-        <>
-          <ProfileHero profile={look} compact>
-            <span className="pf-preview">Live preview</span>
-          </ProfileHero>
-          <div className="pf-body pf-subpage">
-            {notice}
-            <div className="pf-collection">
-              <span>
-                {ownedCount} / {catalog.length} collected
-              </span>
-              <strong>{Number(data.lavxBalance || 0).toLocaleString("en-US")} LAVX</strong>
-            </div>
-
-            <div className="pf-tabs" role="tablist" aria-label="Appearance category">
-              {[
-                ["theme", "Colors"],
-                ["emblem", "Emblems"],
-                ["pattern", "Background"],
-              ].map(([key, title]) => (
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={tab === key}
-                  key={key}
-                  className={tab === key ? "active" : ""}
-                  onClick={() => setTab(key)}
-                >
-                  {title}
-                </button>
-              ))}
-            </div>
-
-            <section className={"pf-grid" + (tab === "theme" ? " pf-swatches" : "")}>
-              {catalog
-                .filter((item) => item.kind === tab && (!item.adminOnly || profile.isAdmin))
-                .map((item) => {
-                  const selected = appearance[KEY_BY_KIND[item.kind]] === item.id;
-                  return (
-                    <button
-                      type="button"
-                      key={item.id}
-                      className={"pf-item" + (selected ? " selected" : "") + (item.owned ? "" : " locked")}
-                      aria-label={item.name + (item.owned ? " · owned" : " · locked")}
-                      aria-pressed={selected}
-                      onClick={() => chooseCosmetic(item)}
-                    >
-                      {item.kind === "theme" ? (
-                        <span className={"pf-color-sample " + item.id} style={themeStyle(item.id)}>
-                          <i />
-                        </span>
-                      ) : item.id.endsWith("-none") ? (
-                        <ProfileIcon name="close" className="pf-no-emblem" />
-                      ) : (
-                        <StatusEmblem id={item.id} />
-                      )}
-                      <strong>{item.name}</strong>
-                      <small>{item.owned ? item.rarity : sourceLabel(item)}</small>
-                      {!item.owned ? <ProfileIcon name="lock" className="pf-item-lock" /> : null}
-                      {selected ? <ProfileIcon name="check" className="pf-item-check" /> : null}
-                    </button>
-                  );
-                })}
-            </section>
-
-            <p className="pf-helper">
-              Unlock looks in Battle Pass or buy exclusives for LAVX. Team-only looks stay hidden for
-              regular players.
-            </p>
-
-            <div className="pf-appearance-actions">
-              <button type="button" className="pf-ghost" onClick={() => setAppearance(DEFAULT_LOOK)}>
-                Reset
-              </button>
-              <button
-                type="button"
-                className="pf-primary"
-                disabled={busy}
-                onClick={() =>
-                  run(async () => {
-                    await mutate("/profile/equip", appearance);
-                    setView("profile");
-                    setMessage("Your look is saved");
-                  })
-                }
-              >
-                {busy ? "Saving…" : "Save appearance"}
-              </button>
-            </div>
-          </div>
-        </>
       ) : null}
 
       {view === "settings" ? (
@@ -624,14 +479,8 @@ export default function Profile() {
             <MenuRow
               icon="edit"
               title="Account"
-              subtitle="Name, photo and description"
+              subtitle="Name, photo, banner and description"
               onClick={edit}
-            />
-            <MenuRow
-              icon="palette"
-              title="Appearance"
-              subtitle="Colors, emblems and background"
-              onClick={customize}
             />
             <MenuRow
               icon="shield"
@@ -758,50 +607,7 @@ export default function Profile() {
       {modal === "qr" ? <QRSheet profile={profile} onClose={closeModal} /> : null}
 
       {modal && modal !== "qr" ? (
-        <ProfileModal
-          title={modal === "cosmetic" ? preview.name : MODAL_TITLES[modal]}
-          onClose={closeModal}
-        >
-          {modal === "cosmetic" ? (
-            <>
-              <ProfileHero profile={{ ...look, [KEY_BY_KIND[preview.kind]]: preview.id }} compact />
-              <div className="pf-item-meta">
-                <span>{preview.rarity}</span>
-                <strong>{sourceLabel(preview)}</strong>
-              </div>
-              <p className="pf-helper">
-                {preview.price
-                  ? "A permanent exclusive. This purchase unlocks the look for your account."
-                  : "Claim this reward in Battle Pass to add it to your collection."}
-              </p>
-              {preview.price ? (
-                <button
-                  type="button"
-                  className="pf-primary"
-                  disabled={busy || Number(data.lavxBalance) < preview.price}
-                  onClick={buy}
-                >
-                  {Number(data.lavxBalance) < preview.price
-                    ? "Not enough LAVX"
-                    : busy
-                      ? "Unlocking…"
-                      : "Unlock for " + preview.price + " LAVX"}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="pf-primary"
-                  onClick={() => {
-                    setModal(null);
-                    navigate("/battlepass");
-                  }}
-                >
-                  Open Battle Pass
-                </button>
-              )}
-            </>
-          ) : null}
-
+        <ProfileModal title={MODAL_TITLES[modal]} onClose={closeModal}>
           {modal === "photo" ? (
             <>
               <img className="pf-photo-preview" src={photo} alt="New avatar preview" />
@@ -822,6 +628,30 @@ export default function Profile() {
                 }
               >
                 {busy ? "Uploading…" : "Use this photo"}
+              </button>
+            </>
+          ) : null}
+
+          {modal === "banner" ? (
+            <>
+              <img className="pf-banner-preview" src={bannerPhoto} alt="New banner preview" />
+              <p className="pf-helper">
+                Wide 3:1 banner · 960 × 320 · under 200 KB. Shown at the top of your profile.
+              </p>
+              <button
+                type="button"
+                className="pf-primary"
+                disabled={busy}
+                onClick={() =>
+                  run(async () => {
+                    await mutate("/profile/banner", { image: bannerPhoto });
+                    setModal(null);
+                    setBannerPhoto("");
+                    setMessage("Banner updated");
+                  })
+                }
+              >
+                {busy ? "Uploading…" : "Use this banner"}
               </button>
             </>
           ) : null}
@@ -898,6 +728,26 @@ export default function Profile() {
                 }
               >
                 Remove photo
+              </button>
+            </>
+          ) : null}
+
+          {modal === "remove-banner" ? (
+            <>
+              <p className="pf-helper">Your profile will use the plain dark banner.</p>
+              <button
+                type="button"
+                className="pf-danger"
+                disabled={busy}
+                onClick={() =>
+                  run(async () => {
+                    await mutate("/profile/banner", undefined, "DELETE");
+                    setModal(null);
+                    setMessage("Banner removed");
+                  })
+                }
+              >
+                Remove banner
               </button>
             </>
           ) : null}

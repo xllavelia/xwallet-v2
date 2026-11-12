@@ -43,3 +43,22 @@ export async function prepareAvatar(file) {
     throw new Error("Could not compress this image. Please choose another photo.");
   } finally { image.close(); }
 }
+
+export async function prepareBanner(file) {
+  if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("Choose a JPG, PNG or WebP image. Animated images and SVG are not supported.");
+  if (file.size > 8 * 1024 * 1024) throw new Error("Choose an image under 8 MB.");
+  const image = await createImageBitmap(file);
+  try {
+    if (image.width < 480 || image.height < 160) throw new Error("Choose a wider photo — at least 480 × 160.");
+    const canvas = document.createElement("canvas"); canvas.width = 960; canvas.height = 320;
+    const context = canvas.getContext("2d"); context.fillStyle = "#101010"; context.fillRect(0, 0, 960, 320);
+    const scale = Math.max(960 / image.width, 320 / image.height);
+    const width = image.width * scale, height = image.height * scale;
+    context.drawImage(image, (960 - width) / 2, (320 - height) / 2, width, height);
+    for (const quality of [0.85, 0.75, 0.65, 0.55]) {
+      const result = canvas.toDataURL("image/jpeg", quality);
+      if ((result.length - 23) * 3 / 4 <= 200 * 1024) return result;
+    }
+    throw new Error("Could not compress this image. Please choose another photo.");
+  } finally { image.close(); }
+}

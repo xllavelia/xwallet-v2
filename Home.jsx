@@ -11,7 +11,7 @@ import { HomeAccountPager } from "./HomeAccounts";
 import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
 
 // git add .
-// git commit -m "remaster profile"
+// git commit -m "remake card design and profile"
 // git push -u origin main 
 
 

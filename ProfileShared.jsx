@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { bpCosmeticId } from "./battlepassConfig";
+import { AccountArt, CARD_COLORS } from "./bankCardVisuals";
 
 // Единая линейная семья иконок: 24-сетка, одинаковый штрих и скругления.
 export function ProfileIcon({ name, className = "", ...props }) {
@@ -56,6 +56,13 @@ export function ProfileIcon({ name, className = "", ...props }) {
         <circle cx="9" cy="8" r="3.2" />
         <path d="M3.5 20c0-3.2 2.5-5.5 5.5-5.5s5.5 2.3 5.5 5.5" />
         <path d="M16 5.2a3.2 3.2 0 0 1 0 6.1M17.5 14.8c2 .6 3.5 2.3 3.5 4.7" />
+      </>
+    ),
+    "person-plus": (
+      <>
+        <circle cx="9.5" cy="8" r="3.4" />
+        <path d="M3.5 20c0-3.3 2.7-5.7 6-5.7 1.6 0 3 .6 4 1.6" />
+        <path d="M18 13.5v6M15 16.5h6" />
       </>
     ),
     add: (
@@ -163,149 +170,41 @@ export function ProfileIcon({ name, className = "", ...props }) {
   );
 }
 
-export const THEMES = {
-  "theme-graphite": ["Graphite", "#292929", "#111111", "#ffffff"],
-  "theme-tide": ["Tide", "#087f91", "#064b60", "#ffffff"],
-  "theme-sage": ["Sage", "#788b43", "#394d2b", "#ffffff"],
-  "theme-coral": ["Coral", "#e45d55", "#8e303e", "#ffffff"],
-  "theme-glacier": ["Glacier", "#75cbdc", "#367d9a", "#ffffff"],
-  "theme-dusk": ["Dusk", "#895b83", "#472d55", "#ffffff"],
-  "theme-aurora": ["Aurora", "#24a879", "#125642", "#ffffff"],
-  "theme-ember": ["Ember", "#d8793f", "#753b29", "#ffffff"],
-  "theme-prism": ["Prism", "#db65b5", "#7655d9", "#ffffff"],
-  "theme-silver": ["Silver", "#c0c7d1", "#727d91", "#ffffff"],
-  "theme-gold": ["Gold", "#e9bd62", "#956329", "#21180d"],
-  "theme-platinum": ["Platinum", "#e4e5e8", "#939aa8", "#20232b"],
-  "theme-supernova": ["Supernova", "#f05b8b", "#9a326d", "#ffffff"],
-  "theme-cocoa": ["Cocoa", "#3a2a1f", "#5c4230", "#efe0c9"],
-  "theme-olive": ["Olive", "#44482a", "#66703c", "#e6e3c6"],
-  "theme-silk": ["Silk", "#e5b49e", "#a56d75", "#ffffff"],
-  "theme-nebula": ["Nebula", "#9271e9", "#49368d", "#ffffff"],
-  "theme-iridescent": ["Iridescent", "#9acbba", "#497e83", "#ffffff"],
-  "theme-xlavelia": ["Xlavelia", "#013e37", "#0d5a49", "#ffefb3"],
-  "theme-wave": ["Wave", "#16324b", "#245479", "#f3eddd"],
+// Старые темы из истории кейсов показываем как ближайшие дизайны карточек.
+const LEGACY_CARD = {
+  "theme-sage": "card-sage",
+  "theme-dusk": "card-dusk",
+  "theme-silver": "card-silver",
+  "theme-gold": "card-gold",
+  "theme-platinum": "card-platinum",
+  "theme-supernova": "card-supernova",
+  "theme-nebula": "card-nebula",
+  "theme-coral": "card-coral",
+  "theme-glacier": "card-glacier",
+  "theme-aurora": "card-aurora",
+  "theme-ember": "card-ember",
+  "theme-prism": "card-prism",
+  "theme-cocoa": "card-cocoa",
+  "theme-olive": "card-olive",
+  "theme-silk": "card-silk",
 };
 
-
-export function themeStyle(id) {
-  const [, a, b, ink] = THEMES[id] || THEMES["theme-graphite"];
-  return {
-    "--pf-a": a,
-    "--pf-b": b,
-    "--pf-ink": ink,
-  };
-}
-
-// Геометрические эмблемы одной толщины штриха — читаются и на 14, и на 48 px.
-export function StatusEmblem({ id = "emblem-spark", className = "" }) {
-  const key = String(id || "").replace(/^(emblem|pattern)-/, "");
-  if (key === "none") return null;
-  const art = {
-    spark: <path d="M24 4 29 19 44 24 29 29 24 44 19 29 4 24 19 19Z" fill="currentColor" stroke="none" />,
-    comet: (
-      <>
-        <g fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
-          <path d="M13 35 32 16" />
-          <path d="M7 41l8-8" />
-          <path d="M27 9l-4 4" />
-        </g>
-        <circle cx="33" cy="15" r="7" fill="currentColor" stroke="none" />
-      </>
-    ),
-    crystal: (
-      <>
-        <path d="M24 4 38 14 43 28 24 44 5 28 10 14Z" />
-        <path d="M24 4v40M10 14l14 14 14-14M5 28h38" opacity=".5" strokeWidth="1.4" />
-      </>
-    ),
-    fox: (
-      <>
-        <path d="M7 9 20 17l4 2 4-2L41 9l-3 23-14 10L10 32Z" />
-        <path d="m13 22 11 9 11-9" strokeWidth="2" />
-        <path d="M22 29 24 33 26 29" fill="currentColor" stroke="none" />
-      </>
-    ),
-    crown: (
-      <>
-        <path d="M6 14 16 21 24 7 32 21 42 14 38 38H10Z" fill="currentColor" stroke="none" />
-        <path d="M11 33h26" stroke="#101010" strokeOpacity=".35" strokeWidth="2" />
-      </>
-    ),
-    dragon: (
-      <>
-        <path d="M9 40c10-6 4-16 14-16 7 0 8-8 14-13-2 8 4 9 3 15-1 8-10 13-18 10-5-2-8 1-13 4Z" />
-        <circle cx="33" cy="16" r="2" fill="currentColor" stroke="none" />
-      </>
-    ),
-    eclipse: (
-      <>
-        <circle cx="24" cy="24" r="16" />
-        <path d="M30 10a16 16 0 0 0 0 28" fill="currentColor" stroke="none" />
-        <path d="M6 6l4 4m28 28 4 4" strokeWidth="2" />
-      </>
-    ),
-    sigil: (
-      <>
-        <path d="M24 5 40 14v20L24 43 8 34V14Z" />
-        <path d="M24 12v24M14 18l20 12M34 18 14 30" strokeWidth="2" />
-      </>
-    ),
-    orbit: (
-      <>
-        <ellipse cx="24" cy="24" rx="19" ry="8" transform="rotate(-32 24 24)" strokeWidth="2.4" />
-        <circle cx="24" cy="24" r="8" fill="currentColor" stroke="none" />
-        <circle cx="10" cy="33" r="3" fill="currentColor" stroke="none" />
-      </>
-    ),
-    leaf: (
-      <>
-        <path d="M39 9C16 9 7 18 12 33c14 8 26-3 27-24Z" />
-        <path d="M10 40 34 16M18 28l-1-8M25 21h8" strokeWidth="1.8" />
-      </>
-    ),
-    waves: <path d="M4 16c6-8 12 8 18 0s12 8 18 0M4 26c6-8 12 8 18 0s12 8 18 0M4 36c6-8 12 8 18 0s12 8 18 0" strokeWidth="3" />,
-    constellation: (
-      <>
-        <path d="m8 34 7-20 19-7 7 21-16 14Z" strokeWidth="1.6" opacity=".5" />
-        <g fill="currentColor" stroke="none">
-          <circle cx="8" cy="34" r="3.2" />
-          <circle cx="15" cy="14" r="3.2" />
-          <circle cx="34" cy="7" r="3.2" />
-          <circle cx="41" cy="28" r="3.2" />
-          <circle cx="25" cy="42" r="3.2" />
-        </g>
-      </>
-    ),
-    monogram: <path d="M8 9h8l8 12 8-12h8L28 24l12 15h-8L24 28l-8 11H8l12-15Z" fill="currentColor" stroke="none" />,
-  };
-  return (
-    <svg
-      className={"pf-emblem " + className}
-      viewBox="0 0 48 48"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {art[key] || art.spark}
-    </svg>
-  );
-}
-
 export function CosmeticRewardArt({ reward }) {
-  const id = bpCosmeticId(reward);
-  if (!id) return null;
+  if (!reward) return null;
+  if (reward.kind === "custom" || reward.voucher) {
+    return (
+      <span className="pf-reward-art pf-reward-art--voucher">
+        <ProfileIcon name="palette" />
+        <em>{reward.value ? "-" + reward.value + "%" : "FREE"}</em>
+      </span>
+    );
+  }
+  let id = reward.cosmetic || "";
+  if (!id || !id.startsWith("card-")) id = LEGACY_CARD[id] || "";
+  if (!id || !CARD_COLORS[id]) return null;
   return (
-    <span className="pf-reward-art" style={themeStyle(id)}>
-      {id.startsWith("theme-") ? (
-        <span className={"pf-color-sample " + id}>
-          <i />
-        </span>
-      ) : (
-        <StatusEmblem id={id} />
-      )}
+    <span className="pf-reward-art">
+      <AccountArt designKey={id} compact />
     </span>
   );
 }
@@ -314,37 +213,29 @@ export function ProfileAvatar({ profile, className = "" }) {
   const photo = profile?.avatarUrl;
   const initial = (profile?.username || "X").slice(0, 1).toUpperCase();
   return (
-    <span className={"pf-avatar " + className} style={themeStyle(profile?.themeId)}>
+    <span className={"pf-avatar " + className}>
       {photo?.startsWith("data:image/jpeg;base64,") ? <img src={photo} alt="" /> : <span>{initial}</span>}
     </span>
   );
 }
 
-export function ProfileHero({ profile, children, compact = false }) {
-  const themeId = profile?.themeId || "theme-graphite";
-  const patternId = profile?.patternId || "pattern-orbit";
+// Баннер 3:1, поверх — ручки редактирования; ниже аватар, ник и @id.
+export function ProfileHero({ profile, actions, children, compact = false }) {
+  const banner = profile?.bannerUrl || "";
   return (
-    <section className={"pf-hero " + (compact ? "pf-hero-compact " : "") + themeId} style={themeStyle(themeId)}>
-      <span className="pf-hero-glow" aria-hidden="true" />
-      {patternId !== "pattern-none" ? (
-        <div className="pf-pattern" aria-hidden="true">
-          {Array.from({ length: 16 }, (_, index) => (
-            <StatusEmblem key={index} id={patternId} />
-          ))}
-        </div>
-      ) : null}
-      <div className="pf-hero-content">
-        <ProfileAvatar profile={profile} />
-        <h1>
-          {profile?.username || "Player " + (profile?.playerId || "")}
-          <StatusEmblem id={profile?.emblemId || "emblem-none"} />
-        </h1>
-        <p>
-          Player {profile?.playerId}
-          {profile?.isAdmin ? " · Team" : ""}
-        </p>
-        {children}
+    <section className={"pf-hero" + (compact ? " pf-hero--compact" : "")}>
+      <div className="pf-hero-banner">
+        {banner.startsWith("data:image/jpeg;base64,") ? <img src={banner} alt="" /> : <span className="pf-hero-banner-empty" aria-hidden="true" />}
+        {actions ? <div className="pf-hero-actions">{actions}</div> : null}
       </div>
+      <div className="pf-hero-identity">
+        <ProfileAvatar profile={profile} />
+        <div className="pf-hero-names">
+          <h1>{profile?.username || "Player " + (profile?.playerId || "")}{profile?.isAdmin ? <em>team</em> : null}</h1>
+          <p>@{profile?.playerId}</p>
+        </div>
+      </div>
+      {children}
     </section>
   );
 }

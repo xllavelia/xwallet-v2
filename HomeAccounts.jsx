@@ -69,11 +69,11 @@ function HomeAccountPager({ accounts, mode, initialAccount, onSelectAccount, bal
                     <span className="hxr-feature-value">{account.value}</span><span className="hxr-feature-label">{account.label} · {account.sub}</span>
                   </span>
                 </div>
-                <span className="hxr-feature-card" aria-hidden="true"><AccountArt designId={account.designId} /></span>
+                <span className="hxr-feature-card" aria-hidden="true"><AccountArt designId={account.designId} designKey={account.designKey} custom={account.custom} opened={account.opened || account.openedAt} /></span>
               </button>
             ) : (
               <button type="button" key={account.key} data-account-key={account.key} className={"hxr-account" + (hiddenCardKey === account.key ? " is-card-away" : "")} onClick={event => openAccount(account, event.currentTarget)}>
-                <span className="hxr-account-top"><AccountArt designId={account.designId} compact />{account.badge && <span className="hxr-account-badge">{account.badge}</span>}</span>
+                <span className="hxr-account-top"><AccountArt designId={account.designId} designKey={account.designKey} custom={account.custom} opened={account.opened || account.openedAt} compact />{account.badge && <span className="hxr-account-badge">{account.badge}</span>}</span>
                 <span className="hxr-account-value">{account.value}</span><span className="hxr-account-label">{account.label}</span>
               </button>
             ))}

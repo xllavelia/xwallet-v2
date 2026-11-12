@@ -2033,7 +2033,7 @@ font-size: 20px; font-weight: 600; cursor: pointer;
   position: relative; display: block; width: 109%; max-width: 390px; margin-top: 20px; padding: 0;
   border: 0; background: none; color: inherit; cursor: pointer;
   transform-origin: 50% 50%;
-  transform: translateY(160px) rotate(-90deg);
+  transform: translateY(160px) rotate(90deg);
 }
 .hxr-feature-card .hxr-account-art { width: 100%; height: auto; filter: drop-shadow(0 12px 14px rgba(0,0,0,.09)); transition: filter .9s ease; }
 .hxr-feature-card .hxr-account-art--savings { width: 160px; margin: 0 auto; }

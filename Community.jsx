@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 
 import { useNavigate } from "react-router-dom";
 import { authFetch } from "./apiClient";
 import { usePlayerProfile } from "./usePlayerProfile";
-import { ProfileIcon, ProfileAvatar, StatusEmblem, ProfileModal, QRSheet, ScannerSheet, themeStyle, usd } from "./ProfileShared";
+import { ProfileIcon, ProfileAvatar, ProfileModal, QRSheet, ScannerSheet, usd } from "./ProfileShared";
 import { IconBack } from "./marketsShared";
 
 // Ссылка на Telegram-канал Xavero: вставьте адрес сюда, блок обновится сам.
@@ -188,11 +188,8 @@ function LeadersSheet({ leaders, loading, error, onRetry, onOpen, onClose }) {
               <button type="button" className="cm-place-row" onClick={() => onOpen(profile.playerId)}>
                 <span className={"cm-place" + (index < 3 ? " top" : "")}>{index + 1}</span>
                 <ProfileAvatar profile={profile} className="cm-row-avatar" />
-                <span className="cm-row-name" style={themeStyle(profile.themeId)}>
-                  <strong>
-                    {profileName(profile)}
-                    <StatusEmblem id={profile.emblemId || "emblem-none"} />
-                  </strong>
+                <span className="cm-row-name">
+                  <strong>{profileName(profile)}</strong>
                   <small>Player {profile.playerId}</small>
                 </span>
                 <span className="cm-place-balance">
@@ -376,11 +373,8 @@ function PlayerRow({ profile, busy, disabled, onOpen, onAction }) {
     <li className="cm-row">
       <button type="button" className="cm-row-main" onClick={() => onOpen(profile.playerId)}>
         <ProfileAvatar profile={profile} className="cm-row-avatar" />
-        <span className="cm-row-name" style={themeStyle(profile.themeId)}>
-          <strong>
-            {profileName(profile)}
-            <StatusEmblem id={profile.emblemId || "emblem-none"} />
-          </strong>
+        <span className="cm-row-name">
+          <strong>{profileName(profile)}</strong>
           <small>Player {profile.playerId}</small>
         </span>
       </button>

@@ -2084,3 +2084,952 @@ margin: 0 26px 26px 26px;
     #354d32 100%
   );
 }
+
+/* ── Профиль: герой с баннером и карточные дизайны ── */
+
+.pf-hero {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 16px 4px;
+  background: none;
+  color: #f4f2ec;
+}
+
+.pf-hero-banner {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 1;
+  max-height: 190px;
+  border-radius: 22px;
+  background: #101010;
+  box-shadow: inset 0 0 0 1px rgba(244, 242, 236, 0.06);
+}
+
+.pf-hero-banner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pf-hero-banner-empty {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(120% 150% at 14% 0%, rgba(240, 223, 173, 0.07), transparent 60%),
+    #101010;
+}
+
+.pf-hero-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  width: auto;
+  margin: 0;
+}
+
+.pf-hero-actions .pf-hero-action {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.5);
+  color: #f4f2ec;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.pf-hero-actions .pf-hero-action:active {
+  transform: scale(0.94);
+  background: rgba(10, 10, 10, 0.7);
+}
+
+.pf-hero-actions .pf-hero-action svg {
+  width: 17px;
+  height: 17px;
+}
+
+.pf-hero-identity {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin-top: -32px;
+  padding: 0 6px;
+}
+
+.pf-hero-identity .pf-avatar {
+  width: 90px;
+  height: 90px;
+  font-size: 30px;
+  background: #1a1a18;
+  color: var(--xlavelia);
+  outline: none;
+  box-shadow: 0 0 0 4px #101010;
+}
+
+.pf-hero-names {
+  min-width: 0;
+  padding-bottom: 6px;
+}
+
+.pf-hero-names h1 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  margin: 0 0 5px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.25;
+  color: #f4f2ec;
+  overflow-wrap: anywhere;
+}
+
+.pf-hero-names h1 em {
+  flex-shrink: 0;
+  padding: 3px 7px;
+  border-radius: 8px;
+  background: rgba(240, 223, 173, 0.12);
+  color: var(--xlavelia);
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pf-hero-names p {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(244, 242, 236, 0.44);
+}
+
+.pf-hero-bio {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 16px;
+  background: #171715;
+  color: #ded9cc;
+  font-size: 11px;
+  line-height: 1.75;
+  text-align: left;
+  overflow-wrap: anywhere;
+  transition: background 0.2s ease;
+}
+
+.pf-hero-bio:not(:disabled):active {
+  background: #1e1e1b;
+}
+
+.pf-hero-bio:disabled {
+  opacity: 1;
+  color: rgba(244, 242, 236, 0.46);
+  cursor: default;
+}
+
+.pf-joined {
+  margin: 22px 0 6px;
+  text-align: center;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(244, 242, 236, 0.3);
+}
+
+/* Баннер в редакторе профиля */
+
+.pf-banner-edit {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 1;
+  margin-bottom: 8px;
+  border-radius: 18px;
+  background: #171715;
+  box-shadow: inset 0 0 0 1px rgba(244, 242, 236, 0.06);
+}
+
+.pf-banner-edit img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pf-banner-edit-empty {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 242, 236, 0.32);
+}
+
+.pf-banner-edit-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.62);
+  color: #f4f2ec;
+  font-size: 9px;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.pf-banner-edit-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pf-banner-preview {
+  display: block;
+  width: 100%;
+  margin-bottom: 14px;
+  border-radius: 14px;
+}
+
+/* Награды: ваучеры на кастомизацию и мини-карточки */
+
+.pf-reward-art {
+  display: inline-flex;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.pf-reward-art .hxr-account-art {
+  width: 34px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.pf-reward-art--voucher {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: rgba(240, 223, 173, 0.12);
+  color: var(--xlavelia);
+}
+
+.pf-reward-art--voucher svg {
+  width: 17px;
+  height: 17px;
+}
+
+.pf-reward-art--voucher em {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  padding: 1px 4px;
+  border-radius: 5px;
+  background: var(--xlavelia);
+  color: #101010;
+  font-size: 6px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ── Счёт: тёмный фон и спокойный герой ── */
+
+.xac-page-bg {
+  background: #101010;
+}
+
+.xac-page-bg::before,
+.xac-page-bg::after {
+  content: none;
+}
+
+.xac-art {
+  filter: none;
+}
+
+.xac-card-face {
+  border-radius: 7.5% / 12%;
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.38);
+}
+
+.xac-hero-card {
+  margin-bottom: 26px;
+}
+
+.xac-card-designs-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+
+/* Строка выбора дизайна */
+
+.xac-design-pick {
+  display: block;
+  margin-top: 14px;
+  padding: 14px;
+}
+
+button.xac-design-pick {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  color: inherit;
+  text-align: left;
+  transition: transform 0.15s ease;
+}
+
+button.xac-design-pick .xac-design-row-art {
+  flex: 0 0 66px;
+  width: 66px;
+}
+
+button.xac-design-pick .xac-design-row-copy {
+  flex: 1;
+}
+
+button.xac-design-pick .xac-chevron {
+  margin-left: auto;
+}
+
+button.xac-design-pick:not(:disabled):active {
+  transform: scale(0.985);
+}
+
+.xac-design-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 11px;
+  padding: 10px;
+  border: 0;
+  border-radius: 15px;
+  background: #262624;
+  color: inherit;
+  text-align: left;
+  transition: transform 0.15s ease;
+}
+
+button.xac-design-row:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.xac-design-row-art {
+  display: block;
+  flex: 0 0 66px;
+  width: 66px;
+}
+
+.xac-design-row-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.xac-design-row-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.xac-design-row-copy b {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.xac-design-row-copy small {
+  font-size: 10px;
+  line-height: 1.5;
+  color: #a0a1a5;
+}
+
+/* ── Оверлеи выбора дизайна ── */
+
+.xac-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba(6, 6, 6, 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: xac-sheet-backdrop 0.24s ease;
+}
+
+@keyframes xac-sheet-backdrop {
+  from {
+    opacity: 0;
+  }
+}
+
+.xac-overlay-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 88%;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-radius: 26px 26px 0 0;
+  background: #151514;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(244, 242, 236, 0.05);
+  animation: xac-sheet-rise 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes xac-sheet-rise {
+  from {
+    transform: translateY(28px);
+    opacity: 0.4;
+  }
+}
+
+.xac-overlay-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px 10px;
+}
+
+.xac-overlay-head strong {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.xac-overlay-close {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #242422;
+  color: #cfcac0;
+}
+
+.xac-overlay-close svg {
+  width: 15px;
+  height: 15px;
+}
+
+.xac-overlay-note {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #a0a1a5;
+}
+
+.xac-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 0 18px;
+  padding: 4px;
+  border-radius: 14px;
+  background: #1d1d1b;
+}
+
+.xac-tabs button {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 3px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #9c9a92;
+  font-size: 9.5px;
+  letter-spacing: -0.01em;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.xac-tabs button.is-active {
+  background: #2b2b28;
+  color: #f4f2ec;
+}
+
+.xac-overlay-scroll {
+  overflow-y: auto;
+  padding: 16px 18px 22px;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+}
+
+.xac-overlay-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.xac-design-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 12px;
+}
+
+.xac-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.xac-tile-art {
+  position: relative;
+  display: block;
+  border-radius: 13px;
+  transition: transform 0.18s ease;
+}
+
+.xac-tile-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 13px;
+}
+
+.xac-tile:active .xac-tile-art {
+  transform: scale(0.97);
+}
+
+
+.xac-tile.is-locked .xac-tile-art svg {
+  opacity: 0.42;
+}
+
+.xac-tile-lock {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.72);
+  color: #ded9cc;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.xac-tile-lock svg {
+  width: 12px;
+  height: 12px;
+}
+
+.xac-tile-check {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--xlavelia);
+  color: #101010;
+}
+
+.xac-tile-check svg {
+  width: 12px;
+  height: 12px;
+}
+
+.xac-tile-name {
+  padding: 5px 2px 0;
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.xac-tile-meta {
+  padding: 0 2px;
+  font-size: 9px;
+  line-height: 1.4;
+  color: #a0a1a5;
+}
+
+.xac-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #1d1d1b;
+}
+
+.xac-hint strong {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.xac-hint span {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #a0a1a5;
+}
+
+.xac-hint .xac-secondary {
+  margin-top: 2px;
+}
+
+/* Плитка кастомной карты */
+
+.xac-custom-tile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #1e1e1b, #171715);
+  color: inherit;
+  text-align: left;
+}
+
+.xac-custom-art {
+  position: relative;
+  display: block;
+  flex: 0 0 76px;
+  width: 76px;
+}
+
+.xac-custom-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
+}
+
+.xac-custom-badge {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--xlavelia);
+  color: #101010;
+  box-shadow: 0 0 0 3px #171715;
+}
+
+.xac-custom-badge svg {
+  width: 13px;
+  height: 13px;
+}
+
+.xac-custom-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.xac-custom-copy strong {
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.xac-custom-copy small {
+  font-size: 9.5px;
+  line-height: 1.6;
+  color: #a0a1a5;
+}
+
+.xac-custom-price {
+  flex-shrink: 0;
+  padding: 6px 9px;
+  border-radius: 9px;
+  background: rgba(240, 223, 173, 0.12);
+  color: var(--xlavelia);
+  font-size: 9px;
+}
+
+/* Мастер кастомной карты */
+
+.xac-custom-panel {
+  max-height: 92%;
+}
+
+.xac-custom-preview {
+  margin-bottom: 16px;
+}
+
+.xac-custom-preview svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.xac-segment {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding: 4px;
+  border-radius: 14px;
+  background: #1d1d1b;
+}
+
+.xac-segment button {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 3px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #9c9a92;
+  font-size: 10px;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.xac-segment button.is-active {
+  background: #2b2b28;
+  color: #f4f2ec;
+}
+
+.xac-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-bottom: 12px;
+  padding: 15px;
+  border-radius: 18px;
+  background: #1b1b19;
+}
+
+.xac-panel-title {
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 242, 236, 0.45);
+}
+
+.xac-panel-note {
+  font-size: 9.5px;
+  line-height: 1.6;
+  color: #a0a1a5;
+}
+
+.xac-panel-note--center {
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.xac-swatches {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.xac-swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  transition: transform 0.15s ease;
+}
+
+.xac-swatch.is-active {
+  box-shadow: 0 0 0 2px #101010, 0 0 0 3.5px var(--xlavelia);
+}
+
+.xac-swatch:active {
+  transform: scale(0.92);
+}
+
+.xac-hex {
+  width: 100%;
+  padding: 11px 13px;
+  border: 0;
+  border-radius: 12px;
+  background: #262624;
+  color: #f4f2ec;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.xac-hex::placeholder {
+  color: rgba(244, 242, 236, 0.28);
+  letter-spacing: 0.03em;
+}
+
+.xac-hex:focus-visible {
+  outline: 2px solid var(--xlavelia);
+  outline-offset: 2px;
+}
+
+.xac-image-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.xac-image-pick {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px;
+  border-radius: 12px;
+  background: #262624;
+  color: #cfcac0;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.xac-image-pick:active {
+  background: #2e2e2b;
+}
+
+.xac-image-pick svg {
+  width: 15px;
+  height: 15px;
+}
+
+.xac-image-pick input {
+  display: none;
+}
+
+.xac-image-clear {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: #262624;
+  color: #c998a0;
+}
+
+.xac-image-clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+.xac-vouchers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.xac-voucher {
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 11px;
+  background: #262624;
+  color: #b3b4b8;
+  font-size: 10px;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.xac-voucher.is-active {
+  background: var(--xlavelia);
+  color: #101010;
+  font-weight: 500;
+}
+
+.xac-main-design {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 53px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.xac-main-design > svg:not(.xac-thumb) {
+  position: absolute;
+  right: -4px;
+  bottom: 1px;
+  width: 20px;
+  height: 20px;
+  padding: 4px;
+  border-radius: 50%;
+  background: #101010;
+  color: #f0f1f3;
+}
+
+.xac-main-open {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  gap: 11px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.xac-ink-presets {
+  margin: 0;
+}
+
+.xac-ink-presets button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.xac-ink-presets button > span {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.xac-ink-presets button > small {
+  font-size: 9px;
+}
+
+.hxr-feature-card {
+  width: 118%;
+  max-width: 420px;
+}

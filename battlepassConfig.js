@@ -5,12 +5,13 @@ export function bpNumber(value) {
     return String(Math.round(Number(value) * 100) / 100);
 }
 
+// Старые «статусы» из сейвов показываем как карточные дизайны.
 const LEGACY_LOOKS = {
-    lucky: ["theme-sage", "Sage theme"], valter: ["theme-dusk", "Dusk theme"],
-    chicken_burger: ["emblem-fox", "Fox emblem"], silver: ["theme-silver", "Silver theme"],
-    gold: ["theme-gold", "Champagne theme"], platinum: ["theme-platinum", "Platinum theme"],
-    legend: ["emblem-dragon", "Dragon emblem"], owner: ["theme-supernova", "Supernova theme"],
-    first: ["emblem-crown", "Crown emblem"]
+    lucky: ["card-sage", "Sage card"], valter: ["card-dusk", "Dusk card"],
+    chicken_burger: ["card-ember", "Ember card"], silver: ["card-silver", "Silver card"],
+    gold: ["card-gold", "Champagne card"], platinum: ["card-platinum", "Platinum card"],
+    legend: ["card-nebula", "Nebula card"], owner: ["card-supernova", "Supernova card"],
+    first: ["card-xlavelia", "Xlavelia card"]
 };
 
 export function bpCosmeticId(reward) {
@@ -27,8 +28,9 @@ export function bpRewardText(reward) {
         case "ref": return bpNumber(reward.value) + " REF XP";
         case "fee": return "$" + bpNumber(reward.value) + " fee · " + reward.days + "d";
         case "case": return bpCaseTitle(reward.case) + " case";
-        case "status": return (reward.label || reward.status) + " look";
-        case "cosmetic": return (reward.label || reward.cosmetic) + " " + (reward.cosmeticKind || "look");
+        case "status": return (reward.label || reward.status) + " card";
+        case "custom": return reward.label || "Card customization voucher";
+        case "cosmetic": return reward.label || (reward.cosmeticKind === "card" ? "Card design" : reward.cosmetic);
         default: return reward.kind || "";
     }
 }

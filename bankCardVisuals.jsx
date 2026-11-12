@@ -1,44 +1,186 @@
 import { useId } from "react";
 
-// Пять градиентных дизайнов без узоров: только мягкие цветовые переходы и свет.
-const ACCOUNT_DESIGNS = [
-  { id: 0, name: "Send", ink: "#ffffff", accent: "#ff6f8e", gradient: { from: "#ffb35c", to: "#e8447f", glow: "#ffd36e", deep: "#b32b66" } },
-  { id: 1, name: "Lime", ink: "#17321c", accent: "#8fdc4f", gradient: { from: "#e7fa8a", to: "#2fa463", glow: "#f4ffb8", deep: "#1c7a4c" } },
-  { id: 2, name: "Space", ink: "#ffffff", accent: "#8b6cf0", gradient: { from: "#8e6df0", to: "#241a52", glow: "#b79bff", deep: "#140f33" } },
-  { id: 3, name: "Sky", ink: "#ffffff", accent: "#41a8f5", gradient: { from: "#9fe4ff", to: "#2f6fe4", glow: "#c9f2ff", deep: "#1c4bb8" } },
-  { id: 4, name: "Dark", ink: "#ffffff", accent: "#5b5f68", gradient: { from: "#4a4f59", to: "#101114", glow: "#6d7480", deep: "#050506" } },
+// Базовые дизайны доступны всем: 0 — кошелёк, 1–3 — основные счета.
+// Слева цветная часть с надписью, справа графитовая полоса с меткой xavero.
+const BASE_DESIGNS = [
+  { id: 0, key: "card-base-cloud", name: "Cloud", left: "#e7e5de", ink: "#101010" },
+  { id: 1, key: "card-base-sand", name: "Sand", left: "#dcc9a8", ink: "#101010" },
+  { id: 2, key: "card-base-mint", name: "Mint", left: "#c3d9cb", ink: "#101010" },
+  { id: 3, key: "card-base-graphite", name: "Graphite", left: "#2c2d32", ink: "#f4f2ec" },
 ];
 
-const SCRIPT_FONT = '"Permanent Marker", "Yellowtail", cursive';
+// Цвета разблокируемых дизайнов: зеркало каталога profile_sql.
+const CARD_COLORS = {
+  "card-sage": ["#788b43", "#ffffff"],
+  "card-coral": ["#e45d55", "#ffffff"],
+  "card-glacier": ["#75cbdc", "#101010"],
+  "card-dusk": ["#895b83", "#ffffff"],
+  "card-aurora": ["#24a879", "#ffffff"],
+  "card-ember": ["#d8793f", "#ffffff"],
+  "card-prism": ["#db65b5", "#ffffff"],
+  "card-silver": ["#c0c7d1", "#101010"],
+  "card-gold": ["#e9bd62", "#21180d"],
+  "card-platinum": ["#e4e5e8", "#20232b"],
+  "card-supernova": ["#f05b8b", "#ffffff"],
+  "card-cocoa": ["#5c4230", "#efe0c9"],
+  "card-olive": ["#66703c", "#e6e3c6"],
+  "card-silk": ["#e5b49e", "#ffffff"],
+  "card-nebula": ["#9271e9", "#ffffff"],
+  "card-iridescent": ["#9acbba", "#101010"],
+  "card-xlavelia": ["#013e37", "#ffefb3"],
+  "card-wave": ["#16324b", "#f3eddd"],
+};
 
-function AccountArt({ designId = 0, className = "hxr-account-art", compact = false }) {
+const GRAPHITE = "#1b1b21";
+const BRAND_FONT = '"Unbounded", "Inter", sans-serif';
+
+function baseDesign(designId) {
+  return BASE_DESIGNS[Number(designId)] || BASE_DESIGNS[0];
+}
+
+// Итоговая палитра карточки: базовый дизайн, разблокированный или кастомный.
+function cardPalette(design) {
+  const base = baseDesign(design?.designId);
+  const custom = design?.custom || null;
+  const key = design?.designKey || "";
+  const mapped = CARD_COLORS[key];
+  const linked = Boolean(custom?.link);
+  const left = custom?.left?.color || (mapped ? mapped[0] : base.left);
+  const ink = custom?.ink || (mapped ? mapped[1] : base.ink);
+  const right = linked ? left : custom?.right?.color || GRAPHITE;
+  // Текст правой части подчиняется выбранному цвету текста, без выбора остаётся светлым.
+  const rightInk = custom?.ink || "#f4f2ec";
+  return {
+    left,
+    ink,
+    inkOpacity: custom?.inkOpacity ?? 1,
+    rightInk: linked ? ink : rightInk,
+    right,
+    linked,
+    leftImage: custom?.left?.image || "",
+    rightImage: linked ? "" : custom?.right?.image || "",
+  };
+}
+
+function openedLabel(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return pad(date.getUTCDate()) + "." + pad(date.getUTCMonth() + 1) + "." + date.getUTCFullYear();
+}
+
+function AccountArt({
+  designId = 0,
+  designKey = "",
+  custom = null,
+  opened = "",
+  owner = "xlavelia",
+  className = "hxr-account-art",
+  compact = false,
+}) {
   const uid = "xac" + useId().replace(/[^a-zA-Z0-9]/g, "");
-  const design = ACCOUNT_DESIGNS[designId] || ACCOUNT_DESIGNS[0];
-  const g = design.gradient;
+  const palette = cardPalette({ designId, designKey, custom });
+  const markColor = palette.rightInk;
+  const meta = [openedLabel(opened) ? "Opened " + openedLabel(opened) : "", owner ? "Owned by " + owner : ""]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <svg className={className} viewBox="0 0 320 200" fill="none" aria-hidden="true" data-design={design.id}>
+    <svg
+      className={className}
+      viewBox="0 0 320 200"
+      fill="none"
+      aria-hidden="true"
+      data-design={designKey || designId}
+      data-linked={palette.linked ? "1" : undefined}
+    >
       <defs>
-        <linearGradient id={uid} x1="0" y1="0" x2="320" y2="200" gradientUnits="userSpaceOnUse"><stop stopColor={g.from} /><stop offset="1" stopColor={g.to} /></linearGradient>
-        <radialGradient id={uid + "a"} cx="15%" cy="0%" r="95%"><stop stopColor={g.glow} stopOpacity=".9" /><stop offset="1" stopColor={g.glow} stopOpacity="0" /></radialGradient>
-        <radialGradient id={uid + "b"} cx="92%" cy="105%" r="105%"><stop stopColor={g.deep} stopOpacity=".85" /><stop offset="1" stopColor={g.deep} stopOpacity="0" /></radialGradient>
-        <linearGradient id={uid + "s"} x1="0" y1="0" x2="0" y2="200" gradientUnits="userSpaceOnUse"><stop stopColor="#fff" stopOpacity=".2" /><stop offset=".5" stopColor="#fff" stopOpacity="0" /></linearGradient>
-        <clipPath id={uid + "c"}><rect x="1" y="1" width="318" height="198" rx="23" /></clipPath>
+        <clipPath id={uid + "c"}>
+          <rect width="320" height="200" rx="24" />
+        </clipPath>
+        <clipPath id={uid + "l"}>
+          <rect x="0" y="0" width="214" height="200" />
+        </clipPath>
+        <clipPath id={uid + "r"}>
+          <rect x="214" y="0" width="106" height="200" />
+        </clipPath>
       </defs>
       <g clipPath={"url(#" + uid + "c)"}>
-        <rect width="320" height="200" fill={"url(#" + uid + ")"} />
-        <rect width="320" height="200" fill={"url(#" + uid + "a)"} />
-        <rect width="320" height="200" fill={"url(#" + uid + "b)"} />
-        <rect width="320" height="200" fill={"url(#" + uid + "s)"} />
-        <g fill="#fff" opacity=".2">
-          <text x="160" y={compact ? 110 : 104} textAnchor="middle" fontFamily={SCRIPT_FONT} fontSize={compact ? 66 : 56}>xavero</text>
-          {!compact && (
-            <text x="160" y="130" textAnchor="middle" fontFamily="Unbounded" fontWeight="800" fontSize="9.5" letterSpacing="2.4">Hello xlavelia!</text>
-          )}
-        </g>
+        {palette.linked ? (
+          palette.leftImage ? (
+            <image href={palette.leftImage} width="320" height="200" preserveAspectRatio="none" />
+          ) : <rect width="320" height="200" fill={palette.left} />
+        ) : (
+          <>
+            {palette.leftImage ? <image href={palette.leftImage} width="214" height="200" preserveAspectRatio="none" clipPath={"url(#" + uid + "l)"} /> : <rect width="214" height="200" fill={palette.left} />}
+            {palette.rightImage ? (
+              // Боковое фото — это баннер, повёрнутый на 90°: режем как баннер, затем кладём в правую полосу.
+              <g clipPath={"url(#" + uid + "r)"}>
+                <g transform="rotate(90 267 100)">
+                  <image href={palette.rightImage} x="167" y="47" width="200" height="106" preserveAspectRatio="xMidYMid slice" />
+                </g>
+              </g>
+            ) : <rect x="214" width="106" height="200" fill={palette.right} />}
+            <path d="M214 1v198" stroke="#ffffff" strokeOpacity=".1" />
+          </>
+        )}
+
+        <text
+          x={palette.linked ? 160 : 107}
+          y={compact ? 110 : 114}
+          textAnchor="middle"
+          fontFamily={BRAND_FONT}
+          fontWeight="800"
+          fontSize={compact ? 34 : 46}
+          letterSpacing="-1.4"
+          fill={palette.ink}
+          fillOpacity={palette.inkOpacity}
+        >
+          Hello!
+        </text>
+
+        {!compact && meta ? (
+          <text
+            x={palette.linked ? 160 : 21}
+            y="179"
+            textAnchor={palette.linked ? "middle" : "start"}
+            fontFamily={BRAND_FONT}
+            fontWeight="500"
+            fontSize="7.1"
+            letterSpacing=".18"
+            fill={palette.ink}
+            fillOpacity={.62 * palette.inkOpacity}
+          >
+            {meta}
+          </text>
+        ) : null}
+
+        {palette.linked ? null : (
+          <g transform={compact ? "translate(267 96) scale(.9) translate(-267 -100)" : undefined} opacity={palette.inkOpacity}>
+            <g transform="translate(258 68)" fill="none" stroke={markColor} strokeWidth="2.2" strokeLinecap="round">
+              <circle cx="0" cy="14" r="1.7" fill={markColor} stroke="none" />
+              <path d="M5.5 8.5a8 8 0 0 1 0 11" />
+              <path d="M10.5 3.5a15 15 0 0 1 0 21" />
+              <path d="M15.5-1.5a22 22 0 0 1 0 31" />
+            </g>
+            <text
+              x="267"
+              y={compact ? 128 : 132}
+              textAnchor="middle"
+              fontFamily={BRAND_FONT}
+              fontWeight="700"
+              fontSize={compact ? 8.6 : 10}
+              letterSpacing="2.6"
+              fill={markColor}
+            >
+              xavero
+            </text>
+          </g>
+        )}
       </g>
     </svg>
   );
 }
 
-export { AccountArt, ACCOUNT_DESIGNS };
+export { AccountArt, BASE_DESIGNS, CARD_COLORS, cardPalette, openedLabel, GRAPHITE };

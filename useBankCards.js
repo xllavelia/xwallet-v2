@@ -38,10 +38,15 @@ async function mutateAccount(path, body) {
   return result;
 }
 
-function openAccount(name, designId) { return mutateAccount("/bankcards/open", { name, designId }); }
+function openAccount(name, choice) { return mutateAccount("/bankcards/open", { name, ...choice }); }
+function setCardDesign(cardId, choice) { return mutateAccount("/bankcards/design", { cardId, ...choice }); }
+// Кошелёк не хранится как карточка, поэтому кастом для него оплачивается отдельно.
+function chargeCustomDesign(voucherId) {
+  return authFetch("/bankcards/custom/charge", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ voucherId: Number(voucherId) || 0 }) });
+}
 function topUpCard(cardId, amount) { return mutateAccount("/bankcards/topup", { cardId, amount }); }
 function selectActiveCard(cardId) { return mutateAccount("/bankcards/select-active", { cardId }); }
 function withdrawFromCard(cardId, amount) { return mutateAccount("/bankcards/withdraw", { cardId, amount }); }
 function closeAccount(cardId) { return mutateAccount("/bankcards/close", { cardId }); }
 
-export { useBankCards, openAccount, topUpCard, selectActiveCard, withdrawFromCard, closeAccount, ACCOUNTS_CHANGED };
+export { useBankCards, openAccount, setCardDesign, chargeCustomDesign, topUpCard, selectActiveCard, withdrawFromCard, closeAccount, ACCOUNTS_CHANGED };

@@ -20,7 +20,7 @@ function accountPose(element) {
   const feature = element.closest(".hxr-feature");
   return {
     rect: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
-    angle: feature ? -90 : 0,
+    angle: feature ? 90 : 0,
     clip: feature ? Math.max(0, rect.bottom - feature.getBoundingClientRect().bottom) : 0,
     edge: feature?.getBoundingClientRect().bottom,
   };
@@ -79,12 +79,14 @@ async function animateAccountView(home, key, change) {
   home.inert = true;
   const options = { duration: 1120, easing: "cubic-bezier(.32,.04,.18,1)", fill: "both" };
   const pose = ({ rect, angle }) => `translate3d(${rect.left + rect.width / 2 - 160}px,${rect.top + rect.height / 2 - 100}px,0) rotate(${angle}deg) scale(${(angle ? rect.height : rect.width) / 320})`;
+  // Карта в single-виде повёрнута на 90°, поэтому переворот идёт в обратную сторону — иначе край уезжает не туда.
+  const spin = from.angle ? 1 : -1;
   const animations = [
     card.animate([{ transform: pose(from) }, { transform: pose(to) }], options),
     turn.animate([
       { transform: "perspective(1100px) rotateY(0deg) rotateX(0deg)" },
-      { transform: "perspective(1100px) rotateY(-95deg) rotateX(8deg)", offset: .5 },
-      { transform: "perspective(1100px) rotateY(-180deg) rotateX(0deg)" },
+      { transform: `perspective(1100px) rotateY(${95 * spin}deg) rotateX(8deg)`, offset: .5 },
+      { transform: `perspective(1100px) rotateY(${180 * spin}deg) rotateX(0deg)` },
     ], options),
   ];
   const edge = from.edge ?? to.edge;
@@ -137,7 +139,8 @@ function useAccountMotion(pageRef, cardRef, origin) {
   function applySourceMask(card, clip, scale, angle) {
     if (!clip) { card.style.maskImage = "none"; return; }
     const bottom = clip / scale;
-    card.style.maskImage = `linear-gradient(to ${angle ? "right" : "top"}, rgba(0,0,0,calc(1 - var(--xac-mask-strength))) ${bottom}px, rgba(0,0,0,calc(1 - .64 * var(--xac-mask-strength))) ${bottom + 31.68 / scale}px, #000 ${bottom + 72 / scale}px)`;
+    // При повороте +90° нижнему краю экрана соответствует правый край карты.
+    card.style.maskImage = `linear-gradient(to ${angle ? "left" : "top"}, rgba(0,0,0,calc(1 - var(--xac-mask-strength))) ${bottom}px, rgba(0,0,0,calc(1 - .64 * var(--xac-mask-strength))) ${bottom + 31.68 / scale}px, #000 ${bottom + 72 / scale}px)`;
   }
 
   useLayoutEffect(() => {
@@ -162,9 +165,11 @@ function useAccountMotion(pageRef, cardRef, origin) {
       ], { duration }),
     ];
     if (!reduced) {
+      // Направление переворота совпадает с источником: у карты из single-вида оно инвертировано.
+      const spin = angle ? -1 : 1;
       tasks.push(animate(card.querySelector(".xac-card-turn"), [
         { transform: "perspective(1100px) rotateY(0deg) rotateX(0deg)" },
-        { transform: "perspective(1100px) rotateY(180deg) rotateX(0deg)" },
+        { transform: `perspective(1100px) rotateY(${180 * spin}deg) rotateX(0deg)` },
       ], { duration }));
       applySourceMask(card, origin?.clip, scale, angle);
       // Маска пересчитывается каждый кадр, поэтому держим её активной только первые кадры.
@@ -173,22 +178,27 @@ function useAccountMotion(pageRef, cardRef, origin) {
         { "--xac-mask-strength": "0" },
       ], { duration: reduced ? 1 : 340 }));
     }
-    page.querySelectorAll(".xac-body > :not(.xac-detail), .xac-detail > *").forEach((element, index) => {
-      tasks.push(animate(element, [
-        { transform: reduced ? "none" : "translate3d(90vw,0,0)", opacity: 0 },
-        { transform: "translate3d(0,0,0)", opacity: 1 },
-      ], { duration: reduced ? 1 : 1160, delay: reduced ? 0 : Math.min(index * 24, 120) }));
-    });
+    // Доп-инфо проявляется одним слоем, когда карта уже почти долетела: без послойного полёта и просадок.
+    const body = page.querySelector(".xac-body");
+    if (body) {
+      tasks.push(animate(body, reduced ? [{ opacity: 0 }, { opacity: 1 }] : [
+        { transform: "translate3d(0, 14px, 0)", opacity: 0 },
+        { transform: "translate3d(0, 0, 0)", opacity: 1 },
+      ], { duration: reduced ? 1 : 560, delay: reduced ? 0 : 300 }));
+    }
     Promise.all(tasks).then(() => {
       if (!mounted.current || closing.current) return;
       animations.current.forEach(animation => animation.cancel());
       animations.current = [];
+      // Маска нужна только на время полёта: на idle она держит лишний слой и даёт рывки.
+      card.style.maskImage = "none";
       setPhase("idle");
     });
     return () => {
       mounted.current = false;
       animations.current.forEach(animation => animation.cancel());
       animations.current = [];
+      if (card) card.style.maskImage = "none";
     };
   }, []);
 
@@ -202,7 +212,8 @@ function useAccountMotion(pageRef, cardRef, origin) {
     const card = cardRef.current;
     const turn = card.querySelector(".xac-card-turn");
     const background = page.querySelector(".xac-page-bg");
-    const elements = [...page.querySelectorAll(".xac-body > :not(.xac-detail), .xac-detail > *")];
+    const body = page.querySelector(".xac-body");
+    const elements = body ? [body] : [];
     // Закрытие может прервать поворот: начинаем с текущего кадра, а не с нулевого.
     const snapshots = [card, turn, background, ...elements].map(element => ({
       element, transform: getComputedStyle(element).transform, opacity: getComputedStyle(element).opacity,
@@ -237,7 +248,7 @@ function useAccountMotion(pageRef, cardRef, origin) {
         { transform: "perspective(1100px) rotateY(0deg) rotateX(0deg)" },
       ], { duration });
       if (element === background) return animate(element, [{ opacity }, { opacity: 0 }], { duration });
-      return animate(element, [{ transform, opacity }, { transform: reduced ? "none" : "translate3d(90vw,0,0)", opacity: 0 }], { duration: reduced ? 1 : 1160 });
+      return animate(element, [{ transform, opacity }, { transform: reduced ? "none" : "translate3d(0, 10px, 0)", opacity: 0 }], { duration: reduced ? 1 : 300 });
     });
     if (!reduced) {
       applySourceMask(card, clip, scale, angle);
