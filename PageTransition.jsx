@@ -110,7 +110,7 @@ function PageTransition({ children }) {
 
       // Таймер совпадает с CLOSE_DURATION_MS в CSS — никакого рывка в конце
       closeTimeoutRef.current = setTimeout(() => {
-        navigate(-1);
+        navigate("/");
       }, CLOSE_DURATION_MS);
 
       return;

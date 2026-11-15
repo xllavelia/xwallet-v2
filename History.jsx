@@ -15,7 +15,7 @@ const ENDPOINTS = {
 };
 const SOURCES = {
   all: "All", trades: "Trades", transfers: "Transfers", crypto: "Crypto",
-  markets: "Markets", tickets: "Tickets", games: "Games", daily: "Daily",
+  markets: "Markets", nft: "NFT", tickets: "Tickets", games: "Games", daily: "Daily",
   battlepass: "Battle Pass", cases: "Cases", quests: "Quests",
   savings: "Savings", cashback: "Cashback", promo: "Vouchers", mining: "Mining"
 };
@@ -118,7 +118,7 @@ function tradeEvent(item, livePrice) {
 
 function buildActivity(data) {
   if (!data) return [];
-  const events = [...((data.activity && data.activity.events) || [])];
+  const events = [...((data.activity && data.activity.events) || [])].map(event => event.source === "nft" ? { ...event, nav: { path: "/nft" } } : event);
   (data.closed || []).forEach(item => {
     events.push(tradeEvent(item));
     if (num(item.cashbackAwarded) > 0) events.push({
@@ -374,6 +374,7 @@ function History() {
   const coverage = [...(data?.activity?.coverage || []), "Trade, transfer, crypto and savings history follows the records returned by their services."];
   const packs = (data?.activity?.ticketPacks || []).map(ticketPackEvent);
   let visible = category === "all" ? events : events.filter(event => event.source === category);
+  if (category === "nft") visible = events.filter(event => event.source === "nft" || event.asset === "NFT");
   if (category === "trades") visible = [...liveEvents, ...visible];
   if (view === "summary" && (category === "games" || category === "tickets")) visible = category === "tickets" ? packs : gameSummaries(data || {}).filter(event => event.source === "games");
   if (category === "mining") visible = (data?.mining?.servers || []).map(server => ({

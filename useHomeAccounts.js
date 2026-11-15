@@ -6,10 +6,32 @@ import { useCommodityPortfolio } from "./useCommodities";
 import { useCard } from "./useCard";
 import { useSavings } from "./useSavings";
 import { useBankCards } from "./useBankCards";
+import { currentPlayerId } from "./apiClient";
 import { BASE_DESIGNS } from "./bankCardVisuals";
 
 const MAIN_DESIGN_IDS = { wallet: 0, crypto: 3, markets: 2, savings: 1 };
-const WALLET_SINCE_KEY = "xw-wallet-since";
+
+// Дизайны хранятся на устройстве, поэтому ключи привязаны к аккаунту: чужой профиль не наследует скины.
+function scopedKey(name) {
+  const pid = currentPlayerId();
+  return { key: "xw-" + (pid || "guest") + "-" + name, legacy: "xw-" + name, owned: !!pid };
+}
+
+// Старые общие ключи переносим один раз, чтобы уже оплаченные дизайны не пропали.
+function readScoped(name) {
+  const scope = scopedKey(name);
+  const raw = localStorage.getItem(scope.key);
+  if (raw !== null || !scope.owned) return raw;
+  const legacy = localStorage.getItem(scope.legacy);
+  if (legacy === null) return null;
+  localStorage.setItem(scope.key, legacy);
+  localStorage.removeItem(scope.legacy);
+  return legacy;
+}
+
+function writeScoped(name, value) {
+  localStorage.setItem(scopedKey(name).key, value);
+}
 
 // В localStorage может лежать номер базового дизайна или полный выбор: ключ каталога и кастом.
 function normalizeMainDesign(value) {
@@ -29,7 +51,7 @@ function normalizeMainDesign(value) {
 }
 
 function getMainDesign(key) {
-  const raw = localStorage.getItem("xw-" + key + "-design");
+  const raw = readScoped(key + "-design");
   if (raw === null) return { designId: MAIN_DESIGN_IDS[key], designKey: "", custom: null };
   try {
     return normalizeMainDesign(JSON.parse(raw));
@@ -43,16 +65,16 @@ function getMainDesigns() {
 }
 
 function setMainDesign(key, design) {
-  localStorage.setItem("xw-" + key + "-design", JSON.stringify(normalizeMainDesign(design)));
+  writeScoped(key + "-design", JSON.stringify(normalizeMainDesign(design)));
   window.dispatchEvent(new Event("xw-accounts-changed"));
 }
 
 // Дата открытия кошелька фиксируется локально при первом показе.
 function walletSince() {
-  let value = localStorage.getItem(WALLET_SINCE_KEY);
+  let value = readScoped("wallet-since");
   if (!value) {
     value = new Date().toISOString();
-    localStorage.setItem(WALLET_SINCE_KEY, value);
+    writeScoped("wallet-since", value);
   }
   return value;
 }

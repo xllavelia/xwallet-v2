@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AccountArt, CARD_COLORS } from "./bankCardVisuals";
+import { NftArt } from "./nftShared";
 
 // Единая линейная семья иконок: 24-сетка, одинаковый штрих и скругления.
 export function ProfileIcon({ name, className = "", ...props }) {
@@ -220,8 +221,10 @@ export function ProfileAvatar({ profile, className = "" }) {
 }
 
 // Баннер 3:1, поверх — ручки редактирования; ниже аватар, ник и @id.
-export function ProfileHero({ profile, actions, children, compact = false }) {
+// Витрина NFT стоит справа от аватара под ником: карточки не перекрывают друг друга и не заходят на баннер.
+export function ProfileHero({ profile, actions, children, compact = false, onShowcase }) {
   const banner = profile?.bannerUrl || "";
+  const showcase = (profile?.nftShowcase || []).slice(0, 3);
   return (
     <section className={"pf-hero" + (compact ? " pf-hero--compact" : "")}>
       <div className="pf-hero-banner">
@@ -230,9 +233,36 @@ export function ProfileHero({ profile, actions, children, compact = false }) {
       </div>
       <div className="pf-hero-identity">
         <ProfileAvatar profile={profile} />
-        <div className="pf-hero-names">
-          <h1>{profile?.username || "Player " + (profile?.playerId || "")}{profile?.isAdmin ? <em>team</em> : null}</h1>
-          <p>@{profile?.playerId}</p>
+        <div className="pf-hero-side">
+          <div className="pf-hero-names">
+            <h1>{profile?.username || "Player " + (profile?.playerId || "")}{profile?.isAdmin ? <em>ceo</em> : null}</h1>
+            <p>@{profile?.playerId}</p>
+          </div>
+          {showcase.length || onShowcase ? (
+            <div className={"pf-hero-nfts" + (showcase.length ? "" : " is-empty")}>
+              {showcase.map((item) => onShowcase ? (
+                <button
+                  key={item.itemId}
+                  type="button"
+                  className={"pf-hero-nft nft-r-" + (item.rarity || "common")}
+                  onClick={onShowcase}
+                  aria-label={item.name || "NFT"}
+                  title={(item.name || "NFT") + " · change showcase"}
+                >
+                  <NftArt art={item.art} rarity={item.rarity} />
+                </button>
+              ) : (
+                <span key={item.itemId} className={"pf-hero-nft nft-r-" + (item.rarity || "common")} title={item.name || "NFT"}>
+                  <NftArt art={item.art} rarity={item.rarity} />
+                </span>
+              ))}
+              {onShowcase ? (
+                <button type="button" className="pf-hero-nft pf-hero-nft--add" onClick={onShowcase} aria-label={showcase.length ? "Change NFT showcase" : "Add NFTs to showcase"}>
+                  {showcase.length < 3 ? <span aria-hidden="true">+</span> : <ProfileIcon name="edit" />}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
       {children}

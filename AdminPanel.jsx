@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { authFetch } from "./apiClient";
+import { AdminNftOverlay, AdminPlayerNftOverlay, AdminProgressOverlay } from "./AdminNft";
 
 
 var STATUS_OPTIONS = ["lucky", "young", "saint", "legendary", "legacy", "rivender", "royal"];
@@ -20,6 +21,7 @@ function AdminPanel() {
   var [statusToGrant, setStatusToGrant] = useState(STATUS_OPTIONS[0]);
   var [toast, setToast] = useState(null);
   var [isBusy, setIsBusy] = useState(false);
+  var [adminOverlay, setAdminOverlay] = useState(null);
 
   
   var [banPlayerId, setBanPlayerId] = useState("");
@@ -157,7 +159,8 @@ function AdminPanel() {
       setLavxInput(res.lavxBalance.toFixed(2));
     }).catch(function () {});
   }
-  function closeDetail() { setSelectedPlayerId(null); setDetail(null); }
+  function closeDetail() { setSelectedPlayerId(null); setDetail(null); setAdminOverlay(null); }
+  function closeAdminOverlay() { setAdminOverlay(null); }
 
   function refreshAll() {
     loadStats();
@@ -270,6 +273,14 @@ function AdminPanel() {
             <div className="adm-stat-card"><span>ACTIVE SUBS</span><strong>{stats.activeSubs}</strong></div>
           </div>
         )}
+
+      {/* ── NFT ───────────────────────────────────── */}
+      <div className="adm-section">
+        <button type="button" className="adx-open-btn" onClick={function () { setAdminOverlay("nft"); }}>
+          <span>NFT Control</span>
+          <span className="adx-open-sub">Drops, market and full reset</span>
+        </button>
+      </div>
 
       {/* ── Bans ──────────────────────────────────── */}
       <div className="adm-section">
@@ -431,6 +442,15 @@ function AdminPanel() {
               </div>
             </div>
 
+            <div className="adm-control-group">
+              <span className="adm-control-label">Player Progress</span>
+              <div className="adx-player-tools">
+                <button type="button" className="adx-player-tool" onClick={function () { setAdminOverlay("player-nft"); }}>NFTs</button>
+                <button type="button" className="adx-player-tool" onClick={function () { setAdminOverlay("daily"); }}>Daily Rewards</button>
+                <button type="button" className="adx-player-tool" onClick={function () { setAdminOverlay("bp"); }}>Battle Pass</button>
+              </div>
+            </div>
+
             <div className="adm-detail-divider"></div>
 
             <div className="adm-danger-actions">
@@ -441,6 +461,15 @@ function AdminPanel() {
             </div>
           </div>
         </div>
+      )}
+
+      {adminOverlay === "nft" && <AdminNftOverlay onClose={closeAdminOverlay} />}
+      {detail && adminOverlay === "player-nft" && (
+        <AdminPlayerNftOverlay playerId={detail.playerId} username={detail.username} onClose={closeAdminOverlay} />
+      )}
+      {detail && (adminOverlay === "daily" || adminOverlay === "bp") && (
+        <AdminProgressOverlay playerId={detail.playerId} username={detail.username} mode={adminOverlay}
+          onClose={closeAdminOverlay} onChanged={function () { openUser(detail.playerId); }} />
       )}
     </div>
   );

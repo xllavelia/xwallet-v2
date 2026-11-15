@@ -1331,17 +1331,6 @@ background-color: #1c1c1c;
   cursor: pointer;
 }
 
-.cm-channel::after {
-  position: absolute;
-  top: -70px;
-  right: -30px;
-  width: 170px;
-  height: 170px;
-  content: "";
-  background: radial-gradient(circle, rgba(244, 242, 236, 0.07), transparent 68%);
-  pointer-events: none;
-}
-
 .cm-channel-art {
   display: grid;
   place-items: center;
@@ -1396,7 +1385,7 @@ background-color: #1c1c1c;
 /* Новости */
 
 .cm-section {
-margin: 0 26px 26px 26px;
+margin: 0 16px 26px 16px;
 }
 
 .cm-head {

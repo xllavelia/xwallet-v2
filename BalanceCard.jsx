@@ -5,6 +5,7 @@ import { useHomeAccounts, accountUsd, setMainDesign } from "./useHomeAccounts";
 import { openAccount, setCardDesign, chargeCustomDesign, topUpCard, withdrawFromCard, selectActiveCard, closeAccount } from "./useBankCards";
 import { usePlayerProfile } from "./usePlayerProfile";
 import { useVouchers } from "./useVouchers";
+import { useNftState } from "./useNft";
 import { AccountArt, BASE_DESIGNS, cardPalette } from "./bankCardVisuals";
 import { DesignSheet, CustomSheet } from "./CardDesigner";
 
@@ -41,6 +42,8 @@ function BalanceCard() {
   const { accounts, bank, wallet, canOpen } = useHomeAccounts();
   const profile = usePlayerProfile();
   const { vouchers, refresh: refreshVouchers } = useVouchers();
+  const nft = useNftState();
+  const nfts = nft.state?.items || [];
   const [panel, setPanel] = useState(params.get("open") === "1" ? "open" : "detail");
   const [name, setName] = useState("");
   const [choice, setChoice] = useState({ designId: 0 });
@@ -72,7 +75,14 @@ function BalanceCard() {
   const detailPalette = cardPalette(detailDesign);
   const cashBalance = visibleAccounts.filter((account) => account.glass).reduce((sum, account) => sum + Number(account.balance || 0), 0);
   const isBankCard = Boolean(selected && selected.key.startsWith("account-"));
-  const detailName = detailDesign.custom ? "Custom card" : detailDesign.designKey ? (catalog.find((item) => item.id === detailDesign.designKey)?.name || "Card design") : BASE_DESIGNS[detailDesign.designId]?.name || "Cloud";
+  const detailNft = detailDesign.custom?.nft || null;
+  const detailName = detailNft
+    ? detailNft.name || "NFT card"
+    : detailDesign.custom
+      ? "Custom card"
+      : detailDesign.designKey
+        ? (catalog.find((item) => item.id === detailDesign.designKey)?.name || "Card design")
+        : BASE_DESIGNS[detailDesign.designId]?.name || "Cloud";
 
   useEffect(() => {
     setPanel(params.get("open") === "1" ? "open" : "detail");
@@ -167,7 +177,8 @@ function BalanceCard() {
   // Выбор дизайна: при открытии счёта копим выбор, у существующей карты сразу сохраняем.
   async function applyChoice(next) {
     if (panel === "open") {
-      setChoice((prev) => ({ ...prev, ...next }));
+      // Скин NFT, ключ каталога и кастом взаимоисключающие: новый выбор заменяет прежний целиком.
+      setChoice(next);
       setSheet(null);
       return;
     }
@@ -298,7 +309,7 @@ function BalanceCard() {
               <span className="xac-card-designs-label">Card design</span>
               <button type="button" className="xac-design-row" onClick={() => showDesign()} disabled={busy}>
                 <span className="xac-design-row-art"><AccountArt designId={choice.designId} designKey={choice.designKey} custom={choice.custom} compact /></span>
-                <span className="xac-design-row-copy"><b>{choice.custom ? "Custom card" : choice.designKey ? (catalog.find((item) => item.id === choice.designKey)?.name || "Card design") : BASE_DESIGNS[choice.designId]?.name || "Cloud"}</b><small>Change</small></span>
+                <span className="xac-design-row-copy"><b>{choice.custom?.nft ? choice.custom.nft.name : choice.custom ? "Custom card" : choice.designKey ? (catalog.find((item) => item.id === choice.designKey)?.name || "Card design") : BASE_DESIGNS[choice.designId]?.name || "Cloud"}</b><small>Change</small></span>
                 <span className="xac-chevron">›</span>
               </button>
             </div>
@@ -319,7 +330,7 @@ function BalanceCard() {
 
             {(isBankCard || selected.key === "wallet") && <button type="button" className="xac-surface xac-design-pick" onClick={() => showDesign()} disabled={busy || phase !== "idle"}>
               <span className="xac-design-row-art"><AccountArt designId={detailDesign.designId} designKey={detailDesign.designKey} custom={detailDesign.custom} compact /></span>
-              <span className="xac-design-row-copy"><b>{detailName}</b><small>Basic, Battle Pass, cases or your own</small></span>
+              <span className="xac-design-row-copy"><b>{detailName}</b><small>Basic, Battle Pass, NFT or your own</small></span>
               <span className="xac-chevron">›</span>
             </button>}
 
@@ -369,6 +380,7 @@ function BalanceCard() {
           lavxBalance={lavxBalance}
           isAdmin={isAdmin}
           value={sheetDesign}
+          nfts={nfts}
           busyId={buyingId}
           onClose={() => setSheet(null)}
           onPick={pickDesign}

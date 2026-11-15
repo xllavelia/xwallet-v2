@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { NftArt } from "./nftShared";
 
 // Базовые дизайны доступны всем: 0 — кошелёк, 1–3 — основные счета.
 // Слева цветная часть с надписью, справа графитовая полоса с меткой xavero.
@@ -34,14 +35,59 @@ const CARD_COLORS = {
 const GRAPHITE = "#1b1b21";
 const BRAND_FONT = '"Unbounded", "Inter", sans-serif';
 
+// Цвета редкостей совпадают с --nft-c в main7.css.
+const NFT_RARITY = {
+  common: "#9a9ba1",
+  uncommon: "#8cc8ff",
+  rare: "#6fdc8c",
+  epic: "#b48cff",
+  mythic: "#ff6b6b",
+  legendary: "#f0dfad",
+};
+
+function hex(value) {
+  const clean = String(value || "").replace("#", "");
+  if (!/^[0-9a-fA-F]{6}$/.test(clean)) return [0, 0, 0];
+  return [0, 2, 4].map((i) => parseInt(clean.slice(i, i + 2), 16));
+}
+
+// Смешивает цвет редкости с тёмной подложкой оверлея получения.
+function mixDark(color, amount) {
+  const rgb = hex(color);
+  const dark = [12, 12, 14];
+  return "#" + rgb.map((v, i) => Math.round(v + (dark[i] - v) * amount).toString(16).padStart(2, "0")).join("");
+}
+
+function nftSkin(custom) {
+  const nft = custom?.nft;
+  if (!nft || !nft.rarity) return null;
+  return nft;
+}
+
 function baseDesign(designId) {
   return BASE_DESIGNS[Number(designId)] || BASE_DESIGNS[0];
 }
 
-// Итоговая палитра карточки: базовый дизайн, разблокированный или кастомный.
+// Итоговая палитра карточки: базовый дизайн, разблокированный, кастомный или скин NFT.
 function cardPalette(design) {
   const base = baseDesign(design?.designId);
   const custom = design?.custom || null;
+  const skin = nftSkin(custom);
+  if (skin) {
+    const accent = NFT_RARITY[skin.rarity] || NFT_RARITY.common;
+    return {
+      left: accent,
+      ink: "#f4f2ec",
+      inkOpacity: 1,
+      rightInk: accent,
+      right: accent,
+      accent,
+      linked: false,
+      leftImage: "",
+      rightImage: "",
+      nft: skin,
+    };
+  }
   const key = design?.designKey || "";
   const mapped = CARD_COLORS[key];
   const linked = Boolean(custom?.link);
@@ -59,6 +105,8 @@ function cardPalette(design) {
     linked,
     leftImage: custom?.left?.image || "",
     rightImage: linked ? "" : custom?.right?.image || "",
+    accent: "",
+    nft: null,
   };
 }
 
@@ -81,10 +129,89 @@ function AccountArt({
 }) {
   const uid = "xac" + useId().replace(/[^a-zA-Z0-9]/g, "");
   const palette = cardPalette({ designId, designKey, custom });
+  const skin = palette.nft;
   const markColor = palette.rightInk;
   const meta = [openedLabel(opened) ? "Opened " + openedLabel(opened) : "", owner ? "Owned by " + owner : ""]
     .filter(Boolean)
     .join(" · ");
+
+  // Скин NFT: арт на всю левую часть, справа — его же отражение, сильно размытое.
+  // Размытие статичное (без анимаций внутри фильтра), поэтому считается один раз.
+  if (skin) {
+    const silk = mixDark(palette.accent, 0.68);
+    return (
+      <svg
+        className={"xac-nft " + className}
+        viewBox="0 0 320 200"
+        fill="none"
+        aria-hidden="true"
+        data-design="nft"
+      >
+        <defs>
+          <clipPath id={uid + "c"}>
+            <rect width="320" height="200" rx="24" />
+          </clipPath>
+          <clipPath id={uid + "l"}>
+            <rect x="0" y="0" width="214" height="200" />
+          </clipPath>
+          <clipPath id={uid + "r"}>
+            <rect x="214" y="0" width="106" height="200" />
+          </clipPath>
+          <filter id={uid + "bl"} x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
+            <feGaussianBlur stdDeviation="14" />
+          </filter>
+          <linearGradient id={uid + "v"} x1="214" y1="0" x2="214" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stopColor="#0c0c0c" stopOpacity=".08" />
+            <stop offset=".55" stopColor="#0c0c0c" stopOpacity="0" />
+            <stop offset="1" stopColor="#0c0c0c" stopOpacity=".22" />
+          </linearGradient>
+          <linearGradient id={uid + "e"} x1="214" y1="0" x2="214" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stopColor="#ffffff" stopOpacity=".3" />
+            <stop offset=".5" stopColor="#ffffff" stopOpacity=".08" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id={uid + "s"} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset=".4" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset=".5" stopColor="#ffffff" stopOpacity=".34" />
+            <stop offset=".6" stopColor="#ffffff" stopOpacity="0" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <g clipPath={"url(#" + uid + "c)"}>
+          <rect width="320" height="200" fill={silk} />
+          <g clipPath={"url(#" + uid + "l)"}>
+            <NftArt
+              art={skin.art}
+              rarity={skin.rarity}
+              width="214"
+              height="200"
+              preserveAspectRatio="xMidYMid slice"
+            />
+          </g>
+          <g clipPath={"url(#" + uid + "r)"}>
+            <g filter={"url(#" + uid + "bl)"}>
+              <g transform="translate(534 0) scale(-1 1)">
+                <NftArt
+                  art={skin.art}
+                  rarity={skin.rarity}
+                  className="nft-blur-copy"
+                  x="143"
+                  y="-24"
+                  width="248"
+                  height="248"
+                  preserveAspectRatio="xMidYMid slice"
+                />
+              </g>
+            </g>
+            <rect x="214" width="106" height="200" fill={"url(#" + uid + "v)"} />
+          </g>
+          <rect className="xac-nft-shine" x="-90" y="-24" width="90" height="248" fill={"url(#" + uid + "s)"} />
+          <rect className="xac-nft-edge" x="213.5" width="2.5" height="200" fill={"url(#" + uid + "e)"} />
+        </g>
+      </svg>
+    );
+  }
 
   return (
     <svg
@@ -183,4 +310,4 @@ function AccountArt({
   );
 }
 
-export { AccountArt, BASE_DESIGNS, CARD_COLORS, cardPalette, openedLabel, GRAPHITE };
+export { AccountArt, BASE_DESIGNS, CARD_COLORS, NFT_RARITY, cardPalette, openedLabel, GRAPHITE };

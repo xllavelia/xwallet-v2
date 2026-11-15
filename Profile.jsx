@@ -4,11 +4,13 @@ import { authFetch } from "./apiClient";
 import { changePassword, deleteAccount } from "./useAccount";
 import { prepareAvatar, prepareBanner, usePlayerProfile } from "./usePlayerProfile";
 import { MenuRow, ProfileAvatar, ProfileHero, ProfileIcon, ProfileModal, QRSheet, usd } from "./ProfileShared";
+import { NftArt, rarityTitle } from "./nftShared";
+import { useNftState } from "./useNft";
 import { IconBack } from "./marketsShared";
 
 const FRIEND_LABELS = { none: "Add friend", incoming: "Accept request", outgoing: "Request sent", friend: "Friends" };
 const VIEW_TITLES = { edit: "Edit profile", security: "Password & security", settings: "Settings" };
-const MODAL_TITLES = { photo: "Your new photo", banner: "Your new banner", delete: "Delete account", logout: "Log out?", friend: "Manage friendship", "remove-photo": "Remove photo?", "remove-banner": "Remove banner?" };
+const MODAL_TITLES = { photo: "Your new photo", banner: "Your new banner", delete: "Delete account", logout: "Log out?", friend: "Manage friendship", "remove-photo": "Remove photo?", "remove-banner": "Remove banner?", nfts: "NFT showcase" };
 
 function Toggle({ checked }) {
   return <span role="switch" aria-checked={checked} className={"pf-switch" + (checked ? " on" : "")} />;
@@ -26,6 +28,7 @@ export default function Profile() {
   const target = params.get("playerId");
 
   const { data, error, refresh, mutate } = usePlayerProfile();
+  const nft = useNftState();
 
   const [other, setOther] = useState(null);
   const [otherError, setOtherError] = useState("");
@@ -40,6 +43,7 @@ export default function Profile() {
   const [bannerPhoto, setBannerPhoto] = useState("");
   const [passwords, setPasswords] = useState({ current: "", next: "", confirm: "" });
   const [deleteName, setDeleteName] = useState("");
+  const [pickIds, setPickIds] = useState([]);
   const [preferences, setPreferences] = useState(() => ({
     hidden: localStorage.getItem("xw-hide-balances") === "1",
     calm: localStorage.getItem("xw-reduce-motion") === "1",
@@ -129,6 +133,24 @@ export default function Profile() {
     setPhoto("");
     setBannerPhoto("");
   };
+
+  const openShowcase = () => {
+    setPickIds((profile?.nftShowcase || []).map((item) => item.itemId));
+    if (!nft.state) nft.refresh().catch(() => {});
+    openModal("nfts");
+  };
+
+  // Порядок выбора задаёт порядок карточек: первая ложится поверх остальных.
+  const togglePick = (id) => {
+    setPickIds((ids) => (ids.includes(id) ? ids.filter((value) => value !== id) : ids.length >= 3 ? ids : [...ids, id]));
+  };
+
+  const saveShowcase = () =>
+    run(async () => {
+      await mutate("/profile/showcase", { itemIds: pickIds });
+      setModal(null);
+      setMessage("NFT showcase updated");
+    });
 
   const selectPhoto = (event) => {
     const file = event.target.files?.[0];
@@ -293,6 +315,7 @@ export default function Profile() {
         <>
           <ProfileHero
             profile={profile}
+            onShowcase={own ? openShowcase : undefined}
             actions={own ? (
               <>
                 <button type="button" className="pf-hero-action" onClick={edit} aria-label="Edit photo and banner">
@@ -326,6 +349,12 @@ export default function Profile() {
                     title="Card designs"
                     subtitle="Basic, Battle Pass, cases and custom cards"
                     onClick={() => navigate("/balancecard?account=wallet")}
+                  />
+                  <MenuRow
+                    icon="spark"
+                    title="NFT showcase"
+                    subtitle="Up to three NFTs on your banner"
+                    onClick={openShowcase}
                   />
                   <MenuRow
                     icon="settings"
@@ -652,6 +681,42 @@ export default function Profile() {
                 }
               >
                 {busy ? "Uploading…" : "Use this banner"}
+              </button>
+            </>
+          ) : null}
+
+          {modal === "nfts" ? (
+            <>
+              <p className="pf-helper">Pick up to three NFTs. The first one sits on top and the others slightly overlap behind it.</p>
+              {nft.state?.items?.length ? (
+                <div className="pf-nft-pick">
+                  {nft.state.items.map((item) => {
+                    const order = pickIds.indexOf(item.id);
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        className={"pf-nft-pick-tile nft-r-" + (item.rarity || "common") + (order >= 0 ? " is-on" : "")}
+                        aria-pressed={order >= 0}
+                        disabled={busy || (order < 0 && pickIds.length >= 3)}
+                        onClick={() => togglePick(item.id)}
+                      >
+                        <span className="pf-nft-pick-art"><NftArt art={item.art} rarity={item.rarity} /></span>
+                        <span className="pf-nft-pick-copy">
+                          <strong>{item.name}</strong>
+                          <small>{rarityTitle(item.rarity)}{item.serial ? " · #" + item.serial : ""}</small>
+                        </span>
+                        {order >= 0 ? <span className="pf-nft-pick-order">{order + 1}</span> : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="pf-helper">{nft.error || (nft.state ? "You have no NFTs yet." : "Loading your NFTs…")}</p>
+              )}
+              {pickIds.length ? <button type="button" className="pf-text-link pf-text-link-center" disabled={busy} onClick={() => setPickIds([])}>Clear showcase</button> : null}
+              <button type="button" className="pf-primary" disabled={busy} onClick={saveShowcase}>
+                {busy ? "Saving…" : "Save showcase"}
               </button>
             </>
           ) : null}

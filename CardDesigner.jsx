@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { AccountArt, BASE_DESIGNS } from "./bankCardVisuals";
 import { ProfileIcon } from "./ProfileShared";
+import { rarityTitle } from "./nftShared";
 
 const CUSTOM_PRICE = 50;
 const COLOR_OPTIONS = [
@@ -15,7 +16,13 @@ const TABS = [
   ["battlepass", "Battle Pass"],
   ["cases", "Cases"],
   ["lavx", "LAVX"],
+  ["nft", "NFT"],
 ];
+
+// Снимок NFT для скина карты: сервер проверяет владение по itemId.
+function nftDesign(item) {
+  return { custom: { nft: { itemId: item.id, name: item.name, rarity: item.rarity, art: item.art } } };
+}
 
 function sourceText(item) {
   if (item.source === "shop") return item.price + " LAVX";
@@ -56,7 +63,7 @@ function DesignTile({ design, name, meta, selected, locked, onPick }) {
   return (
     <button type="button" className={"xac-tile" + (selected ? " is-selected" : "") + (locked ? " is-locked" : "")} onClick={onPick} aria-pressed={selected}>
       <span className="xac-tile-art">
-        <AccountArt designId={design.designId} designKey={design.designKey} compact />
+        <AccountArt designId={design.designId} designKey={design.designKey} custom={design.custom} compact />
         {locked ? <span className="xac-tile-lock"><ProfileIcon name="lock" /></span> : null}
         {selected ? <span className="xac-tile-check"><ProfileIcon name="check" /></span> : null}
       </span>
@@ -66,11 +73,12 @@ function DesignTile({ design, name, meta, selected, locked, onPick }) {
   );
 }
 
-function DesignSheet({ catalog, lavxBalance, isAdmin, value, onPick, onBuy, onCustom, onNavigate, onClose, busyId }) {
+function DesignSheet({ catalog, lavxBalance, isAdmin, value, nfts = [], onPick, onBuy, onCustom, onNavigate, onClose, busyId }) {
   const [tab, setTab] = useState("basic");
   const [hint, setHint] = useState(null);
   const selectedKey = value?.designKey || "";
   const selectedId = value?.designId;
+  const selectedNft = value?.custom?.nft?.itemId || 0;
 
   const items = useMemo(() => {
     if (tab === "basic") {
@@ -138,7 +146,7 @@ function DesignSheet({ catalog, lavxBalance, isAdmin, value, onPick, onBuy, onCu
           ) : null}
 
           <div className="xac-design-grid">
-            {items.map((item) => {
+            {tab === "nft" ? null : items.map((item) => {
               const design = tab === "basic" ? { designId: item.designId } : { designKey: item.id };
               const meta = tab === "basic" ? item.meta : item.owned ? "Owned" : sourceText(item);
               const selected = tab === "basic" ? selectedId === item.designId && !selectedKey && !value?.custom : selectedKey === item.id;
@@ -154,7 +162,28 @@ function DesignSheet({ catalog, lavxBalance, isAdmin, value, onPick, onBuy, onCu
                 />
               );
             })}
+            {tab === "nft" ? nfts.map((item) => {
+              const design = nftDesign(item);
+              return (
+                <DesignTile
+                  key={"nft-" + item.id}
+                  design={design}
+                  name={item.name}
+                  meta={rarityTitle(item.rarity) + (item.serial ? " #" + item.serial : "")}
+                  selected={selectedNft === item.id}
+                  onPick={() => onPick(design)}
+                />
+              );
+            }) : null}
           </div>
+
+          {tab === "nft" && !nfts.length ? (
+            <div className="xac-hint">
+              <strong>No NFTs yet</strong>
+              <span>Open NFT packs to find artwork you can put on a card.</span>
+              <button type="button" className="xac-secondary" onClick={() => onNavigate("/nft")}>Open NFT hub</button>
+            </div>
+          ) : null}
 
           {hint ? (
             <div className="xac-hint">
@@ -270,7 +299,7 @@ function CustomSheet({ initial, isAdmin, lavxBalance, vouchers, onApply, onClose
             <ProfileIcon name="close" />
           </button>
           <strong>Design your card</strong>
-          <span className="xac-overlay-note">{isAdmin ? "Free for team" : price > 0 ? price + " LAVX" : "Free"}</span>
+          <span className="xac-overlay-note">{isAdmin ? "Free for CEO" : price > 0 ? price + " LAVX" : "Free"}</span>
         </header>
 
         <div className="xac-overlay-scroll">
@@ -339,7 +368,7 @@ function CustomSheet({ initial, isAdmin, lavxBalance, vouchers, onApply, onClose
             {busy ? "Saving…" : isAdmin || price <= 0 ? "Apply for free" : "Apply · " + price + " LAVX"}
           </button>
           <p className="xac-panel-note xac-panel-note--center">
-            {isAdmin ? "Team accounts apply custom designs for free." : "Customization is charged once per card."}
+            {isAdmin ? "CEO accounts apply custom designs for free." : "Customization is charged once per card."}
           </p>
         </div>
       </div>

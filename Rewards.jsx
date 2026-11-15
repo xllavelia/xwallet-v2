@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWalletBalance } from "./useWallet";
 import { useRewards } from "./useRewards";
+import NftClaimOverlay from "./NftClaimOverlay";
 
 function GiftIcon() {
   return (
@@ -28,6 +29,7 @@ function compLabel(c) {
   if (c.kind === "voucher") return "VOUCHER $" + c.value.toFixed(0);
   if (c.kind === "ref_xp") return "REF XP " + c.value.toFixed(0);
   if (c.kind === "pass_xp") return "PASS XP " + c.value.toFixed(0);
+  if (c.kind === "nft") return "NFT " + String(c.rarity || "").toUpperCase();
   return "";
 }
 
@@ -38,6 +40,7 @@ const Rewards = () => {
   var [statusMsg, setStatusMsg] = useState(null);
   var [statusOk, setStatusOk] = useState(true);
   var [outcomeMsg, setOutcomeMsg] = useState(null);
+  var [nftItems, setNftItems] = useState(null);
   var [nowTick, setNowTick] = useState(Date.now());
 
   useEffect(function () {
@@ -91,6 +94,7 @@ const Rewards = () => {
         grantedParts.push(compLabel(result.granted[i]));
       }
       setOutcomeMsg({ ok: true, text: "Day " + result.day + " claimed: " + grantedParts.join(" · ") });
+      if (result.nfts && result.nfts.length) setNftItems(result.nfts);
       refreshWallet();
     } catch (err) {
       setStatusMsg(err.message);
@@ -232,6 +236,7 @@ const Rewards = () => {
       {statusMsg && (
         <div className={"rwd-status " + (statusOk ? "ok" : "err")}>{statusMsg}</div>
       )}
+      <NftClaimOverlay items={nftItems} source="Daily Rewards" onClose={function () { setNftItems(null); }} onOpenNft={function () { setNftItems(null); navigate("/nft/inventory"); }} />
     </div>
   );
 };

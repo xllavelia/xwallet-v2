@@ -18,4 +18,16 @@ async function authFetch(path, options) {
   return data;
 }
 
-export { authFetch, API_BASE };
+// PlayerId из токена нужен только чтобы разделять локальные настройки по аккаунтам.
+function currentPlayerId() {
+  var token = localStorage.getItem(TOKEN_KEY);
+  if (!token) return "";
+  try {
+    var payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return payload && payload.playerId != null ? String(payload.playerId) : "";
+  } catch (err) {
+    return "";
+  }
+}
+
+export { authFetch, API_BASE, currentPlayerId };

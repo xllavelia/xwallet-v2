@@ -66,6 +66,12 @@ import MaintenanceOverlay from "./MaintenanceOverlay";
 import Empire from "./Empire";
 import Slots from "./Slots";
 import Quests from "./Quests";
+import Nft from "./Nft";
+import NftInventory from "./NftInventory";
+import NftMarket from "./NftMarket";
+import NftCollection from "./NftCollection";
+import NftUpgrade from "./NftUpgrade";
+import NftMerge from "./NftMerge";
 
 
 import PageTransition from "./PageTransition";
@@ -116,6 +122,12 @@ const islandRoutes = [
   { path: "empire", element: <Empire /> },
   { path: "slots", element: <Slots /> },
   { path: "quests", element: <Quests /> },
+  { path: "nft", element: <Nft /> },
+  { path: "nft/inventory", element: <NftInventory /> },
+  { path: "nft/market", element: <NftMarket /> },
+  { path: "nft/drop", element: <NftCollection /> },
+  { path: "nft/upgrade", element: <NftUpgrade /> },
+  { path: "nft/merge", element: <NftMerge /> },
 ];
 
 const NavigationBar = () => {

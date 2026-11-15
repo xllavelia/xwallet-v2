@@ -1,0 +1,706 @@
+/* NFT-скины карт и витрина NFT в профиле. */
+
+/* Размытая копия арта справа должна быть полностью статичной:
+   анимация искр внутри неё заставляла бы пересчитывать фильтр каждый кадр. */
+.nft-blur-copy .nft-px-spark,
+.nft-blur-copy .nft-px-sparkc {
+  animation: none;
+}
+
+/* Белый блик раз в несколько секунд проходит по всей карте. */
+@keyframes xac-nft-shine {
+  0%,
+  58% {
+    transform: translateX(0);
+  }
+
+  88%,
+  100% {
+    transform: translateX(440px);
+  }
+}
+
+.xac-nft-shine {
+  animation: xac-nft-shine 7.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform;
+}
+
+/* Витрина стоит в строке с аватаром: ник сверху, карточки под ним справа, без нахлёста и без захода на баннер. */
+.pf-hero-identity {
+  align-items: flex-start;
+}
+
+.pf-hero-side {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 9px;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 90px;
+  padding-top: 34px;
+}
+
+.pf-hero-nfts {
+  --pf-nft-size: clamp(32px, 10.5vw, 42px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(5px, 1.6vw, 8px);
+  max-width: 100%;
+}
+
+.pf-hero-nft {
+  position: relative;
+  display: block;
+  flex: 0 1 var(--pf-nft-size);
+  box-sizing: border-box;
+  width: var(--pf-nft-size);
+  min-width: 0;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 26%;
+  overflow: hidden;
+  background: #171717;
+  box-shadow:
+    0 0 0 1px rgba(244, 242, 236, 0.08),
+    0 6px 14px rgba(0, 0, 0, 0.4),
+    0 0 16px color-mix(in srgb, var(--nft-c, #9a9ba1) 20%, transparent);
+  transition: transform 0.18s ease;
+}
+
+button.pf-hero-nft:not(.pf-hero-nft--add):active {
+  transform: translateY(-2px) scale(0.97);
+}
+
+.pf-hero-nft .nft-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pf-hero-nft--add {
+  display: grid;
+  place-items: center;
+  background: #171715;
+  box-shadow:
+    inset 0 0 0 1px rgba(244, 242, 236, 0.2),
+    0 6px 14px rgba(0, 0, 0, 0.36);
+  color: rgba(244, 242, 236, 0.8);
+  font-size: 19px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.pf-hero-nft--add:active {
+  background: #202020;
+}
+
+.pf-hero-nft--add svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Выбор витрины: сетка предметов инвентаря с порядком карточек. */
+.pf-nft-pick {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 46vh;
+  margin: 4px 0 10px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.pf-nft-pick-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 0;
+  border-radius: 14px;
+  background: #171715;
+  box-shadow: inset 0 0 0 1px rgba(244, 242, 236, 0.06);
+  color: #f4f2ec;
+  text-align: left;
+  transition: background 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+.pf-nft-pick-tile:disabled {
+  opacity: 0.36;
+}
+
+.pf-nft-pick-tile.is-on {
+  background: color-mix(in srgb, var(--nft-c, #9a9ba1) 13%, #171715);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--nft-c, #9a9ba1) 68%, transparent);
+}
+
+.pf-nft-pick-art {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  overflow: hidden;
+  background: #101010;
+}
+
+.pf-nft-pick-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.pf-nft-pick-copy strong {
+  overflow: hidden;
+  font-size: 9px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-nft-pick-copy small {
+  overflow: hidden;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--nft-c, #9a9ba1);
+}
+
+.pf-nft-pick-order {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--nft-c, #9a9ba1);
+  color: #101010;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* ---------- Слияние NFT: 2 одинаковые копии или 3 разных одной редкости → случайная редкость выше ---------- */
+
+.nft-merge-page {
+  --mrg-card: clamp(84px, 26vw, 104px);
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+/* В тройке карточек на одну больше, поэтому они мельче. */
+.nft-merge-page.is-trio {
+  --mrg-card: clamp(60px, 17.5vw, 74px);
+}
+
+.nft-merge-page .nft-topbar {
+  flex-shrink: 0;
+  padding: 8px 16px 4px;
+}
+
+.mrg-wrap {
+  flex: 1;
+  gap: 8px;
+  min-height: 0;
+  padding-bottom: 10px;
+}
+
+/* Переключатель механики: пара одинаковых или тройка одной редкости. */
+.mrg-modes {
+  display: flex;
+  flex-shrink: 0;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(244, 242, 236, 0.07);
+  border-radius: 15px;
+  background: #171716;
+}
+
+.mrg-mode {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: rgba(244, 242, 236, 0.5);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mrg-mode b {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mrg-mode small {
+  font-size: 9px;
+  opacity: 0.85;
+}
+
+.mrg-mode.is-on {
+  background: #242421;
+  box-shadow: inset 0 0 0 1px rgba(244, 242, 236, 0.09);
+  color: #f4f2ec;
+}
+
+.mrg-mode:disabled {
+  opacity: 0.5;
+}
+
+.mrg-head {
+  min-height: 15px;
+  margin-top: 0;
+}
+
+.mrg-head span {
+  font-size: 11px;
+}
+
+.mrg-head small {
+  font-size: 9px;
+}
+
+.mrg-sources {
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+  height: 64px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.mrg-sources::-webkit-scrollbar {
+  display: none;
+}
+
+.mrg-src {
+  position: relative;
+  flex-shrink: 0;
+  width: 58px;
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: #1b1b19;
+  color: #f4f2ec;
+  transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.mrg-src:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* Недоступные для текущей тройки: другая редкость, дубль шаблона или уже набрано три. */
+.mrg-src:disabled {
+  opacity: 0.32;
+}
+
+.mrg-src.is-on {
+  border-color: color-mix(in srgb, var(--nft-c, #9a9ba1) 72%, transparent);
+  box-shadow: 0 0 18px -10px var(--nft-c, #9a9ba1);
+}
+
+.mrg-src-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+.mrg-src-count {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  padding: 1px 5px;
+  border-radius: 7px;
+  background: rgba(12, 12, 12, 0.88);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.mrg-src-count.is-order {
+  background: var(--nft-c, #9a9ba1);
+  box-shadow: none;
+  color: #101010;
+}
+
+.mrg-stage {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Камера слияния: пара копий, луч и закрытая карточка следующей редкости. */
+.mrg-chamber {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex: 1;
+  min-height: 148px;
+  overflow: hidden;
+  border: 1px solid rgba(244, 242, 236, 0.07);
+  border-radius: 24px;
+  background:
+    radial-gradient(76% 74% at 50% 22%, color-mix(in srgb, var(--nft-c, #9a9ba1) 13%, transparent), transparent 72%),
+    #141413;
+  isolation: isolate;
+}
+
+.mrg-ring {
+  position: absolute;
+  width: min(72%, 280px);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--nft-c, #9a9ba1) 22%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 46px -20px var(--nft-c, #9a9ba1),
+    inset 0 0 46px -30px var(--nft-c, #9a9ba1);
+  pointer-events: none;
+}
+
+/* Вращается только пунктирная орбита внутри кольца — так движение почти незаметно. */
+.mrg-ring::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px dashed color-mix(in srgb, var(--nft-c, #9a9ba1) 40%, transparent);
+  border-radius: 50%;
+  animation: mrg-turn 26s linear infinite;
+}
+
+.mrg-glow {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--nft-c, #9a9ba1) 22%, transparent), transparent 68%);
+  filter: blur(14px);
+  animation: mrg-breathe 5.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.mrg-pair {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  animation: mrg-float 6.4s ease-in-out infinite;
+}
+
+.mrg-card {
+  display: block;
+  width: var(--mrg-card);
+  aspect-ratio: 1;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #171717;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--nft-c, #9a9ba1) 40%, transparent),
+    0 16px 32px rgba(0, 0, 0, 0.5);
+}
+
+.mrg-card--0 {
+  transform: rotate(-7deg) translateY(3px);
+}
+
+.mrg-card--1 {
+  margin-left: -18px;
+  transform: rotate(7deg) translateY(-3px);
+}
+
+.mrg-card--2 {
+  margin-left: -18px;
+  transform: rotate(-4deg) translateY(4px);
+}
+
+.mrg-pair--trio .mrg-card + .mrg-card {
+  margin-left: -14px;
+}
+
+/* Пустой слот тройки: пунктир и номер шага. */
+.mrg-card--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(244, 242, 236, 0.18);
+  background: rgba(244, 242, 236, 0.03);
+  box-shadow: none;
+  color: rgba(244, 242, 236, 0.3);
+}
+
+.mrg-card--empty b {
+  font-size: calc(var(--mrg-card) * 0.3);
+  font-weight: 500;
+}
+
+.mrg-flow {
+  position: relative;
+  z-index: 1;
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--nft-c, #9a9ba1) 75%, transparent), transparent);
+}
+
+.mrg-flow i {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nft-c, #9a9ba1);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--nft-c, #9a9ba1) 70%, transparent);
+  animation: mrg-dot 2.6s ease-in-out infinite;
+}
+
+.mrg-unknown {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: calc(var(--mrg-card) * 1.12);
+  aspect-ratio: 1;
+  border: 1px dashed color-mix(in srgb, var(--nft-c, #9a9ba1) 62%, transparent);
+  border-radius: 18px;
+  background:
+    radial-gradient(80% 70% at 50% 32%, color-mix(in srgb, var(--nft-c, #9a9ba1) 18%, transparent), transparent 72%),
+    #131312;
+  box-shadow:
+    0 0 40px -16px var(--nft-c, #9a9ba1),
+    inset 0 0 26px -16px var(--nft-c, #9a9ba1);
+  color: var(--nft-c, #9a9ba1);
+}
+
+.mrg-unknown b {
+  font-size: calc(var(--mrg-card) * 0.36);
+  font-weight: 500;
+  line-height: 1;
+  animation: mrg-pulse 3.4s ease-in-out infinite;
+}
+
+.mrg-unknown em {
+  font-size: 8px;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* Мягкая полоса сканирования по камере. */
+.mrg-scan {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -90px;
+  width: 70px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.055), transparent);
+  transform: skewX(-14deg);
+  animation: mrg-scan 5.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+.mrg-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 2px;
+}
+
+.mrg-title b {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mrg-title span {
+  flex: none;
+  font-size: 9px;
+  color: rgba(244, 242, 236, 0.5);
+}
+
+.mrg-readout > div > b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mrg-hint {
+  justify-content: center;
+  font-size: 9px;
+  text-align: center;
+}
+
+@keyframes mrg-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mrg-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes mrg-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes mrg-dot {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    left: calc(100% - 6px);
+    opacity: 0;
+  }
+}
+
+@keyframes mrg-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes mrg-scan {
+  0%,
+  22% {
+    left: -90px;
+  }
+
+  74%,
+  100% {
+    left: 108%;
+  }
+}
+
+@media (max-height: 760px) {
+  .nft-merge-page {
+    --mrg-card: 78px;
+  }
+
+  .nft-merge-page.is-trio {
+    --mrg-card: 56px;
+  }
+
+  .nft-merge-page .nft-topbar {
+    padding: 4px 16px 2px;
+  }
+
+  .mrg-wrap {
+    gap: 6px;
+  }
+
+  .mrg-modes {
+    padding: 3px;
+  }
+
+  .mrg-mode {
+    padding: 5px 8px;
+  }
+
+  .mrg-sources {
+    height: 54px;
+  }
+
+  .mrg-src {
+    width: 48px;
+  }
+
+  .mrg-chamber {
+    min-height: 126px;
+    gap: 9px;
+  }
+
+  .mrg-ring {
+    width: min(58%, 190px);
+  }
+
+  .mrg-flow {
+    width: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-hero-nft,
+  .pf-nft-pick-tile {
+    transition: none;
+  }
+
+  .xac-nft-shine {
+    animation: none;
+  }
+
+  .mrg-src,
+  .mrg-mode {
+    transition: none;
+  }
+
+  .mrg-glow,
+  .mrg-ring::before,
+  .mrg-pair,
+  .mrg-flow i,
+  .mrg-unknown b,
+  .mrg-scan {
+    animation: none;
+  }
+}

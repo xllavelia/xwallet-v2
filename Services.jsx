@@ -20,6 +20,7 @@ var MODULES = [
   { name: "Vouchers", desc: "Fee discounts, USDT & LAVX credits", path: "/bonus" },
   { name: "Community", desc: "News, friends, leaders & referrals", path: "/community" },
   { name: "Battle Pass", desc: "Season rewards, looks & cases", path: "/battlepass" },
+  { name: "NFT", desc: "Collect, earn hourly & trade NFTs", path: "/nft" },
   { name: "Prime", desc: "Membership tiers & LAVX", path: "/prime" },
   { name: "Promo Code", desc: "Redeem a code", path: "/promocode" },
   { name: "Profile", desc: "Your identity, appearance & settings", path: "/profile" },

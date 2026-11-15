@@ -4,6 +4,7 @@ import { useBattlePass } from "./useBattlePass";
 import { bpNumber, bpRewardText, bpSeasonText, bpXpText } from "./battlepassConfig";
 import PassOfferSheet from "./PassOfferSheet";
 import CaseRevealSheet from "./CaseRevealSheet";
+import NftClaimOverlay from "./NftClaimOverlay";
 import { CosmeticRewardArt } from "./ProfileShared";
 
 export default function BattlePass() {
@@ -11,6 +12,7 @@ export default function BattlePass() {
     const { data, loading, error, refresh, purchasePass, claimReward, openCase } = useBattlePass();
     const [passOpen, setPassOpen] = useState(false);
     const [caseItem, setCaseItem] = useState(null);
+    const [nftItems, setNftItems] = useState(null);
     const [toast, setToast] = useState("");
     const [busyCell, setBusyCell] = useState("");
     const toastTimer = useRef(0);
@@ -97,7 +99,7 @@ export default function BattlePass() {
             <>
                 <div className="bp-cell-rewards">
                     {rewards.map(function (reward, index) {
-                        return <span className="bp-reward" key={index}><CosmeticRewardArt reward={reward} />{bpRewardText(reward)}</span>;
+                        return <span className="bp-reward" key={index}>{reward.kind === "nft" && <i className={"nft-dot nft-r-" + (reward.rarity || "pack")} />}<CosmeticRewardArt reward={reward} />{bpRewardText(reward)}</span>;
                     })}
                 </div>
                 {cell.claimed && <span className="bp-cell-check">✓</span>}
@@ -155,6 +157,7 @@ export default function BattlePass() {
                 window.dispatchEvent(new Event("xw-accounts-changed"));
                 const names = (result.rewards || []).map(bpRewardText).join(" · ");
                 showToast(names ? "Claimed: " + names : "Reward claimed");
+                if (result.nfts && result.nfts.length) setNftItems(result.nfts);
                 if (result.caseTokenId) {
                     setCaseItem({
                         id: result.caseTokenId,
@@ -279,6 +282,13 @@ export default function BattlePass() {
                 catalog={data.caseCatalog}
                 onClose={closeCase}
                 onOpen={openCase}
+            />
+
+            <NftClaimOverlay
+                items={caseItem ? null : nftItems}
+                source="Battle Pass"
+                onClose={function () { setNftItems(null); }}
+                onOpenNft={function () { setNftItems(null); navigate("/nft/inventory"); }}
             />
         </div>
     );
