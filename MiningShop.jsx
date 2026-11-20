@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMining } from "./useMining";
 import { useWalletBalance } from "./useWallet";
+import { Icon } from "./icons";
 
 var RARITY_LABELS = { epic: "Epic", mythic: "Mythic", legendary: "Legendary" };
 var PERK_LABELS = {
@@ -21,16 +22,8 @@ var BUFF_DESCRIPTIONS = {
 var DURATION_LABELS = { "24h": "24 Hours", "3d": "3 Days", "7d": "7 Days" };
 var ENERGY_PACK_LABELS = { small: "Small Pack", medium: "Medium Pack", large: "Large Pack" };
 
-function ChevronLeft() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>);
-}
-function WalletChipIcon() {
-  return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path><path d="M16 12h.01"></path></svg>);
-}
-function CloseIcon() {
-  return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>);
-}
-
+function ChevronLeft() { return <Icon name="back" size={20} />; }
+function WalletChipIcon() { return <Icon name="wallet" size={15} />; }
 function formatMoney(v) { return "$" + (v || 0).toFixed(2); }
 
 const MiningShop = () => {

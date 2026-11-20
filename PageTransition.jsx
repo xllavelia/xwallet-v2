@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect, useCallback } from "react";
+import { useAuthStatus } from "./AuthStatusContext";
 
 // Длительность анимации закрытия — держим в одном месте,
 // чтобы JS (setTimeout перед navigate) и CSS (transition) никогда не рассинхронились
-const CLOSE_DURATION_MS = 150;
+const CLOSE_DURATION_MS = 440;
 
 // Порог свайпа для закрытия
 const CLOSE_DISTANCE_THRESHOLD = 110;
@@ -15,6 +16,9 @@ const MAX_DRAG_OFFSET = 420;
 
 function PageTransition({ children }) {
   const navigate = useNavigate();
+  const { reducedMotion } = useAuthStatus();
+  const closeDuration = reducedMotion ? 0 : CLOSE_DURATION_MS;
+  const suppressClick = useRef(false);
 
   const dragZoneRef = useRef(null);
 
@@ -41,10 +45,23 @@ function PageTransition({ children }) {
     };
   }, []);
 
+  const closePage = useCallback((destination) => {
+    if (closingRef.current) return;
+    closingRef.current = true;
+    draggingRef.current = false;
+    setDragging(false);
+    setClosing(true);
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    offsetRef.current = window.innerHeight;
+    setOffset(window.innerHeight);
+    closeTimeoutRef.current = setTimeout(() => navigate(destination), closeDuration);
+  }, [navigate, closeDuration]);
+
   const handleTouchStart = useCallback((event) => {
     if (closingRef.current) return;
 
     draggingRef.current = true;
+    suppressClick.current = false;
     setDragging(true);
 
     const clientY = event.touches ? event.touches[0].clientY : event.clientY;
@@ -77,6 +94,7 @@ function PageTransition({ children }) {
     lastTime.current = now;
 
     const distance = clientY - startY.current;
+    if (Math.abs(distance) > 5) suppressClick.current = true;
 
     // Тянуть можно только вниз; на движение вверх лист не реагирует
     const resistedOffset =
@@ -97,29 +115,14 @@ function PageTransition({ children }) {
       velocity.current > CLOSE_VELOCITY_THRESHOLD;
 
     if (shouldClose) {
-      closingRef.current = true;
-      setClosing(true);
-
-      // Сбрасываем фокус, чтобы убить :hover/:active до анимации
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur();
-      }
-
-      offsetRef.current = window.innerHeight;
-      setOffset(window.innerHeight);
-
-      // Таймер совпадает с CLOSE_DURATION_MS в CSS — никакого рывка в конце
-      closeTimeoutRef.current = setTimeout(() => {
-        navigate("/");
-      }, CLOSE_DURATION_MS);
-
+      closePage("/");
       return;
     }
 
     // Свайп был слишком слабым — плавно возвращаем на место
     offsetRef.current = 0;
     setOffset(0);
-  }, [navigate]);
+  }, [closePage]);
 
   useEffect(() => {
     const dragZone = dragZoneRef.current;
@@ -161,6 +164,7 @@ function PageTransition({ children }) {
         .join(" ")}
       style={{
         transform: `translateY(${offset}px)`,
+        "--xw-sheet-close": `${closeDuration}ms`,
         // Пропускаем клики сквозь лист во время анимации закрытия
         pointerEvents: closing ? "none" : undefined,
       }}
@@ -169,7 +173,16 @@ function PageTransition({ children }) {
         className="page-transition__drag-zone"
         ref={dragZoneRef}
         style={{ touchAction: "none" }}
-        onClick={() => navigate(-1)}
+        role="button"
+        tabIndex={0}
+        aria-label="Close page"
+        onClick={() => { if (!suppressClick.current) closePage(-1); }}
+        onKeyDown={event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            closePage(-1);
+          }
+        }}
 
       >
         <div className="page-transition__handle"  />

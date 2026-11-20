@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuests } from "./useBattlePass";
 import { bpCountdown, bpNumber, bpProgressLabel, bpSeasonText, bpXpText } from "./battlepassConfig";
 import PassOfferSheet from "./PassOfferSheet";
+import { LoadingState } from "./LoadingState";
 
 const CATEGORY_LABEL = { daily: "Daily", weekly: "Weekly", monthly: "Monthly" };
 
@@ -36,8 +37,7 @@ export default function Quests() {
     if (loading && !data) {
         return (
             <div className="bp-page bp-center">
-                <div className="bp-spinner" />
-                <div className="bp-loading-text">Loading quests…</div>
+                <LoadingState label="Loading quests…" />
             </div>
         );
     }

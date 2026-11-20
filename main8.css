@@ -704,3 +704,291 @@ button.pf-hero-nft:not(.pf-hero-nft--add):active {
     animation: none;
   }
 }
+
+:root {
+  --xw-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --xw-ease-spring: cubic-bezier(0.2, 0.85, 0.25, 1.08);
+  --xw-press-time: 110ms;
+  --xw-release-time: 420ms;
+}
+
+@keyframes xw-arrive {
+  from { opacity: 0; translate: 0 12px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes xw-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes xw-dialog-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.965); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes xw-sheet-in {
+  from { opacity: 0.65; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes xw-selection {
+  from { scale: 0.95; }
+  to { scale: 1; }
+}
+
+@keyframes xw-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes xw-spin {
+  to { rotate: 360deg; }
+}
+
+@keyframes xw-logo-rise {
+  from { opacity: 0; transform: translateY(22px) rotate(-6deg) scale(0.92); }
+  to { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+
+@keyframes xw-success-settle {
+  0% { scale: 1; }
+  45% { scale: 1.015; }
+  100% { scale: 1; }
+}
+
+.WelcomeContent { min-height: 100dvh; }
+.WelcomeContent *, .WelcomeContent *::before, .WelcomeContent *::after { box-sizing: border-box; }
+.wlc-onboarding { min-height: 100dvh; }
+.wlc-text-block, .wlc-auth-card { animation: none; }
+.wlc-slide-slot { min-height: 188px; }
+.wlc-content { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+.wlc-text-block > * { animation: xw-arrive 680ms var(--xw-ease-out) backwards; }
+.wlc-text-block > :nth-child(2) { animation-delay: 55ms; }
+.wlc-text-block > :nth-child(3) { animation-delay: 110ms; }
+.wlc-circle { background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--xlavelia) 48%, transparent), transparent 70%); }
+.wlc-ring { border-color: color-mix(in srgb, var(--xlavelia) 16%, transparent); }
+.wlc-sparkle { filter: none; animation-duration: 5.4s; }
+.wlc-burst { opacity: 0.5; background: repeating-conic-gradient(from 0deg, transparent 0deg 3.2deg, color-mix(in srgb, var(--xlavelia) 50%, transparent) 3.4deg 3.6deg); }
+.wlc-burst-dot { box-shadow: 0 0 16px color-mix(in srgb, var(--xlavelia) 35%, transparent); }
+.wlc-scene-mark { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.wlc-scene-logo { width: clamp(110px, 38vw, 168px); height: 190px; color: var(--xlavelia); animation: xw-logo-rise 1.15s var(--xw-ease-out) both; }
+:is(.wlc-scene-logo, .wlc-auth-logo) path { stroke-dasharray: 1; animation: xw-draw 1.35s var(--xw-ease-out) backwards; }
+:is(.wlc-scene-logo, .wlc-auth-logo) path:nth-child(2) { animation-delay: 100ms; }
+:is(.wlc-scene-logo, .wlc-auth-logo) path:nth-child(3) { animation-delay: 200ms; }
+:is(.wlc-scene-logo, .wlc-auth-logo) path:nth-child(4) { animation-delay: 290ms; }
+.wlc-dots { align-items: center; gap: 0; }
+.wlc-dot { position: relative; width: 24px; height: 30px; padding: 0; border: 0; border-radius: 0; background: none; }
+.wlc-dot::before { content: ""; display: block; width: 6px; height: 6px; margin: auto; border-radius: 8px; background: rgba(255,255,255,0.18); transition: width 480ms var(--xw-ease-spring), background 280ms ease; }
+.wlc-dot.active { width: 34px; background: none; }
+.wlc-dot.active::before { width: 24px; background: var(--xlavelia); }
+.wlc-next-btn svg { transition: translate var(--xw-release-time) var(--xw-ease-out); }
+.wlc-next-btn:active svg { translate: 3px 0; }
+.wlc-auth { min-height: 100dvh; padding: 26px 20px max(26px, env(safe-area-inset-bottom)); }
+.wlc-auth-glow { background: radial-gradient(circle, color-mix(in srgb, var(--xlavelia) 8%, transparent), transparent 70%); }
+.wlc-auth-card { padding-top: 24px; transform-origin: 50% 30%; }
+.wlc-auth-heading { width: 100%; }
+.wlc-auth-subtitle { line-height: 1.5; }
+.wlc-mode-pill { transition: transform 520ms var(--xw-ease-spring); }
+.wlc-mode-btn { transition: color 240ms ease; }
+.wlc-form .wlc-field { animation: xw-arrive 540ms var(--xw-ease-out) backwards; }
+.wlc-form .wlc-field:nth-child(2) { animation-delay: 45ms; }
+.wlc-form .wlc-field:nth-child(3) { animation-delay: 90ms; }
+.wlc-form .wlc-field:nth-child(4) { animation-delay: 135ms; }
+.wlc-field .wlc-label { transition: color 250ms ease; }
+.wlc-field:focus-within .wlc-label { color: var(--xlavelia); }
+.wlc-input { transition: border-color 320ms ease, box-shadow 320ms ease, background-color 320ms ease; min-width: 0; }
+.wlc-input:focus { border-color: color-mix(in srgb, var(--xlavelia) 52%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--xlavelia) 7%, transparent); background: #141412; }
+.wlc-error-banner { overflow: hidden; box-sizing: border-box; }
+.wlc-submit-btn { position: relative; min-height: 48px; overflow: hidden; }
+.wlc-submit-content { display: flex; align-items: center; justify-content: center; gap: 9px; }
+.wlc-success-check { width: 20px; height: 20px; }
+.wlc-success-check path { stroke-dasharray: 1; animation: xw-draw 420ms var(--xw-ease-out) backwards; }
+.wlc-spinner { width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.22); border-top-color: currentColor; border-radius: 50%; animation: xw-spin 900ms linear infinite; }
+.wlc-generate-btn.is-loading svg { animation: xw-spin 900ms linear infinite; }
+.WelcomeContent.is-auth-success .wlc-auth-card { animation: xw-success-settle 650ms var(--xw-ease-out); }
+.WelcomeContent.is-auth-success .wlc-form .wlc-field { pointer-events: none; }
+.wlc-submit-btn.is-success { opacity: 1; }
+
+.xw-boot { min-height: 100dvh; display: grid; place-content: center; gap: 16px; justify-items: center; background: #101010; color: var(--xlavelia); }
+.xw-boot > span { font: 600 56px "Unbounded", sans-serif; animation: xw-logo-rise 800ms var(--xw-ease-out) both; }
+.xw-boot::after { content: ""; width: 24px; height: 24px; border: 2px solid color-mix(in srgb, var(--xlavelia) 14%, transparent); border-top-color: var(--xlavelia); border-radius: 50%; animation: xw-spin 1.1s linear infinite; }
+
+.page-transition { animation: xw-sheet-in 660ms var(--xw-ease-out); transition: transform 520ms var(--xw-ease-out); }
+.page-transition--dragging { animation: none; transition: none; }
+.page-transition--closing { animation: none; transition: transform var(--xw-sheet-close, 440ms) cubic-bezier(0.32, 0, 0.67, 0); }
+.page-transition__drag-zone:focus-visible { outline: 1px solid var(--xlavelia); outline-offset: -5px; }
+.page-transition__handle { transition: width 440ms var(--xw-ease-spring), background-color 280ms ease; }
+
+/* Слои перелёта карт не анимируем повторно: у них собственная геометрия. */
+.hxr-grid-departure .hxr-feature-balance-inner { animation: none; }
+.hxr-grid-departure .hxr-feature.is-card-away::after { display: none; }
+.hxr-view-flight-face { transform: translateZ(0.01px); }
+.hxr-view-flight-face.is-back { transform: rotateY(180deg) translateZ(0.01px); }
+.hxr-header { animation: xw-arrive 640ms var(--xw-ease-out) backwards; }
+.hxr-action-circle { animation: xw-arrive 680ms var(--xw-ease-out) 140ms backwards; transition: transform var(--xw-release-time) var(--xw-ease-spring), background-color 260ms ease; }
+.hxr-action:nth-child(2) .hxr-action-circle { animation-delay: 185ms; }
+.hxr-action:nth-child(3) .hxr-action-circle { animation-delay: 230ms; }
+.hxr-action:nth-child(4) .hxr-action-circle { animation-delay: 275ms; }
+.hxr-action:active .hxr-action-circle { transform: scale(0.91); transition-duration: var(--xw-press-time); }
+.hxr-activity, .hxr-games { animation: xw-arrive 700ms var(--xw-ease-out) 220ms backwards; }
+.hxr-games { animation-delay: 290ms; }
+.hxr-account-value, .hxr-feature-value { transition: opacity 300ms ease; }
+.hxr-dot::before, .hmp-games-dot::before { transition: background-color 320ms ease, scale 420ms var(--xw-ease-spring); }
+.hxr-dot.is-active::before, .hmp-games-dot[aria-current="true"]::before { scale: 1.25; }
+
+.hmp-card, .hmp-card--games { animation: none; }
+.hmp-head { animation: xw-arrive 500ms var(--xw-ease-out) 60ms backwards; }
+.hmp-grid > .hmp-tile { animation: xw-arrive 580ms var(--xw-ease-out) 100ms backwards; }
+.hmp-grid > .hmp-tile:nth-child(2) { animation-delay: 145ms; }
+.hmp-grid > .hmp-tile:nth-child(3) { animation-delay: 190ms; }
+.hmp-grid > .hmp-tile:nth-child(4) { animation-delay: 235ms; }
+.hmp-tile-icon, .hmp-tile-cta { transition: translate 440ms var(--xw-ease-spring); }
+.hmp-tile:active .hmp-tile-icon { translate: 0 -2px; }
+.hmp-tile:active .hmp-tile-cta { translate: 3px 0; }
+
+:is(.pf-body, .cm-body) > :not(.pf-notice):not(.cm-notice) { animation: xw-arrive 600ms var(--xw-ease-out) 65ms backwards; }
+:is(.pf-body, .cm-body) > :nth-child(2) { animation-delay: 110ms; }
+:is(.pf-body, .cm-body) > :nth-child(3) { animation-delay: 155ms; }
+:is(.pf-body, .cm-body) > :nth-child(n + 4) { animation-delay: 195ms; }
+.pf-hero-names { animation: xw-arrive 640ms var(--xw-ease-out) 80ms backwards; }
+.pf-hero-nft { animation: xw-fade-in 650ms var(--xw-ease-out) 130ms backwards; }
+.pf-hero-nft:nth-child(2) { animation-delay: 190ms; }
+.pf-hero-nft:nth-child(3) { animation-delay: 250ms; }
+.pf-switch, .pf-switch::after { transition-duration: 420ms; transition-timing-function: var(--xw-ease-spring); }
+.pf-modal, .nft-dialog { animation: xw-dialog-in 440ms var(--xw-ease-out) backwards; }
+.pf-modal-backdrop { animation: xw-fade-in 240ms ease backwards; }
+.nft-sheet { animation: xw-sheet-in 560ms var(--xw-ease-out) backwards; }
+.nft-sheet-wrap, .nft-dialog-wrap { animation-duration: 260ms; }
+
+:is(.svc-grid, .nft-grid) > :not(.svc-empty) { animation: xw-arrive 580ms var(--xw-ease-out) backwards; }
+:is(.svc-grid, .nft-grid) > :nth-child(2n) { animation-delay: 40ms; }
+:is(.svc-grid, .nft-grid) > :nth-child(n + 3) { animation-delay: 80ms; }
+:is(.svc-grid, .nft-grid) > :nth-child(n + 5) { animation-delay: 120ms; }
+:is(.svc-grid, .nft-grid) > :nth-child(n + 7) { animation-delay: 160ms; }
+:is(.svc-header, .nft-topbar, .hub-topbar, .mkt-topbar) { animation: xw-arrive 520ms var(--xw-ease-out) backwards; }
+.svc-tile { border: 0; text-align: left; font: inherit; }
+:is(.hub-asset-row, .mkt-popular-card, .mkt-heat-card) { animation: xw-arrive 600ms var(--xw-ease-out) 90ms backwards; }
+
+:is(.pf-page, .cm-page, .nft-page, .nft-sheet, .nft-dialog, .hub-page, .mkt-page, .swp-page, .svc-page, .pf-modal) :is(button, input, select, textarea) {
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 280ms ease, color 280ms ease, border-color 280ms ease, box-shadow 280ms ease, transform var(--xw-release-time) var(--xw-ease-out), scale var(--xw-release-time) var(--xw-ease-spring);
+}
+
+:is(.wlc-next-btn, .wlc-submit-btn, .wlc-generate-btn, .wlc-eye-btn, .hxr-avatar, .hxr-search, .hxr-gift, .hxr-visibility,
+.hxr-activity, .hxr-games, .hmp-tile, .hmp-close, .svc-tile, .pf-menu-row, .pf-round, .pf-primary, .pf-secondary,
+.pf-hero-action, .cm-mini, .cm-action, .cm-row-main, .nft-cta, .nft-btn, .nft-filter, .nft-seg button,
+.hub-action, .hub-asset-row, .mkt-popular-card, .mkt-heat-card, .mkt-tabs button, .mkt-filters button,
+.swp-submit-btn, .swp-asset-btn, .bp-buy-btn, .bp-case-open-btn) {
+  transition: scale var(--xw-release-time) var(--xw-ease-spring), transform var(--xw-release-time) var(--xw-ease-out), background-color 280ms ease, color 280ms ease, border-color 280ms ease, box-shadow 280ms ease;
+}
+
+:is(.wlc-next-btn, .wlc-submit-btn, .wlc-generate-btn, .wlc-eye-btn, .hxr-avatar, .hxr-search, .hxr-gift, .hxr-visibility,
+.hxr-activity, .hxr-games, .hmp-tile, .hmp-close, .svc-tile, .pf-menu-row, .pf-round, .pf-primary, .pf-secondary,
+.pf-hero-action, .cm-mini, .cm-action, .cm-row-main, .nft-cta, .nft-btn, .nft-filter, .nft-seg button,
+.hub-action, .hub-asset-row, .mkt-popular-card, .mkt-heat-card, .mkt-tabs button, .mkt-filters button,
+.swp-submit-btn, .swp-asset-btn, .bp-buy-btn, .bp-case-open-btn):active:not(:disabled):not([aria-disabled="true"]) {
+  scale: 0.967;
+  transition-duration: var(--xw-press-time);
+}
+
+:is(.nft-seg button.is-on, .nft-filter.is-on, .mkt-tabs button.active, .mkt-filters button.active, .mrg-mode.is-on) { animation: xw-selection 460ms var(--xw-ease-spring); }
+:is(.wlc-next-btn, .wlc-submit-btn, .wlc-mode-btn, .wlc-dot, .hxr-search, .hxr-gift, .hmp-tile, .svc-tile):focus-visible { outline: 2px solid var(--xlavelia); outline-offset: 4px; }
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.hmp-tile, .svc-tile, .pf-menu-row, .cm-row-main, .hub-asset-row):hover:not(:disabled) { background-color: #242423; }
+  :is(.wlc-next-btn, .wlc-submit-btn):hover:not(:disabled) { box-shadow: 0 4px 20px color-mix(in srgb, var(--xlavelia) 12%, transparent); }
+  .hmp-tile:hover .hmp-tile-cta { translate: 3px 0; }
+  .hxr-action:hover .hxr-action-circle { transform: translateY(-2px); }
+}
+
+@media (max-height: 700px) {
+  .wlc-scene { height: 39dvh; min-height: 210px; }
+  .wlc-slide-slot { min-height: 160px; }
+  .wlc-title { font-size: 28px; }
+  .wlc-auth { align-items: flex-start; padding-top: 18px; }
+  .wlc-auth-card { padding: 16px 22px 20px; }
+  .wlc-auth-logo { height: 32px; margin-bottom: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+html.xw-reduce-motion *, html.xw-reduce-motion *::before, html.xw-reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ---------- Единые состояния загрузки ---------- */
+
+.xw-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 46vh;
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.xw-loading.is-compact { min-height: 0; gap: 10px; padding: 16px 0; }
+
+.xw-spinner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--xlavelia) 14%, transparent);
+  border-top-color: var(--xlavelia);
+  animation: xw-spin 900ms linear infinite;
+}
+
+.xw-loading.is-compact .xw-spinner { width: 20px; height: 20px; }
+
+.xw-loading-text {
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  color: rgba(244, 242, 236, 0.5);
+}
+
+.xw-skeleton { display: flex; flex-direction: column; gap: 12px; }
+
+.xw-skeleton i {
+  display: block;
+  height: 96px;
+  border-radius: 24px;
+  background: linear-gradient(90deg, #191918 0%, #222220 50%, #191918 100%);
+  background-size: 200% 100%;
+  animation: xw-shimmer 1.4s linear infinite;
+}
+
+.xw-skeleton.is-hero i:first-child { height: 220px; }
+
+@keyframes xw-shimmer {
+  from { background-position: 0 0; }
+  to { background-position: -200% 0; }
+}
+
+/* ---------- Единый слой оверлеев ---------- */
+
+:is(.bp-overlay, .nft-sheet-wrap, .nft-dialog-wrap, .pf-modal-backdrop, .hmp-overlay) {
+  background: color-mix(in srgb, #050506 74%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+:is(.bp-sheet, .nft-sheet, .nft-dialog, .pf-modal, .hmp-card) {
+  background-color: #151514;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.045);
+}
+
+:is(.bp-pass-sheet, .nft-sheet) { border-radius: 28px 28px 0 0; }
+:is(.bp-case-sheet, .nft-dialog, .pf-modal, .hmp-card) { border-radius: 28px; }
+
+:is(.bp-overlay, .nft-sheet-wrap, .nft-dialog-wrap, .pf-modal-backdrop) { animation: xw-fade-in 220ms ease both; }
+:is(.bp-pass-sheet, .nft-sheet) { animation: xw-sheet-in 440ms var(--xw-ease-out) both; }
+:is(.bp-case-sheet, .nft-dialog, .pf-modal) { animation: xw-dialog-in 380ms var(--xw-ease-out) both; }

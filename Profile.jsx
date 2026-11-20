@@ -7,6 +7,7 @@ import { MenuRow, ProfileAvatar, ProfileHero, ProfileIcon, ProfileModal, QRSheet
 import { NftArt, rarityTitle } from "./nftShared";
 import { useNftState } from "./useNft";
 import { IconBack } from "./marketsShared";
+import { LoadingState } from "./LoadingState";
 
 const FRIEND_LABELS = { none: "Add friend", incoming: "Accept request", outgoing: "Request sent", friend: "Friends" };
 const VIEW_TITLES = { edit: "Edit profile", security: "Password & security", settings: "Settings" };
@@ -249,22 +250,22 @@ export default function Profile() {
           <span className="pf-topbar-title">Profile</span>
           <span className="pf-round pf-round-ghost" />
         </header>
-        <div className="pf-loading-body">
-          <ProfileIcon name="people" />
-          <h2>{otherError || error ? "Could not load profile" : "Loading profile…"}</h2>
-          {otherError || error ? (
-            <>
-              <p className="pf-error">{otherError || error}</p>
-              <button
-                type="button"
-                className="pf-secondary"
-                onClick={() => (own ? refresh() : navigate("/community"))}
-              >
-                {own ? "Try again" : "Back to Community"}
-              </button>
-            </>
-          ) : null}
-        </div>
+        {otherError || error ? (
+          <div className="pf-loading-body">
+            <ProfileIcon name="people" />
+            <h2>Could not load profile</h2>
+            <p className="pf-error">{otherError || error}</p>
+            <button
+              type="button"
+              className="pf-secondary"
+              onClick={() => (own ? refresh() : navigate("/community"))}
+            >
+              {own ? "Try again" : "Back to Community"}
+            </button>
+          </div>
+        ) : (
+          <LoadingState label="Loading profile…" />
+        )}
       </main>
     );
   }

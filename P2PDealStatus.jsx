@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchDealDetail, confirmDeal, cancelDeal } from "./useP2P";
 import { backToP2PMarket } from "./p2pNav";
+import { Icon } from "./icons";
 
-function ChevronLeft() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>); }
+function ChevronLeft() { return <Icon name="back" size={20} />; }
 
 function formatCountdown(expiresAt) {
   var ms = new Date(expiresAt).getTime() - Date.now();

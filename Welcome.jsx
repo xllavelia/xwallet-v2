@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuthStatus } from "./AuthStatusContext";
 import MaintenanceOverlay from "./MaintenanceOverlay";
@@ -29,10 +30,10 @@ function LogoMark(props) {
   var cls = props.className || "";
   return (
     <svg className={cls} viewBox="0 0 1299 1536" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="70" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M 462 350 C 465 510 466 670 470 820 C 472 900 475 970 478 1035"></path>
-      <path d="M 660 360 C 663 520 665 680 670 830 C 675 920 680 1010 686 1085"></path>
-      <path d="M 125 985 C 220 865 330 760 470 690 C 600 625 735 575 850 585 C 905 590 935 615 900 655 C 830 725 700 800 560 865 C 450 915 350 960 250 970"></path>
-      <path d="M 245 970 C 330 975 405 970 470 970 C 545 970 615 1015 690 1085"></path>
+      <path pathLength="1" d="M 462 350 C 465 510 466 670 470 820 C 472 900 475 970 478 1035"></path>
+      <path pathLength="1" d="M 660 360 C 663 520 665 680 670 830 C 675 920 680 1010 686 1085"></path>
+      <path pathLength="1" d="M 125 985 C 220 865 330 760 470 690 C 600 625 735 575 850 585 C 905 590 935 615 900 655 C 830 725 700 800 560 865 C 450 915 350 960 250 970"></path>
+      <path pathLength="1" d="M 245 970 C 330 975 405 970 470 970 C 545 970 615 1015 690 1085"></path>
     </svg>
   );
 }
@@ -121,7 +122,10 @@ async function apiGenerateId() {
 
 const Welcome = () => {
   const navigate = useNavigate();
-    var { setStatus } = useAuthStatus();
+  const { setStatus, reducedMotion } = useAuthStatus();
+  const sessionTimer = useRef(null);
+  const [success, setSuccess] = useState(false);
+  useEffect(() => () => clearTimeout(sessionTimer.current), []);
 
   var [stage, setStage] = useState("onboarding");
   var [slideIndex, setSlideIndex] = useState(0);
@@ -150,12 +154,15 @@ const Welcome = () => {
     setSlideIndex(slideIndex + 1);
   }
 
-function completeSession(data) {
-  localStorage.setItem(TOKEN_KEY, data.token);
-  localStorage.setItem(SESSION_KEY, "1");
-  setStatus("authed");
-  navigate("/");
-}
+  function completeSession(data) {
+    localStorage.setItem(TOKEN_KEY, data.token);
+    localStorage.setItem(SESSION_KEY, "1");
+    setSuccess(true);
+    sessionTimer.current = setTimeout(() => {
+      setStatus("authed");
+      navigate("/", { replace: true });
+    }, reducedMotion ? 0 : 720);
+  }
 
   async function handleGenerateId() {
     setError(null);
@@ -172,6 +179,7 @@ function completeSession(data) {
 
   async function handleRegisterSubmit(e) {
     e.preventDefault();
+    if (isSubmitting || success) return;
     setError(null);
 
     if (username.trim().length < 3) {
@@ -195,9 +203,6 @@ function completeSession(data) {
     try {
       var data = await apiRegister(username.trim(), playerId, password);
       completeSession(data);
-      setTimeout(() => {
-    window.location.reload()
-    }, 200)
     } catch (err) {
       setError(err.message);
     } finally {
@@ -207,6 +212,7 @@ function completeSession(data) {
 
   async function handleLoginSubmit(e) {
     e.preventDefault();
+    if (isSubmitting || success) return;
     setError(null);
 
     if (loginId.trim().length === 0 || loginPassword.length === 0) {
@@ -218,10 +224,6 @@ function completeSession(data) {
     try {
       var data = await apiLogin(loginId.trim(), loginPassword);
       completeSession(data);
-           setTimeout(() => {
-    window.location.reload()
-    }, 200)
-    
     } catch (err) {
       setError(err.message);
     } finally {
@@ -229,183 +231,127 @@ function completeSession(data) {
     }
   }
 
-  var modePillClass = "wlc-mode-pill " + mode;
-  var submitLabel = isSubmitting ? "Please wait..." : (mode === "register" ? "Create Account" : "Log In");
+  const ease = [0.22, 1, 0.36, 1];
+  const transition = { duration: reducedMotion ? 0 : 0.5, ease };
+  const submitLabel = success ? "You're in" : isSubmitting ? "Connecting…" : mode === "register" ? "Create Account" : "Log In";
+  const enter = reducedMotion ? { opacity: 1 } : { opacity: 0, y: 18 };
+  const exit = reducedMotion ? { opacity: 0 } : { opacity: 0, y: -10 };
 
   return (
-    <div className="WelcomeContent">
-
-      {stage === "onboarding" && (
-        <div className="wlc-onboarding">
-
-          <div className="wlc-scene">
-            <div className="wlc-circle c1"></div>
-            <div className="wlc-circle c2"></div>
-            <div className="wlc-ring r1"></div>
-            <div className="wlc-ring r2"></div>
-            <div className="wlc-sparkle">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2 L13.6 10.4 L22 12 L13.6 13.6 L12 22 L10.4 13.6 L2 12 L10.4 10.4 Z"></path>
-              </svg>
-            </div>
-            <div className="wlc-burst"></div>
-            <div className="wlc-burst-dot"></div>
-          </div>
-
-          <div className="wlc-content">
-            <div className="wlc-text-block" key={slideIndex}>
-              <span className="wlc-eyebrow">{slide.eyebrow}</span>
-              <h1 className="wlc-title">{slide.title}</h1>
-              <p className="wlc-subtitle">{slide.text}</p>
-            </div>
-
-            <div className="wlc-footer">
-              <div className="wlc-dots">
-                {SLIDES.map(function (s, idx) {
-                  return (
-                    <span
-                      key={idx}
-                      className={"wlc-dot" + (idx === slideIndex ? " active" : "")}
-                      onClick={() => setSlideIndex(idx)}
-                    ></span>
-                  );
-                })}
+    <div className={"WelcomeContent" + (success ? " is-auth-success" : "")}>
+      <AnimatePresence mode="wait">
+        {stage === "onboarding" ? (
+          <motion.div key="onboarding" className="wlc-onboarding" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={exit} transition={transition}>
+            <div className={"wlc-scene wlc-scene--" + slideIndex} aria-hidden="true">
+              <div className="wlc-circle c1" />
+              <div className="wlc-circle c2" />
+              <motion.div className="wlc-ring r1" animate={{ rotate: reducedMotion ? 0 : slideIndex * 18, scale: reducedMotion ? 1 : 1 + slideIndex * 0.04 }} transition={{ duration: reducedMotion ? 0 : 1.2, ease }} />
+              <motion.div className="wlc-ring r2" animate={{ x: reducedMotion ? 0 : slideIndex * 12, y: reducedMotion ? 0 : -slideIndex * 8 }} transition={{ duration: reducedMotion ? 0 : 1.2, ease }} />
+              <div className="wlc-sparkle">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L13.6 10.4 L22 12 L13.6 13.6 L12 22 L10.4 13.6 L2 12 L10.4 10.4 Z" /></svg>
               </div>
-              <button className="wlc-next-btn" onClick={handleNextSlide}>
-                {nextLabel}
-                <ArrowIcon />
-              </button>
+              <div className="wlc-burst" />
+              <div className="wlc-burst-dot" />
+              {/* <div className="wlc-scene-mark"><LogoMark className="wlc-scene-logo" /></div> */}
             </div>
-          </div>
-
-        </div>
-      )}
-
-      {stage === "auth" && (
-        <div className="wlc-auth">
-          <div className="wlc-auth-glow"></div>
-
-          <div className="wlc-auth-card">
-            <LogoMark className="wlc-auth-logo" />
-            <h2 className="wlc-auth-title">{mode === "register" ? "Create your account" : "Welcome back"}</h2>
-            <p className="wlc-auth-subtitle">
-              {mode === "register" ? "Set up your wallet in under a minute" : "Log in to continue trading"}
-            </p>
-
-            <div className="wlc-mode-toggle">
-              <div className={modePillClass}></div>
-              <button className={"wlc-mode-btn " + (mode === "register" ? "active" : "")} onClick={() => { setMode("register"); setError(null); }}>
-                Register
-              </button>
-              <button className={"wlc-mode-btn " + (mode === "login" ? "active" : "")} onClick={() => { setMode("login"); setError(null); }}>
-                Log In
-              </button>
+            <div className="wlc-content">
+              <div className="wlc-slide-slot">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div className="wlc-text-block" key={slideIndex} initial={enter} animate={{ opacity: 1, y: 0 }} exit={exit} transition={transition}>
+                    <span className="wlc-eyebrow">{slide.eyebrow}</span>
+                    <h1 className="wlc-title">{slide.title}</h1>
+                    <p className="wlc-subtitle">{slide.text}</p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+              <div className="wlc-footer">
+                <div className="wlc-dots" aria-label="Welcome slides">
+                  {SLIDES.map((s, idx) => (
+                    <button type="button" key={idx} className={"wlc-dot" + (idx === slideIndex ? " active" : "")} aria-label={"Welcome slide " + (idx + 1)} aria-current={idx === slideIndex ? "step" : undefined} onClick={() => setSlideIndex(idx)} />
+                  ))}
+                </div>
+                <button type="button" className="wlc-next-btn" onClick={handleNextSlide}><span>{nextLabel}</span></button>
+              </div>
             </div>
-
-            {error && <div className="wlc-error-banner">{error}</div>}
-
-            {mode === "register" && (
-              <form className="wlc-form" onSubmit={handleRegisterSubmit}>
-                <div className="wlc-field">
-                  <label className="wlc-label">Username</label>
-                  <input
-                    className="wlc-input"
-                    type="text"
-                    placeholder="e.g. xlavelia"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </div>
-
-                <div className="wlc-field">
-                  <label className="wlc-label">Player ID</label>
-                  <div className="wlc-id-row">
-                    <input
-                      className="wlc-input"
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={6}
-                      placeholder="6 digits"
-                      value={playerId}
-                      onChange={(e) => setPlayerId(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                    />
-                    <button type="button" className="wlc-generate-btn" onClick={handleGenerateId} disabled={isGeneratingId}>
-                      <RefreshIcon />
-                    </button>
-                  </div>
-                  <span className="wlc-hint">Digits only, exactly 6 characters</span>
-                </div>
-
-                <div className="wlc-field">
-                  <label className="wlc-label">Password</label>
-                  <div className="wlc-pass-row">
-                    <input
-                      className="wlc-input"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="At least 6 characters"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="button" className="wlc-eye-btn" onClick={() => setShowPassword(!showPassword)}>
-                      <EyeIcon off={showPassword} />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="wlc-field">
-                  <label className="wlc-label">Confirm Password</label>
-                  <input
-                    className="wlc-input"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Repeat your password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </div>
-
-                <button type="submit" className="wlc-submit-btn" disabled={isSubmitting}>{submitLabel}</button>
-              </form>
-            )}
-
-            {mode === "login" && (
-              <form className="wlc-form" onSubmit={handleLoginSubmit}>
-              <div className="wlc-field">
-  <label className="wlc-label">Player ID</label>
-  <input
-    className="wlc-input"
-    type="text"
-    inputMode="numeric"
-    maxLength={6}
-    placeholder="6-digit ID"
-    value={loginId}
-    onChange={(e) => setLoginId(e.target.value.replace(/\D/g, "").slice(0, 6))}
-  />
-</div>
-
-                <div className="wlc-field">
-                  <label className="wlc-label">Password</label>
-                  <div className="wlc-pass-row">
-                    <input
-                      className="wlc-input"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Your password"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                    />
-                    <button type="button" className="wlc-eye-btn" onClick={() => setShowPassword(!showPassword)}>
-                      <EyeIcon off={showPassword} />
-                    </button>
-                  </div>
-                </div>
-
-                <button type="submit" className="wlc-submit-btn" disabled={isSubmitting}>{submitLabel}</button>
-              </form>
-            )}
-
-          </div>
-        </div>
-      )}
-<MaintenanceOverlay />
+          </motion.div>
+        ) : (
+          <motion.div key="auth" className="wlc-auth" initial={enter} animate={{ opacity: 1, y: 0 }} exit={exit} transition={transition}>
+            <div className="wlc-auth-glow" />
+            <motion.div className="wlc-auth-card" layout={!reducedMotion} transition={{ layout: { duration: reducedMotion ? 0 : 0.48, ease } }}>
+              <LogoMark className="wlc-auth-logo" />
+              <motion.div layout="position" className="wlc-auth-heading" key={mode} initial={{ opacity: reducedMotion ? 1 : 0 }} animate={{ opacity: 1 }} transition={transition}>
+                <h2 className="wlc-auth-title">{mode === "register" ? "Create your account" : "Welcome back"}</h2>
+                <p className="wlc-auth-subtitle">{mode === "register" ? "Set up your wallet in under a minute" : "Log in to continue trading"}</p>
+              </motion.div>
+              <motion.div layout="position" className="wlc-mode-toggle" role="tablist" aria-label="Account access">
+                <div className={"wlc-mode-pill " + mode} />
+                {["register", "login"].map(value => (
+                  <button key={value} type="button" role="tab" aria-selected={mode === value} aria-controls="wlc-access-form" disabled={isSubmitting || success} className={"wlc-mode-btn " + (mode === value ? "active" : "")} onClick={() => { setMode(value); setError(null); }}>
+                    {value === "register" ? "Register" : "Log In"}
+                  </button>
+                ))}
+              </motion.div>
+              <AnimatePresence initial={false}>
+                {error && <motion.div key={error} role="alert" className="wlc-error-banner" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: reducedMotion ? 0 : 0.24, ease }}>{error}</motion.div>}
+              </AnimatePresence>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.form key={mode} id="wlc-access-form" className="wlc-form" onSubmit={mode === "register" ? handleRegisterSubmit : handleLoginSubmit} initial={enter} animate={{ opacity: 1, y: 0 }} exit={exit} transition={{ duration: reducedMotion ? 0 : 0.25, ease }} aria-busy={isSubmitting}>
+                  {mode === "register" ? (
+                    <>
+                      <div className="wlc-field">
+                        <label className="wlc-label" htmlFor="wlc-username">Username</label>
+                        <input id="wlc-username" className="wlc-input" type="text" autoComplete="username" placeholder="e.g. xlavelia" value={username} onChange={e => setUsername(e.target.value)} />
+                      </div>
+                      <div className="wlc-field">
+                        <label className="wlc-label" htmlFor="wlc-player">Player ID</label>
+                        <div className="wlc-id-row">
+                          <input id="wlc-player" className="wlc-input" type="text" inputMode="numeric" maxLength={6} placeholder="6 digits" value={playerId} onChange={e => setPlayerId(e.target.value.replace(/\D/g, "").slice(0, 6))} />
+                          <button type="button" aria-label="Generate player ID" aria-busy={isGeneratingId} className={"wlc-generate-btn" + (isGeneratingId ? " is-loading" : "")} onClick={handleGenerateId} disabled={isGeneratingId}><RefreshIcon /></button>
+                        </div>
+                        <span className="wlc-hint">Digits only, exactly 6 characters</span>
+                      </div>
+                      <div className="wlc-field">
+                        <label className="wlc-label" htmlFor="wlc-password">Password</label>
+                        <div className="wlc-pass-row">
+                          <input id="wlc-password" className="wlc-input" type={showPassword ? "text" : "password"} autoComplete="new-password" placeholder="At least 6 characters" value={password} onChange={e => setPassword(e.target.value)} />
+                          <button type="button" className="wlc-eye-btn" aria-label={showPassword ? "Hide password" : "Show password"} onClick={() => setShowPassword(!showPassword)}><EyeIcon off={showPassword} /></button>
+                        </div>
+                      </div>
+                      <div className="wlc-field">
+                        <label className="wlc-label" htmlFor="wlc-confirm">Confirm Password</label>
+                        <input id="wlc-confirm" className="wlc-input" type={showPassword ? "text" : "password"} autoComplete="new-password" placeholder="Repeat your password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="wlc-field">
+                        <label className="wlc-label" htmlFor="wlc-login-id">Player ID</label>
+                        <input id="wlc-login-id" className="wlc-input" type="text" inputMode="numeric" autoComplete="username" maxLength={6} placeholder="6-digit ID" value={loginId} onChange={e => setLoginId(e.target.value.replace(/\D/g, "").slice(0, 6))} />
+                      </div>
+                      <div className="wlc-field">
+                        <label className="wlc-label" htmlFor="wlc-login-password">Password</label>
+                        <div className="wlc-pass-row">
+                          <input id="wlc-login-password" className="wlc-input" type={showPassword ? "text" : "password"} autoComplete="current-password" placeholder="Your password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} />
+                          <button type="button" className="wlc-eye-btn" aria-label={showPassword ? "Hide password" : "Show password"} onClick={() => setShowPassword(!showPassword)}><EyeIcon off={showPassword} /></button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  <button type="submit" className={"wlc-submit-btn" + (success ? " is-success" : "")} aria-label={submitLabel} disabled={isSubmitting || success}>
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.span key={submitLabel} className="wlc-submit-content" role="status" initial={{ opacity: 0, y: reducedMotion ? 0 : 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reducedMotion ? 0 : -6 }} transition={{ duration: reducedMotion ? 0 : 0.16 }}>
+                        {success ? <svg className="wlc-success-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path pathLength="1" d="m5 12 4 4L19 6" /></svg> : isSubmitting ? <span className="wlc-spinner" aria-hidden="true" /> : null}
+                        {submitLabel}
+                      </motion.span>
+                    </AnimatePresence>
+                  </button>
+                </motion.form>
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <MaintenanceOverlay />
     </div>
   );
 };

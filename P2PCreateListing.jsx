@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { createListing, fetchMarketPrice } from "./useP2P";
 import { CRYPTO_ASSETS, STOCK_ASSETS } from "./p2pAssets";
 import { backToP2PMarket } from "./p2pNav";
+import { Icon } from "./icons";
 
-function ChevronLeft() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>); }
+function ChevronLeft() { return <Icon name="back" size={20} />; }
 
 const P2PCreateListing = () => {
   const navigate = useNavigate();

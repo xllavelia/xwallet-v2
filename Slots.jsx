@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWalletBalance } from "./useWallet";
 import { useSlots } from "./useSlots";
+import { Icon } from "./icons";
 
 // ============================================================
 // ИКОНКИ СИМВОЛОВ — кошелёковая стилистика, stroke = currentColor
@@ -140,14 +141,6 @@ function BackIcon() {
   );
 }
 
-function CloseIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <path d="M18 6L6 18"></path>
-      <path d="M6 6l12 12"></path>
-    </svg>
-  );
-}
 
 // Реестр символов; hot — редкие, светятся акцентом
 var SYMBOL_ICONS = {
@@ -469,7 +462,7 @@ function ShopModal(props) {
       <div className="slt-modal" onClick={function (e) { e.stopPropagation(); }}>
         <div className="slt-modal-head">
           <h3>Spin Packs</h3>
-          <button className="slt-x" onClick={props.onClose}><CloseIcon /></button>
+          <button className="slt-x" onClick={props.onClose}><Icon name="close" size={16} /></button>
         </div>
         <p className="slt-modal-sub">Paid from your wallet balance. Every pack spin carries its own stake into the prize pool.</p>
         <div className="slt-pack-list">
@@ -511,7 +504,7 @@ function PaytableModal(props) {
       <div className="slt-modal" onClick={function (e) { e.stopPropagation(); }}>
         <div className="slt-modal-head">
           <h3>Paytable</h3>
-          <button className="slt-x" onClick={props.onClose}><CloseIcon /></button>
+          <button className="slt-x" onClick={props.onClose}><Icon name="close" size={16} /></button>
         </div>
         <div className="slt-pt-group">
           <div className="slt-pt-title">Triple symbols</div>

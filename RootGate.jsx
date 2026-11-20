@@ -57,13 +57,13 @@ function RootGate() {
   }, [retryTick]);
 
   if (status === "checking") {
-    return <div style={{ background: "#101010", minHeight: "100vh" }}></div>;
+    return <div className="xw-boot" role="status" aria-label="Opening xwallet"><span aria-hidden="true">x</span></div>;
   }
   if (status === "authed") {
     return <Home />;
   }
   return (
-    <Suspense fallback={<div style={{ background: "#101010", minHeight: "100vh" }}></div>}>
+    <Suspense fallback={<div className="xw-boot" role="status" aria-label="Opening xwallet"><span aria-hidden="true">x</span></div>}>
       <Welcome />
     </Suspense>
   );

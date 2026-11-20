@@ -1,5 +1,7 @@
 // Общие утилиты, метаданные монет и иконки маркет-модуля
 
+import { Icon } from "./icons";
+
 var COIN_ORDER = ["BTC", "ETH", "SOL", "TON"];
 
 var COIN_META = {
@@ -61,73 +63,24 @@ function alphaColor(color, alpha) {
   return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
 }
 
-function IconBack() {
-  return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>);
-}
-
-function IconSearch() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>);
-}
-
-function IconArrow() {
-  return (<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg>);
-}
-
-function IconChevron() {
-  return (<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>);
-}
-
-function IconSwap() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>);
-}
-
-function IconBuy() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>);
-}
-
-function IconSell() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>);
-}
-
-function IconCard() {
-  return (<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>);
-}
-
-function IconRefresh() {
-  return (<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path><polyline points="21 3 21 9 15 9"></polyline></svg>);
-}
-
-function IconInfo() {
-  return (<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><line x1="12" y1="8" x2="12" y2="8.01"></line></svg>);
-}
-
-function IconSend() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>);
-}
-
-function IconChart() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="15 7 21 7 21 13"></polyline></svg>);
-}
-
-function IconHistory() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><polyline points="3 4 3 9 8 9"></polyline><polyline points="12 7 12 12 15.5 14"></polyline></svg>);
-}
-
-function IconPlus() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>);
-}
-
-function IconChevronDown() {
-  return (<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>);
-}
-
-function IconSwapVertical() {
-  return (<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="7 10 12 5 17 10"></polyline><line x1="12" y1="5" x2="12" y2="15"></line><polyline points="7 14 12 19 17 14"></polyline><line x1="12" y1="19" x2="12" y2="9"></line></svg>);
-}
-
-function IconCheck() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="5 12.5 10 17.5 19 7"></polyline></svg>);
-}
+// Маркет-иконки — тонкие обёртки над общим набором, размеры остаются на месте.
+function IconBack() { return <Icon name="back" size={18} />; }
+function IconSearch() { return <Icon name="search" size={16} />; }
+function IconArrow() { return <Icon name="arrow" size={14} />; }
+function IconChevron() { return <Icon name="chevron" size={12} />; }
+function IconSwap() { return <Icon name="swap" size={16} />; }
+function IconBuy() { return <Icon name="arrow-up" size={16} />; }
+function IconSell() { return <Icon name="arrow-down" size={16} />; }
+function IconCard() { return <Icon name="card" size={13} />; }
+function IconRefresh() { return <Icon name="refresh" size={14} />; }
+function IconInfo() { return <Icon name="info" size={13} />; }
+function IconSend() { return <Icon name="arrow-up" size={16} />; }
+function IconChart() { return <Icon name="chart" size={16} />; }
+function IconHistory() { return <Icon name="history" size={16} />; }
+function IconPlus() { return <Icon name="plus" size={16} />; }
+function IconChevronDown() { return <Icon name="chevron-down" size={12} />; }
+function IconSwapVertical() { return <Icon name="swap-vertical" size={17} />; }
+function IconCheck() { return <Icon name="check" size={16} />; }
 
 export {
   COIN_ORDER,

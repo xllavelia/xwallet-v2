@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useNftState } from "./useNft";
 import { RARITIES, NftArt, NftIcon, NftTopbar, money, perHour, rarityRank, rarityTitle, useNftBack } from "./nftShared";
 import { NftConfirm, NftCta, NftDetailSheet, NftListDialog, NftToast, itemRows, useNftToast } from "./NftSheets";
+import { Skeleton } from "./LoadingState";
 
 const SORTS = [
   ["value", "Value"],
@@ -98,7 +99,7 @@ export default function NftInventory() {
       <div className="nft-wrap">
         {!state && (error
           ? <div className="nft-empty"><b>Could not load NFTs</b><span>{error}</span></div>
-          : <div className="nft-skeleton"><i /><i /><i /></div>)}
+          : <Skeleton rows={3} hero />)}
 
         {state && (
           <>

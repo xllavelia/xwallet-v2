@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { authFetch } from "./apiClient";
+import { Icon } from "./icons";
 
 function LogoMark(props) {
   var cls = props.className || "";
@@ -14,37 +15,10 @@ function LogoMark(props) {
   );
 }
 
-function SendIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="7" y1="17" x2="17" y2="7"></line>
-      <polyline points="8 7 17 7 17 16"></polyline>
-    </svg>
-  );
-}
-function ReceiveIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="17" y1="7" x2="7" y2="17"></line>
-      <polyline points="16 17 7 17 7 8"></polyline>
-    </svg>
-  );
-}
-function CopyIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="9" y="9" width="12" height="12" rx="2"></rect>
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-    </svg>
-  );
-}
-function CheckIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="4 12.5 9.5 18 20 6"></polyline>
-    </svg>
-  );
-}
+function SendIcon() { return <Icon name="arrow-up-right" size={26} />; }
+function ReceiveIcon() { return <Icon name="arrow-down-left" size={26} />; }
+function CopyIcon() { return <Icon name="copy" size={13} />; }
+function CheckIcon() { return <Icon name="check" size={14} />; }
 
 const SendCheck = () => {
   const navigate = useNavigate();

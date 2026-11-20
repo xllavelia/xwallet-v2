@@ -1,5 +1,8 @@
 import React, { useId, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAuthStatus } from "./AuthStatusContext";
+import { Icon } from "./icons";
 
 // Пути — сверь с App.jsx. Если роут называется иначе, поправь только здесь.
 var REWARDS_ROUTES = {
@@ -19,42 +22,10 @@ var GAMES_ROUTES = {
   mine: "/mining",
 };
 
-// ===================== ИКОНКИ =====================
-
-function GiftIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"></rect><path d="M12 8v13"></path><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"></path><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"></path></svg>);
-}
-function TicketIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2 2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4Z"></path><path d="M14 7v10" strokeDasharray="2 3"></path></svg>);
-}
-function EmpireIcon() {
-  return (<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="9" y1="6" x2="9.01" y2="6"></line><line x1="15" y1="6" x2="15.01" y2="6"></line><line x1="9" y1="10" x2="9.01" y2="10"></line><line x1="15" y1="10" x2="15.01" y2="10"></line><path d="M10 22v-4h4v4"></path></svg>);
-}
-function SlotsIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v14"></path><path d="M16 5v14"></path><path d="M8 12h.01"></path><path d="M12 12h.01"></path><path d="M16 12h.01"></path></svg>);
-}
-function PixelIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>);
-}
-function RocketIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2Z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>);
-}
-function FlipIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>);
-}
-function TradeIcon() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>);
-}
-function MineIcon() {
-  return (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32"><path fill="#fff" d="M16.001 26.473H16L4.284 12.955L9.5 6h13l5.216 6.955l-3.24 3.737l1.513 1.31l4.295-4.957L23.5 4h-15l-6.784 9.045l12.772 14.737z" /><path fill="#fff" d="m20 19l7 5l-7 5z" /></svg>);
-}
-function CloseIcon() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>);
-}
-
 // ===================== ОБЩАЯ КОРЗИНА МОДАЛКИ =====================
 
 function PickerShell(props) {
+  const { reducedMotion } = useAuthStatus();
   const dialogRef = useRef(null);
   const closeRef = useRef(null);
   const onCloseRef = useRef(props.onClose);
@@ -111,8 +82,13 @@ function PickerShell(props) {
   }, []);
 
   return (
-    <div className={"hmp-overlay" + (props.games ? " hmp-overlay--games" : "")} onClick={props.onClose}>
-      <div
+    <motion.div className={"hmp-overlay" + (props.games ? " hmp-overlay--games" : "")} onClick={props.onClose}
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reducedMotion ? 0 : 0.24 }}>
+      <motion.div
+        initial={reducedMotion ? false : { opacity: 0, y: 28, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: reducedMotion ? 0 : 18, scale: reducedMotion ? 1 : 0.975 }}
+        transition={{ duration: reducedMotion ? 0 : 0.42, ease: [0.22, 1, 0.36, 1] }}
         ref={dialogRef}
         className={"hmp-card" + (props.games ? " hmp-card--games" : "")}
         role="dialog"
@@ -127,11 +103,11 @@ function PickerShell(props) {
             <span className="hmp-title" id={titleId}>{props.title}</span>
             <span className="hmp-sub" id={subtitleId}>{props.subtitle}</span>
           </div>
-          <button ref={closeRef} type="button" className="hmp-close" aria-label="Close dialog" onClick={props.onClose}><CloseIcon /></button>
+          <button ref={closeRef} type="button" className="hmp-close" aria-label="Close dialog" onClick={props.onClose}><Icon name="close" size={16} /></button>
         </div>
         {props.children}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -169,14 +145,14 @@ export function RewardsPickerModal(props) {
       <div className="hmp-grid two">
         <Tile
           tone="gold"
-          icon={<TicketIcon />}
+          icon={<Icon name="ticket" size={20} />}
           name="Vouchers"
           desc="Active and expired"
           onGo={() => go(REWARDS_ROUTES.vouchers)}
         />
         <Tile
           tone="green"
-          icon={<GiftIcon />}
+          icon={<Icon name="gift" size={20} />}
           name="Daily Rewards"
           desc="Claim today's drop"
           onGo={() => go(REWARDS_ROUTES.daily)}
@@ -186,7 +162,7 @@ export function RewardsPickerModal(props) {
         <div className="hmp-grid q">
           <Tile
           tone="gold"
-          icon={<TicketIcon />}
+          icon={<Icon name="ticket" size={20} />}
           name="Battle pass"
           desc="levels, reward and pass"
           onGo={() => go(REWARDS_ROUTES.pass)}
@@ -201,6 +177,7 @@ export function RewardsPickerModal(props) {
 
 export function MiniGamesModal(props) {
   const navigate = useNavigate();
+  const { reducedMotion } = useAuthStatus();
   const viewportRef = useRef(null);
   const firstSlideRef = useRef(null);
   const controlsRef = useRef(null);
@@ -253,7 +230,7 @@ export function MiniGamesModal(props) {
     const next = Math.max(0, Math.min(1, page));
     viewport.scrollTo({
       left: next * viewport.clientWidth,
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth"
+      behavior: reducedMotion ? "instant" : "smooth"
     });
   }
 
@@ -292,10 +269,10 @@ export function MiniGamesModal(props) {
             inert={activePage !== 0}
           >
             <div className="hmp-grid hmp-games-grid" ref={firstSlideRef}>
-              <Tile tone="violet" icon={<PixelIcon />} name="Pixel" desc="Tap & collect" onGo={() => go(GAMES_ROUTES.pixel)} />
-              <Tile tone="orange" icon={<RocketIcon />} name="Rocket" desc="Fly & multiply" onGo={() => go(GAMES_ROUTES.rocket)} />
-              <Tile tone="blue" icon={<FlipIcon />} name="Flip" desc="Coin decision" onGo={() => go(GAMES_ROUTES.flip)} />
-              <Tile tone="pink" icon={<TicketIcon />} name="Ticket" desc="Draw & win" onGo={() => go(GAMES_ROUTES.ticket)} />
+              <Tile tone="violet" icon={<Icon name="pixel" size={20} />} name="Pixel" desc="Tap & collect" onGo={() => go(GAMES_ROUTES.pixel)} />
+              <Tile tone="orange" icon={<Icon name="rocket" size={20} />} name="Rocket" desc="Fly & multiply" onGo={() => go(GAMES_ROUTES.rocket)} />
+              <Tile tone="blue" icon={<Icon name="flip" size={20} />} name="Flip" desc="Coin decision" onGo={() => go(GAMES_ROUTES.flip)} />
+              <Tile tone="pink" icon={<Icon name="ticket" size={20} />} name="Ticket" desc="Draw & win" onGo={() => go(GAMES_ROUTES.ticket)} />
             </div>
           </div>
           <div
@@ -308,10 +285,10 @@ export function MiniGamesModal(props) {
             inert={activePage !== 1}
           >
             <div className="hmp-grid hmp-games-grid">
-              <Tile tone="pink" icon={<EmpireIcon />} name="Empire" desc="Build empire" onGo={() => go(GAMES_ROUTES.empire)} />
-              <Tile tone="cyan" icon={<SlotsIcon />} name="Slots" desc="Risk and money" onGo={() => go(GAMES_ROUTES.slots)} />
-              <Tile tone="cyan" icon={<TradeIcon />} name="Trade" desc="Charts & orders" onGo={() => go(GAMES_ROUTES.trade)} />
-              <Tile tone="cyan" icon={<MineIcon />} name="Mine" desc="Server and power" onGo={() => go(GAMES_ROUTES.mine)} />
+              <Tile tone="pink" icon={<Icon name="empire" size={22} />} name="Empire" desc="Build empire" onGo={() => go(GAMES_ROUTES.empire)} />
+              <Tile tone="cyan" icon={<Icon name="slots" size={20} />} name="Slots" desc="Risk and money" onGo={() => go(GAMES_ROUTES.slots)} />
+              <Tile tone="cyan" icon={<Icon name="trade" size={20} />} name="Trade" desc="Charts & orders" onGo={() => go(GAMES_ROUTES.trade)} />
+              <Tile tone="cyan" icon={<Icon name="mine" size={20} />} name="Mine" desc="Server and power" onGo={() => go(GAMES_ROUTES.mine)} />
             
             </div>
           </div>

@@ -155,7 +155,7 @@ const AppRoutes = () => {
             path={route.path}
             element={
               <RequireAuth>
-                <PageTransition>
+                <PageTransition key={route.path}>
                   {route.element}
                 </PageTransition>
               </RequireAuth>

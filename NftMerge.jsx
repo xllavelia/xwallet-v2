@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useNftState } from "./useNft";
 import { NftArt, NftIcon, NftTopbar, RARITIES, money, rarityRank, rarityTitle, useNftBack } from "./nftShared";
 import { NftConfirm, NftToast, useNftToast } from "./NftSheets";
+import { Skeleton } from "./LoadingState";
 
 // Пары: одинаковый шаблон в двух и более незалистованных копиях.
 // Редкость выше последней в списке не существует, поэтому legendary в слияние не попадает.
@@ -162,7 +163,7 @@ export default function NftMerge() {
       <div className="nft-wrap mrg-wrap">
         {!state && (error
           ? <div className="upg-empty upg-center"><b>Could not load NFTs</b><span>{error}</span></div>
-          : <div className="nft-skeleton"><i /><i /><i /></div>)}
+          : <Skeleton rows={3} hero />)}
 
         {state && !result && (
           <div className="mrg-modes" role="tablist" aria-label="Merge mode">

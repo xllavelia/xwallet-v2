@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMerchantStatus, useMyListings, becomeMerchant, withdrawMerchantDeposit, closeListing } from "./useP2P";
 import { backToP2PMarket } from "./p2pNav";
+import { Icon } from "./icons";
 
-function ChevronLeft() { return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>); }
-function DollarIcon() { return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>); }
+function ChevronLeft() { return <Icon name="back" size={20} />; }
 
 const P2PMerchant = () => {
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ const P2PMerchant = () => {
         </div>
 
         <div className="p2p-onboard-step">
-          <div className="p2p-onboard-icon"><DollarIcon /></div>
+          <div className="p2p-onboard-icon"><Icon name="dollar" size={16} /></div>
           <div className="p2p-onboard-text">
             <span className="p2p-onboard-title">{"Guarantee deposit — $" + status.requiredDeposit.toFixed(0)}</span>
             <span className="p2p-onboard-sub">Refundable when you stop being a merchant</span>

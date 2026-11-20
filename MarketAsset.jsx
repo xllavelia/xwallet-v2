@@ -16,18 +16,11 @@ import {
   IconChart
 } from "./marketsShared";
 import { AssetLogo } from "./AssetLogos";
+import { Icon } from "./icons";
 
 var RANGES = ["1D", "1W", "1M", "3M", "1Y"];
 var CHART_UP = "#39d98a";
 var CHART_DOWN = "#ff6b6b";
-
-function StarIcon({ filled }) {
-  return <svg width="19" height="19" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2.8 15 8.9 21.5 9.8 16.8 14.4 17.9 21 12 17.9 6.1 21 7.2 14.4 2.5 9.8 9 8.9"></polygon></svg>;
-}
-
-function CandleIcon() {
-  return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><line x1="7" y1="3" x2="7" y2="7"></line><line x1="7" y1="17" x2="7" y2="21"></line><rect x="4" y="7" width="6" height="10" rx="1"></rect><line x1="17" y1="3" x2="17" y2="7"></line><line x1="17" y1="17" x2="17" y2="21"></line><rect x="14" y="7" width="6" height="10" rx="1"></rect></svg>;
-}
 
 // Сервер отдаёт close-точки: агрегируем их в интервалы и честно строим OHLC только из доступных значений
 function deriveCandles(points) {
@@ -251,7 +244,7 @@ function AssetBook({ kind, symbol, catalog, portfolio, refreshCatalog, refreshPo
       <header className="mkt-asset-nav">
         <button className="mkt-back" onClick={function () { navigate(-1); }} aria-label="Back"><IconBack /></button>
         <span>{isStock ? "Stock" : "Resource"}</span>
-        <button className={"mkt-favorite" + (favorite ? " is-active" : "")} onClick={toggleFavorite} aria-label={favorite ? "Remove from favorites" : "Add to favorites"} aria-pressed={favorite}><StarIcon filled={favorite} /></button>
+        <button className={"mkt-favorite" + (favorite ? " is-active" : "")} onClick={toggleFavorite} aria-label={favorite ? "Remove from favorites" : "Add to favorites"} aria-pressed={favorite}><Icon name="star" size={19} fill={favorite ? "currentColor" : "none"} /></button>
       </header>
 
       <section className="mkt-asset-identity">
@@ -272,7 +265,7 @@ function AssetBook({ kind, symbol, catalog, portfolio, refreshCatalog, refreshPo
         </div>
         <div className="mkt-chart-modes" role="tablist" aria-label="Chart type">
           <button role="tab" aria-selected={chartMode === "line"} className={chartMode === "line" ? "is-active" : ""} onClick={function () { setChartMode("line"); }} aria-label="Line chart"><IconChart /><span>Line</span></button>
-          <button role="tab" aria-selected={chartMode === "candles"} className={chartMode === "candles" ? "is-active" : ""} onClick={function () { setChartMode("candles"); }} aria-label="Candlestick chart"><CandleIcon /><span>Candles</span></button>
+          <button role="tab" aria-selected={chartMode === "candles"} className={chartMode === "candles" ? "is-active" : ""} onClick={function () { setChartMode("candles"); }} aria-label="Candlestick chart"><Icon name="candles" size={15} /><span>Candles</span></button>
         </div>
       </div>
 

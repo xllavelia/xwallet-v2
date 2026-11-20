@@ -1,31 +1,11 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { usePrime, purchasePrime } from "./usePrime";
 import { useBattlePass } from "./useBattlePass";
+import { Icon } from "./icons";
 
-function ArrowIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="7" y1="17" x2="17" y2="7"></line>
-      <polyline points="8 7 17 7 17 16"></polyline>
-    </svg>
-  );
-}
-function CheckIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="4 12.5 9.5 18 20 6"></polyline>
-    </svg>
-  );
-}
-function GemIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 3h12l4 6-10 12L2 9Z"></path>
-      <path d="M2 9h20"></path>
-      <path d="M9 3 8 9l4 12 4-12-1-6"></path>
-    </svg>
-  );
-}
+function ArrowIcon() { return <Icon name="arrow-up-right" size={15} />; }
+function CheckIcon() { return <Icon name="check" size={13} />; }
+function GemIcon() { return <Icon name="nft" size={18} />; }
 
 function buildFeatures(tier) {
   var features = [];

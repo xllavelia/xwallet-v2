@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { authFetch } from "./apiClient";
 import { useWalletBalance } from "./useWallet";
 import { useCardFunding } from "./useCardFunding";
+import { Icon } from "./icons";
 
 var BARCODE = [3, 1, 2, 1, 4, 2, 1, 3, 1, 2, 4, 1, 2, 1, 3, 2, 1, 4, 1, 2];
 // var TORN_BOTTOM_CLIP = "polygon(0% 0%, 100% 0%, 100% 90%, 96% 100%, 92% 92%, 88% 100%, 84% 91%, 80% 100%, 76% 92%, 72% 100%, 68% 91%, 64% 100%, 60% 92%, 56% 100%, 52% 91%, 48% 100%, 44% 92%, 40% 100%, 36% 91%, 32% 100%, 28% 92%, 24% 100%, 20% 91%, 16% 100%, 12% 92%, 8% 100%, 4% 91%, 0% 100%)";
@@ -10,15 +11,9 @@ var BARCODE = [3, 1, 2, 1, 4, 2, 1, 3, 1, 2, 4, 1, 2, 1, 3, 2, 1, 4, 1, 2];
 var TORN_BOTTOM_CLIP = "";
 var TORN_TOP_CLIP = "";
 
-function ChevronLeft() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>);
-}
-function ChevronRight() {
-  return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>);
-}
-function WalletChipIcon() {
-  return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path><path d="M16 12h.01"></path></svg>);
-}
+function ChevronLeft() { return <Icon name="back" size={20} />; }
+function ChevronRight() { return <Icon name="chevron" size={18} />; }
+function WalletChipIcon() { return <Icon name="wallet" size={15} />; }
 function pad(num, len) {
   var s = String(num);
   while (s.length < len) s = "0" + s;

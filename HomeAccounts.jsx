@@ -1,9 +1,11 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AccountArt } from "./bankCardVisuals";
+import { useAuthStatus } from "./AuthStatusContext";
 
 function HomeAccountPager({ accounts, mode, initialAccount, onSelectAccount, balanceHidden, onToggleHidden, canOpen, onOpenAccount, onOpenDetail, leaving, hiddenCardKey }) {
   const navigate = useNavigate();
+  const { reducedMotion } = useAuthStatus();
   const trackRef = useRef(null);
   const single = mode === "single";
   const entries = [...accounts, ...(canOpen ? [{ key: "add", label: "Open account" }] : [])];
@@ -45,7 +47,7 @@ function HomeAccountPager({ accounts, mode, initialAccount, onSelectAccount, bal
       </button>
       <div className="hxr-dots" aria-label={single ? "Accounts" : "Account pages"}>
         {pages.map((_, i) => <button type="button" key={i} className={"hxr-dot" + (index === i ? " is-active" : "")} aria-label={"Account page " + (i + 1)} aria-current={index === i ? "true" : undefined}
-          onClick={() => trackRef.current.scrollTo({ left: i * trackRef.current.clientWidth, behavior: "smooth" })} />)}
+          onClick={() => trackRef.current.scrollTo({ left: i * trackRef.current.clientWidth, behavior: reducedMotion ? "instant" : "smooth" })} />)}
       </div>
       <span />
     </div>

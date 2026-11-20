@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useNftState } from "./useNft";
 import { RARITIES, NftArt, NftIcon, NftTopbar, formatLeft, money, moneyShort, pendingText, perHour, rarityRank, rarityTitle, useNftBack, useNow } from "./nftShared";
 import { NftToast, useNftToast } from "./NftSheets";
+import { Skeleton } from "./LoadingState";
 
 function themeOf(c) {
   return "nft-t-" + (c && c.theme ? c.theme : "frost");
@@ -30,7 +31,7 @@ export default function Nft() {
         <div className="nft-wrap">
           {error
             ? <div className="nft-empty"><b>Could not load NFTs</b><span>{error}</span><button className="nft-btn nft-btn--glass" type="button" onClick={function () { refresh().catch(function () {}); }}>Try again</button></div>
-            : <div className="nft-skeleton"><i /><i /><i /></div>}
+            : <Skeleton rows={3} hero />}
         </div>
       </div>
     );

@@ -4,6 +4,7 @@ import { authFetch } from "./apiClient";
 import { useNftState } from "./useNft";
 import { NftArt, NftIcon, NftTopbar, money, rarityTitle, useNftBack } from "./nftShared";
 import { NftConfirm, NftToast, useNftToast } from "./NftSheets";
+import { Skeleton } from "./LoadingState";
 
 const RADIUS = 100;
 const CIRC = 2 * Math.PI * RADIUS;
@@ -176,7 +177,7 @@ export default function NftUpgrade() {
       <div className="nft-wrap upg-wrap">
         {!state && (error
           ? <div className="upg-empty upg-center"><b>Could not load NFTs</b><span>{error}</span></div>
-          : <div className="nft-skeleton"><i /><i /><i /></div>)}
+          : <Skeleton rows={3} hero />)}
 
         {state && items.length === 0 && (
           <div className="upg-empty upg-center">

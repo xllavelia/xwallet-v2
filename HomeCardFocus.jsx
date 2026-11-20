@@ -26,30 +26,33 @@ function accountPose(element) {
   };
 }
 
-async function animateAccountView(home, key, change) {
+async function animateAccountView(home, key, change, reducedMotion) {
   const find = () => [...home.querySelectorAll("[data-account-key]")].find(element => element.dataset.accountKey === key);
   const source = find();
-  if (!source || window.matchMedia("(prefers-reduced-motion: reduce)").matches) { change(); return; }
+  if (!source || reducedMotion) { change(); return; }
   const from = accountPose(source);
   const front = source.querySelector(".hxr-account-art").cloneNode(true);
-  let departure;
-  if (!from.angle) {
-    const section = home.querySelector(".hxr-accounts");
-    const bounds = section.getBoundingClientRect();
-    departure = document.createElement("div");
-    departure.className = "hxr-grid-departure";
-    departure.setAttribute("aria-hidden", "true");
-    departure.inert = true;
-    const grid = section.cloneNode(true);
-    namespaceArtwork(grid, "-departing");
-    grid.style.cssText = `position:absolute;left:${bounds.left}px;top:${bounds.top}px;width:${bounds.width}px;margin:0`;
-    grid.querySelectorAll("[data-account-key]").forEach(element => {
-      if (element.dataset.accountKey === key) element.classList.add("is-card-away");
-    });
-    departure.append(grid);
-    home.append(departure);
-    grid.querySelector(".hxr-track").scrollLeft = section.querySelector(".hxr-track").scrollLeft;
-  }
+  const section = home.querySelector(".hxr-accounts");
+  const bounds = section.getBoundingClientRect();
+  const departure = document.createElement("div");
+  departure.className = "hxr-grid-departure";
+  departure.setAttribute("aria-hidden", "true");
+  departure.inert = true;
+  const snapshot = section.cloneNode(true);
+  namespaceArtwork(snapshot, "-departing");
+  snapshot.style.cssText = `position:absolute;left:${bounds.left}px;top:${bounds.top}px;width:${bounds.width}px;margin:0`;
+  let sourceFeature = null;
+  snapshot.querySelectorAll("[data-account-key]").forEach(element => {
+    if (element.dataset.accountKey === key) {
+      element.classList.add("is-card-away");
+      sourceFeature = element;
+    }
+  });
+  const snapshotTrack = snapshot.querySelector(".hxr-track");
+  snapshotTrack.style.scrollSnapType = "none";
+  departure.append(snapshot);
+  home.append(departure);
+  snapshotTrack.scrollLeft = section.querySelector(".hxr-track").scrollLeft;
   const positions = [...home.querySelectorAll(".hxr-actions, .hxr-feed")].map(element => [element, element.getBoundingClientRect().top]);
   const layer = document.createElement("div");
   layer.className = "hxr-view-flight";
@@ -63,7 +66,7 @@ async function animateAccountView(home, key, change) {
   home.classList.add("is-view-moving");
   change();
   const destination = find();
-  if (!destination) { departure?.remove(); home.classList.remove("is-view-moving"); return; }
+  if (!destination) { departure.remove(); home.classList.remove("is-view-moving"); return; }
   const to = accountPose(destination);
   const back = destination.querySelector(".hxr-account-art").cloneNode(true);
   [front, back].forEach((art, index) => {
@@ -77,7 +80,7 @@ async function animateAccountView(home, key, change) {
   destination.classList.add("is-card-away");
   document.body.append(layer);
   home.inert = true;
-  const options = { duration: 1120, easing: "cubic-bezier(.32,.04,.18,1)", fill: "both" };
+  const options = { duration: 1120, easing: "cubic-bezier(.4,0,.2,1)", fill: "both" };
   const pose = ({ rect, angle }) => `translate3d(${rect.left + rect.width / 2 - 160}px,${rect.top + rect.height / 2 - 100}px,0) rotate(${angle}deg) scale(${(angle ? rect.height : rect.width) / 320})`;
   // Карта в single-виде повёрнута на 90°, поэтому переворот идёт в обратную сторону — иначе край уезжает не туда.
   const spin = from.angle ? 1 : -1;
@@ -85,7 +88,6 @@ async function animateAccountView(home, key, change) {
     card.animate([{ transform: pose(from) }, { transform: pose(to) }], options),
     turn.animate([
       { transform: "perspective(1100px) rotateY(0deg) rotateX(0deg)" },
-      { transform: `perspective(1100px) rotateY(${95 * spin}deg) rotateX(8deg)`, offset: .5 },
       { transform: `perspective(1100px) rotateY(${180 * spin}deg) rotateX(0deg)` },
     ], options),
   ];
@@ -101,14 +103,52 @@ async function animateAccountView(home, key, change) {
       { "--xac-mask-strength": "1" },
     ], { delay: options.duration * .65, duration: options.duration * .35, easing: EASE, fill: "forwards" }));
   }
-  if (departure) animations.push(departure.animate([
+  animations.push(departure.animate([
     { transform: "translate3d(0,0,0)" },
     { transform: "translate3d(-100vw,0,0)" },
   ], options));
-  if (!to.angle) animations.push(destination.closest(".hxr-accounts").animate([
+  // Надпись большого баланса не уезжает со снимком: компенсируем сдвиг родителя
+  // тем же таймингом и растворяем текст на месте.
+  const departingBalance = from.angle ? sourceFeature?.querySelector(".hxr-feature-balance-inner") : null;
+  if (departingBalance) {
+    animations.push(departingBalance.animate([
+      { transform: "translate3d(0,0,0)" },
+      { transform: "translate3d(100vw,0,0)" },
+    ], options));
+    animations.push(departingBalance.animate([
+      { opacity: 1 },
+      { opacity: 0 },
+    ], { duration: 720, easing: EASE, fill: "both" }));
+  }
+  // Точки пагинации не уезжают вместе с лентой: гасим их на месте,
+  // компенсируя сдвиг снимка тем же таймингом.
+  const departingDots = snapshot.querySelector(".hxr-pagination");
+  if (departingDots) {
+    animations.push(departingDots.animate([
+      { transform: "translate3d(0,0,0)" },
+      { transform: "translate3d(100vw,0,0)" },
+    ], options));
+    animations.push(departingDots.animate([
+      { opacity: 1 },
+      { opacity: 0 },
+    ], { duration: 420, easing: EASE, fill: "both" }));
+  }
+  const destinationSection = destination.closest(".hxr-accounts");
+  if (!to.angle) animations.push(destinationSection.animate([
     { transform: "translate3d(-100vw,0,0)" },
     { transform: "translate3d(0,0,0)" },
   ], options));
+  const arrivingDots = destinationSection.querySelector(".hxr-pagination");
+  if (arrivingDots) {
+    if (!to.angle) animations.push(arrivingDots.animate([
+      { transform: "translate3d(100vw,0,0)" },
+      { transform: "translate3d(0,0,0)" },
+    ], options));
+    animations.push(arrivingDots.animate([
+      { opacity: 0 },
+      { opacity: 1 },
+    ], { delay: 180, duration: 460, easing: EASE, fill: "both" }));
+  }
   positions.forEach(([element, top]) => animations.push(element.animate([
     { transform: `translateY(${top - element.getBoundingClientRect().top}px)` },
     { transform: "translateY(0)" },
@@ -119,7 +159,7 @@ async function animateAccountView(home, key, change) {
     home.classList.remove("is-view-moving");
     home.inert = false;
     layer.remove();
-    departure?.remove();
+    departure.remove();
     animations.forEach(animation => animation.cancel());
   }
 }

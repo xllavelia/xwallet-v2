@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
+import { Icon } from "./icons";
 
 // PageTransition держит transform, поэтому fixed-оверлеи выносим в body
 export function NftPortal({ children }) {
@@ -293,31 +294,8 @@ export function NftArt({ art, rarity, className, x, y, width, height, preserveAs
 
 /* ---------- Иконки ---------- */
 
-const ICONS = {
-  back: <path d="M15 18l-6-6 6-6" />,
-  close: <path d="M6 6l12 12M18 6L6 18" />,
-  arrow: <path d="M7 17L17 7M9 7h8v8" />,
-  chevron: <path d="M9 6l6 6-6 6" />,
-  bolt: <path d="M13 3L5 14h6l-1 7 8-11h-6z" />,
-  grid: <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />,
-  store: <path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9h16M9 20v-6h6v6" />,
-  box: <path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5zM3 7.5L12 12l9-4.5M12 12v9" />,
-  clock: <path d="M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" />,
-  tag: <path d="M3 12V3h9l9 9-9 9zM7.5 7.5h.01" />,
-  check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
-  spark: <path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3" />,
-  plus: <path d="M12 5v14M5 12h14" />,
-  upgrade: <path d="M7 20h10M12 17V5M7.5 9.5L12 5l4.5 4.5" />,
-  merge: <path d="M6 5l6 7-6 7M18 5l-6 7 6 7" />,
-  wallet: <path d="M4 7h15a1 1 0 0 1 1 1v11H5a1 1 0 0 1-1-1zM4 7l11-3v3M16 13h.01" />
-};
-
 export function NftIcon({ name }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {ICONS[name]}
-    </svg>
-  );
+  return <Icon name={name} />;
 }
 
 export function RarityPill({ rarity }) {

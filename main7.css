@@ -400,25 +400,6 @@
 
 /* Заглушки загрузки и пустые состояния */
 
-.nft-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.nft-skeleton i {
-  display: block;
-  height: 96px;
-  border-radius: 24px;
-  background: linear-gradient(90deg, #191918 0%, #222220 50%, #191918 100%);
-  background-size: 200% 100%;
-  animation: nft-shimmer 1.4s linear infinite;
-}
-
-.nft-skeleton i:first-child {
-  height: 220px;
-}
-
 .nft-empty {
   display: flex;
   flex-direction: column;
@@ -2567,15 +2548,6 @@ button.nft-drop:active {
   }
   50% {
     opacity: 0.9;
-  }
-}
-
-@keyframes nft-shimmer {
-  from {
-    background-position: 200% 0;
-  }
-  to {
-    background-position: -200% 0;
   }
 }
 

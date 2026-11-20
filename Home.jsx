@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
+import { AnimatePresence } from "framer-motion";
+import { useAuthStatus } from "./AuthStatusContext";
 import { accountPose, animateAccountView } from "./HomeCardFocus";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAccount } from "./useAccount";
@@ -9,9 +11,10 @@ import { useHomeSummary } from "./useHomeSummary";
 import { useHomeAccounts, accountUsd } from "./useHomeAccounts";
 import { HomeAccountPager } from "./HomeAccounts";
 import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
+import { Icon } from "./icons";
 
 // git add .
-// git commit -m "create nft!"
+// git commit -m "new animation"
 // git push -u origin main 
 
 
@@ -24,22 +27,6 @@ import { RewardsPickerModal, MiniGamesModal } from "./HomePickers";
 // git reset --soft HEAD~1
 // git add .
 // git commit --amend --no-edit
-
-function HomeIcon({ kind }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {kind === "search" && <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></>}
-      {kind === "gift" && <><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M5 12v9h14v-9M12 8v13" /><path d="M12 8H8a3 3 0 1 1 3-3l1 3Zm0 0h4a3 3 0 1 0-3-3l-1 3Z" /></>}
-      {kind === "create" && <><path d="M12 4v16M4 12h16" /></>}
-      {kind === "history" && <><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3" /><path d="M9 9h6M9 13h6M9 17h3" /></>}
-      {kind === "send" && <><path d="M4 12h16m-7-7 7 7-7 7" /></>}
-      {kind === "single" && <><path d="m5 16-1 4 4-1L20 7l-3-3L5 16Z" /><path d="m14 7 3 3" /></>}
-      {kind === "grid" && <><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></>}
-      {kind === "games" && <><path d="M7 7h10c2 0 3 2 3.5 4l1 5c.5 3-2 4-4 2l-2-2h-7l-2 2c-2 2-4.5 1-4-2l1-5C4 9 5 7 7 7Z" /><path d="M7 10v5m-2.5-2.5h5" /><circle cx="16" cy="11" r=".7" fill="currentColor" /><circle cx="18" cy="14" r=".7" fill="currentColor" /></>}
-      {kind === "nft" && <><path d="M3 9 7 4h10l4 5-9 11L3 9Z" /><path d="M3 9h18" /></>}
-    </svg>
-  );
-}
 
 function ActivityArt() {
   return (
@@ -57,6 +44,7 @@ function ActivityArt() {
 function Home() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { reducedMotion } = useAuthStatus();
   const { account } = useAccount();
   const { data: player } = usePlayerProfile();
   const summary = useHomeSummary();
@@ -80,7 +68,6 @@ function Home() {
   useEffect(() => {
     const update = () => {
       setBalanceHidden(localStorage.getItem("xw-hide-balances") === "1");
-      document.documentElement.classList.toggle("xw-reduce-motion", localStorage.getItem("xw-reduce-motion") === "1");
     };
     update();
     window.addEventListener("xw-preferences-changed", update);
@@ -108,7 +95,7 @@ function Home() {
       await animateAccountView(homeRef.current, key, () => flushSync(() => {
         setSelectedAccount(key);
         setViewMode(next);
-      }));
+      }), reducedMotion);
     } finally { viewBusy.current = false; }
   }
 
@@ -132,7 +119,7 @@ function Home() {
     { kind: "create", label: "Create", onClick: openNewAccount },
     { kind: "nft", label: "NFT", onClick: () => navigate("/nft") },
     { kind: "send", label: "Send", onClick: () => navigate("/send") },
-    { kind: viewMode === "grid" ? "single" : "grid", label: "View", onClick: toggleView },
+    { kind: viewMode === "grid" ? "expand" : "grid", label: "View", onClick: toggleView },
   ];
 
   return (
@@ -144,10 +131,10 @@ function Home() {
             {/* <span className="hxr-avatar-mark">x</span> */}
           </button>
           <button type="button" className="hxr-search" onClick={() => navigate("/services")}>
-            <HomeIcon kind="search" /><span>Search</span>
+            <Icon name="search" /><span>Search</span>
           </button>
           <button type="button" className="hxr-gift" onClick={() => setPicker("rewards")} aria-label="Rewards and vouchers">
-            <HomeIcon kind="gift" />
+            <Icon name="gift" />
           </button>
         </header>
 
@@ -170,7 +157,7 @@ function Home() {
           {actions.map(action => (
             <button type="button" className="hxr-action" key={action.label} onClick={action.onClick}
               aria-label={action.label === "View" ? (viewMode === "grid" ? "Show single account" : "Show grouped accounts") : action.label}>
-              <span className="hxr-action-circle"><HomeIcon kind={action.kind} /></span>
+              <span className="hxr-action-circle"><Icon name={action.kind} /></span>
               <span>{action.label}</span>
             </button>
           ))}
@@ -189,12 +176,14 @@ function Home() {
               <span className="hxr-feed-title">Mini games</span>
               <span className="hxr-feed-caption">Empire, Pixel and more</span>
             </span>
-            <span className="hxr-games-art"><HomeIcon kind="games" /></span>
+            <span className="hxr-games-art"><Icon name="games" /></span>
           </button>
         </section>
       </div>
-      {picker === "rewards" && <RewardsPickerModal onClose={() => setPicker(null)} />}
-      {picker === "games" && <MiniGamesModal onClose={() => setPicker(null)} />}
+      <AnimatePresence mode="wait">
+        {picker === "rewards" && <RewardsPickerModal key="rewards" onClose={() => setPicker(null)} />}
+        {picker === "games" && <MiniGamesModal key="games" onClose={() => setPicker(null)} />}
+      </AnimatePresence>
     
     </main>
   );

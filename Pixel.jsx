@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { authFetch } from "./apiClient";
 import { useWalletBalance } from "./useWallet";
 import { useCardFunding } from "./useCardFunding";
+import { Icon } from "./icons";
 
 var PRESETS = [10, 50, 100, 500];
 var HEART_BITMAP = ["01010", "11111", "11111", "01110", "00100"];
@@ -11,12 +12,8 @@ var ROUND_SECONDS = 20;
 var BETTING_SECONDS = 10;
 var REVEAL_SECONDS = 3;
 
-function ClockIcon() {
-  return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>);
-}
-function WalletChipIcon() {
-  return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path><path d="M16 12h.01"></path></svg>);
-}
+function ClockIcon() { return <Icon name="clock" size={18} />; }
+function WalletChipIcon() { return <Icon name="wallet" size={15} />; }
 function formatCountdown(seconds) {
   var s = Math.max(0, Math.ceil(seconds));
   var m = Math.floor(s / 60);

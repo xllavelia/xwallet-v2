@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNftMarket, useNftState } from "./useNft";
 import { RARITIES, NftArt, NftIcon, NftPortal, NftTopbar, formatLeft, money, perHour, rarityTitle, useNftBack, useNow } from "./nftShared";
 import { NftConfirm, NftCta, NftDetailSheet, NftListDialog, NftToast, itemRows, useNftToast } from "./NftSheets";
+import { Skeleton } from "./LoadingState";
 import { NftTile } from "./NftInventory";
 
 const TABS = [
@@ -183,7 +184,7 @@ export default function NftMarket() {
 
         {!market && (error
           ? <div className="nft-empty"><b>Could not load the market</b><span>{error}</span></div>
-          : <div className="nft-skeleton"><i /><i /><i /></div>)}
+          : <Skeleton rows={3} hero />)}
 
         {market && shown.length === 0 && (
           <div className="nft-empty">

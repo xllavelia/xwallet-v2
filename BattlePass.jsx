@@ -6,6 +6,7 @@ import PassOfferSheet from "./PassOfferSheet";
 import CaseRevealSheet from "./CaseRevealSheet";
 import NftClaimOverlay from "./NftClaimOverlay";
 import { CosmeticRewardArt } from "./ProfileShared";
+import { LoadingState } from "./LoadingState";
 
 export default function BattlePass() {
     const navigate = useNavigate();
@@ -48,8 +49,7 @@ export default function BattlePass() {
     if (loading && !data) {
         return (
             <div className="bp-page bp-center">
-                <div className="bp-spinner" />
-                <div className="bp-loading-text">Loading Battle Pass…</div>
+                <LoadingState label="Loading Battle Pass…" />
             </div>
         );
     }

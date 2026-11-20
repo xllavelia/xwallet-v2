@@ -3,10 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useWalletBalance } from './useWallet';
 import { useCardFunding } from './useCardFunding';
 import { openPosition, openTimeTrade } from './usePositions';
-
-function ChevronDown() {
-  return (<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>);
-}
+import { Icon } from "./icons";
 
 const Order = () => {
   const navigate = useNavigate();
@@ -161,7 +158,7 @@ const isSubmittingRef = useRef(false);
           </div>
           <div className="tt-mode-wrap">
             <button className="px-market-btn" onClick={() => setModeMenuOpen(!modeMenuOpen)}>
-              {mode === "standard" ? "Standard" : "Time"} <ChevronDown />
+              {mode === "standard" ? "Standard" : "Time"} <Icon name="chevron-down" size={12} strokeWidth={2.4} />
             </button>
             {modeMenuOpen && (
               <div className="tt-mode-menu">

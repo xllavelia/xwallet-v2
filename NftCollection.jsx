@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useNftState } from "./useNft";
 import { NftArt, NftIcon, NftTopbar, RarityPill, formatLeft, money, perHour, rarityRank, rarityTitle, useNftBack, useNow } from "./nftShared";
 import { NftConfirm, NftToast, useNftToast } from "./NftSheets";
+import { Skeleton } from "./LoadingState";
 import NftClaimOverlay from "./NftClaimOverlay";
 
 function avgPrice(templates, rarity) {
@@ -74,7 +75,7 @@ export default function NftCollection() {
                 <button className="nft-btn nft-btn--light" type="button" onClick={function () { navigate("/nft/market"); }}>Open market</button>
               </div>
             )
-            : <div className="nft-skeleton"><i /><i /><i /></div>}
+            : <Skeleton rows={3} hero />}
         </div>
       </div>
     );

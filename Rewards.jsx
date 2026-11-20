@@ -3,17 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useWalletBalance } from "./useWallet";
 import { useRewards } from "./useRewards";
 import NftClaimOverlay from "./NftClaimOverlay";
-
-function GiftIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="8" width="18" height="4" rx="1"></rect>
-      <path d="M12 8v13"></path>
-      <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"></path>
-      <path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"></path>
-    </svg>
-  );
-}
+import { Icon } from "./icons";
 
 function formatWait(seconds) {
   var s = Math.max(0, Math.ceil(seconds));
@@ -116,14 +106,14 @@ const Rewards = () => {
       <div className="rwd-topbar">
         <span className="rwd-title">Rewards</span>
         <span className={"rwd-track-chip " + (isPro ? "pro" : "")}>
-          <GiftIcon />
+          <Icon name="gift" size={15} />
           <span>{noTrackView ? "NO TRACK" : trackTitle}</span>
         </span>
       </div>
 
       {noTrackView ? (
         <div className="rwd-empty-card">
-          <div className="rwd-empty-icon"><GiftIcon /></div>
+          <div className="rwd-empty-icon"><Icon name="gift" size={15} /></div>
           <span className="rwd-empty-title">No active track</span>
           <span className="rwd-empty-sub">Daily rewards will appear here once a track is active</span>
         </div>

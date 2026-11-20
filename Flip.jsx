@@ -3,18 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { authFetch } from "./apiClient";
 import { useWalletBalance } from "./useWallet";
 import { useCardFunding } from "./useCardFunding";
+import { Icon } from "./icons";
 
 var PRESETS = [10, 50, 100, 500];
 // Зеркало flip_sql/flip.go: FlipDuration = 6s, PayoutMultiplier = 1.90
 var FLIP_SECONDS = 6;
 var PAYOUT = 1.9;
 
-function ChevronLeft() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>);
-}
-function WalletChipIcon() {
-  return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path><path d="M16 12h.01"></path></svg>);
-}
+function ChevronLeft() { return <Icon name="back" size={20} />; }
+function WalletChipIcon() { return <Icon name="wallet" size={15} />; }
 function formatCountdown(seconds) {
   var s = Math.max(0, Math.ceil(seconds));
   var m = Math.floor(s / 60);

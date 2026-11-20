@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMining } from "./useMining";
 import { useWalletBalance } from "./useWallet";
+import { Icon } from "./icons";
 
 var PAGE_SIZE = 5;
 
@@ -10,30 +11,13 @@ var PERK_LABELS = {
   turbo: "Turbo", stable: "Stable", silent: "Silent"
 };
 
-function ChevronLeft() {
-  return (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>);
-}
-function WalletChipIcon() {
-  return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path><path d="M16 12h.01"></path></svg>);
-}
-function BoltIcon() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>);
-}
-function BatteryIcon() {
-  return (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="7" width="18" height="10" rx="2"></rect><line x1="23" y1="11" x2="23" y2="13"></line></svg>);
-}
-function ServerIcon() {
-  return (<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="6" rx="1.5"></rect><rect x="2" y="15" width="20" height="6" rx="1.5"></rect><line x1="6" y1="6" x2="6" y2="6"></line><line x1="6" y1="18" x2="6" y2="18"></line></svg>);
-}
-function ShopIcon() {
-  return (<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>);
-}
-function CloseIcon() {
-  return (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>);
-}
-function TrashIcon() {
-  return (<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>);
-}
+function ChevronLeft() { return <Icon name="back" size={20} />; }
+function WalletChipIcon() { return <Icon name="wallet" size={15} />; }
+function BoltIcon() { return <Icon name="bolt" size={16} />; }
+function BatteryIcon() { return <Icon name="battery" size={16} />; }
+function ServerIcon() { return <Icon name="server" size={22} />; }
+function ShopIcon() { return <Icon name="store" size={17} />; }
+function TrashIcon() { return <Icon name="trash" size={15} />; }
 
 function formatMoney(v) { return "$" + (v || 0).toFixed(2); }
 function formatHMS(totalSeconds) {
@@ -278,7 +262,7 @@ function ServerDetailModal(props) {
       <div className="mng-modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="mng-modal-head">
           <span className="mng-modal-title">{s.name}</span>
-          <button className="mng-modal-close" onClick={props.onClose}><CloseIcon /></button>
+          <button className="mng-modal-close" onClick={props.onClose}><Icon name="close" size={18} /></button>
         </div>
         <span className="mng-modal-sub">{"Rank " + s.rank + "/" + s.maxRank + " · " + s.country}</span>
 
